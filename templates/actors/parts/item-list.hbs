@@ -1,0 +1,16 @@
+<ol class="items-list">
+  {{#each items as |item|}}
+    <li class="item-row {{#if (and ../ratingMax (gt (lookup item.system ../ratingField) ../ratingMax))}}trait-over-limit{{/if}}" data-item-id="{{item.id}}" data-item-type="{{item.type}}">
+      <span class="item-name {{#if (or (eq item.type "discipline") (eq item.type "disciplinePath"))}}discipline-card-open{{else}}{{#if (eq item.type "ritual")}}ritual-card-open{{else}}{{#if (or (eq item.type "merit") (eq item.type "flaw"))}}merit-flaw-card-open{{else}}item-edit{{/if}}{{/if}}{{/if}}">{{item.name}}</span>
+      <span class="item-rating">{{lookup item.system ../ratingField}}{{#if ../ratingMax}}<small>/{{../ratingMax}}</small>{{/if}}</span>
+      {{#if (or (eq item.type "discipline") (eq item.type "disciplinePath"))}}<button type="button" class="discipline-card-open" title="{{localize "VTM_REVISED.Discipline.OpenCard"}}"><i class="fas fa-book-open"></i></button>{{/if}}
+      {{#if (eq item.type "ritual")}}<button type="button" class="ritual-card-open" title="{{localize "VTM_REVISED.Ritual.OpenCard"}}"><i class="fas fa-book-open"></i></button>{{/if}}
+      {{#if (or (eq item.type "merit") (eq item.type "flaw"))}}<button type="button" class="merit-flaw-card-open" title="{{localize "VTM_REVISED.MeritFlaw.OpenCard"}}"><i class="fas fa-book-open"></i></button>{{/if}}
+      <button type="button" class="item-use" title="{{localize "VTM_REVISED.Item.Use"}}"><i class="fas fa-bolt"></i></button>
+      <button type="button" class="item-edit"><i class="fas fa-edit"></i></button>
+      <button type="button" class="item-delete"><i class="fas fa-trash"></i></button>
+    </li>
+  {{else}}
+    <li class="empty">{{localize "VTM_REVISED.Empty"}}</li>
+  {{/each}}
+</ol>

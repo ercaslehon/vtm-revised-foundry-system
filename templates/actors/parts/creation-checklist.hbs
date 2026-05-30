@@ -1,0 +1,66 @@
+<section class="vtm-panel creation-checklist">
+  <header class="creation-header">
+    <div>
+      <h2>{{localize "VTM_REVISED.Creation.Title"}}</h2>
+      <p class="muted">{{localize "VTM_REVISED.Creation.Help"}}</p>
+    </div>
+    <button type="button" class="character-creation-wizard-open"><i class="fas fa-wand-magic-sparkles"></i> Мастер создания</button>
+  </header>
+
+  <div class="creation-grid">
+    <article class="creation-card">
+      <h3>{{localize "VTM_REVISED.Creation.BaseChecklist"}}</h3>
+      <ol class="creation-rows">
+        {{#each creation.baseRows as |row|}}
+          <li class="creation-row status-{{row.status}}">
+            <span class="creation-status" title="{{row.statusLabel}}">{{row.icon}}</span>
+            <div class="creation-row-main">
+              <strong>{{row.label}}</strong>
+              <span>{{row.detail}}</span>
+              {{#if row.warning}}<em>{{row.warning}}</em>{{/if}}
+            </div>
+          </li>
+        {{/each}}
+      </ol>
+
+      <div class="creation-actions">
+        <button type="button" class="creation-fix-humanity"><i class="fas fa-heart"></i> {{localize "VTM_REVISED.Creation.FixHumanity"}}</button>
+        <button type="button" class="creation-fix-willpower"><i class="fas fa-fist-raised"></i> {{localize "VTM_REVISED.Creation.FixWillpower"}}</button>
+        <button type="button" class="creation-roll-blood"><i class="fas fa-dice-d10"></i> {{localize "VTM_REVISED.Creation.RollBlood"}}</button>
+      </div>
+    </article>
+
+    <article class="creation-card">
+      <h3>{{localize "VTM_REVISED.Creation.FreebieChecklist"}}</h3>
+      <div class="freebie-pool-row">
+        <label>{{localize "VTM_REVISED.Creation.FreebiePool"}}
+          <input type="number" name="system.creation.freebiePool" value="{{creation.freebiePool}}" />
+        </label>
+        <span class="freebie-total {{#if creation.freebie.negative}}is-negative{{/if}}">
+          {{localize "VTM_REVISED.Creation.Remaining"}}: <strong>{{creation.freebie.remaining}}</strong>
+        </span>
+      </div>
+
+      <table class="freebie-table">
+        <tbody>
+          {{#each creation.freebie.rows as |row|}}
+            <tr class="{{#if row.warning}}has-warning{{/if}}">
+              <th>{{row.label}}</th>
+              <td>{{row.display}}</td>
+              <td>{{row.costDisplay}}</td>
+            </tr>
+            {{#if row.warning}}
+              <tr class="freebie-warning"><td colspan="3">{{row.warning}}</td></tr>
+            {{/if}}
+          {{/each}}
+        </tbody>
+        <tfoot>
+          <tr>
+            <th>{{localize "VTM_REVISED.Creation.Sum"}}</th>
+            <td colspan="2" class="{{#if creation.freebie.negative}}is-negative{{else}}is-ok{{/if}}">{{creation.freebie.remaining}}</td>
+          </tr>
+        </tfoot>
+      </table>
+    </article>
+  </div>
+</section>

@@ -1,0 +1,51 @@
+<form class="{{cssClass}} vtm-sheet" autocomplete="off">
+  <header class="sheet-header">
+    <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}"/>
+    <section class="header-fields">
+      <h1><input name="name" type="text" value="{{actor.name}}" placeholder="{{localize 'VTM_REVISED.Actor.Name'}}"/></h1>
+      <div class="grid grid-4">
+        <label>{{localize "VTM_REVISED.Profile.Clan"}} <input name="system.profile.clan" value="{{system.profile.clan}}"/></label>
+        <label>{{localize "VTM_REVISED.Profile.Generation"}} <input name="system.profile.generation" value="{{system.profile.generation}}"/></label>
+        <label>{{localize "VTM_REVISED.Profile.Nature"}}
+          <select name="system.profile.nature">
+            <option value="">{{localize "VTM_REVISED.Empty"}}</option>
+            {{#each config.archetypeOptions as |archetype|}}
+              <option value="{{archetype.name}}" {{#if (eq ../system.profile.nature archetype.name)}}selected{{/if}}>{{archetype.name}}</option>
+            {{/each}}
+          </select>
+        </label>
+        <label>{{localize "VTM_REVISED.Profile.Demeanor"}}
+          <select name="system.profile.demeanor">
+            <option value="">{{localize "VTM_REVISED.Empty"}}</option>
+            {{#each config.archetypeOptions as |archetype|}}
+              <option value="{{archetype.name}}" {{#if (eq ../system.profile.demeanor archetype.name)}}selected{{/if}}>{{archetype.name}}</option>
+            {{/each}}
+          </select>
+        </label>
+      </div>
+    </section>
+  </header>
+
+  <nav class="sheet-tabs tabs" data-group="primary">
+    <a class="item" data-tab="overview">{{localize "VTM_REVISED.Tab.Overview"}}</a>
+    <a class="item" data-tab="traits">{{localize "VTM_REVISED.Tab.Traits"}}</a>
+    <a class="item" data-tab="advantages">{{localize "VTM_REVISED.Tab.Advantages"}}</a>
+    <a class="item" data-tab="notes">{{localize "VTM_REVISED.Tab.Notes"}}</a>
+  </nav>
+
+  <section class="sheet-body">
+    <div class="tab" data-group="primary" data-tab="overview">
+      {{> "systems/vtm-revised/templates/actors/parts/profile.hbs"}}
+    </div>
+    <div class="tab" data-group="primary" data-tab="traits">
+      {{> "systems/vtm-revised/templates/actors/parts/attributes.hbs"}}
+      {{> "systems/vtm-revised/templates/actors/parts/abilities.hbs"}}
+    </div>
+    <div class="tab" data-group="primary" data-tab="advantages">
+      {{> "systems/vtm-revised/templates/actors/parts/advantages.hbs"}}
+    </div>
+    <div class="tab" data-group="primary" data-tab="notes">
+      {{> "systems/vtm-revised/templates/actors/parts/notes.hbs"}}
+    </div>
+  </section>
+</form>

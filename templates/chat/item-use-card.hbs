@@ -1,0 +1,6 @@
+<div class="vtm-chat-card item-use-card">
+  <h3>{{item.name}}</h3>
+  {{#if actor}}<p><strong>{{actor.name}}</strong></p>{{/if}}
+  {{#if description}}<div class="item-description">{{{description}}}</div>{{/if}}
+  {{#if cost.text}}<p><strong>{{localize "VTM_REVISED.Item.Cost"}}:</strong> {{cost.text}}</p>{{/if}}
+</div>

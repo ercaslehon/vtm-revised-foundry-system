@@ -1,0 +1,26 @@
+<section class="vtm-panel weapons-panel">
+  <header class="section-header-row">
+    <h2>{{localize "VTM_REVISED.Weapon.Section"}}</h2>
+    <div class="section-actions">
+      <button type="button" class="weapon-add-from-catalog" title="{{localize "VTM_REVISED.Weapon.AddFromCatalog"}}"><i class="fas fa-plus"></i></button>
+      <button type="button" class="item-create" data-type="weapon" title="{{localize "VTM_REVISED.Weapon.CreateCustom"}}"><i class="fas fa-pen"></i></button>
+    </div>
+  </header>
+
+  <ol class="items-list weapon-list">
+    {{#each weapons as |item|}}
+      <li class="item-row weapon-row" data-item-id="{{item.id}}" data-item-type="{{item.type}}">
+        <span class="item-name item-edit">{{item.name}}</span>
+        <span class="weapon-meta">{{#if (eq item.system.weapon.category "firearm")}}{{localize "VTM_REVISED.Weapon.Firearm"}}{{else if (eq item.system.weapon.category "melee")}}{{localize "VTM_REVISED.Weapon.Melee"}}{{else if (eq item.system.weapon.category "thrown")}}{{localize "VTM_REVISED.Weapon.Thrown"}}{{else}}{{item.system.weapon.category}}{{/if}}</span>
+        <span class="weapon-meta">{{localize "VTM_REVISED.Weapon.Damage"}}: {{#if item.system.weapon.usesStrength}}{{localize "VTM_REVISED.Attribute.strength"}} + {{item.system.weapon.damageBonus}}{{else}}{{item.system.weapon.damageDice}}{{/if}}</span>
+        <span class="weapon-meta">{{localize "VTM_REVISED.Weapon.DifficultyShort"}} {{item.system.weapon.difficulty}}</span>
+        {{#if item.system.weapon.range}}<span class="weapon-meta">{{localize "VTM_REVISED.Weapon.Range"}}: {{item.system.weapon.range}}</span>{{/if}}
+        <button type="button" class="weapon-attack" title="{{localize "VTM_REVISED.Weapon.AttackAndDamage"}}"><i class="fas fa-burst"></i></button>
+        <button type="button" class="item-edit"><i class="fas fa-edit"></i></button>
+        <button type="button" class="item-delete"><i class="fas fa-trash"></i></button>
+      </li>
+    {{else}}
+      <li class="empty">{{localize "VTM_REVISED.Weapon.Empty"}}</li>
+    {{/each}}
+  </ol>
+</section>

@@ -1,0 +1,88 @@
+<div class="vtm-ritual-card-root">
+  <header class="vtm-ritual-card-header">
+    <div>
+      <h1>{{ritual.name}}</h1>
+      <p class="muted">
+        {{localize "TYPES.Item.ritual"}} · {{localize "VTM_REVISED.Item.Level"}} {{level}}{{#if discipline}} · {{discipline}}{{/if}} · {{actor.name}}
+        {{#if sourceIsLibrary}} · описание подтянуто из справочника{{/if}}
+      </p>
+    </div>
+    <div class="vtm-card-actions">
+      <button type="button" class="ritual-use"><i class="fas fa-bolt"></i> {{localize "VTM_REVISED.Item.Use"}}</button>
+      <button type="button" class="ritual-edit"><i class="fas fa-edit"></i> {{localize "VTM_REVISED.Item.Edit"}}</button>
+    </div>
+  </header>
+
+  <section class="vtm-ritual-card-body">
+    <article class="vtm-panel ritual-summary-panel">
+      <h2>{{localize "VTM_REVISED.Ritual.Summary"}}</h2>
+      <dl class="vtm-ritual-facts">
+        <dt>{{localize "VTM_REVISED.Item.Level"}}</dt><dd>{{level}}</dd>
+        <dt>{{localize "TYPES.Item.discipline"}}</dt><dd>{{#if discipline}}{{discipline}}{{else}}—{{/if}}</dd>
+        <dt>{{localize "VTM_REVISED.Ritual.CastingTime"}}</dt><dd>{{#if castingTime}}{{castingTime}}{{else}}—{{/if}}</dd>
+        <dt>{{localize "VTM_REVISED.Item.Cost"}}</dt><dd>{{#if costText}}{{costText}}{{else}}—{{/if}}</dd>
+      </dl>
+    </article>
+
+    {{#if description}}
+      <article class="vtm-panel">
+        <h2>{{localize "VTM_REVISED.Ritual.Literary"}}</h2>
+        <div class="vtm-rich-text vtm-literary-text">{{{description}}}</div>
+      </article>
+    {{else}}
+      <article class="vtm-panel warning-panel">
+        <h2>{{localize "VTM_REVISED.Ritual.NoDescription"}}</h2>
+        <p class="muted">Для этого ритуала пока нет литературного описания. Добавь его в карточку ритуала или импортируй справочник ритуалов.</p>
+      </article>
+    {{/if}}
+
+    {{#if components}}
+      <article class="vtm-panel">
+        <h2>{{localize "VTM_REVISED.Ritual.Components"}}</h2>
+        <div class="vtm-rich-text">{{{components}}}</div>
+      </article>
+    {{/if}}
+
+    {{#if systemText}}
+      <details class="vtm-system-text" open>
+        <summary>{{localize "VTM_REVISED.Item.SystemText"}}</summary>
+        <div class="vtm-rich-text">{{{systemText}}}</div>
+      </details>
+    {{/if}}
+    {{#if activation}}
+      <details class="vtm-system-text" open><summary>{{localize "VTM_REVISED.Ritual.Activation"}}</summary><div class="vtm-rich-text">{{{activation}}}</div></details>
+    {{/if}}
+    {{#if duration}}
+      <details class="vtm-system-text" open><summary>{{localize "VTM_REVISED.Ritual.Duration"}}</summary><div class="vtm-rich-text">{{{duration}}}</div></details>
+    {{/if}}
+    {{#if successScaling}}
+      <details class="vtm-system-text" open><summary>{{localize "VTM_REVISED.Ritual.SuccessScaling"}}</summary><div class="vtm-rich-text">{{{successScaling}}}</div></details>
+    {{/if}}
+    {{#if resistance}}
+      <details class="vtm-system-text"><summary>{{localize "VTM_REVISED.Ritual.Resistance"}}</summary><div class="vtm-rich-text">{{{resistance}}}</div></details>
+    {{/if}}
+    {{#if limits}}
+      <details class="vtm-system-text" open><summary>{{localize "VTM_REVISED.Ritual.Limits"}}</summary><div class="vtm-rich-text">{{{limits}}}</div></details>
+    {{/if}}
+    {{#if failure}}
+      <details class="vtm-system-text"><summary>{{localize "VTM_REVISED.Ritual.Failure"}}</summary><div class="vtm-rich-text">{{{failure}}}</div></details>
+    {{/if}}
+    {{#if botch}}
+      <details class="vtm-system-text"><summary>{{localize "VTM_REVISED.Ritual.Botch"}}</summary><div class="vtm-rich-text">{{{botch}}}</div></details>
+    {{/if}}
+    {{#if automationNotes}}
+      <details class="vtm-system-text"><summary>{{localize "VTM_REVISED.Ritual.AutomationNotes"}}</summary><div class="vtm-rich-text">{{{automationNotes}}}</div></details>
+    {{/if}}
+
+    <article class="vtm-panel source-panel">
+      <h2>{{localize "VTM_REVISED.Ritual.Source"}}</h2>
+      <p class="muted">
+        <span class="vtm-audit-badge audit-{{auditStatus}}">{{auditStatusLabel}}</span>
+        {{#if sourceUrl}} · {{localize "VTM_REVISED.Item.SourceUrl"}}: {{sourceUrl}}{{/if}}
+        {{#if sourceBook}} · {{sourceBook}}{{/if}}
+        {{#if sourcePage}} · стр. {{sourcePage}}{{/if}}
+      </p>
+      {{#if auditNotes}}<div class="vtm-rich-text">{{{auditNotes}}}</div>{{/if}}
+    </article>
+  </section>
+</div>

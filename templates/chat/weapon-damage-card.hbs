@@ -1,0 +1,9 @@
+<div class="vtm-chat-card weapon-damage-card">
+  <h3>{{localize "VTM_REVISED.Weapon.DamageSummary"}}: {{item.name}}</h3>
+  {{#if actor}}<p><strong>{{actor.name}}</strong></p>{{/if}}
+  <p>{{localize "VTM_REVISED.Weapon.AttackSuccesses"}}: {{attackSuccesses}}</p>
+  <p>{{localize "VTM_REVISED.Weapon.ExtraAttackSuccesses"}}: {{extraSuccesses}}</p>
+  <p>{{localize "VTM_REVISED.Weapon.DamagePool"}}: {{damagePool}} · {{localize "VTM_REVISED.Weapon.DamageType"}}: {{damageTypeLabel}}</p>
+  <p class="result">{{localize "VTM_REVISED.Weapon.DamageLevelsBeforeSoak"}}: {{damageSuccesses}}</p>
+  {{#if soakHint}}<p class="muted">{{soakHint}}</p>{{/if}}
+</div>

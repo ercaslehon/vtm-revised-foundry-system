@@ -1,0 +1,26 @@
+<div class="vtm-archetype-card-root">
+  <header class="vtm-card-header archetype-card-header">
+    <h1>{{archetype.name}}</h1>
+    <p>{{kindLabel}}{{#if isCustom}} · {{localize "VTM_REVISED.Archetype.Custom"}}{{/if}}</p>
+  </header>
+
+  <section class="vtm-archetype-card-body">
+    <article class="vtm-card-section">
+      <h2>Литературно</h2>
+      <blockquote>{{archetype.motto}}</blockquote>
+      <p>{{archetype.summary}}</p>
+    </article>
+
+    <article class="vtm-card-section">
+      <h2>Механика</h2>
+      {{#if isNature}}
+        <p><strong>{{localize "VTM_REVISED.Archetype.WillpowerRegain"}}:</strong> {{archetype.regain}}</p>
+        <p>Натура описывает подлинный внутренний импульс персонажа. Когда персонаж действует в соответствии с ней достаточно ярко и значимо для сцены, Рассказчик может разрешить восстановить Силу Воли.</p>
+        <button type="button" class="archetype-card-restore-willpower"><i class="fas fa-plus"></i> {{localize "VTM_REVISED.Archetype.RestoreWillpower"}}</button>
+      {{else}}
+        <p><strong>{{localize "VTM_REVISED.Archetype.DemeanorMechanicTitle"}}:</strong> {{localize "VTM_REVISED.Archetype.DemeanorMechanic"}}</p>
+        <p>Маска показывает публичный образ персонажа: то, что он демонстрирует людям, котерии и обществу Сородичей. Она полезна для отыгрыша, обмана и социальных сцен, но сама по себе не восстанавливает Силу Воли.</p>
+      {{/if}}
+    </article>
+  </section>
+</div>

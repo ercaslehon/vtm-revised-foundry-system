@@ -1,0 +1,93 @@
+<div class="vtm-clan-card-root">
+  <header class="vtm-clan-card-header">
+    <div>
+      <h1>{{#if hasClan}}{{clan.name}}{{else}}{{selectedClanName}}{{/if}}</h1>
+      <p class="muted">
+        {{localize "VTM_REVISED.Profile.Clan"}}
+        {{#if system.nameEn}} · {{system.nameEn}}{{/if}}
+        {{#if system.sect}} · {{system.sect}}{{/if}}
+      </p>
+    </div>
+    {{#if clan}}
+      <button type="button" class="discipline-power-edit" data-item-uuid="{{clan.uuid}}" onclick="fromUuid('{{clan.uuid}}').then(i => i?.sheet?.render(true))">
+        <i class="fas fa-edit"></i> {{localize "VTM_REVISED.Item.Edit"}}
+      </button>
+    {{/if}}
+  </header>
+
+  <section class="vtm-clan-card-body">
+    {{#unless hasClan}}
+      <article class="vtm-panel">
+        <h2>{{localize "VTM_REVISED.Clan.NotFound"}}</h2>
+        <p>{{localize "VTM_REVISED.Clan.ImportHint"}}</p>
+      </article>
+    {{/unless}}
+
+    {{#if description}}
+      <article class="vtm-panel">
+        <h2>{{localize "VTM_REVISED.Clan.Description"}}</h2>
+        <div class="vtm-rich-text vtm-literary-text">{{{description}}}</div>
+      </article>
+    {{/if}}
+
+    {{#if shortDescription}}
+      <article class="vtm-panel">
+        <h2>{{localize "VTM_REVISED.Clan.ShortView"}}</h2>
+        <div class="vtm-rich-text">{{{shortDescription}}}</div>
+      </article>
+    {{/if}}
+
+    <article class="vtm-panel">
+      <h2>{{localize "VTM_REVISED.Clan.Mechanics"}}</h2>
+      {{#if disciplines.length}}
+        <p><strong>{{localize "VTM_REVISED.Clan.Disciplines"}}:</strong>
+          {{#each disciplines as |discipline index|}}{{#if index}}, {{/if}}{{discipline}}{{/each}}
+        </p>
+      {{/if}}
+      {{#if weakness}}
+        <details class="vtm-system-text" open>
+          <summary>{{localize "VTM_REVISED.Clan.Weakness"}}</summary>
+          <div class="vtm-rich-text">{{{weakness}}}</div>
+        </details>
+      {{/if}}
+      {{#if systemText}}
+        <details class="vtm-system-text" open>
+          <summary>{{localize "VTM_REVISED.Item.SystemText"}}</summary>
+          <div class="vtm-rich-text">{{{systemText}}}</div>
+        </details>
+      {{/if}}
+    </article>
+
+    {{#if organization}}
+      <article class="vtm-panel">
+        <h2>{{localize "VTM_REVISED.Clan.Organization"}}</h2>
+        <div class="vtm-rich-text">{{{organization}}}</div>
+      </article>
+    {{/if}}
+
+    {{#if opinion}}
+      <article class="vtm-panel">
+        <h2>{{localize "VTM_REVISED.Clan.Opinion"}}</h2>
+        <div class="vtm-rich-text">{{{opinion}}}</div>
+      </article>
+    {{/if}}
+
+    {{#if stereotypes}}
+      <article class="vtm-panel">
+        <h2>{{localize "VTM_REVISED.Clan.Stereotypes"}}</h2>
+        <div class="vtm-rich-text">{{{stereotypes}}}</div>
+      </article>
+    {{/if}}
+
+    {{#if roleplayTips}}
+      <article class="vtm-panel">
+        <h2>{{localize "VTM_REVISED.Clan.RoleplayTips"}}</h2>
+        <div class="vtm-rich-text">{{{roleplayTips}}}</div>
+      </article>
+    {{/if}}
+
+    {{#if sourceUrl}}
+      <p class="muted source-line">{{localize "VTM_REVISED.Item.SourceUrl"}}: {{sourceUrl}}{{#if sourceBook}} · {{sourceBook}}{{/if}}{{#if sourcePage}} · стр. {{sourcePage}}{{/if}}</p>
+    {{/if}}
+  </section>
+</div>

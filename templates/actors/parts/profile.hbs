@@ -1,0 +1,80 @@
+<section class="vtm-panel resources">
+  <h2>{{localize "VTM_REVISED.Section.Tracker"}}</h2>
+  
+  <div class="generation-cap-card">
+    <div>
+      <strong>{{localize "VTM_REVISED.Generation.Title"}}</strong>
+      <span>{{localize "VTM_REVISED.Profile.Generation"}} {{generationCaps.label}}</span>
+    </div>
+    <div class="generation-cap-values">
+      <span>{{localize "VTM_REVISED.Generation.TraitMax"}}: <strong>{{generationCaps.traitMax}}</strong></span>
+      <span>{{localize "VTM_REVISED.Generation.BloodMax"}}: <strong>{{#if generationCaps.bloodMax}}{{generationCaps.bloodMax}}{{else}}?{{/if}}</strong></span>
+      <span>{{localize "VTM_REVISED.Generation.BloodPerTurn"}}: <strong>{{#if generationCaps.bloodPerTurn}}{{generationCaps.bloodPerTurn}}{{else}}?{{/if}}</strong></span>
+    </div>
+    <button type="button" class="generation-sync"><i class="fas fa-rotate"></i> {{localize "VTM_REVISED.Generation.Sync"}}</button>
+  </div>
+
+  <div class="resource-grid">
+    <div class="resource-card">
+      <h3>{{localize "VTM_REVISED.Resource.Humanity"}}</h3>
+      <div class="resource-controls">
+        <button type="button" class="resource-change" data-resource="resources.humanity" data-delta="-1">−</button>
+        <input type="number" name="system.resources.humanity.value" value="{{system.resources.humanity.value}}"/>
+        <span>/</span>
+        <input type="number" name="system.resources.humanity.max" value="{{system.resources.humanity.max}}"/>
+        <button type="button" class="resource-change" data-resource="resources.humanity" data-delta="1">+</button>
+      </div>
+      <label>{{localize "VTM_REVISED.Resource.Path"}} <input name="system.resources.pathName" value="{{system.resources.pathName}}"/></label>
+    </div>
+    <div class="resource-card">
+      <h3>{{localize "VTM_REVISED.Resource.Willpower"}}</h3>
+      <div class="resource-controls">
+        <button type="button" class="resource-change" data-resource="resources.willpower" data-delta="-1">−</button>
+        <input type="number" name="system.resources.willpower.value" value="{{system.resources.willpower.value}}"/>
+        <span>/</span>
+        <input type="number" name="system.resources.willpower.max" value="{{system.resources.willpower.max}}"/>
+        <button type="button" class="resource-change" data-resource="resources.willpower" data-delta="1">+</button>
+      </div>
+    </div>
+    <div class="resource-card">
+      <h3>{{localize "VTM_REVISED.Resource.Blood"}}</h3>
+      <div class="resource-controls">
+        <button type="button" class="resource-change" data-resource="resources.blood" data-delta="-1">−</button>
+        <input type="number" name="system.resources.blood.value" value="{{system.resources.blood.value}}"/>
+        <span>/</span>
+        <input type="number" name="system.resources.blood.max" value="{{system.resources.blood.max}}" readonly/>
+        <button type="button" class="resource-change" data-resource="resources.blood" data-delta="1">+</button>
+      </div>
+      <label>{{localize "VTM_REVISED.Resource.BloodPerTurn"}} <input type="number" name="system.resources.bloodPerTurn" value="{{system.resources.bloodPerTurn}}" readonly/></label>
+    </div>
+    <div class="resource-card">
+      <h3>{{localize "VTM_REVISED.Resource.Experience"}}</h3>
+      <label>{{localize "VTM_REVISED.Resource.ExperienceTotal"}} <input type="number" name="system.resources.experience.total" value="{{system.resources.experience.total}}"/></label>
+      <label>{{localize "VTM_REVISED.Resource.ExperienceSpent"}} <input type="number" name="system.resources.experience.spent" value="{{system.resources.experience.spent}}"/></label>
+      <p>{{localize "VTM_REVISED.Resource.ExperienceAvailable"}}: <strong>{{system.resources.experience.available}}</strong></p>
+    </div>
+  </div>
+</section>
+
+<section class="vtm-panel health">
+  <h2>{{localize "VTM_REVISED.Section.Health"}}</h2>
+  <p class="health-active-penalty">
+    <strong>{{localize "VTM_REVISED.HealthPenalty.active"}}:</strong>
+    {{#if activeHealthPenalty.incapacitated}}
+      {{activeHealthPenalty.label}} — {{localize "VTM_REVISED.HealthPenalty.out"}}
+    {{else}}
+      {{activeHealthPenalty.label}} — {{activeHealthPenalty.value}} {{localize "VTM_REVISED.Roll.DiceShort"}}
+    {{/if}}
+  </p>
+  <div class="health-grid health-check-grid">
+    {{#each healthRows as |row|}}
+      <label class="health-row {{#if row.checked}}is-checked{{/if}}">
+        <input type="checkbox" class="health-checkbox" data-health="{{row.key}}" {{checked row.checked}}/>
+        <span class="health-info">
+          <span class="health-name">{{row.label}}</span>
+          <span class="health-penalty">{{row.penaltyLabel}}</span>
+        </span>
+      </label>
+    {{/each}}
+  </div>
+</section>

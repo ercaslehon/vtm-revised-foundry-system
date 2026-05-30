@@ -1,0 +1,135 @@
+<form class="{{cssClass}} vtm-sheet item-sheet" autocomplete="off">
+  <header class="sheet-header">
+    <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}"/>
+    <section class="header-fields">
+      <h1><input name="name" type="text" value="{{item.name}}"/></h1>
+      <p class="muted">{{localize (concat "TYPES.Item." item.type)}}</p>
+    </section>
+  </header>
+  <section class="vtm-panel">
+    {{#if (eq item.type "clan")}}
+      <label>{{localize "VTM_REVISED.Item.Category"}} <input name="system.category" value="{{system.category}}"/></label>
+      <label>{{localize "VTM_REVISED.Item.Slug"}} <input name="system.slug" value="{{system.slug}}"/></label>
+      <label>{{localize "VTM_REVISED.Item.Aliases"}} <input name="system.aliases" value="{{system.aliases}}"/></label>
+    {{else if (eq item.type "sect")}}
+      <label>{{localize "VTM_REVISED.Item.Category"}} <input name="system.category" value="{{system.category}}"/></label>
+      <label>{{localize "VTM_REVISED.Item.Slug"}} <input name="system.slug" value="{{system.slug}}"/></label>
+      <label>{{localize "VTM_REVISED.Item.Aliases"}} <input name="system.aliases" value="{{system.aliases}}"/></label>
+    {{else if (eq item.type "disciplinePower")}}
+      <label>{{localize "VTM_REVISED.Item.Level"}} <input type="number" name="system.level" value="{{system.level}}"/></label>
+      <label>{{localize "VTM_REVISED.Item.ParentDiscipline"}} <input name="system.parentDiscipline" value="{{system.parentDiscipline}}"/></label>
+    {{else if (eq item.type "ritual")}}
+      <label>{{localize "VTM_REVISED.Item.Level"}} <input type="number" name="system.level" value="{{system.level}}"/></label>
+      <label>{{localize "VTM_REVISED.Item.Discipline"}} <input name="system.discipline" value="{{system.discipline}}"/></label>
+      <label>{{localize "VTM_REVISED.Item.CastingTime"}} <input name="system.castingTime" value="{{system.castingTime}}"/></label>
+      <label>{{localize "VTM_REVISED.Item.Cost"}} <input name="system.cost" value="{{system.cost}}"/></label>
+    {{else if (eq item.type "disciplinePath")}}
+      <label>{{localize "VTM_REVISED.Item.Rating"}} <input type="number" name="system.rating" value="{{system.rating}}" min="0" max="{{traitMax}}"/></label>
+      <label>{{localize "VTM_REVISED.Item.ParentDiscipline"}} <input name="system.parentDiscipline" value="{{system.parentDiscipline}}"/></label>
+    {{else if (eq item.type "weapon")}}
+      <div class="grid grid-2">
+        <label>{{localize "VTM_REVISED.Weapon.Category"}}
+          <select name="system.weapon.category">
+            {{#each config.weaponCategories as |category|}}
+              <option value="{{category.key}}" {{#if (eq ../system.weapon.category category.key)}}selected{{/if}}>{{category.name}}</option>
+            {{/each}}
+          </select>
+        </label>
+        <label>{{localize "VTM_REVISED.Weapon.DamageType"}}
+          <select name="system.weapon.damageType">
+            {{#each config.damageTypes as |type|}}
+              <option value="{{type.key}}" {{#if (eq ../system.weapon.damageType type.key)}}selected{{/if}}>{{type.name}}</option>
+            {{/each}}
+          </select>
+        </label>
+        <label>{{localize "VTM_REVISED.Weapon.AttackDifficulty"}} <input type="number" min="2" max="10" name="system.weapon.difficulty" value="{{system.weapon.difficulty}}"/></label>
+        <label>{{localize "VTM_REVISED.Weapon.DamageDifficulty"}} <input type="number" min="2" max="10" name="system.weapon.damageDifficulty" value="{{system.weapon.damageDifficulty}}"/></label>
+        <label>{{localize "VTM_REVISED.Weapon.DamageBonus"}} <input type="number" name="system.weapon.damageBonus" value="{{system.weapon.damageBonus}}"/></label>
+        <label>{{localize "VTM_REVISED.Weapon.DamageDice"}} <input type="number" min="0" name="system.weapon.damageDice" value="{{system.weapon.damageDice}}"/></label>
+        <label>{{localize "VTM_REVISED.Weapon.Range"}} <input name="system.weapon.range" value="{{system.weapon.range}}"/></label>
+        <label>{{localize "VTM_REVISED.Weapon.Rate"}} <input name="system.weapon.rate" value="{{system.weapon.rate}}"/></label>
+        <label>{{localize "VTM_REVISED.Weapon.Clip"}} <input name="system.weapon.clip" value="{{system.weapon.clip}}"/></label>
+        <label>{{localize "VTM_REVISED.Weapon.Conceal"}} <input name="system.weapon.conceal" value="{{system.weapon.conceal}}"/></label>
+        <label>{{localize "VTM_REVISED.Weapon.MinimumStrength"}} <input type="number" min="0" max="10" name="system.weapon.minimumStrength" value="{{system.weapon.minimumStrength}}"/></label>
+      </div>
+      <div class="grid grid-2">
+        <label>{{localize "VTM_REVISED.Roll.FirstTrait"}}
+          <select name="system.weapon.attackFirstTrait">
+            {{#each rollTraitOptions as |option|}}
+              <option value="{{option.key}}" {{#if (eq ../system.weapon.attackFirstTrait option.key)}}selected{{/if}}>{{option.display}}</option>
+            {{/each}}
+          </select>
+        </label>
+        <label>{{localize "VTM_REVISED.Roll.SecondTrait"}}
+          <select name="system.weapon.attackSecondTrait">
+            {{#each rollTraitOptions as |option|}}
+              <option value="{{option.key}}" {{#if (eq ../system.weapon.attackSecondTrait option.key)}}selected{{/if}}>{{option.display}}</option>
+            {{/each}}
+          </select>
+        </label>
+      </div>
+      <label><input type="checkbox" name="system.weapon.usesStrength" {{#if system.weapon.usesStrength}}checked{{/if}}/> {{localize "VTM_REVISED.Weapon.UsesStrength"}}</label>
+      <label><input type="checkbox" name="system.weapon.addsAttackSuccesses" {{#if system.weapon.addsAttackSuccesses}}checked{{/if}}/> {{localize "VTM_REVISED.Weapon.AddsAttackSuccesses"}}</label>
+      <label>{{localize "VTM_REVISED.Weapon.Notes"}} <textarea name="system.weapon.notes" rows="3">{{system.weapon.notes}}</textarea></label>
+    {{else if (or (eq item.type "discipline") (eq item.type "background"))}}
+      <label>{{localize "VTM_REVISED.Item.Rating"}} <input type="number" name="system.rating" value="{{system.rating}}" min="0" max="{{traitMax}}"/></label>
+    {{else if (or (eq item.type "merit") (eq item.type "flaw"))}}
+      <label>{{localize "VTM_REVISED.Item.Points"}} <input type="number" name="system.points" value="{{system.points}}"/></label>
+      <label>{{localize "VTM_REVISED.MeritFlaw.Category"}} <input name="system.category" value="{{system.category}}"/></label>
+      <label>{{localize "VTM_REVISED.MeritFlaw.Trigger"}} <input name="system.trigger" value="{{system.trigger}}"/></label>
+    {{/if}}
+    {{#if (or (eq item.type "discipline") (or (eq item.type "disciplinePower") (or (eq item.type "disciplinePath") (or (eq item.type "ritual") (or (eq item.type "clan") (or (eq item.type "sect") (or (eq item.type "weapon") (or (eq item.type "merit") (or (eq item.type "flaw") (eq item.type "ruleEntry"))))))))))}}
+      <label>{{localize "VTM_REVISED.Item.Description"}} {{editor system.description.value target="system.description.value" button=true editable=editable}}</label>
+      <label>{{localize "VTM_REVISED.Item.SystemText"}} {{editor system.description.system target="system.description.system" button=true editable=editable}}</label>
+      <label>{{localize "VTM_REVISED.Item.ChatText"}} {{editor system.description.chat target="system.description.chat" button=true editable=editable}}</label>
+    {{else}}
+      <label>{{localize "VTM_REVISED.Item.Description"}} {{editor system.description.value target="system.description.value" button=true editable=editable}}</label>
+    {{/if}}
+
+    {{#if system.effect}}
+      <hr/>
+      <h3>{{localize "VTM_REVISED.MeritFlaw.Effect"}}</h3>
+      <div class="grid grid-2">
+        <label>{{localize "VTM_REVISED.MeritFlaw.EffectType"}} <input name="system.effect.type" value="{{system.effect.type}}"/></label>
+        <label>{{localize "VTM_REVISED.MeritFlaw.Target"}} <input name="system.effect.target" value="{{system.effect.target}}"/></label>
+        <label>{{localize "VTM_REVISED.MeritFlaw.DifficultyModifier"}} <input type="number" name="system.effect.difficultyModifier" value="{{system.effect.difficultyModifier}}"/></label>
+        <label>{{localize "VTM_REVISED.MeritFlaw.DiceModifier"}} <input type="number" name="system.effect.diceModifier" value="{{system.effect.diceModifier}}"/></label>
+      </div>
+      <label>{{localize "VTM_REVISED.MeritFlaw.EffectNotes"}} {{editor system.effect.notes target="system.effect.notes" button=true editable=editable}}</label>
+    {{/if}}
+
+    {{#if system.automation}}
+      <hr/>
+      <h3>{{localize "VTM_REVISED.Item.Automation"}}</h3>
+      <div class="grid grid-2">
+        <label>{{localize "VTM_REVISED.Roll.FirstTrait"}}
+          <select name="system.automation.roll.firstTrait">
+            {{#each rollTraitOptions as |option|}}
+              <option value="{{option.key}}" {{#if (eq ../system.automation.roll.firstTrait option.key)}}selected{{/if}}>{{option.display}}</option>
+            {{/each}}
+          </select>
+        </label>
+        <label>{{localize "VTM_REVISED.Roll.SecondTrait"}}
+          <select name="system.automation.roll.secondTrait">
+            {{#each rollTraitOptions as |option|}}
+              <option value="{{option.key}}" {{#if (eq ../system.automation.roll.secondTrait option.key)}}selected{{/if}}>{{option.display}}</option>
+            {{/each}}
+          </select>
+        </label>
+        <label>{{localize "VTM_REVISED.Roll.Difficulty"}} <input type="number" min="2" max="10" name="system.automation.roll.difficulty" value="{{system.automation.roll.difficulty}}"/></label>
+        <label>{{localize "VTM_REVISED.Roll.Label"}} <input name="system.automation.roll.label" value="{{system.automation.roll.label}}"/></label>
+        <label>{{localize "VTM_REVISED.Item.CostResource"}}
+          <select name="system.automation.cost.resource">
+            <option value="" {{#if (eq system.automation.cost.resource "")}}selected{{/if}}>{{localize "VTM_REVISED.Item.NoCost"}}</option>
+            <option value="blood" {{#if (eq system.automation.cost.resource "blood")}}selected{{/if}}>{{localize "VTM_REVISED.Resource.Blood"}}</option>
+            <option value="willpower" {{#if (eq system.automation.cost.resource "willpower")}}selected{{/if}}>{{localize "VTM_REVISED.Resource.Willpower"}}</option>
+          </select>
+        </label>
+        <label>{{localize "VTM_REVISED.Item.CostAmount"}} <input type="number" min="0" name="system.automation.cost.amount" value="{{system.automation.cost.amount}}"/></label>
+      </div>
+      <label>{{localize "VTM_REVISED.Item.CostText"}} <input name="system.automation.cost.text" value="{{system.automation.cost.text}}"/></label>
+      <label>{{localize "VTM_REVISED.Item.SourceUrl"}} <input name="system.automation.source.url" value="{{system.automation.source.url}}"/></label>
+    {{/if}}
+
+  </section>
+</form>

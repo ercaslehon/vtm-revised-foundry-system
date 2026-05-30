@@ -1,0 +1,150 @@
+<div class="vtm-discipline-card-root">
+  <header class="vtm-discipline-card-header">
+    <div>
+      <h1>{{discipline.name}}</h1>
+      <p class="muted">{{localize "TYPES.Item.discipline"}} · {{localize "VTM_REVISED.Item.Rating"}} {{rating}} · {{actor.name}}</p>
+      {{#if canEditRating}}
+        <label class="discipline-rating-control">{{localize "VTM_REVISED.Discipline.RatingEdit"}}
+          <input class="discipline-rating-input" type="number" min="0" max="10" value="{{rating}}" />
+        </label>
+      {{else}}
+        <p class="muted">{{localize "VTM_REVISED.Discipline.WorldItemReadOnly"}}</p>
+      {{/if}}
+    </div>
+    <button type="button" class="discipline-power-edit" data-item-uuid="{{discipline.uuid}}">
+      <i class="fas fa-edit"></i> {{localize "VTM_REVISED.Item.Edit"}}
+    </button>
+  </header>
+
+  <section class="vtm-discipline-card-body">
+    {{#if description}}
+      <article class="vtm-discipline-card-description vtm-panel">
+        <h2>{{localize "VTM_REVISED.Discipline.Description"}}</h2>
+        <div class="vtm-rich-text">{{{description}}}</div>
+      </article>
+    {{/if}}
+
+    {{#if paths.length}}
+      <article class="vtm-panel">
+        <h2>{{localize "VTM_REVISED.Discipline.Paths"}}</h2>
+        <ol class="vtm-card-list">
+          {{#each paths as |path|}}
+            <li>
+              <strong>{{path.name}}</strong>
+              {{#if path.system.rating}}<span class="vtm-badge">{{path.system.rating}}</span>{{/if}}
+            </li>
+          {{/each}}
+        </ol>
+      </article>
+    {{/if}}
+
+    <article class="vtm-panel">
+      <h2>{{localize "VTM_REVISED.Discipline.Powers"}}</h2>
+      {{#if hasPowers}}
+        <ol class="vtm-discipline-powers">
+          {{#each powers as |power|}}
+            <li class="vtm-discipline-power {{#if power.available}}is-available{{else}}is-locked{{/if}} audit-{{power.auditStatus}}">
+              <header class="vtm-discipline-power-header">
+                <div>
+                  <h3>{{localize "VTM_REVISED.Item.Level"}} {{#if power.levelLabel}}{{power.levelLabel}}{{else}}{{power.level}}{{/if}} · {{power.name}}</h3>
+                  <p class="muted">
+                    <span class="vtm-audit-badge audit-{{power.auditStatus}}">{{power.auditStatusLabel}}</span>
+                    {{#if power.available}}
+                      · {{localize "VTM_REVISED.Discipline.Available"}}
+                    {{else}}
+                      · {{localize "VTM_REVISED.Discipline.Locked"}}
+                    {{/if}}
+                    {{#if power.difficulty}} · {{localize "VTM_REVISED.Roll.Difficulty"}} {{power.difficulty}}{{/if}}
+                    {{#if power.costText}} · {{power.costText}}{{/if}}
+                  </p>
+                </div>
+                <div class="vtm-card-actions">
+                  {{#if power.canUse}}
+                    <button type="button" class="discipline-power-use" data-item-uuid="{{power.uuid}}">
+                      <i class="fas fa-bolt"></i> {{localize "VTM_REVISED.Item.Use"}}
+                    </button>
+                  {{else}}
+                    <button type="button" class="discipline-power-use" data-item-uuid="{{power.uuid}}" disabled title="{{power.useDisabledReason}}">
+                      <i class="fas fa-lock"></i> Непроверено
+                    </button>
+                  {{/if}}
+                  <button type="button" class="discipline-power-edit" data-item-uuid="{{power.uuid}}">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                </div>
+              </header>
+
+              {{#if power.description}}
+                <div class="vtm-rich-text vtm-literary-text">{{{power.description}}}</div>
+              {{/if}}
+
+              {{#if power.systemText}}
+                <details class="vtm-system-text" open>
+                  <summary>{{localize "VTM_REVISED.Item.SystemText"}}</summary>
+                  <div class="vtm-rich-text">{{{power.systemText}}}</div>
+                </details>
+              {{/if}}
+
+              {{#if power.activation}}
+                <details class="vtm-system-text" open>
+                  <summary>Активация</summary>
+                  <div class="vtm-rich-text">{{{power.activation}}}</div>
+                </details>
+              {{/if}}
+              {{#if power.duration}}
+                <details class="vtm-system-text" open>
+                  <summary>Длительность</summary>
+                  <div class="vtm-rich-text">{{{power.duration}}}</div>
+                </details>
+              {{/if}}
+              {{#if power.successScaling}}
+                <details class="vtm-system-text" open>
+                  <summary>Успехи и масштабирование</summary>
+                  <div class="vtm-rich-text">{{{power.successScaling}}}</div>
+                </details>
+              {{/if}}
+              {{#if power.resistance}}
+                <details class="vtm-system-text" open>
+                  <summary>Сопротивление</summary>
+                  <div class="vtm-rich-text">{{{power.resistance}}}</div>
+                </details>
+              {{/if}}
+              {{#if power.limits}}
+                <details class="vtm-system-text" open>
+                  <summary>Ограничения</summary>
+                  <div class="vtm-rich-text">{{{power.limits}}}</div>
+                </details>
+              {{/if}}
+              {{#if power.failure}}
+                <details class="vtm-system-text">
+                  <summary>Провал</summary>
+                  <div class="vtm-rich-text">{{{power.failure}}}</div>
+                </details>
+              {{/if}}
+              {{#if power.botch}}
+                <details class="vtm-system-text">
+                  <summary>Ботч</summary>
+                  <div class="vtm-rich-text">{{{power.botch}}}</div>
+                </details>
+              {{/if}}
+              {{#if power.automationNotes}}
+                <details class="vtm-system-text">
+                  <summary>Заметка по автоматизации</summary>
+                  <div class="vtm-rich-text">{{{power.automationNotes}}}</div>
+                </details>
+              {{/if}}
+              {{#if power.auditNotes}}
+                <p class="muted source-line">Аудит: {{{power.auditNotes}}}</p>
+              {{/if}}
+              {{#if power.sourceUrl}}
+                <p class="muted source-line">{{localize "VTM_REVISED.Item.SourceUrl"}}: {{power.sourceUrl}}{{#if power.sourceBook}} · {{power.sourceBook}}{{/if}}{{#if power.sourcePage}} · стр. {{power.sourcePage}}{{/if}}</p>
+              {{/if}}
+            </li>
+          {{/each}}
+        </ol>
+      {{else}}
+        <p class="muted">{{localize "VTM_REVISED.Discipline.NoPowers"}}</p>
+      {{/if}}
+    </article>
+  </section>
+</div>

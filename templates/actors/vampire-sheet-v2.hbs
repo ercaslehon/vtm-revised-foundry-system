@@ -1,0 +1,145 @@
+<div class="{{cssClass}} vtm-sheet vtm-sheet-v2">
+  <header class="sheet-header">
+    <div class="portrait-card">
+      <img class="profile-img actor-portrait-edit" src="{{actor.img}}" data-edit="img" title="{{actor.name}}"/>
+      <div class="portrait-actions">
+        <button type="button" class="actor-portrait-edit" title="{{localize 'VTM_REVISED.Portrait.Edit'}}"><i class="fas fa-image"></i></button>
+        <button type="button" class="actor-portrait-sync-token" title="{{localize 'VTM_REVISED.Portrait.SyncToken'}}"><i class="fas fa-user-tag"></i></button>
+        <button type="button" class="actor-portrait-reset" title="{{localize 'VTM_REVISED.Portrait.Reset'}}"><i class="fas fa-rotate-left"></i></button>
+      </div>
+      <input type="hidden" name="img" value="{{actor.img}}"/>
+      <input type="hidden" name="system.profile.avatar" value="{{system.profile.avatar}}"/>
+    </div>
+    <section class="header-fields">
+      <h1><input name="name" type="text" value="{{actor.name}}" placeholder="{{localize 'VTM_REVISED.Actor.Name'}}"/></h1>
+      <div class="grid grid-4">
+        <label class="clan-picker-label">{{localize "VTM_REVISED.Profile.Clan"}}
+          <div class="clan-picker-row">
+            <select name="system.profile.clan" class="clan-select">
+              <option value="">{{localize "VTM_REVISED.Empty"}}</option>
+              {{#if selectedClan}}
+                {{#unless selectedClan.slug}}
+                  <option value="{{system.profile.clan}}" selected>{{system.profile.clan}} · {{localize "VTM_REVISED.Archetype.Custom"}}</option>
+                {{/unless}}
+              {{/if}}
+              {{#each config.clanOptions as |clan|}}
+                <option value="{{clan.name}}" {{#if (eq ../system.profile.clan clan.name)}}selected{{/if}}>{{clan.name}}</option>
+              {{/each}}
+            </select>
+            <button type="button" class="clan-card-open" title="{{localize 'VTM_REVISED.Clan.OpenCard'}}"><i class="fas fa-book-open"></i></button>
+          </div>
+        </label>
+        <label>{{localize "VTM_REVISED.Profile.Generation"}}
+          <select name="system.profile.generation" class="generation-select">
+            {{#each generationOptions as |option|}}
+              <option value="{{option.key}}" {{#if (eq ../generationCaps.key option.key)}}selected{{/if}}>{{option.label}}</option>
+            {{/each}}
+          </select>
+        </label>
+        <label>{{localize "VTM_REVISED.Profile.Nature"}}
+          <div class="archetype-picker-row">
+            <select name="system.profile.nature" class="archetype-select">
+              <option value="">{{localize "VTM_REVISED.Empty"}}</option>
+              {{#if selectedNature.isCustom}}
+                <option value="{{system.profile.nature}}" selected>{{system.profile.nature}} · {{localize "VTM_REVISED.Archetype.Custom"}}</option>
+              {{/if}}
+              {{#each archetypeOptions as |archetype|}}
+                <option value="{{archetype.name}}" {{#if (eq ../system.profile.nature archetype.name)}}selected{{/if}}>{{archetype.name}}</option>
+              {{/each}}
+            </select>
+            <button type="button" class="archetype-card-open" data-kind="nature" title="Открыть описание Натуры"><i class="fas fa-book-open"></i></button>
+          </div>
+        </label>
+        <label>{{localize "VTM_REVISED.Profile.Demeanor"}}
+          <div class="archetype-picker-row">
+            <select name="system.profile.demeanor" class="archetype-select">
+              <option value="">{{localize "VTM_REVISED.Empty"}}</option>
+              {{#if selectedDemeanor.isCustom}}
+                <option value="{{system.profile.demeanor}}" selected>{{system.profile.demeanor}} · {{localize "VTM_REVISED.Archetype.Custom"}}</option>
+              {{/if}}
+              {{#each archetypeOptions as |archetype|}}
+                <option value="{{archetype.name}}" {{#if (eq ../system.profile.demeanor archetype.name)}}selected{{/if}}>{{archetype.name}}</option>
+              {{/each}}
+            </select>
+            <button type="button" class="archetype-card-open" data-kind="demeanor" title="Открыть описание Маски"><i class="fas fa-book-open"></i></button>
+          </div>
+        </label>
+      </div>
+    </section>
+  </header>
+
+  <section class="vtm-panel vtm-roll-builder">
+    <h2>{{localize "VTM_REVISED.Roll.BuilderTitle"}}</h2>
+    <div class="vtm-roll-builder-grid">
+      <label>{{localize "VTM_REVISED.Roll.FirstTrait"}}
+        <select data-roll-field="firstTrait">
+          {{#each rollTraitOptions as |option|}}
+            <option value="{{option.key}}">{{option.display}}</option>
+          {{/each}}
+        </select>
+      </label>
+      <label>{{localize "VTM_REVISED.Roll.SecondTrait"}}
+        <select data-roll-field="secondTrait">
+          <option value="">{{localize "VTM_REVISED.Roll.NoSecondTrait"}}</option>
+          {{#each rollTraitOptions as |option|}}
+            <option value="{{option.key}}">{{option.display}}</option>
+          {{/each}}
+        </select>
+      </label>
+      <label>{{localize "VTM_REVISED.Roll.Difficulty"}}
+        <input type="number" data-roll-field="difficulty" min="2" max="10" value="6"/>
+      </label>
+      <label>{{localize "VTM_REVISED.Roll.Label"}}
+        <input type="text" data-roll-field="label" placeholder="{{localize 'VTM_REVISED.Roll.LabelPlaceholder'}}"/>
+      </label>
+      <button type="button" class="vtm-roll-builder-submit"><i class="fas fa-dice-d10"></i> {{localize "VTM_REVISED.Roll.RollButton"}}</button>
+    </div>
+  </section>
+
+
+  <section class="vtm-sheet-body">
+    {{> "systems/vtm-revised/templates/actors/parts/profile.hbs"}}
+  <section class="vtm-panel archetypes-panel">
+    <h2>{{localize "VTM_REVISED.Archetype.Title"}}</h2>
+    <p class="archetype-help">{{localize "VTM_REVISED.Archetype.Help"}}</p>
+    <div class="archetype-grid">
+      <article class="archetype-card nature-card">
+        <header>
+          <h3>{{localize "VTM_REVISED.Archetype.Nature"}}: {{#if selectedNature}}{{selectedNature.name}}{{else}}{{localize "VTM_REVISED.Empty"}}{{/if}}</h3>
+          {{#if selectedNature}}<span>{{selectedNature.motto}}</span>{{/if}}
+        </header>
+        {{#if selectedNature}}
+          <p>{{selectedNature.summary}}</p>
+          <div class="archetype-mechanic">
+            <strong>{{localize "VTM_REVISED.Archetype.WillpowerRegain"}}:</strong> {{selectedNature.regain}}
+          </div>
+          <button type="button" class="nature-willpower-restore"><i class="fas fa-plus"></i> {{localize "VTM_REVISED.Archetype.RestoreWillpower"}}</button>
+        {{else}}
+          <p>{{localize "VTM_REVISED.Archetype.SelectNaturePrompt"}}</p>
+        {{/if}}
+      </article>
+      <article class="archetype-card demeanor-card">
+        <header>
+          <h3>{{localize "VTM_REVISED.Archetype.Demeanor"}}: {{#if selectedDemeanor}}{{selectedDemeanor.name}}{{else}}{{localize "VTM_REVISED.Empty"}}{{/if}}</h3>
+          {{#if selectedDemeanor}}<span>{{selectedDemeanor.motto}}</span>{{/if}}
+        </header>
+        {{#if selectedDemeanor}}
+          <p>{{selectedDemeanor.summary}}</p>
+          <div class="archetype-mechanic">
+            <strong>{{localize "VTM_REVISED.Archetype.DemeanorMechanicTitle"}}:</strong> {{localize "VTM_REVISED.Archetype.DemeanorMechanic"}}
+          </div>
+        {{else}}
+          <p>{{localize "VTM_REVISED.Archetype.SelectDemeanorPrompt"}}</p>
+        {{/if}}
+      </article>
+    </div>
+  </section>
+
+    {{> "systems/vtm-revised/templates/actors/parts/attributes.hbs"}}
+    {{> "systems/vtm-revised/templates/actors/parts/abilities.hbs"}}
+    {{> "systems/vtm-revised/templates/actors/parts/advantages.hbs"}}
+    {{> "systems/vtm-revised/templates/actors/parts/weapons.hbs"}}
+    {{> "systems/vtm-revised/templates/actors/parts/blood-magic.hbs"}}
+    {{> "systems/vtm-revised/templates/actors/parts/notes-v2.hbs"}}
+  </section>
+</div>

@@ -1,0 +1,26 @@
+<section class="vtm-panel">
+  <h2>{{localize "VTM_REVISED.Section.Profile"}}</h2>
+  <div class="grid grid-3">
+    <label>{{localize "VTM_REVISED.Profile.Player"}} <input name="system.profile.player" value="{{system.profile.player}}"/></label>
+    <label>{{localize "VTM_REVISED.Profile.Chronicle"}} <input name="system.profile.chronicle" value="{{system.profile.chronicle}}"/></label>
+    <label>{{localize "VTM_REVISED.Profile.Concept"}} <input name="system.profile.concept" value="{{system.profile.concept}}"/></label>
+    <label>{{localize "VTM_REVISED.Profile.Sire"}} <input name="system.profile.sire" value="{{system.profile.sire}}"/></label>
+    <label>{{localize "VTM_REVISED.Profile.Sect"}}
+      <select name="system.profile.sect">
+        <option value="">{{localize "VTM_REVISED.Empty"}}</option>
+        {{#each config.sectOptions as |sect|}}
+          <option value="{{sect.name}}" {{#if (eq ../system.profile.sect sect.name)}}selected{{/if}}>{{sect.name}}</option>
+        {{/each}}
+      </select>
+    </label>
+    <label>{{localize "VTM_REVISED.Profile.Age"}} <input name="system.profile.age" value="{{system.profile.age}}"/></label>
+  </div>
+</section>
+<section class="vtm-panel text-blocks">
+  <label>{{localize "VTM_REVISED.Profile.Appearance"}} <textarea name="system.profile.appearance">{{system.profile.appearance}}</textarea></label>
+  <label>{{localize "VTM_REVISED.Profile.History"}} <textarea name="system.profile.history">{{system.profile.history}}</textarea></label>
+  <label>{{localize "VTM_REVISED.Profile.Goals"}} <textarea name="system.profile.goals">{{system.profile.goals}}</textarea></label>
+  <label>{{localize "VTM_REVISED.Profile.AlliesContacts"}} <textarea name="system.profile.alliesContacts">{{system.profile.alliesContacts}}</textarea></label>
+  <label>{{localize "VTM_REVISED.Profile.Possessions"}} <textarea name="system.profile.possessions">{{system.profile.possessions}}</textarea></label>
+  <label>{{localize "VTM_REVISED.Profile.Notes"}} <textarea name="system.profile.notes">{{system.profile.notes}}</textarea></label>
+</section>

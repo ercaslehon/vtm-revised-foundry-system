@@ -1,0 +1,52 @@
+{
+  "folderName": "VtM Revised Discipline Card Demo",
+  "note": "Демо формата для интерактивной карточки дисциплины. Описания здесь короткие технические заглушки, не полный текст правил.",
+  "disciplines": [
+    {
+      "name": "Присутствие",
+      "slug": "presence",
+      "description": "Дисциплина социального влияния. В карточке дисциплины показываются все связанные возможности и их автоматизация.",
+      "rating": 5
+    }
+  ],
+  "disciplinePowers": [
+    {
+      "name": "Присутствие 1: пример возможности",
+      "level": 1,
+      "parentDiscipline": "Присутствие",
+      "description": "Краткое описание эффекта для чтения в карточке. Замени на свой разрешённый текст.",
+      "system": "Пример системного текста. Здесь можно указать условия, длительность, эффект успехов и ограничения.",
+      "chat": "Использует возможность Присутствия 1.",
+      "roll": {
+        "firstTrait": "attribute.social.charisma",
+        "secondTrait": "ability.talents.expression",
+        "difficulty": 7,
+        "label": "Присутствие 1"
+      },
+      "cost": {
+        "resource": "",
+        "amount": 0,
+        "text": "Без стоимости"
+      }
+    },
+    {
+      "name": "Присутствие 2: пример возможности",
+      "level": 2,
+      "parentDiscipline": "Присутствие",
+      "description": "Краткое описание эффекта для второго уровня.",
+      "system": "Пример: бросок с выбранной сложностью, штрафы здоровья применяются автоматически.",
+      "chat": "Использует возможность Присутствия 2.",
+      "roll": {
+        "firstTrait": "attribute.social.manipulation",
+        "secondTrait": "ability.talents.subterfuge",
+        "difficulty": 7,
+        "label": "Присутствие 2"
+      },
+      "cost": {
+        "resource": "willpower",
+        "amount": 1,
+        "text": "1 пункт Силы воли"
+      }
+    }
+  ]
+}

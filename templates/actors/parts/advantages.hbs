@@ -1,0 +1,21 @@
+<section class="vtm-panel item-section">
+  <h2>{{localize "VTM_REVISED.Section.Advantages"}}</h2>
+  <div class="advantage-grid">
+    <div>
+      <h3>{{localize "TYPES.Item.discipline"}} <button type="button" class="item-create" data-type="discipline">+</button></h3>
+      {{> "systems/vtm-revised/templates/actors/parts/item-list.hbs" items=disciplines ratingField="rating" ratingMax=generationCaps.traitMax}}
+    </div>
+    <div>
+      <h3>{{localize "TYPES.Item.background"}} <button type="button" class="item-create" data-type="background">+</button></h3>
+      {{> "systems/vtm-revised/templates/actors/parts/item-list.hbs" items=backgrounds ratingField="rating" ratingMax=generationCaps.traitMax}}
+    </div>
+    <div>
+      <h3>{{localize "TYPES.Item.merit"}} <button type="button" class="merit-add-from-catalog" data-type="merit" title="{{localize "VTM_REVISED.MeritFlaw.AddFromCatalog"}}">+</button></h3>
+      {{> "systems/vtm-revised/templates/actors/parts/item-list.hbs" items=merits ratingField="points"}}
+    </div>
+    <div>
+      <h3>{{localize "TYPES.Item.flaw"}} <button type="button" class="flaw-add-from-catalog" data-type="flaw" title="{{localize "VTM_REVISED.MeritFlaw.AddFromCatalog"}}">+</button></h3>
+      {{> "systems/vtm-revised/templates/actors/parts/item-list.hbs" items=flaws ratingField="points"}}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,29 @@
+<section class="vtm-panel">
+  <h2>{{localize "VTM_REVISED.Section.Attributes"}} <span class="trait-cap-note">{{localize "VTM_REVISED.Generation.TraitMax"}} {{generationCaps.traitMax}}</span></h2>
+  <div class="trait-columns">
+    {{#each attributeGroups as |keys group|}}
+      <div class="trait-column">
+        <h3>{{localize (concat "VTM_REVISED.AttributeGroup." group)}}</h3>
+        {{#each keys as |key|}}
+          {{#with (lookup (lookup ../../system.attributes group) key) as |value|}}
+            <label class="trait-row {{#if (gt value ../../../generationCaps.traitMax)}}trait-over-limit{{/if}}">
+              <span>{{localize (concat "VTM_REVISED.Attribute." key)}}</span>
+              <input type="number" name="system.attributes.{{group}}.{{key}}" value="{{value}}" min="0" max="{{../../../generationCaps.traitMax}}"/>
+              <button type="button" class="vtm-roll" data-trait="attribute.{{group}}.{{key}}" data-label="{{localize (concat 'VTM_REVISED.Attribute.' key)}}"><i class="fas fa-dice-d10"></i></button>
+            </label>
+          {{/with}}
+        {{/each}}
+      </div>
+    {{/each}}
+  </div>
+</section>
+
+<section class="vtm-panel virtues">
+  <h2>{{localize "VTM_REVISED.Section.Virtues"}}</h2>
+  <p class="muted">{{localize "VTM_REVISED.Generation.VirtuesNote"}}</p>
+  <div class="grid grid-3">
+    <label>{{localize "VTM_REVISED.Virtue.Conscience"}} <input type="number" name="system.virtues.conscience" value="{{system.virtues.conscience}}"/></label>
+    <label>{{localize "VTM_REVISED.Virtue.SelfControl"}} <input type="number" name="system.virtues.selfControl" value="{{system.virtues.selfControl}}"/></label>
+    <label>{{localize "VTM_REVISED.Virtue.Courage"}} <input type="number" name="system.virtues.courage" value="{{system.virtues.courage}}"/></label>
+  </div>
+</section>

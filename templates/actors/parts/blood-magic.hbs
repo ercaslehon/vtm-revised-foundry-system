@@ -1,0 +1,45 @@
+<section class="vtm-panel item-section blood-magic-section">
+  <h2>{{localize "VTM_REVISED.Section.BloodMagic"}}</h2>
+  <p class="muted">{{localize "VTM_REVISED.BloodMagic.Help"}}</p>
+
+  <div class="blood-magic-grid">
+    {{#each bloodMagicGroups as |group|}}
+      <div class="blood-magic-group blood-magic-{{group.key}}" data-blood-magic-parent="{{group.parentName}}" data-blood-magic-key="{{group.key}}">
+        <header class="blood-magic-group-header">
+          <div class="blood-magic-group-title">
+            <h3>{{group.parentName}}</h3>
+            <p class="muted">{{group.title}}</p>
+          </div>
+          <button type="button" class="blood-magic-add-path vtm-small-add-button" data-parent-discipline="{{group.parentName}}" title="{{localize "VTM_REVISED.BloodMagic.AddPath"}}" aria-label="{{localize "VTM_REVISED.BloodMagic.AddPath"}}">
+            <i class="fas fa-plus"></i>
+          </button>
+        </header>
+        {{> "systems/vtm-revised/templates/actors/parts/item-list.hbs" items=group.items ratingField="rating" ratingMax=../generationCaps.traitMax}}
+      </div>
+    {{/each}}
+    {{#if otherMagicPaths.length}}
+      <div class="blood-magic-group blood-magic-other">
+        <h3>{{localize "VTM_REVISED.BloodMagic.OtherPaths"}}</h3>
+        {{> "systems/vtm-revised/templates/actors/parts/item-list.hbs" items=otherMagicPaths ratingField="rating" ratingMax=generationCaps.traitMax}}
+      </div>
+    {{/if}}
+  </div>
+
+  <div class="blood-magic-rituals-panel">
+    <header class="blood-magic-group-header rituals-header">
+      <div class="blood-magic-group-title">
+        <h3>{{localize "TYPES.Item.ritual"}}</h3>
+        <p class="muted">{{localize "VTM_REVISED.BloodMagic.RitualHelp"}}</p>
+      </div>
+      <div class="ritual-header-actions">
+        <button type="button" class="ritual-sync-from-catalog vtm-small-add-button" title="{{localize "VTM_REVISED.Ritual.Sync"}}" aria-label="{{localize "VTM_REVISED.Ritual.Sync"}}">
+          <i class="fas fa-arrows-rotate"></i>
+        </button>
+        <button type="button" class="ritual-add-from-catalog vtm-small-add-button" title="{{localize "VTM_REVISED.Ritual.Add"}}" aria-label="{{localize "VTM_REVISED.Ritual.Add"}}">
+          <i class="fas fa-plus"></i>
+        </button>
+      </div>
+    </header>
+    {{> "systems/vtm-revised/templates/actors/parts/item-list.hbs" items=rituals ratingField="level"}}
+  </div>
+</section>

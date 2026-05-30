@@ -1,0 +1,52 @@
+# OS junk
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editors / IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+logs/
+
+# Node / package managers
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment / local config
+.env
+.env.*
+!.env.example
+
+# Archives / generated bundles
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+
+# Temporary files
+tmp/
+temp/
+.cache/
+
+# Foundry runtime / local world data
+worlds/
+Data/worlds/
+uploads/
+
+# Keep source directories tracked
+!data/
+!docs/
+!lang/
+!packs/
+!scripts/
+!styles/
+!templates/
+!ui/

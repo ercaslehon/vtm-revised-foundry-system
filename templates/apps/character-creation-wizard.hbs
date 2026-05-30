@@ -1,0 +1,291 @@
+<form class="vtm-character-wizard-form">
+  <div class="vtm-wizard-layout">
+    <aside class="vtm-wizard-sidebar">
+      <h2>Создание персонажа</h2>
+      <ol class="vtm-wizard-steps">
+        {{#each steps as |step|}}
+          <li>
+            <button type="button" class="wizard-step-button {{#if step.active}}active{{/if}} {{#if step.done}}done{{/if}}" data-step="{{step.index}}">
+              <span>{{step.index}}</span>
+              {{step.title}}
+            </button>
+          </li>
+        {{/each}}
+      </ol>
+      <div class="vtm-wizard-checklist-mini">
+        <h3>Чеклист</h3>
+        {{#each checklist.baseRows as |row|}}
+          <div class="wizard-mini-row status-{{row.status}}"><b>{{row.icon}}</b> {{row.label}}</div>
+        {{/each}}
+        <div class="wizard-freebie-mini {{#if checklist.freebie.negative}}is-negative{{/if}}">
+          Свободные очки: <strong>{{checklist.freebie.remaining}}</strong>
+        </div>
+      </div>
+    </aside>
+
+    <main class="vtm-wizard-main">
+      <header class="vtm-wizard-header">
+        <div>
+          <h1>{{stepTitle}}</h1>
+          <p>Мастер не запрещает нарушать правила создания, но честно подсвечивает, где математика уже пошла в тёмный переулок.</p>
+        </div>
+        <button type="button" class="wizard-save"><i class="fas fa-save"></i> Сохранить</button>
+      </header>
+
+      {{#if (eq stepKey "clan")}}
+        <section class="wizard-panel wizard-clan-step">
+          <h2>Шаг 1. Выберите клан и базовые данные</h2>
+          <div class="grid grid-2">
+            <label>Имя персонажа
+              <input type="text" name="name" value="{{actor.name}}"/>
+            </label>
+            <label>Игрок
+              <input type="text" name="system.profile.player" value="{{system.profile.player}}"/>
+            </label>
+            <label>Хроника
+              <input type="text" name="system.profile.chronicle" value="{{system.profile.chronicle}}"/>
+            </label>
+            <label>Концепт
+              <input type="text" name="system.profile.concept" value="{{system.profile.concept}}"/>
+            </label>
+            <label>Клан
+              <div class="wizard-inline-control">
+                <select name="system.profile.clan">
+                  <option value="">Не выбран</option>
+                  {{#each clanOptions as |clan|}}
+                    <option value="{{clan.name}}" {{#if (eq ../system.profile.clan clan.name)}}selected{{/if}}>{{clan.name}}</option>
+                  {{/each}}
+                </select>
+                <button type="button" class="wizard-clan-card" title="Открыть описание выбранного клана"><i class="fas fa-book-open"></i></button>
+              </div>
+            </label>
+            <label>Поколение
+              <select name="system.profile.generation">
+                {{#each generationOptions as |generation|}}
+                  <option value="{{generation.key}}" {{#if (eq ../system.profile.generation generation.key)}}selected{{/if}}>{{generation.label}}</option>
+                {{/each}}
+              </select>
+            </label>
+            <label>Натура
+              <div class="wizard-inline-control">
+                <select name="system.profile.nature">
+                  <option value="">Не выбрана</option>
+                  {{#each config.archetypeOptions as |archetype|}}
+                    <option value="{{archetype.name}}" {{#if (eq ../system.profile.nature archetype.name)}}selected{{/if}}>{{archetype.name}}</option>
+                  {{/each}}
+                </select>
+                <button type="button" class="wizard-archetype-card" data-kind="nature" title="Открыть описание Натуры"><i class="fas fa-book-open"></i></button>
+              </div>
+            </label>
+            <label>Маска
+              <div class="wizard-inline-control">
+                <select name="system.profile.demeanor">
+                  <option value="">Не выбрана</option>
+                  {{#each config.archetypeOptions as |archetype|}}
+                    <option value="{{archetype.name}}" {{#if (eq ../system.profile.demeanor archetype.name)}}selected{{/if}}>{{archetype.name}}</option>
+                  {{/each}}
+                </select>
+                <button type="button" class="wizard-archetype-card" data-kind="demeanor" title="Открыть описание Маски"><i class="fas fa-book-open"></i></button>
+              </div>
+            </label>
+          </div>
+          <p class="wizard-hint">Кнопка с книгой открывает описание выбранного клана. Если каталог кланов ещё не импортирован, сначала используй <code>game.vtmRevised.importBuiltInClanCatalog()</code>.</p>
+        </section>
+      {{/if}}
+
+      {{#if (eq stepKey "attributes")}}
+        <section class="wizard-panel">
+          <h2>Шаг 2. Распределите Характеристики 7/5/3</h2>
+          <p class="wizard-hint">Каждая характеристика уже имеет базовую 1 точку. В чеклист считаются только точки сверх первой. Максимум по поколению {{generationCaps.label}}: {{generationCaps.traitMax}}.</p>
+          <div class="wizard-trait-groups">
+            {{#each attributeGroups as |group|}}
+              <article class="wizard-trait-group">
+                <header>
+                  <h3>{{group.label}}</h3>
+                  <label>Пул
+                    <select class="wizard-priority-select" data-priority-type="attribute" data-group="{{group.group}}">
+                      {{#each ../attributePriorityOptions as |option|}}
+                        <option value="{{option.value}}" {{#if (eq option.value group.target)}}selected{{/if}}>{{option.label}}</option>
+                      {{/each}}
+                    </select>
+                  </label>
+                  <span class="wizard-fact {{#if (gt group.total group.target)}}is-over{{/if}}">факт {{group.total}}/{{group.target}}</span>
+                </header>
+                {{#each group.traits as |trait|}}
+                  <label class="wizard-dot-row {{#if trait.overGeneration}}is-over{{/if}}">{{trait.label}}
+                    <input type="number" name="{{trait.path}}" value="{{trait.value}}" min="1" max="{{trait.max}}"/>
+                  </label>
+                {{/each}}
+              </article>
+            {{/each}}
+          </div>
+        </section>
+      {{/if}}
+
+      {{#if (eq stepKey "abilities")}}
+        <section class="wizard-panel">
+          <h2>Шаг 3. Распределите Способности 13/9/5</h2>
+          <p class="wizard-hint">На первичном этапе способность не должна быть выше 3. Максимум по поколению {{generationCaps.label}}: {{generationCaps.traitMax}}. Система предупреждает, но не запрещает, потому что мастера всё равно любят исключения.</p>
+          <div class="wizard-trait-groups">
+            {{#each abilityGroups as |group|}}
+              <article class="wizard-trait-group">
+                <header>
+                  <h3>{{group.label}}</h3>
+                  <label>Пул
+                    <select class="wizard-priority-select" data-priority-type="ability" data-group="{{group.group}}">
+                      {{#each ../abilityPriorityOptions as |option|}}
+                        <option value="{{option.value}}" {{#if (eq option.value group.target)}}selected{{/if}}>{{option.label}}</option>
+                      {{/each}}
+                    </select>
+                  </label>
+                  <span class="wizard-fact {{#if (gt group.total group.target)}}is-over{{/if}}">факт {{group.total}}/{{group.target}}</span>
+                </header>
+                {{#each group.traits as |trait|}}
+                  <label class="wizard-dot-row {{#if (or trait.overThree trait.overGeneration)}}is-over{{/if}}">{{trait.label}}
+                    <input type="number" name="{{trait.path}}" value="{{trait.value}}" min="0" max="{{trait.max}}"/>
+                  </label>
+                {{/each}}
+              </article>
+            {{/each}}
+          </div>
+        </section>
+      {{/if}}
+
+      {{#if (eq stepKey "advantages")}}
+        <section class="wizard-panel">
+          <h2>Шаг 4. Дисциплины, факты биографии, добродетели</h2>
+          <div class="wizard-columns-2">
+            <article class="wizard-subpanel">
+              <h3>Дисциплины · цель 3, факт {{checklist.totals.disciplineTotal}}</h3>
+              <div class="wizard-add-row">
+                <select name="wizard.disciplineId">
+                  {{#each disciplineCatalog as |item|}}<option value="{{item.id}}">{{item.label}}</option>{{/each}}
+                </select>
+                <input type="number" name="wizard.disciplineRating" value="1" min="0" max="10"/>
+                <button type="button" class="wizard-add-discipline">+</button>
+              </div>
+              <ol class="wizard-item-list">
+                {{#each disciplineItems as |item|}}
+                  <li data-item-id="{{item.id}}"><button type="button" class="wizard-open-discipline" data-item-id="{{item.id}}" title="Открыть справку по дисциплине"><i class="fas fa-book-open"></i></button><span>{{item.name}}</span><input class="wizard-item-rating" data-item-id="{{item.id}}" data-field="rating" type="number" value="{{item.system.rating}}" min="0" max="{{../generationCaps.traitMax}}"/><button type="button" class="wizard-delete-item" data-item-id="{{item.id}}"><i class="fas fa-trash"></i></button></li>
+                {{else}}<li class="empty">Пока нет дисциплин</li>{{/each}}
+              </ol>
+            </article>
+            <article class="wizard-subpanel">
+              <h3>Факты биографии · цель 5, факт {{checklist.totals.backgroundTotal}}</h3>
+              <div class="wizard-add-row">
+                <select name="wizard.backgroundId">
+                  {{#each backgroundCatalog as |item|}}<option value="{{item.id}}">{{item.label}}</option>{{/each}}
+                </select>
+                <input type="number" name="wizard.backgroundRating" value="1" min="0" max="10"/>
+                <button type="button" class="wizard-add-background">+</button>
+              </div>
+              <ol class="wizard-item-list">
+                {{#each backgroundItems as |item|}}
+                  <li data-item-id="{{item.id}}"><span>{{item.name}}</span><input class="wizard-item-rating" data-item-id="{{item.id}}" data-field="rating" type="number" value="{{item.system.rating}}" min="0" max="{{../generationCaps.traitMax}}"/><button type="button" class="wizard-delete-item" data-item-id="{{item.id}}"><i class="fas fa-trash"></i></button></li>
+                {{else}}<li class="empty">Пока нет фактов биографии</li>{{/each}}
+              </ol>
+            </article>
+          </div>
+          <article class="wizard-subpanel virtues-panel">
+            <h3>Добродетели · цель 7 дополнительных точек, факт {{checklist.totals.virtueCreationTotal}}</h3>
+            <div class="grid grid-3">
+              <label>Совесть / Убеждённость <input type="number" name="system.virtues.conscience" value="{{system.virtues.conscience}}" min="1" max="10"/></label>
+              <label>Самоконтроль / Инстинкты <input type="number" name="system.virtues.selfControl" value="{{system.virtues.selfControl}}" min="1" max="10"/></label>
+              <label>Смелость <input type="number" name="system.virtues.courage" value="{{system.virtues.courage}}" min="1" max="10"/></label>
+              <label>Человечность / Путь <input type="number" name="system.resources.humanity.value" value="{{system.resources.humanity.value}}" min="0" max="10"/></label>
+              <label>Сила Воли <input type="number" name="system.resources.willpower.max" value="{{system.resources.willpower.max}}" min="0" max="10"/></label>
+              <label>Текущая Воля <input type="number" name="system.resources.willpower.value" value="{{system.resources.willpower.value}}" min="0" max="10"/></label>
+              <label>Запас крови <input type="number" name="system.resources.blood.value" value="{{system.resources.blood.value}}" min="0" max="99"/></label>
+            </div>
+            <div class="wizard-actions-row">
+              <button type="button" class="wizard-fix-humanity">Человечность = Совесть + Самоконтроль</button>
+              <button type="button" class="wizard-fix-willpower">Воля = Смелость</button>
+              <button type="button" class="wizard-roll-blood">Бросить кровь d10</button>
+            </div>
+          </article>
+        </section>
+      {{/if}}
+
+      {{#if (eq stepKey "freebies")}}
+        <section class="wizard-panel">
+          <h2>Шаг 5. Свободные очки, достоинства и недостатки</h2>
+          <div class="freebie-pool-row wizard-freebie-head">
+            <label>Изначальный пул свободных очков
+              <input type="number" name="system.creation.freebiePool" value="{{checklist.freebie.freebiePool}}"/>
+            </label>
+            <span class="freebie-total {{#if checklist.freebie.negative}}is-negative{{/if}}">Остаток: <strong>{{checklist.freebie.remaining}}</strong></span>
+          </div>
+          <div class="wizard-columns-2">
+            <article class="wizard-subpanel">
+              <h3>Достоинства · {{checklist.freebie.meritPoints}} пунктов</h3>
+              <div class="wizard-add-row">
+                <select name="wizard.meritId">{{#each meritCatalog as |item|}}<option value="{{item.id}}">{{item.label}}</option>{{/each}}</select>
+                <button type="button" class="wizard-preview-merit-flaw" data-type="merit" title="Открыть описание выбранного достоинства"><i class="fas fa-book-open"></i></button>
+                <button type="button" class="wizard-add-merit">+</button>
+              </div>
+              <ol class="wizard-item-list">
+                {{#each meritItems as |item|}}
+                  <li><button type="button" class="wizard-open-merit-flaw" data-item-id="{{item.id}}"><i class="fas fa-book-open"></i></button><span>{{item.name}}</span><b>{{item.system.points}}</b><button type="button" class="wizard-delete-item" data-item-id="{{item.id}}"><i class="fas fa-trash"></i></button></li>
+                {{else}}<li class="empty">Пока нет достоинств</li>{{/each}}
+              </ol>
+            </article>
+            <article class="wizard-subpanel">
+              <h3>Недостатки · {{checklist.freebie.flawPoints}} пунктов</h3>
+              {{#if (gt checklist.freebie.flawPoints 7)}}<p class="wizard-warning">Недостатков больше 7 пунктов. Можно, но чеклист считает это нарушением.</p>{{/if}}
+              <div class="wizard-add-row">
+                <select name="wizard.flawId">{{#each flawCatalog as |item|}}<option value="{{item.id}}">{{item.label}}</option>{{/each}}</select>
+                <button type="button" class="wizard-preview-merit-flaw" data-type="flaw" title="Открыть описание выбранного недостатка"><i class="fas fa-book-open"></i></button>
+                <button type="button" class="wizard-add-flaw">+</button>
+              </div>
+              <ol class="wizard-item-list">
+                {{#each flawItems as |item|}}
+                  <li><button type="button" class="wizard-open-merit-flaw" data-item-id="{{item.id}}"><i class="fas fa-book-open"></i></button><span>{{item.name}}</span><b>{{item.system.points}}</b><button type="button" class="wizard-delete-item" data-item-id="{{item.id}}"><i class="fas fa-trash"></i></button></li>
+                {{else}}<li class="empty">Пока нет недостатков</li>{{/each}}
+              </ol>
+            </article>
+          </div>
+          <table class="freebie-table wizard-freebie-table"><tbody>
+            {{#each checklist.freebie.rows as |row|}}
+              <tr class="{{#if row.warning}}has-warning{{/if}}"><th>{{row.label}}</th><td>{{row.display}}</td><td>{{row.costDisplay}}</td></tr>
+              {{#if row.warning}}<tr class="freebie-warning"><td colspan="3">{{row.warning}}</td></tr>{{/if}}
+            {{/each}}
+          </tbody><tfoot><tr><th>Сумма</th><td colspan="2" class="{{#if checklist.freebie.negative}}is-negative{{else}}is-ok{{/if}}">{{checklist.freebie.remaining}}</td></tr></tfoot></table>
+        </section>
+      {{/if}}
+
+      {{#if (eq stepKey "summary")}}
+        <section class="wizard-panel">
+          <h2>Итоговая проверка</h2>
+          <div class="wizard-summary-grid">
+            <article class="creation-card">
+              <h3>Первичный чеклист</h3>
+              <ol class="creation-rows">
+                {{#each checklist.baseRows as |row|}}
+                  <li class="creation-row status-{{row.status}}"><span class="creation-status">{{row.icon}}</span><div class="creation-row-main"><strong>{{row.label}}</strong><span>{{row.detail}}</span>{{#if row.warning}}<em>{{row.warning}}</em>{{/if}}</div></li>
+                {{/each}}
+              </ol>
+            </article>
+            <article class="creation-card">
+              <h3>Свободные очки</h3>
+              <table class="freebie-table"><tbody>
+                {{#each checklist.freebie.rows as |row|}}
+                  <tr class="{{#if row.warning}}has-warning{{/if}}"><th>{{row.label}}</th><td>{{row.display}}</td><td>{{row.costDisplay}}</td></tr>
+                {{/each}}
+              </tbody><tfoot><tr><th>Остаток</th><td colspan="2" class="{{#if checklist.freebie.negative}}is-negative{{else}}is-ok{{/if}}">{{checklist.freebie.remaining}}</td></tr></tfoot></table>
+            </article>
+          </div>
+          <p class="wizard-hint">Нажми “Готово”, если персонаж собран. Нарушения не блокируют закрытие, потому что мы всё ещё играем в ВТМ, а не в налоговую декларацию.</p>
+        </section>
+      {{/if}}
+    </main>
+  </div>
+
+  <footer class="vtm-wizard-footer">
+    <button type="button" class="wizard-prev" {{#if isFirst}}disabled{{/if}}><i class="fas fa-arrow-left"></i> Назад</button>
+    {{#if isLast}}
+      <button type="button" class="wizard-finish"><i class="fas fa-check"></i> Готово</button>
+    {{else}}
+      <button type="button" class="wizard-next">Далее <i class="fas fa-arrow-right"></i></button>
+    {{/if}}
+  </footer>
+</form>

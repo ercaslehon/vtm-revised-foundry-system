@@ -1,0 +1,47 @@
+{
+  "source": "https://wod.su/vampire",
+  "folderName": "WOD.SU Vampire Reference Index",
+  "note": "Индекс и ссылки, без полного текста правил. Полные тексты добавлять только при наличии прав или для приватного использования.",
+  "sects": [
+    {
+      "name": "Камарилья",
+      "slug": "camarilla",
+      "sourceUrl": "https://wod.su/vampire/sects/camarilla"
+    },
+    {
+      "name": "Шабаш",
+      "slug": "sabbat",
+      "sourceUrl": "https://wod.su/vampire/sects/sabbat"
+    },
+    {
+      "name": "Анархи",
+      "slug": "anarch",
+      "sourceUrl": "https://wod.su/vampire/sects/anarch"
+    }
+  ],
+  "disciplines": [
+    {
+      "name": "Присутствие",
+      "slug": "presence",
+      "sourceUrl": "https://wod.su/vampire/disciplines/presence"
+    },
+    {
+      "name": "Власть над Тенью",
+      "slug": "obtenebration",
+      "sourceUrl": "https://wod.su/vampire/disciplines/obtenebration"
+    },
+    {
+      "name": "Изменчивость",
+      "slug": "vicissitude",
+      "sourceUrl": "https://wod.su/vampire/disciplines/vicissitude"
+    }
+  ],
+  "rituals": [
+    {
+      "name": "Ритуалы Тауматургии",
+      "slug": "rites-thaumaturgy",
+      "discipline": "Тауматургия",
+      "sourceUrl": "https://wod.su/vampire/rites/thaum"
+    }
+  ]
+}

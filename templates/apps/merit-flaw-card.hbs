@@ -1,0 +1,75 @@
+<div class="vtm-merit-flaw-card-root">
+  <header class="vtm-merit-flaw-card-header">
+    <div>
+      <h1>{{item.name}}</h1>
+      <p class="muted">
+        {{typeLabel}}
+        {{#if system.points}} · {{system.points}} {{localize "VTM_REVISED.Item.Points"}}{{/if}}
+        {{#if system.category}} · {{system.category}}{{/if}}
+        {{#if audit.status}} · {{audit.status}}{{/if}}
+      </p>
+    </div>
+    <div class="vtm-card-actions">
+      <button type="button" class="merit-flaw-use"><i class="fas fa-bolt"></i> {{localize "VTM_REVISED.Item.Use"}}</button>
+      {{#if item}}
+        <button type="button" onclick="fromUuid('{{item.uuid}}').then(i => i?.sheet?.render(true))"><i class="fas fa-edit"></i> {{localize "VTM_REVISED.Item.Edit"}}</button>
+      {{/if}}
+    </div>
+  </header>
+
+  <section class="vtm-merit-flaw-card-body">
+    {{#unless hasItem}}
+      <article class="vtm-panel"><p>{{localize "VTM_REVISED.MeritFlaw.NotFound"}}</p></article>
+    {{/unless}}
+
+    {{#if description}}
+      <article class="vtm-panel">
+        <h2>{{localize "VTM_REVISED.MeritFlaw.Description"}}</h2>
+        <div class="vtm-rich-text vtm-literary-text">{{{description}}}</div>
+      </article>
+    {{/if}}
+
+    {{#if shortDescription}}
+      <article class="vtm-panel">
+        <h2>{{localize "VTM_REVISED.MeritFlaw.ShortView"}}</h2>
+        <div class="vtm-rich-text">{{{shortDescription}}}</div>
+      </article>
+    {{/if}}
+
+    <article class="vtm-panel">
+      <h2>{{localize "VTM_REVISED.MeritFlaw.Mechanics"}}</h2>
+      {{#if systemText}}
+        <details class="vtm-system-text" open>
+          <summary>{{localize "VTM_REVISED.Item.SystemText"}}</summary>
+          <div class="vtm-rich-text">{{{systemText}}}</div>
+        </details>
+      {{/if}}
+      {{#if hasEffect}}
+        <details class="vtm-system-text" open>
+          <summary>{{localize "VTM_REVISED.MeritFlaw.Effect"}}</summary>
+          <div class="vtm-rich-text">
+            {{#if effect.type}}<p><strong>{{localize "VTM_REVISED.MeritFlaw.EffectType"}}:</strong> {{effect.type}}</p>{{/if}}
+            {{#if effect.target}}<p><strong>{{localize "VTM_REVISED.MeritFlaw.Target"}}:</strong> {{effect.target}}</p>{{/if}}
+            {{#if effect.mode}}<p><strong>{{localize "VTM_REVISED.MeritFlaw.Mode"}}:</strong> {{effect.mode}}</p>{{/if}}
+            {{#if effect.amount}}<p><strong>{{localize "VTM_REVISED.MeritFlaw.Amount"}}:</strong> {{effect.amount}}</p>{{/if}}
+            {{#if effect.difficultyModifier}}<p><strong>{{localize "VTM_REVISED.MeritFlaw.DifficultyModifier"}}:</strong> {{effect.difficultyModifier}}</p>{{/if}}
+            {{#if effect.diceModifier}}<p><strong>{{localize "VTM_REVISED.MeritFlaw.DiceModifier"}}:</strong> {{effect.diceModifier}}</p>{{/if}}
+            {{#if effect.notes}}<div>{{{effect.notes}}}</div>{{/if}}
+          </div>
+        </details>
+      {{/if}}
+      {{#if mechanics.activation}}<details class="vtm-system-text"><summary>{{localize "VTM_REVISED.Mechanics.Activation"}}</summary><div>{{{mechanics.activation}}}</div></details>{{/if}}
+      {{#if mechanics.duration}}<details class="vtm-system-text"><summary>{{localize "VTM_REVISED.Mechanics.Duration"}}</summary><div>{{{mechanics.duration}}}</div></details>{{/if}}
+      {{#if mechanics.limits}}<details class="vtm-system-text"><summary>{{localize "VTM_REVISED.Mechanics.Limits"}}</summary><div>{{{mechanics.limits}}}</div></details>{{/if}}
+      {{#if mechanics.automationNotes}}<details class="vtm-system-text" open><summary>{{localize "VTM_REVISED.Mechanics.AutomationNotes"}}</summary><div>{{{mechanics.automationNotes}}}</div></details>{{/if}}
+    </article>
+
+    {{#if trigger}}
+      <article class="vtm-panel"><h2>{{localize "VTM_REVISED.MeritFlaw.Trigger"}}</h2><p>{{trigger}}</p></article>
+    {{/if}}
+
+    {{#if sourceUrl}}
+      <p class="muted source-line">{{localize "VTM_REVISED.Item.SourceUrl"}}: {{sourceUrl}}{{#if sourceBook}} · {{sourceBook}}{{/if}}{{#if sourcePage}} · стр. {{sourcePage}}{{/if}}</p>
+    {{/if}}
+  </section>
+</div>
