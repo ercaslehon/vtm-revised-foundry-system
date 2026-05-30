@@ -33,9 +33,9 @@ const ATTRIBUTE_MAP = {
   wits: "mental.wits"
 };
 
-const TALENTS = ["alertness", "athletics", "brawl", "dodge", "empathy", "expression", "intimidation", "leadership", "streetwise", "subterfuge", "awareness"];
-const SKILLS = ["animalken", "crafts", "drive", "etiquette", "firearms", "melee", "performance", "security", "stealth", "survival", "larceny", "ride"];
-const KNOWLEDGES = ["academics", "computer", "finance", "investigation", "law", "linguistics", "medicine", "occult", "politics", "science", "technology", "theology"];
+const TALENTS = ["athletics", "alertness", "brawl", "intimidation", "expression", "leadership", "streetwise", "subterfuge", "awareness", "empathy"];
+const SKILLS = ["drive", "larceny", "survival", "performance", "animalken", "crafts", "stealth", "firearms", "melee", "etiquette"];
+const KNOWLEDGES = ["academics", "science", "law", "computer", "medicine", "occult", "politics", "investigation", "finance", "technology"];
 
 export class TrechkalovJsonImporter {
   static async renderDialog() {

@@ -48,9 +48,9 @@ function attributesSchema() {
 }
 
 function abilitiesSchema() {
-  const talentNames = ["alertness", "athletics", "brawl", "dodge", "empathy", "expression", "intimidation", "leadership", "streetwise", "subterfuge", "awareness"];
-  const skillNames = ["animalken", "crafts", "drive", "etiquette", "firearms", "melee", "performance", "security", "stealth", "survival", "larceny", "ride"];
-  const knowledgeNames = ["academics", "computer", "finance", "investigation", "law", "linguistics", "medicine", "occult", "politics", "science", "technology", "theology", "koldunism"];
+  const talentNames = ["athletics", "alertness", "brawl", "intimidation", "expression", "leadership", "streetwise", "subterfuge", "awareness", "empathy"];
+  const skillNames = ["drive", "larceny", "survival", "performance", "animalken", "crafts", "stealth", "firearms", "melee", "etiquette"];
+  const knowledgeNames = ["academics", "science", "law", "computer", "medicine", "occult", "politics", "investigation", "finance", "technology"];
   const build = names => Object.fromEntries(names.map(name => [name, namedRatingField()]));
 
   return new fields.SchemaField({

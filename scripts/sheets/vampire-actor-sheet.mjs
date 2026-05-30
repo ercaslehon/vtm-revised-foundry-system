@@ -192,6 +192,18 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
       });
     });
 
+    element.querySelectorAll(".actor-portrait-view").forEach(image => {
+      const openPortrait = async event => {
+        event.preventDefault();
+        await this._openActorPortraitViewer();
+      };
+      image.addEventListener("click", openPortrait);
+      image.addEventListener("keydown", async event => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        await openPortrait(event);
+      });
+    });
+
     if (!this.isEditable) return;
 
     element.querySelectorAll(".trait-value-input").forEach(input => {
@@ -481,6 +493,51 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
         await this.actor.deleteEmbeddedDocuments("Item", [row.dataset.itemId]);
       });
     });
+  }
+
+
+  async _openActorPortraitViewer() {
+    const image = this.actor.img || this.actor.system?.profile?.avatar || "icons/svg/mystery-man.svg";
+    const title = this.actor.name || game.i18n.localize("TYPES.Actor.vampire");
+
+    const ImagePopoutClass = foundry.applications?.apps?.ImagePopout?.implementation
+      ?? foundry.applications?.apps?.ImagePopout
+      ?? globalThis.ImagePopout;
+
+    if (ImagePopoutClass) {
+      try {
+        return new ImagePopoutClass(image, {
+          title,
+          uuid: this.actor.uuid,
+          shareable: false
+        }).render(true);
+      } catch (error) {
+        console.warn("VTM Revised | ImagePopout failed, falling back to dialog.", error);
+      }
+    }
+
+    const escapedSrc = foundry.utils.escapeHTML(image);
+    const escapedTitle = foundry.utils.escapeHTML(title);
+    const content = `
+      <div class="vtm-portrait-viewer">
+        <img src="${escapedSrc}" alt="${escapedTitle}" />
+      </div>`;
+
+    return new DialogV1({
+      title,
+      content,
+      buttons: {
+        close: {
+          icon: '<i class="fas fa-xmark"></i>',
+          label: game.i18n.localize("Close")
+        }
+      },
+      default: "close"
+    }, {
+      width: 720,
+      height: "auto",
+      classes: ["vtm-revised", "vtm-portrait-viewer-dialog"]
+    }).render(true);
   }
 
 

@@ -6,9 +6,9 @@ export const VTM_REVISED = {
     mental: ["perception", "intelligence", "wits"]
   },
   abilityCategories: {
-    talents: ["alertness", "athletics", "brawl", "dodge", "empathy", "expression", "intimidation", "leadership", "streetwise", "subterfuge", "awareness"],
-    skills: ["animalken", "crafts", "drive", "etiquette", "firearms", "melee", "performance", "security", "stealth", "survival", "larceny", "ride"],
-    knowledges: ["academics", "computer", "finance", "investigation", "law", "linguistics", "medicine", "occult", "politics", "science", "technology", "theology", "koldunism"]
+    talents: ["athletics", "alertness", "brawl", "intimidation", "expression", "leadership", "streetwise", "subterfuge", "awareness", "empathy"],
+    skills: ["drive", "larceny", "survival", "performance", "animalken", "crafts", "stealth", "firearms", "melee", "etiquette"],
+    knowledges: ["academics", "science", "law", "computer", "medicine", "occult", "politics", "investigation", "finance", "technology"]
   },
   healthLevels: ["bruised", "hurt", "injured", "wounded", "mauled", "crippled", "incapacitated"],
   healthPenalties: {
