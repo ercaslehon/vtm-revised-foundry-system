@@ -53,6 +53,12 @@ FoundryUserData/Data/systems/vtm-revised
 Vampire: The Masquerade Revised - Unofficial System
 ```
 
+## Импорт готовых чарлистов
+
+Вы можете интегрировать вашего персонажа, созданного на замечательном инструменте -> https://trechkalov.com/vtm/current/index.html 
+Во вкладке "актеры" нажмите "Импорт JSON", вставьте содержимое файла скачанного чарлиста и нажмите "продолжить".
+Ваш персонаж создастся во вкладке "Актеры". 
+
 ## Импорт встроенных каталогов
 
 После установки в мире можно выполнить либо во вкладке "предметы", либо в консоли Foundry:
@@ -64,27 +70,6 @@ game.vtmRevised.importBuiltInBloodMagicCatalog()
 game.vtmRevised.importBuiltInRitualCatalog()
 game.vtmRevised.importBuiltInWeaponCatalog()
 game.vtmRevised.importBuiltInMeritsFlawsCatalog()
-```
-
-## Полезные команды
-
-```js
-// Импорт персонажа из JSON-чарника
-game.vtmRevised.importJsonText(jsonText)
-
-// Синхронизация уже добавленных ритуалов первого персонажа из каталога
-game.vtmRevised.syncFirstActorRitualsFromCatalog()
-
-// Применить ограничения поколения к первому персонажу
-game.vtmRevised.applyFirstActorGenerationCaps()
-
-// Тест визуальных кубов
-game.vtmRevised.showDiceTest()
-
-// Стиль кубов
-game.vtmRevised.setDiceStyle("camarilla")
-game.vtmRevised.setDiceStyle("sabbat")
-game.vtmRevised.setDiceStyle("none")
 ```
 
 ## Структура проекта
