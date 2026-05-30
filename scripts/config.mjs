@@ -20,7 +20,7 @@ export const VTM_REVISED = {
     crippled: "-5",
     incapacitated: "out"
   },
-  itemTypes: ["clan", "sect", "discipline", "disciplinePower", "disciplinePath", "ritual", "merit", "flaw", "background", "weapon", "equipment", "ruleEntry"],
+  itemTypes: ["clan", "sect", "discipline", "disciplinePower", "disciplinePath", "ritual", "merit", "flaw", "background", "weapon", "equipment", "moralityPath", "ruleEntry"],
   weaponCategories: [
     { key: "melee", name: "Холодное оружие" },
     { key: "firearm", name: "Огнестрельное оружие" },

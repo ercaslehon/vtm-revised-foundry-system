@@ -137,7 +137,9 @@ export class VTMVampireActorData extends foundry.abstract.TypeDataModel {
 
   prepareDerivedData() {
     const xp = this.resources?.experience;
-    if (xp) xp.available = Math.max(0, Number(xp.total || 0) - Number(xp.spent || 0));
+    if (xp) {
+      xp.available = Math.max(0, Number(xp.available || 0));
+    }
 
     const health = this.health;
     if (health) {

@@ -146,6 +146,29 @@ export class VTMDisciplinePowerItemData extends foundry.abstract.TypeDataModel {
   }
 }
 
+export class VTMMoralityPathItemData extends foundry.abstract.TypeDataModel {
+  static defineSchema() {
+    return {
+      slug: textField(),
+      category: textField("path"),
+      nameEn: textField(),
+      aliases: textField(),
+      sourceEra: textField(),
+      virtues: htmlField(),
+      aura: htmlField(),
+      ethics: htmlField(),
+      hierarchy: htmlField(),
+      initiation: htmlField(),
+      description: descriptionSchema(),
+      mechanics: mechanicsSchema(),
+      audit: auditSchema(),
+      automation: automationSchema(),
+      rawName: textField(),
+      isHomebrew: new fields.BooleanField({ required: true, initial: false })
+    };
+  }
+}
+
 export class VTMRuleEntryItemData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     return {

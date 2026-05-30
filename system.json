@@ -1,8 +1,8 @@
 {
   "id": "vtm-revised",
   "title": "Vampire: The Masquerade Revised - Unofficial System",
-  "description": "Unofficial Foundry VTT system scaffold for Vampire: The Masquerade v3 Revised. Includes actor sheets, portraits, generation limits, Nature/Demeanor reference cards, clan reference cards, disciplines, blood magic, rituals, weapons, merits/flaws catalog, and a guided character creation wizard.",
-  "version": "9.0.0",
+  "description": "Unofficial Foundry VTT system for Vampire: The Masquerade v3 Revised. Includes actor sheets, portraits, generation limits, Nature/Demeanor and clan reference cards, disciplines, blood magic, rituals, weapons, merits/flaws, Roads/Paths morality reference, and a guided character creation wizard. Morality Path/Road hierarchy tables are verified against wod.su in v9.4.0.",
+  "version": "9.5.32",
   "compatibility": {
     "minimum": "13.347",
     "verified": "14"
@@ -186,6 +186,27 @@
           "description.value",
           "description.system",
           "description.chat",
+          "mechanics.activation",
+          "mechanics.duration",
+          "mechanics.successScaling",
+          "mechanics.resistance",
+          "mechanics.failure",
+          "mechanics.botch",
+          "mechanics.limits",
+          "mechanics.automationNotes",
+          "audit.notes"
+        ]
+      },
+      "moralityPath": {
+        "htmlFields": [
+          "description.value",
+          "description.system",
+          "description.chat",
+          "ethics",
+          "hierarchy",
+          "aura",
+          "virtues",
+          "initiation",
           "mechanics.activation",
           "mechanics.duration",
           "mechanics.successScaling",

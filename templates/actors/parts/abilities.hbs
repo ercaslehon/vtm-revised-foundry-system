@@ -1,4 +1,4 @@
-<section class="vtm-panel">
+<section class="vtm-panel vtm-traits-panel vtm-abilities-panel">
   <h2>{{localize "VTM_REVISED.Section.Abilities"}} <span class="trait-cap-note">{{localize "VTM_REVISED.Generation.TraitMax"}} {{generationCaps.traitMax}}</span></h2>
   <div class="trait-columns">
     {{#each abilityGroups as |keys group|}}
@@ -7,8 +7,13 @@
         {{#each keys as |key|}}
           {{#with (lookup (lookup ../../system.abilities group) key) as |ability|}}
             <label class="trait-row {{#if (gt ability.value ../../../generationCaps.traitMax)}}trait-over-limit{{/if}}">
-              <span>{{localize (concat "VTM_REVISED.Ability." key)}}</span>
-              <input type="number" name="system.abilities.{{group}}.{{key}}.value" value="{{ability.value}}" min="0" max="{{../../../generationCaps.traitMax}}"/>
+              <span class="trait-name">{{localize (concat "VTM_REVISED.Ability." key)}}</span>
+              <span class="trait-pips" aria-hidden="true">
+                {{#each ../../../traitPips as |pip|}}
+                  <i class="{{#if (gte ../ability.value pip)}}is-filled{{/if}}"></i>
+                {{/each}}
+              </span>
+              <input class="trait-value-input" type="number" name="system.abilities.{{group}}.{{key}}.value" value="{{ability.value}}" min="0" max="{{../../../generationCaps.traitMax}}"/>
               <button type="button" class="vtm-roll" data-trait="ability.{{group}}.{{key}}" data-label="{{localize (concat 'VTM_REVISED.Ability.' key)}}"><i class="fas fa-dice-d10"></i></button>
             </label>
           {{/with}}

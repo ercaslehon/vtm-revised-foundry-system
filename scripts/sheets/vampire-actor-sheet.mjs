@@ -1,10 +1,12 @@
 import { rollDicePool } from "../dice/dice-pool.mjs";
 import { VTM_REVISED } from "../config.mjs";
+import { applyAutomationCost, normalizeAutomationCost } from "../utils/automation-costs.mjs";
 import { VTMDisciplineCard } from "../apps/discipline-card.mjs";
 import { VTMRitualCard } from "../apps/ritual-card.mjs";
 import { VTMClanCard, findClanItemForName } from "../apps/clan-card.mjs";
 import { VTMMeritFlawCard } from "../apps/merit-flaw-card.mjs";
 import { VTMArchetypeCard, findArchetypeForName } from "../apps/archetype-card.mjs";
+import { VTMMoralityPathCard, findMoralityPathItemForName } from "../apps/morality-path-card.mjs";
 import { VTMCharacterCreationWizard } from "../apps/character-creation-wizard.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -34,8 +36,8 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
     id: "vtm-revised-actor-sheet-{id}",
     classes: ["vtm-revised", "sheet", "actor", "vampire"],
     position: {
-      width: 820,
-      height: 860
+      width: 1460,
+      height: 980
     },
     window: {
       resizable: true
@@ -69,9 +71,12 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
 
     const items = Array.from(actor.items ?? []);
     const generationCaps = actor.generationCaps ?? actor.constructor?.generationCaps?.(actor.system?.profile?.generation) ?? { key: "13", label: "13", traitMax: 5, bloodMax: 10, bloodPerTurn: 1 };
+    const traitPips = Array.from({ length: Math.max(1, Number(generationCaps.traitMax ?? 5)) }, (_, index) => index + 1);
     const selectedNature = this._resolveArchetype(actor.system?.profile?.nature);
     const selectedDemeanor = this._resolveArchetype(actor.system?.profile?.demeanor);
     const selectedClan = this._resolveClan(actor.system?.profile?.clan);
+    const moralityOptions = this._buildMoralityPathOptions();
+    const selectedMoralityPath = this._resolveMoralityPath(actor.system?.resources?.pathName || "Человечность");
 
     // Do not use foundry.utils.mergeObject here. ActorSheetV2 returns a context that already
     // contains document-like properties. Deep-merging an Actor instance makes Foundry try to
@@ -136,12 +141,19 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
       healthRows,
       activeHealthPenalty: this._resolveHealthPenalty(),
       generationCaps,
+      traitPips,
+      ritualPips: Array.from({ length: 10 }, (_, index) => index + 1),
+      pathPips: Array.from({ length: Math.max(1, Number(generationCaps.traitMax ?? 5)) }, (_, index) => index + 1),
       generationOptions: VTM_REVISED.generationOptions,
       archetypeOptions: VTM_REVISED.archetypeOptions,
       selectedNature,
       selectedDemeanor,
       selectedClan,
+      moralityOptions,
+      selectedMoralityPath,
+      activeSheetTab: this._activeSheetTab || "main",
       rollTraitOptions: this._buildRollTraitOptions(),
+      rollTraitOptionGroups: this._buildRollTraitOptionGroups(),
       creation: this._buildCreationChecklist()
     };
   }
@@ -149,7 +161,54 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
   _onRender(context, options) {
     super._onRender(context, options);
     const element = this.element;
-    if (!element || !this.isEditable) return;
+    if (!element) return;
+
+    const applyActiveTab = (tab, { scroll = false } = {}) => {
+      const safeTab = ["main", "powers", "profile"].includes(tab) ? tab : "main";
+      this._activeSheetTab = safeTab;
+
+      element.querySelectorAll(".vtm-tab-item[data-vtm-tab]").forEach(button => {
+        button.classList.toggle("is-active", button.dataset.vtmTab === safeTab);
+      });
+
+      element.querySelectorAll(".vtm-tab-panel[data-vtm-tab-panel]").forEach(panel => {
+        panel.classList.toggle("is-active", panel.dataset.vtmTabPanel === safeTab);
+      });
+
+      if (scroll) {
+        const scrollBody = element.querySelector(".vtm-sheet-body");
+        if (scrollBody) scrollBody.scrollTop = 0;
+      }
+    };
+
+    applyActiveTab(this._activeSheetTab || context?.activeSheetTab || "main");
+
+    element.querySelectorAll(".vtm-tab-item[data-vtm-tab]").forEach(tabButton => {
+      tabButton.addEventListener("click", event => {
+        event.preventDefault();
+        const tab = tabButton.dataset.vtmTab;
+        if (!tab) return;
+        applyActiveTab(tab, { scroll: true });
+      });
+    });
+
+    if (!this.isEditable) return;
+
+    element.querySelectorAll(".trait-value-input").forEach(input => {
+      const updatePips = () => {
+        const row = input.closest(".trait-row");
+        if (!row) return;
+
+        const value = Number(input.value || 0);
+        row.querySelectorAll(".trait-pips i").forEach((pip, index) => {
+          pip.classList.toggle("is-filled", index < value);
+        });
+      };
+
+      input.addEventListener("input", updatePips);
+      input.addEventListener("change", updatePips);
+      updatePips();
+    });
 
     element.querySelectorAll(".actor-portrait-edit").forEach(button => {
       button.addEventListener("click", async event => {
@@ -240,6 +299,20 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
       });
     });
 
+    element.querySelectorAll(".morality-path-card-open").forEach(button => {
+      button.addEventListener("click", async event => {
+        event.preventDefault();
+        await this._openMoralityPathCard();
+      });
+    });
+
+    element.querySelectorAll(".morality-path-select").forEach(select => {
+      select.addEventListener("change", async event => {
+        const value = event.currentTarget.value || "Человечность";
+        await this.actor.update({ "system.resources.pathName": value });
+      });
+    });
+
     element.querySelectorAll(".clan-select").forEach(select => {
       select.addEventListener("change", event => {
         event.currentTarget.closest("form")?.requestSubmit?.();
@@ -288,6 +361,10 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
       button.addEventListener("click", async event => {
         event.preventDefault();
         const type = button.dataset.type;
+        if (type === "discipline") {
+          await this._openAddDisciplineDialog();
+          return;
+        }
         const name = game.i18n.localize(`TYPES.Item.${type}`) || type;
         await this.actor.createEmbeddedDocuments("Item", [{ name, type }]);
       });
@@ -363,7 +440,7 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
           await new VTMRitualCard({ actor: this.actor, ritual: item }).render({ force: true });
         } else if (item?.type === "weapon") {
           await this._useWeapon(item);
-        } else if (["merit", "flaw"].includes(item?.type)) {
+        } else if (["merit", "flaw", "background"].includes(item?.type)) {
           await new VTMMeritFlawCard({ actor: this.actor, item }).render({ force: true });
         } else if (item) await this._useItemAutomation(item);
       });
@@ -374,16 +451,16 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
         event.preventDefault();
         const row = button.closest("[data-item-id]");
         const item = row ? this.actor.items.get(row.dataset.itemId) : null;
-        if (["merit", "flaw"].includes(item?.type)) {
+        if (["merit", "flaw", "background"].includes(item?.type)) {
           await new VTMMeritFlawCard({ actor: this.actor, item }).render({ force: true });
         }
       });
     });
 
-    element.querySelectorAll(".merit-add-from-catalog, .flaw-add-from-catalog").forEach(button => {
+    element.querySelectorAll(".merit-add-from-catalog, .flaw-add-from-catalog, .background-add-from-catalog").forEach(button => {
       button.addEventListener("click", async event => {
         event.preventDefault();
-        await this._openAddMeritFlawDialog(button.dataset.type || "merit");
+        await this._openAddCatalogTraitDialog(button.dataset.type || "merit");
       });
     });
 
@@ -487,6 +564,43 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
       return new VTMClanCard({ actor: this.actor, clan: null }).render({ force: true });
     }
     return new VTMClanCard({ actor: this.actor, clan }).render({ force: true });
+  }
+
+
+  _buildMoralityPathOptions() {
+    const catalog = Array.from(game.items ?? [])
+      .filter(item => item.type === "moralityPath")
+      .sort((a, b) => {
+        const ca = String(a.system?.category || "");
+        const cb = String(b.system?.category || "");
+        const c = ca.localeCompare(cb);
+        return c || a.name.localeCompare(b.name);
+      });
+
+    if (catalog.length) return catalog.map(item => ({
+      id: item.id,
+      name: item.name,
+      category: item.system?.category || "path",
+      label: `${item.system?.category === "road" ? "Дорога" : item.system?.category === "humanity" ? "Человечность" : "Путь"} · ${item.name}`
+    }));
+
+    return [
+      { id: "humanity", name: "Человечность", category: "humanity", label: "Человечность · Человечность" }
+    ];
+  }
+
+  _resolveMoralityPath(value = "") {
+    const raw = String(value || "Человечность").trim();
+    const item = findMoralityPathItemForName(raw);
+    if (item) return { name: item.name, item, category: item.system?.category || "path", imported: true };
+    return { name: raw, item: null, category: raw === "Человечность" ? "humanity" : "custom", imported: false };
+  }
+
+  async _openMoralityPathCard() {
+    const pathName = this.actor.system?.resources?.pathName || "Человечность";
+    const item = findMoralityPathItemForName(pathName);
+    if (!item) ui.notifications?.warn?.("Каталог Путей и Дорог не импортирован или выбранное название не найдено.");
+    return new VTMMoralityPathCard({ actor: this.actor, moralityPath: item }).render({ force: true });
   }
 
   _resolveArchetype(value = "") {
@@ -624,6 +738,184 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
     const item = created?.[0];
     if (item) {
       ui.notifications?.info?.(game.i18n.format("VTM_REVISED.BloodMagic.PathAdded", { name: item.name }));
+      await new VTMDisciplineCard({ actor: this.actor, discipline: item }).render({ force: true });
+    }
+    return item;
+  }
+
+
+  _catalogDisciplineItems() {
+    const seen = new Set();
+    const result = [];
+
+    const addCandidate = item => {
+      const key = this._normalizeName(item?.name);
+      if (!key || seen.has(key)) return;
+      seen.add(key);
+      result.push(item);
+    };
+
+    for (const item of Array.from(game.items ?? []).filter(item => item.type === "discipline")) {
+      addCandidate(item);
+    }
+
+    for (const option of VTM_REVISED.disciplineOptions ?? []) {
+      addCandidate({
+        id: `config:${option.slug || option.name}`,
+        name: option.name,
+        type: "discipline",
+        img: "icons/magic/unholy/orb-swirling-teal.webp",
+        system: {
+          rating: 0,
+          rawName: option.name,
+          rulesId: option.slug || option.name,
+          isHomebrew: false
+        },
+        flags: {
+          "vtm-revised": {
+            source: "config"
+          }
+        }
+      });
+    }
+
+    return result.sort((a, b) => String(a.name || "").localeCompare(String(b.name || "")));
+  }
+
+  _resolveDisciplineSource(sourceId = "") {
+    const id = String(sourceId || "");
+    if (!id.startsWith("config:")) return game.items.get(id) ?? null;
+
+    const key = id.slice("config:".length);
+    const option = (VTM_REVISED.disciplineOptions ?? [])
+      .find(option => String(option.slug || option.name) === key);
+
+    if (!option) return null;
+
+    return {
+      id,
+      name: option.name,
+      type: "discipline",
+      img: "icons/magic/unholy/orb-swirling-teal.webp",
+      system: {
+        rating: 0,
+        rawName: option.name,
+        rulesId: option.slug || option.name,
+        isHomebrew: false
+      },
+      flags: {
+        "vtm-revised": {
+          source: "config"
+        }
+      }
+    };
+  }
+
+  _disciplineCandidates() {
+    const actorDisciplineNames = new Set(Array.from(this.actor.items ?? [])
+      .filter(item => item.type === "discipline")
+      .map(item => this._normalizeName(item.name)));
+
+    return this._catalogDisciplineItems()
+      .map(item => ({ item, known: actorDisciplineNames.has(this._normalizeName(item.name)) }))
+      .sort((a, b) => a.item.name.localeCompare(b.item.name));
+  }
+
+  async _openAddDisciplineDialog() {
+    const candidates = this._disciplineCandidates();
+    const availableCandidates = candidates.filter(candidate => !candidate.known);
+    const traitMax = Math.max(1, Number(this.actor.generationCaps?.traitMax ?? this.actor.system?.resources?.traitMax ?? 5));
+
+    if (!candidates.length) {
+      ui.notifications?.warn?.(game.i18n.localize("VTM_REVISED.Discipline.NoCatalog"));
+      return;
+    }
+
+    if (!availableCandidates.length) {
+      ui.notifications?.warn?.(game.i18n.localize("VTM_REVISED.Discipline.AllKnown"));
+      return;
+    }
+
+    const options = candidates.map(({ item, known }) => {
+      const disabled = known ? " disabled" : "";
+      const suffix = known ? ` (${game.i18n.localize("VTM_REVISED.Discipline.KnownSuffix")})` : "";
+      return `<option value="${foundry.utils.escapeHTML(item.id)}"${disabled}>${foundry.utils.escapeHTML(item.name + suffix)}</option>`;
+    }).join("");
+
+    const content = `
+      <form class="vtm-add-discipline-dialog">
+        <p>${game.i18n.localize("VTM_REVISED.Discipline.SelectHelp")}</p>
+        <div class="form-group">
+          <label>${game.i18n.localize("VTM_REVISED.Discipline.Select")}</label>
+          <select name="disciplineId">${options}</select>
+        </div>
+        <div class="form-group">
+          <label>${game.i18n.localize("VTM_REVISED.Discipline.InitialRating")}</label>
+          <input type="number" name="rating" min="0" max="${traitMax}" value="1" />
+        </div>
+      </form>`;
+
+    return new Promise(resolve => {
+      new DialogV1({
+        title: game.i18n.localize("VTM_REVISED.Discipline.SelectTitle"),
+        content,
+        buttons: {
+          add: {
+            icon: '<i class="fas fa-plus"></i>',
+            label: game.i18n.localize("VTM_REVISED.Discipline.Add"),
+            callback: async html => {
+              const form = this._getFormElement(html);
+              const disciplineId = form?.querySelector("[name='disciplineId']")?.value;
+              const rating = Number(form?.querySelector("[name='rating']")?.value ?? 1);
+              const source = disciplineId ? this._resolveDisciplineSource(disciplineId) : null;
+              if (source) await this._addDisciplineFromCatalog(source, rating);
+              resolve(true);
+            }
+          },
+          cancel: {
+            label: game.i18n.localize("Cancel"),
+            callback: () => resolve(false)
+          }
+        },
+        default: "add",
+        close: () => resolve(false)
+      }, { width: 520 }).render(true);
+    });
+  }
+
+  async _addDisciplineFromCatalog(sourceItem, rating = 1) {
+    const existing = Array.from(this.actor.items ?? [])
+      .find(item => item.type === "discipline" && this._normalizeName(item.name) === this._normalizeName(sourceItem.name));
+
+    if (existing) {
+      ui.notifications?.warn?.(game.i18n.localize("VTM_REVISED.Discipline.AlreadyKnown"));
+      return existing;
+    }
+
+    const traitMax = Math.max(1, Number(this.actor.generationCaps?.traitMax ?? this.actor.system?.resources?.traitMax ?? 5));
+    const system = foundry.utils.deepClone(sourceItem.system ?? {});
+    system.rating = Math.max(0, Math.min(traitMax, Number(rating || 0)));
+    system.rulesId = system.rulesId || sourceItem.system?.rulesId || sourceItem.id;
+    system.rawName = system.rawName || sourceItem.name;
+    system.isHomebrew = false;
+
+    const created = await this.actor.createEmbeddedDocuments("Item", [{
+      name: sourceItem.name,
+      type: "discipline",
+      img: sourceItem.img,
+      system,
+      flags: {
+        "vtm-revised": {
+          catalogSourceUuid: sourceItem.uuid || "",
+          catalogSourceId: sourceItem.id || "",
+          addedFromCatalogAt: new Date().toISOString()
+        }
+      }
+    }]);
+
+    const item = created?.[0];
+    if (item) {
+      ui.notifications?.info?.(game.i18n.format("VTM_REVISED.Discipline.Added", { name: item.name }));
       await new VTMDisciplineCard({ actor: this.actor, discipline: item }).render({ force: true });
     }
     return item;
@@ -1094,17 +1386,17 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
       });
   }
 
-  async _openAddMeritFlawDialog(type = "merit") {
+  async _openAddCatalogTraitDialog(type = "merit") {
     const candidates = this._meritFlawCandidates(type);
     const availableCandidates = candidates.filter(candidate => !candidate.known);
-    const typeLabel = game.i18n.localize(type === "flaw" ? "TYPES.Item.flaw" : "TYPES.Item.merit");
+    const typeLabel = game.i18n.localize(type === "flaw" ? "TYPES.Item.flaw" : (type === "background" ? "TYPES.Item.background" : "TYPES.Item.merit"));
 
     if (!candidates.length) {
-      ui.notifications?.warn?.(game.i18n.localize("VTM_REVISED.MeritFlaw.NoCatalog"));
+      ui.notifications?.warn?.(game.i18n.localize(type === "background" ? "VTM_REVISED.Background.NoCatalog" : "VTM_REVISED.MeritFlaw.NoCatalog"));
       return;
     }
     if (!availableCandidates.length) {
-      ui.notifications?.warn?.(game.i18n.localize("VTM_REVISED.MeritFlaw.AllKnown"));
+      ui.notifications?.warn?.(game.i18n.localize(type === "background" ? "VTM_REVISED.Background.AllKnown" : "VTM_REVISED.MeritFlaw.AllKnown"));
       return;
     }
 
@@ -1136,7 +1428,7 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
               const form = this._getFormElement(html);
               const itemId = form?.querySelector("[name='itemId']")?.value;
               const source = itemId ? game.items.get(itemId) : null;
-              if (source) await this._addMeritFlawFromCatalog(source);
+              if (source) await this._addCatalogTraitFromCatalog(source);
               resolve(true);
             }
           },
@@ -1151,12 +1443,12 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
     });
   }
 
-  async _addMeritFlawFromCatalog(sourceItem) {
+  async _addCatalogTraitFromCatalog(sourceItem) {
     const existing = Array.from(this.actor.items ?? [])
       .find(item => item.type === sourceItem.type && this._normalizeName(item.name) === this._normalizeName(sourceItem.name));
 
     if (existing) {
-      ui.notifications?.warn?.(game.i18n.localize("VTM_REVISED.MeritFlaw.AlreadyKnown"));
+      ui.notifications?.warn?.(game.i18n.localize(sourceItem.type === "background" ? "VTM_REVISED.Background.AlreadyKnown" : "VTM_REVISED.MeritFlaw.AlreadyKnown"));
       return existing;
     }
 
@@ -1179,7 +1471,7 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
 
     const item = created?.[0];
     if (item) {
-      ui.notifications?.info?.(game.i18n.format("VTM_REVISED.MeritFlaw.Added", { name: item.name }));
+      ui.notifications?.info?.(game.i18n.format(item.type === "background" ? "VTM_REVISED.Background.Added" : "VTM_REVISED.MeritFlaw.Added", { name: item.name }));
       await new VTMMeritFlawCard({ actor: this.actor, item }).render({ force: true });
     }
     return item;
@@ -1470,6 +1762,17 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
     return options;
   }
 
+  _buildRollTraitOptionGroups() {
+    const options = this._buildRollTraitOptions();
+    const grouped = new Map();
+    for (const option of options) {
+      if (!grouped.has(option.group)) grouped.set(option.group, []);
+      grouped.get(option.group).push(option);
+    }
+
+    return Array.from(grouped.entries()).map(([label, options]) => ({ label, options }));
+  }
+
   _resolveTraitOption(key) {
     if (!key) return null;
     const [type, group, trait] = String(key).split(".");
@@ -1634,7 +1937,7 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
   async _useItemAutomation(item) {
     const auto = item.system?.automation ?? {};
     const roll = auto.roll ?? {};
-    const cost = auto.cost ?? {};
+    const cost = normalizeAutomationCost(auto.cost ?? {}, item);
     const hasRoll = Boolean(roll.firstTrait || roll.secondTrait);
 
     if (hasRoll) {
@@ -1647,18 +1950,14 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
       if (!rolled) return;
     }
 
-    const resourcePath = this._resolveAutomationResource(cost.resource);
-    const amount = Number(cost.amount || 0);
-    if (resourcePath && amount > 0) {
-      await this.actor.changeResource(resourcePath, -amount, cost.text || item.name);
-    }
+    const appliedCost = await applyAutomationCost(this.actor, cost, item, { reason: cost.text || item.name });
 
     if (!hasRoll) {
       const renderTemplate = foundry.applications?.handlebars?.renderTemplate ?? globalThis.renderTemplate;
       const content = await renderTemplate("systems/vtm-revised/templates/chat/item-use-card.hbs", {
         actor: this.actor,
         item,
-        cost,
+        cost: appliedCost,
         description: item.system?.description?.chat || item.system?.description?.system || item.system?.description?.value || ""
       });
       await ChatMessage.create({

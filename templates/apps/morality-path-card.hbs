@@ -1,0 +1,71 @@
+<div class="vtm-morality-card-root">
+  <header class="vtm-card-header morality-card-header">
+    <div>
+      <h1>{{#if hasPath}}{{item.name}}{{else}}{{selectedName}}{{/if}}</h1>
+      <p class="muted">{{category}}{{#if system.nameEn}} · {{system.nameEn}}{{/if}}{{#if system.sourceEra}} · {{system.sourceEra}}{{/if}}</p>
+    </div>
+    {{#if item}}
+      <button type="button" onclick="fromUuid('{{item.uuid}}').then(i => i?.sheet?.render(true))"><i class="fas fa-edit"></i> {{localize "VTM_REVISED.Item.Edit"}}</button>
+    {{/if}}
+  </header>
+
+  <section class="vtm-morality-card-body">
+    {{#unless hasPath}}
+      <article class="vtm-panel">
+        <h2>Справочник не найден</h2>
+        <p>Импортируй каталог Путей и Дорог: <code>game.vtmRevised.importBuiltInMoralityCatalog()</code>.</p>
+      </article>
+    {{/unless}}
+
+    {{#if summary}}
+      <article class="vtm-panel">
+        <h2>Кратко</h2>
+        <div class="vtm-rich-text">{{{summary}}}</div>
+      </article>
+    {{/if}}
+
+    {{#if description}}
+      <article class="vtm-panel">
+        <h2>Литературно</h2>
+        <div class="vtm-rich-text vtm-literary-text">{{{description}}}</div>
+      </article>
+    {{/if}}
+
+    <article class="vtm-panel">
+      <h2>Механика</h2>
+      <p><strong>Текущий рейтинг персонажа:</strong> {{rating}} / {{actor.system.resources.humanity.max}}</p>
+      {{#if system.virtues}}<p><strong>Добродетели:</strong></p><div class="vtm-rich-text">{{{system.virtues}}}</div>{{/if}}
+      {{#if system.aura}}<p><strong>Аура:</strong></p><div class="vtm-rich-text">{{{system.aura}}}</div>{{/if}}
+      {{#if systemText}}<details class="vtm-system-text" open><summary>Система</summary><div class="vtm-rich-text">{{{systemText}}}</div></details>{{/if}}
+      {{#if mechanics.activation}}<details class="vtm-system-text" open><summary>Когда проверять</summary><div class="vtm-rich-text">{{{mechanics.activation}}}</div></details>{{/if}}
+      {{#if mechanics.successScaling}}<details class="vtm-system-text" open><summary>Успехи и последствия</summary><div class="vtm-rich-text">{{{mechanics.successScaling}}}</div></details>{{/if}}
+      {{#if mechanics.limits}}<details class="vtm-system-text" open><summary>Ограничения</summary><div class="vtm-rich-text">{{{mechanics.limits}}}</div></details>{{/if}}
+      {{#if mechanics.automationNotes}}<details class="vtm-system-text" open><summary>Заметка по автоматизации</summary><div class="vtm-rich-text">{{{mechanics.automationNotes}}}</div></details>{{/if}}
+    </article>
+
+    {{#if system.ethics}}
+      <article class="vtm-panel">
+        <h2>Этический кодекс</h2>
+        <div class="vtm-rich-text">{{{system.ethics}}}</div>
+      </article>
+    {{/if}}
+
+    {{#if system.hierarchy}}
+      <article class="vtm-panel">
+        <h2>Иерархия грехов / поводы для проверки</h2>
+        <div class="vtm-rich-text">{{{system.hierarchy}}}</div>
+      </article>
+    {{/if}}
+
+    {{#if system.initiation}}
+      <article class="vtm-panel">
+        <h2>Переход и посвящение</h2>
+        <div class="vtm-rich-text">{{{system.initiation}}}</div>
+      </article>
+    {{/if}}
+
+    {{#if sourceUrl}}
+      <p class="muted source-line">Источник: {{sourceUrl}}{{#if sourceBook}} · {{sourceBook}}{{/if}}{{#if sourcePage}} · стр. {{sourcePage}}{{/if}}</p>
+    {{/if}}
+  </section>
+</div>

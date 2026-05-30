@@ -1,11 +1,34 @@
 <ol class="items-list">
   {{#each items as |item|}}
     <li class="item-row {{#if (and ../ratingMax (gt (lookup item.system ../ratingField) ../ratingMax))}}trait-over-limit{{/if}}" data-item-id="{{item.id}}" data-item-type="{{item.type}}">
-      <span class="item-name {{#if (or (eq item.type "discipline") (eq item.type "disciplinePath"))}}discipline-card-open{{else}}{{#if (eq item.type "ritual")}}ritual-card-open{{else}}{{#if (or (eq item.type "merit") (eq item.type "flaw"))}}merit-flaw-card-open{{else}}item-edit{{/if}}{{/if}}{{/if}}">{{item.name}}</span>
+      {{#if (or (eq item.type "discipline") (eq item.type "disciplinePath") (eq item.type "ritual"))}}
+        <span class="item-main">
+          <span class="item-name {{#if (or (eq item.type "discipline") (eq item.type "disciplinePath"))}}discipline-card-open{{else}}ritual-card-open{{/if}}">{{item.name}}</span>
+          <span class="trait-pips item-pips" aria-hidden="true">
+            {{#if (eq item.type "discipline")}}
+              {{#each @root.traitPips as |pip|}}
+                <i class="{{#if (gte item.system.rating pip)}}is-filled{{/if}}"></i>
+              {{/each}}
+            {{else}}
+              {{#if (eq item.type "disciplinePath")}}
+                {{#each @root.pathPips as |pip|}}
+                  <i class="{{#if (gte item.system.rating pip)}}is-filled{{/if}}"></i>
+                {{/each}}
+              {{else}}
+                {{#each @root.ritualPips as |pip|}}
+                  <i class="{{#if (gte item.system.level pip)}}is-filled{{/if}}"></i>
+                {{/each}}
+              {{/if}}
+            {{/if}}
+          </span>
+        </span>
+      {{else}}
+        <span class="item-name {{#if (or (eq item.type "discipline") (eq item.type "disciplinePath"))}}discipline-card-open{{else}}{{#if (eq item.type "ritual")}}ritual-card-open{{else}}{{#if (or (eq item.type "merit") (or (eq item.type "flaw") (eq item.type "background")))}}merit-flaw-card-open{{else}}item-edit{{/if}}{{/if}}{{/if}}">{{item.name}}</span>
+      {{/if}}
       <span class="item-rating">{{lookup item.system ../ratingField}}{{#if ../ratingMax}}<small>/{{../ratingMax}}</small>{{/if}}</span>
       {{#if (or (eq item.type "discipline") (eq item.type "disciplinePath"))}}<button type="button" class="discipline-card-open" title="{{localize "VTM_REVISED.Discipline.OpenCard"}}"><i class="fas fa-book-open"></i></button>{{/if}}
       {{#if (eq item.type "ritual")}}<button type="button" class="ritual-card-open" title="{{localize "VTM_REVISED.Ritual.OpenCard"}}"><i class="fas fa-book-open"></i></button>{{/if}}
-      {{#if (or (eq item.type "merit") (eq item.type "flaw"))}}<button type="button" class="merit-flaw-card-open" title="{{localize "VTM_REVISED.MeritFlaw.OpenCard"}}"><i class="fas fa-book-open"></i></button>{{/if}}
+      {{#if (or (eq item.type "merit") (or (eq item.type "flaw") (eq item.type "background")))}}<button type="button" class="merit-flaw-card-open" title="{{localize "VTM_REVISED.MeritFlaw.OpenCard"}}"><i class="fas fa-book-open"></i></button>{{/if}}
       <button type="button" class="item-use" title="{{localize "VTM_REVISED.Item.Use"}}"><i class="fas fa-bolt"></i></button>
       <button type="button" class="item-edit"><i class="fas fa-edit"></i></button>
       <button type="button" class="item-delete"><i class="fas fa-trash"></i></button>

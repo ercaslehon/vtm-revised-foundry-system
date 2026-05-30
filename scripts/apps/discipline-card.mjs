@@ -1,5 +1,6 @@
 import { rollDicePool } from "../dice/dice-pool.mjs";
 import { VTM_REVISED } from "../config.mjs";
+import { applyAutomationCost, normalizeAutomationCost } from "../utils/automation-costs.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 const DialogV1 = foundry.appv1?.api?.Dialog ?? globalThis.Dialog;
@@ -442,7 +443,7 @@ export class VTMDisciplineCard extends HandlebarsApplicationMixin(ApplicationV2)
 
     const auto = item.system?.automation ?? {};
     const roll = auto.roll ?? {};
-    const cost = auto.cost ?? {};
+    const cost = normalizeAutomationCost(auto.cost ?? {}, item);
     const hasRoll = Boolean(roll.firstTrait || roll.secondTrait);
 
     if (hasRoll) {
@@ -455,12 +456,12 @@ export class VTMDisciplineCard extends HandlebarsApplicationMixin(ApplicationV2)
       if (!rolled) return;
     }
 
-    await this._applyAutomationCosts(cost, item);
+    const appliedCost = await this._applyAutomationCosts(cost, item);
 
     const content = await renderTemplateCompat("systems/vtm-revised/templates/chat/item-use-card.hbs", {
       actor: this.actor,
       item,
-      cost,
+      cost: appliedCost,
       description: interpolateMechanics(item.system?.description?.chat || item.system?.description?.system || item.system?.description?.value || item.system?.description?.system || "", {
         actor: this.actor,
         discipline: this.discipline,
@@ -476,18 +477,7 @@ export class VTMDisciplineCard extends HandlebarsApplicationMixin(ApplicationV2)
   }
 
   async _applyAutomationCosts(cost = {}, item = null) {
-    const reason = cost.text || item?.name || "Автоматизация дисциплины";
-    const blood = Number(cost.blood || 0);
-    const willpower = Number(cost.willpower || 0);
-
-    if (blood > 0) await this.actor.changeResource("resources.blood", -blood, reason);
-    if (willpower > 0) await this.actor.changeResource("resources.willpower", -willpower, reason);
-
-    if (blood > 0 || willpower > 0) return;
-
-    const resourcePath = this._resolveAutomationResource(cost.resource);
-    const amount = Number(cost.amount || 0);
-    if (resourcePath && amount > 0) await this.actor.changeResource(resourcePath, -amount, reason);
+    return applyAutomationCost(this.actor, cost, item, { reason: cost.text || item?.name || "Автоматизация дисциплины" });
   }
 
   _resolveAutomationResource(resource) {

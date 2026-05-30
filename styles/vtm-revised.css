@@ -1384,3 +1384,4395 @@ input[readonly] {
 .wizard-item-list li[data-item-id] .wizard-open-discipline + span {
   min-width: 0;
 }
+
+/* Morality Paths / Roads */
+.morality-picker-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.35rem;
+  align-items: center;
+}
+.morality-picker-row button,
+.vtm-morality-card-root button {
+  cursor: pointer;
+}
+.morality-selected-summary {
+  margin: 0.25rem 0 0;
+  font-size: 0.82rem;
+}
+.vtm-morality-card-root {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.vtm-morality-card-body {
+  overflow-y: auto;
+  padding: 0.75rem;
+  min-height: 0;
+}
+.morality-card-header {
+  flex: 0 0 auto;
+}
+
+
+/* Morality hierarchy tables */
+.vtm-hierarchy-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.35rem 0;
+  font-size: 0.92rem;
+}
+.vtm-hierarchy-table th,
+.vtm-hierarchy-table td {
+  border: 1px solid rgba(184, 150, 62, 0.28);
+  padding: 0.35rem 0.45rem;
+  vertical-align: top;
+}
+.vtm-hierarchy-table th {
+  color: var(--vtm-gold, #b8963e);
+  background: rgba(184, 150, 62, 0.08);
+  text-align: left;
+}
+.vtm-hierarchy-table td:first-child {
+  width: 5rem;
+  color: var(--vtm-gold, #b8963e);
+  font-weight: 700;
+  text-align: center;
+}
+
+
+/* ==========================================================================
+   VTM Revised v9.5.2 Vampire UI Layout Refresh
+   Цель: приблизить лист к интерактивному готическому чарнику из дизайн-референса.
+   Функциональные классы и data-* оставлены на месте.
+   ========================================================================== */
+
+.vtm-revised.sheet {
+  --vtm-bg: #070509;
+  --vtm-bg-soft: #120810;
+  --vtm-bg-red: #210b16;
+  --vtm-panel: rgba(16, 9, 13, 0.96);
+  --vtm-panel-2: rgba(31, 12, 20, 0.88);
+  --vtm-panel-3: rgba(46, 14, 26, 0.74);
+  --vtm-border: #73233a;
+  --vtm-border-soft: rgba(115, 35, 58, 0.55);
+  --vtm-border-gold: rgba(204, 169, 91, 0.34);
+  --vtm-blood: #9e2039;
+  --vtm-blood-light: #c83c55;
+  --vtm-blood-dark: #4b0a18;
+  --vtm-gold: #c9aa61;
+  --vtm-gold-bright: #e1c77e;
+  --vtm-text: #f1e8db;
+  --vtm-muted: #b8a898;
+  --vtm-dim: #85776c;
+  --vtm-shadow: 0 18px 44px rgba(0, 0, 0, 0.48);
+  --vtm-inset: inset 0 0 28px rgba(0, 0, 0, 0.48);
+  color: var(--vtm-text);
+  font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif;
+}
+
+.vtm-revised.sheet .window-content {
+  padding: 0;
+  overflow: hidden;
+  color: var(--vtm-text);
+  background:
+    radial-gradient(circle at 18% 0%, rgba(158, 32, 57, 0.28), transparent 32%),
+    radial-gradient(circle at 88% 20%, rgba(201, 170, 97, 0.10), transparent 28%),
+    linear-gradient(135deg, #050306 0%, #160813 45%, #070509 100%);
+}
+
+.vtm-revised.sheet .window-content::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.024) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
+  background-size: 32px 32px;
+  opacity: 0.23;
+  mix-blend-mode: screen;
+}
+
+.vtm-vampire-layout {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  padding: 16px;
+  gap: 12px;
+}
+
+.vtm-vampire-layout::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  z-index: -1;
+  border: 1px solid rgba(201, 170, 97, 0.16);
+  border-radius: 22px;
+  pointer-events: none;
+  box-shadow: inset 0 0 88px rgba(0, 0, 0, 0.46);
+}
+
+.vtm-sheet input,
+.vtm-sheet textarea,
+.vtm-sheet select {
+  min-height: 30px;
+  padding: 4px 8px;
+  border: 1px solid rgba(115, 35, 58, 0.82);
+  border-radius: 8px;
+  background: rgba(4, 3, 5, 0.82);
+  color: var(--vtm-text);
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.45);
+}
+
+.vtm-sheet input:focus,
+.vtm-sheet textarea:focus,
+.vtm-sheet select:focus {
+  outline: none;
+  border-color: rgba(201, 170, 97, 0.72);
+  box-shadow:
+    0 0 0 1px rgba(201, 170, 97, 0.18),
+    0 0 18px rgba(158, 32, 57, 0.28),
+    inset 0 0 14px rgba(0, 0, 0, 0.48);
+}
+
+.vtm-sheet button {
+  border: 1px solid rgba(201, 170, 97, 0.28);
+  border-radius: 9px;
+  background: linear-gradient(180deg, rgba(120, 28, 47, 0.95), rgba(55, 10, 21, 0.98));
+  color: var(--vtm-text);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease, filter 120ms ease;
+}
+
+.vtm-sheet button:hover {
+  border-color: rgba(201, 170, 97, 0.66);
+  box-shadow: 0 0 18px rgba(158, 32, 57, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.10);
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.vtm-sheet button:active {
+  transform: translateY(0);
+}
+
+.vtm-sheet label {
+  color: var(--vtm-muted);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.vtm-sheet h1,
+.vtm-sheet h2,
+.vtm-sheet h3 {
+  font-family: "Cinzel", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+}
+
+.vtm-sheet h2,
+.vtm-sheet h3 {
+  border: 0;
+  color: var(--vtm-gold);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.vtm-sheet h2 {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 12px;
+  font-size: 15px;
+}
+
+.vtm-sheet h2::before {
+  content: "";
+  width: 22px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--vtm-gold));
+}
+
+.vtm-sheet h2::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(201, 170, 97, 0.52), transparent);
+}
+
+.vtm-panel {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 14px;
+  padding: 14px;
+  border: 1px solid var(--vtm-border-soft);
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(158, 32, 57, 0.10), transparent 32%),
+    linear-gradient(145deg, rgba(20, 10, 15, 0.96), rgba(8, 5, 8, 0.94));
+  box-shadow: var(--vtm-shadow), var(--vtm-inset);
+}
+
+.vtm-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-top: 1px solid rgba(201, 170, 97, 0.13);
+  background:
+    radial-gradient(circle at 0% 0%, rgba(201, 170, 97, 0.06), transparent 25%),
+    radial-gradient(circle at 100% 100%, rgba(158, 32, 57, 0.10), transparent 31%);
+}
+
+.vtm-panel > * {
+  position: relative;
+}
+
+/* Header */
+.vtm-sheet .vtm-hero-header {
+  flex: 0 0 auto;
+  align-items: stretch;
+  gap: 16px;
+  margin: 0;
+  padding: 16px;
+  border: 1px solid rgba(115, 35, 58, 0.72);
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at 92% 16%, rgba(201, 170, 97, 0.12), transparent 26%),
+    linear-gradient(145deg, rgba(17, 8, 13, 0.98), rgba(38, 12, 22, 0.84));
+  box-shadow: var(--vtm-shadow), var(--vtm-inset);
+}
+
+.vtm-sheet .vtm-portrait-card {
+  flex: 0 0 134px;
+  min-height: 174px;
+  padding: 10px;
+  border: 1px solid rgba(201, 170, 97, 0.34);
+  border-radius: 17px;
+  background:
+    linear-gradient(180deg, rgba(7, 5, 8, 0.98), rgba(35, 12, 20, 0.84));
+  box-shadow: inset 0 0 32px rgba(0, 0, 0, 0.58);
+}
+
+.vtm-portrait-frame {
+  border-radius: 13px;
+  padding: 4px;
+  background:
+    linear-gradient(135deg, rgba(201, 170, 97, 0.85), rgba(115, 35, 58, 0.4), rgba(201, 170, 97, 0.28));
+}
+
+.vtm-sheet .profile-img {
+  display: block;
+  width: 106px;
+  height: 116px;
+  object-fit: cover;
+  border: 0;
+  border-radius: 10px;
+  filter: contrast(1.06) saturate(0.88);
+  background: #050306;
+}
+
+.vtm-sheet .portrait-actions {
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+  margin-top: 10px;
+}
+
+.vtm-sheet .portrait-actions button {
+  width: 29px;
+  height: 29px;
+  padding: 0;
+}
+
+.vtm-identity-panel {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  grid-template-rows: auto auto auto;
+  gap: 12px;
+}
+
+.vtm-character-name {
+  position: relative;
+  margin: 0;
+  padding: 0 0 2px;
+}
+
+.vtm-character-name input {
+  width: 100%;
+  min-height: 48px;
+  padding: 2px 46px 6px 10px;
+  border: 0;
+  border-bottom: 1px solid rgba(201, 170, 97, 0.46);
+  border-radius: 0;
+  background: transparent;
+  color: var(--vtm-gold);
+  font-size: 33px;
+  letter-spacing: 0.12em;
+  text-shadow: 0 0 18px rgba(201, 170, 97, 0.18);
+  box-shadow: none;
+}
+
+.vtm-character-name::after {
+  content: "✦";
+  position: absolute;
+  right: 12px;
+  bottom: 13px;
+  color: rgba(201, 170, 97, 0.56);
+  font-size: 16px;
+}
+
+.vtm-identity-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(132px, 1fr));
+  gap: 10px;
+}
+
+.vtm-lore-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(132px, 1fr));
+  gap: 10px;
+}
+
+.vtm-field-card,
+.vtm-lore-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  padding: 9px;
+  border: 1px solid rgba(115, 35, 58, 0.56);
+  border-radius: 13px;
+  background:
+    linear-gradient(180deg, rgba(7, 5, 8, 0.62), rgba(31, 11, 19, 0.48));
+}
+
+.vtm-field-card > span,
+.vtm-lore-card > span,
+.vtm-command-strip label > span {
+  color: var(--vtm-muted);
+}
+
+.vtm-control-with-book,
+.clan-picker-row,
+.archetype-picker-row,
+.morality-picker-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 34px;
+  gap: 7px;
+  align-items: center;
+}
+
+.vtm-book-button,
+.clan-card-open,
+.archetype-card-open,
+.morality-path-card-open,
+.discipline-card-open,
+.ritual-card-open,
+.merit-flaw-card-open {
+  background:
+    linear-gradient(180deg, rgba(133, 38, 58, 0.95), rgba(65, 12, 25, 0.98));
+  border-color: rgba(201, 170, 97, 0.38);
+  color: #ffe8cf;
+}
+
+.vtm-book-button {
+  width: 34px;
+  height: 31px;
+  padding: 0;
+}
+
+/* Roll builder */
+.vtm-command-strip {
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 12px 16px;
+  border-color: rgba(201, 170, 97, 0.24);
+  background:
+    linear-gradient(90deg, rgba(11, 6, 9, 0.98), rgba(45, 13, 24, 0.94), rgba(11, 6, 9, 0.98));
+}
+
+.vtm-command-strip h2 {
+  margin-bottom: 9px;
+}
+
+.vtm-command-strip .vtm-roll-builder-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1.3fr 92px minmax(170px, 1fr) auto;
+  gap: 10px;
+  align-items: end;
+}
+
+.vtm-command-strip label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.vtm-roll-builder-submit,
+.vtm-roll,
+.weapon-attack {
+  background:
+    linear-gradient(180deg, var(--vtm-blood-light), var(--vtm-blood) 48%, var(--vtm-blood-dark));
+  border-color: rgba(201, 170, 97, 0.48);
+  color: #fff4ea;
+  font-weight: 700;
+}
+
+.vtm-roll-builder-submit {
+  min-height: 34px;
+  padding-inline: 18px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Body */
+.vtm-sheet-v2 .vtm-sheet-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(201, 170, 97, 0.46) rgba(8, 5, 8, 0.58);
+}
+
+.vtm-section-tabs {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(120px, 1fr));
+  gap: 8px;
+  margin: 12px 0 12px;
+}
+
+.vtm-tab-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 36px;
+  border: 1px solid rgba(115, 35, 58, 0.46);
+  border-radius: 12px;
+  background: rgba(8, 5, 8, 0.62);
+  color: var(--vtm-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 12px;
+}
+
+.vtm-tab-item.is-active {
+  border-color: rgba(201, 170, 97, 0.42);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(158, 32, 57, 0.30), transparent 58%),
+    linear-gradient(180deg, rgba(68, 16, 31, 0.78), rgba(10, 6, 9, 0.74));
+  color: var(--vtm-gold-bright);
+  box-shadow: 0 0 18px rgba(158, 32, 57, 0.22);
+}
+
+.vtm-main-grid {
+  display: grid;
+  grid-template-columns: minmax(520px, 1.5fr) minmax(360px, 0.9fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.vtm-main-left,
+.vtm-main-right {
+  min-width: 0;
+}
+
+/* Trackers */
+.vtm-tracker-panel,
+.vtm-health-panel {
+  margin-top: 12px;
+}
+
+.vtm-generation-banner {
+  display: grid;
+  grid-template-columns: minmax(170px, 1.1fr) minmax(260px, 2fr) auto;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 12px;
+  padding: 11px 12px;
+  border: 1px solid rgba(201, 170, 97, 0.22);
+  border-radius: 15px;
+  background: rgba(7, 5, 8, 0.64);
+}
+
+.vtm-generation-title {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.vtm-generation-title strong,
+.generation-cap-values strong {
+  color: var(--vtm-gold-bright);
+}
+
+.generation-cap-values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.generation-cap-values span {
+  padding: 5px 9px;
+  border: 1px solid rgba(201, 170, 97, 0.16);
+  border-radius: 999px;
+  background: rgba(201, 170, 97, 0.07);
+  color: var(--vtm-muted);
+}
+
+.vtm-resource-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(170px, 1fr));
+  gap: 11px;
+}
+
+.vtm-resource-card {
+  min-height: 128px;
+  padding: 12px;
+  border: 1px solid rgba(115, 35, 58, 0.62);
+  border-radius: 15px;
+  background:
+    radial-gradient(circle at 82% 13%, rgba(158, 32, 57, 0.18), transparent 35%),
+    linear-gradient(180deg, rgba(12, 7, 10, 0.95), rgba(35, 12, 20, 0.82));
+  box-shadow: inset 0 0 22px rgba(0, 0, 0, 0.38);
+}
+
+.vtm-resource-card h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 10px;
+  font-size: 12px;
+}
+
+.vtm-resource-card h3 i {
+  color: var(--vtm-blood-light);
+}
+
+.resource-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.resource-controls input {
+  width: 54px;
+  height: 32px;
+  min-height: 32px;
+  text-align: center;
+  color: var(--vtm-gold-bright);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.resource-controls button {
+  width: 29px;
+  height: 29px;
+  padding: 0;
+}
+
+.vtm-resource-subfield {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.vtm-xp-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.vtm-xp-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.vtm-xp-available {
+  margin: 8px 0 0;
+  color: var(--vtm-muted);
+}
+
+.vtm-xp-available strong {
+  color: var(--vtm-gold-bright);
+}
+
+.vtm-health-panel {
+  border-color: rgba(158, 32, 57, 0.46);
+}
+
+.health-active-penalty {
+  margin: 0 0 11px;
+  padding: 9px 11px;
+  border: 1px solid rgba(201, 170, 97, 0.21);
+  border-radius: 12px;
+  background:
+    linear-gradient(90deg, rgba(73, 12, 25, 0.54), rgba(201, 170, 97, 0.06));
+  color: var(--vtm-text);
+}
+
+.health-check-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(80px, 1fr));
+  gap: 8px;
+}
+
+.health-row {
+  display: grid;
+  grid-template-columns: 21px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  min-height: 54px;
+  padding: 8px;
+  border: 1px solid rgba(115, 35, 58, 0.58);
+  border-radius: 13px;
+  background: linear-gradient(180deg, rgba(9, 5, 8, 0.92), rgba(30, 10, 18, 0.78));
+}
+
+.health-row input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--vtm-blood-light);
+}
+
+.health-row.is-checked {
+  border-color: rgba(200, 60, 85, 0.86);
+  background:
+    radial-gradient(circle at 20% 18%, rgba(200, 60, 85, 0.28), transparent 44%),
+    linear-gradient(180deg, rgba(78, 12, 27, 0.95), rgba(19, 7, 12, 0.9));
+  box-shadow: 0 0 18px rgba(158, 32, 57, 0.28), inset 0 0 18px rgba(0, 0, 0, 0.44);
+}
+
+.health-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.16;
+}
+
+.health-name {
+  color: var(--vtm-text);
+  font-weight: 700;
+}
+
+.health-penalty {
+  color: var(--vtm-muted);
+  font-size: 11px;
+}
+
+/* Traits */
+.trait-columns {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(170px, 1fr));
+  gap: 10px;
+}
+
+.trait-column {
+  padding: 11px;
+  border: 1px solid rgba(115, 35, 58, 0.48);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(7, 5, 8, 0.70), rgba(30, 11, 18, 0.56));
+}
+
+.trait-column h3 {
+  margin: 0 0 9px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--vtm-gold-bright);
+}
+
+.trait-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 48px 30px;
+  gap: 6px;
+  align-items: center;
+  min-height: 32px;
+  margin: 0;
+  padding: 4px 5px 4px 8px;
+  border-bottom: 1px solid rgba(115, 35, 58, 0.22);
+  border-radius: 8px;
+  transition: background 120ms ease, border-color 120ms ease;
+}
+
+.trait-row:hover {
+  background: rgba(201, 170, 97, 0.06);
+}
+
+.trait-row span {
+  overflow: hidden;
+  color: var(--vtm-text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.trait-row input {
+  width: 48px;
+  height: 26px;
+  min-height: 26px;
+  text-align: center;
+  color: var(--vtm-gold-bright);
+  font-weight: 700;
+}
+
+.trait-row .vtm-roll {
+  width: 29px;
+  height: 27px;
+  padding: 0;
+}
+
+.trait-cap-note {
+  margin-left: 7px;
+  padding: 2px 7px;
+  border: 1px solid rgba(201, 170, 97, 0.22);
+  border-radius: 999px;
+  background: rgba(201, 170, 97, 0.07);
+  color: var(--vtm-muted);
+  font-size: 11px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.trait-over-limit {
+  box-shadow: inset 3px 0 0 rgba(200, 60, 85, 0.80);
+}
+
+/* Advantages and items */
+.advantage-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(135px, 1fr));
+  gap: 10px;
+}
+
+.advantage-grid > div,
+.blood-magic-group,
+.blood-magic-rituals-panel {
+  padding: 11px;
+  border: 1px solid rgba(115, 35, 58, 0.48);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(7, 5, 8, 0.72), rgba(32, 11, 19, 0.54));
+}
+
+.advantage-grid h3,
+.blood-magic-group h3,
+.blood-magic-rituals-panel h3 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+}
+
+.items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.item-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 48px repeat(4, 28px);
+  gap: 4px;
+  align-items: center;
+  min-height: 32px;
+  padding: 5px 5px 5px 8px;
+  border: 1px solid rgba(115, 35, 58, 0.30);
+  border-radius: 10px;
+  background: rgba(6, 4, 7, 0.62);
+}
+
+.item-row:hover {
+  border-color: rgba(201, 170, 97, 0.35);
+  background: rgba(201, 170, 97, 0.055);
+}
+
+.item-name {
+  overflow: hidden;
+  color: var(--vtm-text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.item-rating {
+  color: var(--vtm-gold-bright);
+  text-align: center;
+  font-weight: 700;
+}
+
+.item-rating small {
+  color: var(--vtm-dim);
+}
+
+.item-row button {
+  width: 27px;
+  height: 27px;
+  padding: 0;
+}
+
+.empty,
+.muted {
+  color: var(--vtm-muted);
+}
+
+/* Archetypes */
+.archetype-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.archetype-card {
+  padding: 12px;
+  border: 1px solid rgba(201, 170, 97, 0.20);
+  border-radius: 14px;
+  background: rgba(7, 5, 8, 0.60);
+}
+
+.archetype-card header {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(115, 35, 58, 0.34);
+}
+
+.archetype-card p {
+  color: var(--vtm-muted);
+}
+
+.archetype-mechanic {
+  padding: 8px;
+  border: 1px solid rgba(201, 170, 97, 0.14);
+  border-radius: 10px;
+  background: rgba(201, 170, 97, 0.07);
+}
+
+/* Blood magic */
+.blood-magic-section {
+  border-color: rgba(158, 32, 57, 0.48);
+  background:
+    radial-gradient(circle at 84% 12%, rgba(158, 32, 57, 0.22), transparent 32%),
+    linear-gradient(145deg, rgba(12, 7, 10, 0.98), rgba(45, 13, 24, 0.84));
+}
+
+.blood-magic-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(160px, 1fr));
+  gap: 10px;
+}
+
+.blood-magic-rituals-panel {
+  margin-top: 10px;
+}
+
+.blood-magic-group-header,
+.section-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Weapons */
+.weapon-list .weapon-row {
+  grid-template-columns: minmax(110px, 1.1fr) repeat(4, minmax(56px, auto)) 30px 30px 30px;
+  gap: 6px;
+}
+
+.weapon-meta {
+  color: var(--vtm-muted);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.weapon-attack {
+  width: auto !important;
+  min-width: 60px;
+  padding-inline: 8px !important;
+}
+
+/* Notes/Profile */
+.grid-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.text-blocks {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.text-blocks label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+}
+
+.text-blocks textarea {
+  width: 100%;
+  min-height: 88px;
+  resize: vertical;
+}
+
+/* Chat cards inherit the vampire language */
+.vtm-chat-card {
+  border: 1px solid rgba(115, 35, 58, 0.75);
+  border-radius: 14px;
+  padding: 12px;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(158, 32, 57, 0.16), transparent 30%),
+    linear-gradient(145deg, #150b10, #070509);
+  color: var(--vtm-text);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.34);
+}
+
+.vtm-chat-card h3 {
+  color: var(--vtm-gold);
+}
+
+.vtm-chat-card .die {
+  min-width: 26px;
+  padding: 3px 6px;
+  border-color: rgba(201, 170, 97, 0.35);
+  background: rgba(8, 5, 8, 0.76);
+}
+
+.vtm-chat-card .botch {
+  color: #ff6b82;
+}
+
+/* Responsive safety */
+@media (max-width: 1240px) {
+  .vtm-main-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .vtm-resource-grid,
+  .advantage-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .health-check-grid {
+    grid-template-columns: repeat(4, minmax(80px, 1fr));
+  }
+}
+
+@media (max-width: 920px) {
+  .vtm-sheet .vtm-hero-header {
+    flex-direction: column;
+  }
+
+  .vtm-sheet .vtm-portrait-card {
+    width: 134px;
+  }
+
+  .vtm-identity-grid,
+  .vtm-lore-grid,
+  .trait-columns,
+  .blood-magic-grid,
+  .archetype-grid,
+  .vtm-command-strip .vtm-roll-builder-grid,
+  .vtm-section-tabs {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .vtm-identity-grid,
+  .vtm-lore-grid,
+  .vtm-resource-grid,
+  .advantage-grid,
+  .health-check-grid,
+  .trait-columns,
+  .blood-magic-grid,
+  .archetype-grid,
+  .vtm-command-strip .vtm-roll-builder-grid,
+  .vtm-section-tabs,
+  .grid-2,
+  .grid-3,
+  .grid-4 {
+    grid-template-columns: 1fr;
+  }
+
+  .weapon-list .weapon-row,
+  .item-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* ==========================================================================
+   VTM Revised v9.5.3 Vampire UI Shell
+   Более близко к целевому макету: портрет слева, справа identity/tracker/roll,
+   ограниченная ширина листа, компактные трекеры, pips для черт.
+   ========================================================================== */
+
+.vtm-revised.sheet {
+  --vtm-canvas: #050306;
+  --vtm-black: #09060a;
+  --vtm-black-2: #10080e;
+  --vtm-panel: rgba(13, 9, 11, 0.95);
+  --vtm-panel-red: rgba(37, 12, 22, 0.86);
+  --vtm-border: #6f2338;
+  --vtm-border-soft: rgba(112, 35, 56, 0.50);
+  --vtm-border-hot: rgba(190, 56, 82, 0.72);
+  --vtm-gold: #c9ad66;
+  --vtm-gold-soft: rgba(201, 173, 102, 0.36);
+  --vtm-gold-dim: rgba(201, 173, 102, 0.18);
+  --vtm-blood: #9e2039;
+  --vtm-blood-2: #c33b54;
+  --vtm-blood-dark: #440916;
+  --vtm-text: #efe6d8;
+  --vtm-muted: #ad9d8e;
+  --vtm-dim: #7d6f65;
+  --vtm-shadow: 0 18px 50px rgba(0, 0, 0, 0.55);
+  --vtm-inset: inset 0 0 28px rgba(0, 0, 0, 0.48);
+  color: var(--vtm-text);
+  font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif;
+}
+
+.vtm-revised.sheet .window-content {
+  padding: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 18% 4%, rgba(124, 20, 39, 0.32), transparent 28%),
+    radial-gradient(circle at 90% 18%, rgba(201, 173, 102, 0.10), transparent 26%),
+    linear-gradient(135deg, #050306, #120810 48%, #050306);
+  color: var(--vtm-text);
+}
+
+.vtm-vampire-shell {
+  width: min(100%, 1480px);
+  max-width: 1480px;
+  margin: 0 auto;
+  padding: 12px 14px 14px;
+  gap: 10px;
+  box-sizing: border-box;
+}
+
+.vtm-vampire-shell::before {
+  inset: 7px;
+  border-radius: 18px;
+  border-color: rgba(201, 173, 102, 0.13);
+}
+
+.vtm-sheet input,
+.vtm-sheet select,
+.vtm-sheet textarea {
+  min-height: 28px;
+  padding: 4px 8px;
+  border: 1px solid rgba(112, 35, 56, 0.78);
+  border-radius: 7px;
+  background: rgba(4, 3, 5, 0.76);
+  color: var(--vtm-text);
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.48);
+}
+
+.vtm-sheet input:focus,
+.vtm-sheet select:focus,
+.vtm-sheet textarea:focus {
+  outline: none;
+  border-color: rgba(201, 173, 102, 0.72);
+  box-shadow: 0 0 0 1px rgba(201, 173, 102, 0.17), 0 0 16px rgba(158, 32, 57, 0.25), inset 0 0 13px rgba(0,0,0,0.48);
+}
+
+.vtm-sheet label {
+  color: var(--vtm-muted);
+  font-size: 11px;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+}
+
+.vtm-sheet button {
+  border: 1px solid rgba(201, 173, 102, 0.28);
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(124, 28, 48, 0.96), rgba(55, 9, 21, 0.98));
+  color: #fff0dd;
+  box-shadow: 0 5px 14px rgba(0,0,0,0.34), inset 0 1px 0 rgba(255,255,255,0.08);
+}
+
+.vtm-sheet button:hover {
+  border-color: rgba(201, 173, 102, 0.68);
+  filter: brightness(1.08);
+  box-shadow: 0 0 16px rgba(158,32,57,0.30), inset 0 1px 0 rgba(255,255,255,0.12);
+}
+
+.vtm-panel {
+  margin-bottom: 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(112, 35, 56, 0.42);
+  background:
+    radial-gradient(circle at 100% 0%, rgba(158, 32, 57, 0.11), transparent 34%),
+    linear-gradient(145deg, rgba(14, 9, 12, 0.96), rgba(7, 5, 7, 0.94));
+  box-shadow: 0 12px 30px rgba(0,0,0,0.38), inset 0 0 24px rgba(0,0,0,0.38);
+}
+
+.vtm-sheet h2,
+.vtm-sheet h3 {
+  color: var(--vtm-gold);
+  font-family: "Cinzel", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.vtm-sheet h2 {
+  margin: 0 0 9px;
+  font-size: 14px;
+}
+
+/* Top shell: this is the main structural change versus 9.5.2 */
+.vtm-top-shell {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  gap: 12px;
+  min-height: 392px;
+}
+
+.vtm-top-stack {
+  display: grid;
+  grid-template-rows: auto auto auto;
+  gap: 10px;
+  min-width: 0;
+}
+
+.vtm-sheet .vtm-portrait-card {
+  min-height: 392px;
+  padding: 10px;
+  border: 1px solid rgba(112, 35, 56, 0.76);
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(112, 35, 56, 0.25), transparent 52%),
+    linear-gradient(180deg, rgba(10, 7, 9, 0.98), rgba(32, 11, 19, 0.88));
+  box-shadow: var(--vtm-shadow), var(--vtm-inset);
+}
+
+.vtm-portrait-frame {
+  height: 300px;
+  padding: 5px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(201, 173, 102, 0.80), rgba(112, 35, 56, 0.50), rgba(201, 173, 102, 0.20));
+}
+
+.vtm-sheet .profile-img {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: 9px;
+  object-fit: cover;
+  background: #030203;
+  filter: contrast(1.06) saturate(0.90);
+}
+
+.vtm-portrait-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 7px;
+  margin-top: 10px;
+}
+
+.vtm-portrait-actions button {
+  min-height: 32px;
+}
+
+.vtm-sheet .vtm-identity-panel {
+  display: block;
+  margin: 0;
+  padding: 16px 18px 14px;
+  border: 1px solid rgba(112, 35, 56, 0.58);
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 90% 15%, rgba(201, 173, 102, 0.10), transparent 26%),
+    linear-gradient(145deg, rgba(12, 8, 10, 0.98), rgba(29, 10, 18, 0.82));
+  box-shadow: var(--vtm-shadow), var(--vtm-inset);
+}
+
+.vtm-character-name {
+  position: relative;
+  margin: 0 0 11px;
+}
+
+.vtm-character-name input {
+  width: 100%;
+  min-height: 50px;
+  padding: 2px 42px 7px 6px;
+  border: 0;
+  border-bottom: 1px solid rgba(201, 173, 102, 0.44);
+  border-radius: 0;
+  background: transparent;
+  color: var(--vtm-gold);
+  box-shadow: none;
+  font-family: "Cinzel", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  font-size: 34px;
+  letter-spacing: 0.15em;
+  text-shadow: 0 0 18px rgba(201, 173, 102, 0.17);
+}
+
+.vtm-character-name::after {
+  content: "✦";
+  position: absolute;
+  right: 12px;
+  bottom: 13px;
+  color: rgba(201,173,102,0.55);
+  font-size: 16px;
+}
+
+.vtm-identity-grid,
+.vtm-lore-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.vtm-lore-grid {
+  margin-top: 10px;
+}
+
+.vtm-identity-cell,
+.vtm-lore-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+  padding-left: 10px;
+  border-left: 1px solid rgba(201, 173, 102, 0.22);
+}
+
+.vtm-identity-cell > span,
+.vtm-lore-cell > span,
+.vtm-command-strip label > span,
+.vtm-mini-field {
+  color: var(--vtm-muted);
+}
+
+.vtm-control-with-book,
+.clan-picker-row,
+.archetype-picker-row,
+.morality-picker-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 32px;
+  gap: 6px;
+  align-items: center;
+}
+
+.vtm-book-button,
+.clan-card-open,
+.archetype-card-open,
+.morality-path-card-open,
+.discipline-card-open,
+.ritual-card-open,
+.merit-flaw-card-open {
+  width: 32px;
+  min-width: 32px;
+  height: 29px;
+  min-height: 29px;
+  padding: 0;
+  background: linear-gradient(180deg, rgba(124, 28, 48, 0.96), rgba(55, 9, 21, 0.98));
+  border-color: rgba(201,173,102,0.38);
+}
+
+/* Compact trackers, now living to the right of the portrait like in the mockup */
+.vtm-top-trackers {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.08fr .9fr 1.55fr;
+  gap: 8px;
+}
+
+.vtm-tracker-card {
+  min-height: 88px;
+  padding: 10px 10px 9px;
+  border: 1px solid rgba(112, 35, 56, 0.54);
+  border-radius: 12px;
+  background:
+    radial-gradient(circle at 84% 10%, rgba(158, 32, 57, 0.18), transparent 42%),
+    linear-gradient(180deg, rgba(9, 6, 8, 0.96), rgba(30, 10, 18, 0.82));
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.38);
+}
+
+.vtm-tracker-card h3 {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 0 8px;
+  font-size: 11px;
+  line-height: 1;
+}
+
+.vtm-tracker-card h3 i {
+  color: var(--vtm-blood-2);
+}
+
+.vtm-tracker-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.vtm-tracker-controls input {
+  width: 44px;
+  height: 28px;
+  min-height: 28px;
+  padding-inline: 4px;
+  text-align: center;
+  color: var(--vtm-gold);
+  font-weight: 700;
+}
+
+.vtm-tracker-controls button {
+  width: 27px;
+  height: 27px;
+  min-height: 27px;
+  padding: 0;
+}
+
+.vtm-mini-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 7px;
+  font-size: 10px;
+}
+
+.vtm-mini-field input,
+.vtm-path-mini select {
+  height: 27px;
+  min-height: 27px;
+}
+
+.vtm-xp-compact {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.vtm-xp-compact label {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 9px;
+}
+
+.vtm-xp-compact input {
+  height: 27px;
+  min-height: 27px;
+}
+
+.vtm-xp-available {
+  margin: 6px 0 0;
+  color: var(--vtm-muted);
+  font-size: 11px;
+}
+
+.vtm-xp-available strong {
+  color: var(--vtm-gold);
+}
+
+.vtm-tracker-health {
+  min-width: 0;
+}
+
+.vtm-tracker-health .health-active-penalty {
+  margin: 0 0 7px;
+  padding: 5px 7px;
+  border: 1px solid rgba(201, 173, 102, 0.20);
+  border-radius: 8px;
+  background: rgba(201, 173, 102, 0.06);
+  color: var(--vtm-muted);
+  font-size: 11px;
+}
+
+.vtm-tracker-health .health-check-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.vtm-tracker-health .health-row {
+  display: block;
+  min-height: 30px;
+  padding: 0;
+  border: 1px solid rgba(112, 35, 56, 0.50);
+  border-radius: 7px;
+  background: rgba(5, 3, 6, 0.72);
+  text-align: center;
+  overflow: hidden;
+}
+
+.vtm-tracker-health .health-row input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.vtm-tracker-health .health-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 30px;
+  padding: 2px;
+  line-height: 1.05;
+}
+
+.vtm-tracker-health .health-name {
+  max-width: 100%;
+  overflow: hidden;
+  color: var(--vtm-text);
+  font-size: 9px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.vtm-tracker-health .health-penalty {
+  color: var(--vtm-dim);
+  font-size: 9px;
+}
+
+.vtm-tracker-health .health-row.is-checked {
+  border-color: rgba(195, 59, 84, 0.86);
+  background: linear-gradient(180deg, rgba(117, 24, 43, 0.92), rgba(35, 7, 15, 0.94));
+  box-shadow: 0 0 10px rgba(158,32,57,0.30);
+}
+
+.vtm-generation-strip {
+  display: grid;
+  grid-template-columns: minmax(140px, .75fr) minmax(280px, 1.6fr) auto;
+  gap: 8px;
+  align-items: center;
+  min-height: 38px;
+  margin-top: -2px;
+  padding: 7px 9px;
+  border: 1px solid rgba(201,173,102,0.20);
+  border-radius: 11px;
+  background: rgba(6, 4, 7, 0.62);
+}
+
+.vtm-generation-title {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.vtm-generation-title strong,
+.generation-cap-values strong {
+  color: var(--vtm-gold);
+}
+
+.generation-cap-values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.generation-cap-values span {
+  padding: 3px 8px;
+  border: 1px solid rgba(201,173,102,0.14);
+  border-radius: 999px;
+  background: rgba(201,173,102,0.06);
+  color: var(--vtm-muted);
+  font-size: 11px;
+}
+
+.generation-sync {
+  white-space: nowrap;
+}
+
+/* Roll strip */
+.vtm-command-strip {
+  margin: 0;
+  padding: 10px 12px 12px;
+  border-color: rgba(201,173,102,0.23);
+  background: linear-gradient(90deg, rgba(8,5,7,0.96), rgba(45,13,24,0.92), rgba(8,5,7,0.96));
+}
+
+.vtm-command-strip h2 {
+  margin-bottom: 7px;
+}
+
+.vtm-command-strip .vtm-roll-builder-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1.3fr 92px minmax(160px, 1fr) 150px;
+  gap: 8px;
+  align-items: end;
+}
+
+.vtm-command-strip label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.vtm-roll-builder-submit,
+.vtm-roll,
+.weapon-attack {
+  background: linear-gradient(180deg, var(--vtm-blood-2), var(--vtm-blood) 50%, var(--vtm-blood-dark));
+  border-color: rgba(201,173,102,0.42);
+  font-weight: 700;
+}
+
+.vtm-roll-builder-submit {
+  min-height: 31px;
+  text-transform: uppercase;
+  letter-spacing: .055em;
+}
+
+/* Body */
+.vtm-sheet-v2 .vtm-sheet-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(201,173,102,.42) rgba(5,3,6,.55);
+}
+
+.vtm-section-tabs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.vtm-tab-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 36px;
+  border: 1px solid rgba(112,35,56,.42);
+  border-radius: 10px;
+  background: rgba(7,5,7,.70);
+  color: var(--vtm-muted);
+  font-size: 12px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.vtm-tab-item.is-active {
+  border-color: rgba(201,173,102,.42);
+  color: var(--vtm-gold);
+  background: radial-gradient(circle at 50% 0%, rgba(158,32,57,.30), transparent 58%), linear-gradient(180deg, rgba(67,16,30,.78), rgba(8,5,7,.74));
+  box-shadow: 0 0 18px rgba(158,32,57,.20);
+}
+
+.vtm-main-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(390px, .72fr);
+  gap: 10px;
+  align-items: start;
+}
+
+.vtm-main-left,
+.vtm-main-right {
+  min-width: 0;
+}
+
+/* Trait panels with visual pips */
+.trait-columns {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.trait-column {
+  padding: 10px;
+  border: 1px solid rgba(112,35,56,.42);
+  border-radius: 11px;
+  background: linear-gradient(180deg, rgba(7,5,7,.74), rgba(29,10,18,.52));
+}
+
+.trait-column h3 {
+  margin: 0 0 8px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--vtm-gold);
+}
+
+.trait-row {
+  display: grid;
+  grid-template-columns: minmax(82px, 1fr) auto 34px 28px;
+  gap: 6px;
+  align-items: center;
+  min-height: 30px;
+  margin: 0;
+  padding: 3px 4px 3px 7px;
+  border-bottom: 1px solid rgba(112,35,56,.20);
+  border-radius: 7px;
+}
+
+.trait-row:hover {
+  background: rgba(201,173,102,.055);
+}
+
+.trait-name {
+  overflow: hidden;
+  color: var(--vtm-text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.trait-pips {
+  display: inline-grid;
+  grid-template-columns: repeat(5, 10px);
+  gap: 4px;
+  align-items: center;
+  justify-content: end;
+}
+
+.trait-pips i {
+  width: 9px;
+  height: 9px;
+  border: 1px solid rgba(201,173,102,.40);
+  border-radius: 50%;
+  background: rgba(5,3,6,.72);
+  box-shadow: inset 0 0 5px rgba(0,0,0,.58);
+}
+
+.trait-pips i.is-filled {
+  border-color: rgba(227, 91, 103, .72);
+  background: radial-gradient(circle at 35% 30%, #f0a08f, #9e2039 62%, #3d0714);
+  box-shadow: 0 0 7px rgba(158,32,57,.38);
+}
+
+.trait-value-input {
+  width: 34px !important;
+  height: 24px !important;
+  min-height: 24px !important;
+  padding: 0 2px !important;
+  text-align: center;
+  color: var(--vtm-gold) !important;
+  font-weight: 700;
+}
+
+.trait-row .vtm-roll {
+  width: 27px;
+  height: 25px;
+  min-height: 25px;
+  padding: 0;
+}
+
+.trait-cap-note {
+  margin-left: 6px;
+  padding: 2px 7px;
+  border: 1px solid rgba(201,173,102,.18);
+  border-radius: 999px;
+  background: rgba(201,173,102,.055);
+  color: var(--vtm-muted);
+  font-size: 10px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.trait-over-limit {
+  box-shadow: inset 3px 0 0 rgba(195,59,84,.78);
+}
+
+.grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+/* Advantage and item cards */
+.advantage-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.advantage-grid > div,
+.blood-magic-group,
+.blood-magic-rituals-panel {
+  padding: 10px;
+  border: 1px solid rgba(112,35,56,.42);
+  border-radius: 11px;
+  background: linear-gradient(180deg, rgba(7,5,7,.74), rgba(29,10,18,.52));
+}
+
+.advantage-grid h3,
+.blood-magic-group h3,
+.blood-magic-rituals-panel h3 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin: 0 0 8px;
+  font-size: 11px;
+}
+
+.items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.item-row {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) 42px repeat(4, 26px);
+  gap: 4px;
+  align-items: center;
+  min-height: 30px;
+  padding: 4px 4px 4px 7px;
+  border: 1px solid rgba(112,35,56,.26);
+  border-radius: 8px;
+  background: rgba(5,3,6,.58);
+}
+
+.item-row:hover {
+  border-color: rgba(201,173,102,.32);
+  background: rgba(201,173,102,.05);
+}
+
+.item-name {
+  overflow: hidden;
+  color: var(--vtm-text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.item-rating {
+  color: var(--vtm-gold);
+  text-align: center;
+  font-weight: 700;
+}
+
+.item-row button {
+  width: 25px;
+  height: 25px;
+  min-height: 25px;
+  padding: 0;
+}
+
+/* Right column */
+.blood-magic-section {
+  border-color: rgba(158,32,57,.42);
+  background: radial-gradient(circle at 84% 14%, rgba(158,32,57,.20), transparent 32%), linear-gradient(145deg, rgba(10,6,9,.97), rgba(40,12,22,.82));
+}
+
+.blood-magic-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.blood-magic-rituals-panel {
+  margin-top: 8px;
+}
+
+.blood-magic-group-header,
+.section-header-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: center;
+}
+
+.weapon-list .weapon-row {
+  grid-template-columns: minmax(110px,1fr) repeat(4, minmax(45px, auto)) 28px 28px 28px;
+  gap: 4px;
+}
+
+.weapon-meta {
+  color: var(--vtm-muted);
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.weapon-attack {
+  width: auto !important;
+  min-width: 58px;
+  padding-inline: 7px !important;
+}
+
+.text-blocks {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.text-blocks label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.text-blocks textarea {
+  min-height: 82px;
+}
+
+/* Chat cards */
+.vtm-chat-card {
+  border: 1px solid rgba(112,35,56,.70);
+  border-radius: 12px;
+  padding: 11px;
+  background: radial-gradient(circle at 100% 0%, rgba(158,32,57,.16), transparent 30%), linear-gradient(145deg, #150b10, #060407);
+  color: var(--vtm-text);
+}
+
+.vtm-chat-card h3 { color: var(--vtm-gold); }
+
+@media (max-width: 1320px) {
+  .vtm-top-shell { grid-template-columns: 240px minmax(0, 1fr); }
+  .vtm-sheet .vtm-portrait-card { min-height: 342px; }
+  .vtm-portrait-frame { height: 250px; }
+  .vtm-top-trackers { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .vtm-tracker-health { grid-column: span 2; }
+  .vtm-command-strip .vtm-roll-builder-grid { grid-template-columns: 1fr 1fr 80px 1fr; }
+  .vtm-roll-builder-submit { grid-column: 4; }
+}
+
+@media (max-width: 1040px) {
+  .vtm-top-shell,
+  .vtm-main-grid { grid-template-columns: 1fr; }
+  .vtm-sheet .vtm-portrait-card { width: 260px; min-height: auto; }
+  .vtm-portrait-frame { height: 260px; }
+  .vtm-identity-grid,
+  .vtm-lore-grid,
+  .advantage-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .trait-columns { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 760px) {
+  .vtm-vampire-shell { padding: 10px; }
+  .vtm-identity-grid,
+  .vtm-lore-grid,
+  .vtm-top-trackers,
+  .vtm-generation-strip,
+  .vtm-command-strip .vtm-roll-builder-grid,
+  .vtm-section-tabs,
+  .advantage-grid,
+  .blood-magic-grid,
+  .grid-2,
+  .grid-3,
+  .grid-4 { grid-template-columns: 1fr; }
+  .vtm-tracker-health { grid-column: auto; }
+  .item-row,
+  .weapon-list .weapon-row { grid-template-columns: 1fr; }
+}
+
+
+/* ==========================================================================
+   VTM Revised v9.5.4 Vampire UI Fix
+   Исправляет визуальный развал v9.5.3 и делает pips динамическими по поколению.
+   ========================================================================== */
+
+.vtm-revised.sheet .window-content {
+  background:
+    radial-gradient(circle at 18% 3%, rgba(130, 23, 42, 0.24), transparent 26%),
+    radial-gradient(circle at 88% 14%, rgba(201, 173, 102, 0.10), transparent 24%),
+    linear-gradient(135deg, #050306 0%, #11070e 48%, #050306 100%) !important;
+}
+
+.vtm-revised.sheet .application-content,
+.vtm-revised.sheet form {
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+.vtm-revised.sheet .vtm-vampire-shell {
+  width: min(100%, 1448px) !important;
+  max-width: 1448px !important;
+  margin: 0 auto !important;
+  padding: 12px !important;
+  gap: 10px !important;
+  box-sizing: border-box !important;
+}
+
+/* Верх теперь компактный, а не растянутая простыня */
+.vtm-revised.sheet .vtm-top-shell {
+  display: grid !important;
+  grid-template-columns: 250px minmax(0, 1fr) !important;
+  gap: 10px !important;
+  min-height: 0 !important;
+  align-items: stretch !important;
+}
+
+.vtm-revised.sheet .vtm-top-stack {
+  display: grid !important;
+  grid-template-rows: auto auto auto auto !important;
+  gap: 8px !important;
+  min-width: 0 !important;
+}
+
+.vtm-revised.sheet .vtm-portrait-card {
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 10px !important;
+  border-radius: 14px !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(115, 35, 58, 0.24), transparent 52%),
+    linear-gradient(180deg, rgba(10, 7, 9, 0.98), rgba(31, 11, 18, 0.88)) !important;
+}
+
+.vtm-revised.sheet .vtm-portrait-frame {
+  height: 238px !important;
+  padding: 5px !important;
+  border-radius: 12px !important;
+}
+
+.vtm-revised.sheet .profile-img {
+  width: 100% !important;
+  height: 100% !important;
+  border: 0 !important;
+  border-radius: 9px !important;
+  object-fit: cover !important;
+}
+
+.vtm-revised.sheet .vtm-portrait-actions {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 7px !important;
+  margin-top: 9px !important;
+}
+
+.vtm-revised.sheet .vtm-portrait-actions button {
+  min-height: 30px !important;
+  height: 30px !important;
+}
+
+/* Identity block closer to the mockup */
+.vtm-revised.sheet .vtm-identity-panel {
+  margin: 0 !important;
+  padding: 14px 16px 13px !important;
+  border-radius: 14px !important;
+  border: 1px solid rgba(112, 35, 56, 0.62) !important;
+  background:
+    radial-gradient(circle at 90% 14%, rgba(201, 173, 102, 0.10), transparent 26%),
+    linear-gradient(145deg, rgba(12, 8, 10, 0.98), rgba(29, 10, 18, 0.82)) !important;
+}
+
+.vtm-revised.sheet .vtm-character-name {
+  margin: 0 0 10px !important;
+}
+
+.vtm-revised.sheet .vtm-character-name input {
+  min-height: 44px !important;
+  padding: 0 38px 5px 4px !important;
+  font-size: clamp(26px, 2vw, 34px) !important;
+  letter-spacing: 0.14em !important;
+}
+
+.vtm-revised.sheet .vtm-identity-grid,
+.vtm-revised.sheet .vtm-lore-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 9px !important;
+}
+
+.vtm-revised.sheet .vtm-lore-grid {
+  margin-top: 9px !important;
+}
+
+.vtm-revised.sheet .vtm-identity-cell,
+.vtm-revised.sheet .vtm-lore-cell {
+  min-width: 0 !important;
+  padding: 0 0 0 10px !important;
+  border-left: 1px solid rgba(201, 173, 102, 0.22) !important;
+  background: transparent !important;
+}
+
+.vtm-revised.sheet .vtm-identity-cell select,
+.vtm-revised.sheet .vtm-identity-cell input,
+.vtm-revised.sheet .vtm-lore-cell select,
+.vtm-revised.sheet .vtm-lore-cell input {
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+.vtm-revised.sheet .vtm-control-with-book {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 32px !important;
+  gap: 6px !important;
+}
+
+/* Трекеры сверху: плотнее, как строка управления, а не отдельная страница */
+.vtm-revised.sheet .vtm-top-trackers {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr 1.25fr .9fr 1.45fr !important;
+  gap: 8px !important;
+  align-items: stretch !important;
+}
+
+.vtm-revised.sheet .vtm-tracker-card {
+  min-height: 86px !important;
+  padding: 10px !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(112, 35, 56, 0.54) !important;
+  background:
+    radial-gradient(circle at 90% 0%, rgba(158, 32, 57, 0.14), transparent 40%),
+    linear-gradient(180deg, rgba(10, 6, 9, 0.96), rgba(31, 11, 18, 0.74)) !important;
+}
+
+.vtm-revised.sheet .vtm-tracker-card h3 {
+  margin: 0 0 7px !important;
+  font-size: 11px !important;
+  line-height: 1.15 !important;
+}
+
+.vtm-revised.sheet .vtm-tracker-controls {
+  justify-content: flex-start !important;
+  gap: 6px !important;
+}
+
+.vtm-revised.sheet .vtm-tracker-controls input {
+  width: 48px !important;
+  height: 28px !important;
+  min-height: 28px !important;
+}
+
+.vtm-revised.sheet .vtm-tracker-controls button {
+  width: 27px !important;
+  height: 27px !important;
+  min-height: 27px !important;
+  padding: 0 !important;
+}
+
+.vtm-revised.sheet .vtm-mini-field input,
+.vtm-revised.sheet .vtm-mini-field select {
+  min-height: 26px !important;
+  height: 26px !important;
+}
+
+.vtm-revised.sheet .vtm-health-boxes {
+  display: grid !important;
+  grid-template-columns: repeat(7, minmax(28px, 1fr)) !important;
+  gap: 4px !important;
+}
+
+.vtm-revised.sheet .vtm-health-box {
+  min-width: 0 !important;
+  padding: 4px 2px !important;
+  border-radius: 6px !important;
+  text-align: center !important;
+}
+
+.vtm-revised.sheet .vtm-generation-strip {
+  display: grid !important;
+  grid-template-columns: minmax(160px, 1.2fr) minmax(320px, 2fr) auto !important;
+  gap: 10px !important;
+  align-items: center !important;
+  min-height: 50px !important;
+  margin: 0 !important;
+  padding: 9px 10px !important;
+  border-radius: 12px !important;
+}
+
+.vtm-revised.sheet .generation-cap-values {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 7px !important;
+}
+
+.vtm-revised.sheet .generation-cap-values span {
+  padding: 4px 8px !important;
+  border-radius: 999px !important;
+}
+
+/* Roll strip */
+.vtm-revised.sheet .vtm-command-strip {
+  margin: 0 !important;
+  padding: 11px 14px !important;
+  border-radius: 13px !important;
+}
+
+.vtm-revised.sheet .vtm-command-strip h2 {
+  margin-bottom: 7px !important;
+}
+
+.vtm-revised.sheet .vtm-command-strip .vtm-roll-builder-grid {
+  display: grid !important;
+  grid-template-columns: 1.2fr 1.2fr 86px minmax(150px, 1fr) 132px !important;
+  gap: 8px !important;
+  align-items: end !important;
+}
+
+/* Body flow: никаких визуальных наложений, tabs нормальным блоком */
+.vtm-revised.sheet .vtm-sheet-body {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  padding-right: 6px !important;
+}
+
+.vtm-revised.sheet .vtm-section-tabs {
+  position: relative !important;
+  z-index: 2 !important;
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 8px !important;
+  margin: 10px 0 !important;
+  padding: 0 !important;
+  transform: none !important;
+}
+
+.vtm-revised.sheet .vtm-tab-item {
+  min-height: 34px !important;
+  border-radius: 10px !important;
+}
+
+.vtm-revised.sheet .vtm-main-grid {
+  position: relative !important;
+  z-index: 1 !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.05fr) minmax(390px, .72fr) !important;
+  gap: 10px !important;
+  align-items: start !important;
+}
+
+.vtm-revised.sheet .vtm-main-left,
+.vtm-revised.sheet .vtm-main-right {
+  min-width: 0 !important;
+}
+
+/* Trait panels: dynamically rendered pips up to generation cap */
+.vtm-revised.sheet .trait-columns {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+}
+
+.vtm-revised.sheet .trait-column {
+  min-width: 0 !important;
+  padding: 10px !important;
+  border-radius: 11px !important;
+}
+
+.vtm-revised.sheet .trait-row {
+  display: grid !important;
+  grid-template-columns: minmax(90px, 1fr) minmax(86px, auto) 42px 28px !important;
+  gap: 6px !important;
+  min-height: 30px !important;
+  padding: 4px 5px 4px 8px !important;
+}
+
+.vtm-revised.sheet .trait-name {
+  min-width: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.vtm-revised.sheet .trait-pips {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  justify-content: flex-end !important;
+  gap: 4px !important;
+  min-width: 0 !important;
+}
+
+.vtm-revised.sheet .trait-pips i {
+  width: 8px !important;
+  height: 8px !important;
+  flex: 0 0 8px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(201, 173, 102, 0.36) !important;
+  background: rgba(5, 3, 6, 0.75) !important;
+  box-shadow: inset 0 0 5px rgba(0,0,0,.55) !important;
+}
+
+.vtm-revised.sheet .trait-pips i.is-filled {
+  border-color: rgba(218, 103, 112, 0.82) !important;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255, 198, 173, .76), transparent 30%),
+    linear-gradient(180deg, #c95366, #7b1d33) !important;
+  box-shadow: 0 0 7px rgba(200, 60, 85, .42) !important;
+}
+
+.vtm-revised.sheet .trait-value-input {
+  width: 42px !important;
+  height: 26px !important;
+  min-height: 26px !important;
+  padding: 2px !important;
+  text-align: center !important;
+}
+
+.vtm-revised.sheet .vtm-roll {
+  width: 27px !important;
+  height: 26px !important;
+  padding: 0 !important;
+}
+
+/* Left/right panels tighter */
+.vtm-revised.sheet .vtm-panel {
+  margin-bottom: 10px !important;
+  padding: 12px !important;
+  border-radius: 12px !important;
+}
+
+.vtm-revised.sheet .advantage-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+}
+
+.vtm-revised.sheet .blood-magic-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+}
+
+.vtm-revised.sheet .item-row {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 46px repeat(4, 27px) !important;
+  gap: 4px !important;
+  min-height: 31px !important;
+}
+
+.vtm-revised.sheet .weapon-list .weapon-row {
+  grid-template-columns: minmax(120px, 1fr) repeat(4, minmax(52px, auto)) 30px 30px 30px !important;
+}
+
+/* Book/help buttons must stay visible */
+.vtm-revised.sheet .vtm-book-button,
+.vtm-revised.sheet .clan-card-open,
+.vtm-revised.sheet .archetype-card-open,
+.vtm-revised.sheet .morality-path-card-open,
+.vtm-revised.sheet .discipline-card-open,
+.vtm-revised.sheet .ritual-card-open,
+.vtm-revised.sheet .merit-flaw-card-open {
+  border-color: rgba(201, 173, 102, 0.45) !important;
+  color: #ffe6c7 !important;
+}
+
+/* Medium windows */
+@media (max-width: 1180px) {
+  .vtm-revised.sheet .vtm-top-shell {
+    grid-template-columns: 210px minmax(0, 1fr) !important;
+  }
+
+  .vtm-revised.sheet .vtm-portrait-frame {
+    height: 198px !important;
+  }
+
+  .vtm-revised.sheet .vtm-identity-grid,
+  .vtm-revised.sheet .vtm-lore-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .vtm-revised.sheet .vtm-top-trackers {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .vtm-revised.sheet .vtm-tracker-health {
+    grid-column: span 2 !important;
+  }
+
+  .vtm-revised.sheet .vtm-main-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 820px) {
+  .vtm-revised.sheet .vtm-top-shell {
+    grid-template-columns: 1fr !important;
+  }
+
+  .vtm-revised.sheet .vtm-portrait-card {
+    width: 220px !important;
+  }
+
+  .vtm-revised.sheet .vtm-command-strip .vtm-roll-builder-grid,
+  .vtm-revised.sheet .vtm-generation-strip,
+  .vtm-revised.sheet .vtm-section-tabs,
+  .vtm-revised.sheet .advantage-grid,
+  .vtm-revised.sheet .blood-magic-grid,
+  .vtm-revised.sheet .trait-columns {
+    grid-template-columns: 1fr !important;
+  }
+
+  .vtm-revised.sheet .vtm-tracker-health {
+    grid-column: auto !important;
+  }
+
+  .vtm-revised.sheet .trait-row {
+    grid-template-columns: minmax(90px, 1fr) minmax(86px, auto) 42px 28px !important;
+  }
+}
+
+
+/* ==========================================================================
+   VTM Revised v9.5.5 Actual Tabs
+   Вкладки теперь не декор, а рабочая навигация листа.
+   ========================================================================== */
+
+.vtm-revised.sheet .vtm-section-tabs {
+  grid-template-columns: repeat(3, minmax(160px, 1fr)) !important;
+  margin: 10px 0 12px !important;
+}
+
+.vtm-revised.sheet .vtm-section-tabs .vtm-tab-item {
+  appearance: none !important;
+  cursor: pointer !important;
+  width: 100% !important;
+  min-height: 38px !important;
+  padding: 0 12px !important;
+  border-radius: 11px !important;
+  border: 1px solid rgba(112,35,56,.52) !important;
+  background: rgba(7,5,7,.72) !important;
+  color: var(--vtm-muted) !important;
+  font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif !important;
+  font-size: 12px !important;
+  letter-spacing: .08em !important;
+  text-transform: uppercase !important;
+}
+
+.vtm-revised.sheet .vtm-section-tabs .vtm-tab-item.is-active {
+  border-color: rgba(201,173,102,.50) !important;
+  color: var(--vtm-gold) !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(158,32,57,.34), transparent 58%),
+    linear-gradient(180deg, rgba(67,16,30,.82), rgba(8,5,7,.76)) !important;
+  box-shadow: 0 0 18px rgba(158,32,57,.22) !important;
+}
+
+.vtm-revised.sheet .vtm-tab-panels {
+  min-width: 0 !important;
+}
+
+.vtm-revised.sheet .vtm-tab-panel {
+  display: none !important;
+}
+
+.vtm-revised.sheet .vtm-tab-panel.is-active {
+  display: block !important;
+}
+
+.vtm-revised.sheet .vtm-main-grid-single {
+  grid-template-columns: 1fr !important;
+}
+
+.vtm-revised.sheet .vtm-powers-grid,
+.vtm-revised.sheet .vtm-profile-grid {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 10px !important;
+}
+
+.vtm-revised.sheet .vtm-powers-two-col {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 10px !important;
+}
+
+.vtm-revised.sheet .vtm-disciplines-panel,
+.vtm-revised.sheet .vtm-social-assets-panel {
+  margin-bottom: 10px !important;
+}
+
+.vtm-revised.sheet .vtm-profile-advantage-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+}
+
+.vtm-revised.sheet .vtm-optional-weapons {
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+.vtm-revised.sheet .vtm-optional-weapons > summary {
+  cursor: pointer !important;
+  padding: 12px 14px !important;
+  color: var(--vtm-gold) !important;
+  font-family: "Cinzel", "Palatino Linotype", "Book Antiqua", Georgia, serif !important;
+  letter-spacing: .08em !important;
+  text-transform: uppercase !important;
+  list-style: none !important;
+}
+
+.vtm-revised.sheet .vtm-optional-weapons > summary::-webkit-details-marker {
+  display: none !important;
+}
+
+.vtm-revised.sheet .vtm-optional-weapons > summary::after {
+  content: "▾" !important;
+  float: right !important;
+  color: rgba(201,173,102,.72) !important;
+}
+
+.vtm-revised.sheet .vtm-optional-weapons[open] > summary::after {
+  content: "▴" !important;
+}
+
+.vtm-revised.sheet .vtm-optional-weapons .weapons-panel {
+  margin: 0 !important;
+  border: 0 !important;
+  border-top: 1px solid rgba(112,35,56,.42) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+/* Основное больше не должно пытаться держать правую колонку. Благословенная скука порядка. */
+.vtm-revised.sheet .vtm-tab-panel[data-vtm-tab-panel="main"] .trait-columns {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+.vtm-revised.sheet .vtm-tab-panel[data-vtm-tab-panel="powers"] .blood-magic-section {
+  margin-bottom: 0 !important;
+}
+
+@media (max-width: 1180px) {
+  .vtm-revised.sheet .vtm-profile-advantage-grid,
+  .vtm-revised.sheet .vtm-powers-two-col {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .vtm-revised.sheet .vtm-section-tabs,
+  .vtm-revised.sheet .vtm-profile-advantage-grid,
+  .vtm-revised.sheet .vtm-powers-two-col {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+
+/* ==========================================================================
+   VTM Revised v9.5.6 Tabs Polish
+   Убирает отдельный блок сил дисциплин, чинит читаемость здоровья,
+   названия дисциплин и стабильность переключения вкладок.
+   ========================================================================== */
+
+/* Табы должны жить ниже верхнего блока, а не залезать на портрет/трекеры. */
+.vtm-revised.sheet .vtm-sheet-body {
+  position: relative !important;
+  z-index: 1 !important;
+  padding-top: 0 !important;
+}
+
+.vtm-revised.sheet .vtm-tab-panels {
+  position: relative !important;
+  z-index: 1 !important;
+  clear: both !important;
+}
+
+.vtm-revised.sheet .vtm-tab-panel {
+  min-height: 0 !important;
+}
+
+.vtm-revised.sheet .vtm-tab-panel.is-active {
+  display: block !important;
+}
+
+/* Силы: дисциплины одна нормальная колонка, без отдельного "Сила дисциплины". */
+.vtm-revised.sheet .vtm-disciplines-panel {
+  max-width: none !important;
+}
+
+.vtm-revised.sheet .vtm-discipline-list-only {
+  width: 100% !important;
+}
+
+.vtm-revised.sheet .vtm-discipline-list-only .items-list {
+  gap: 7px !important;
+}
+
+.vtm-revised.sheet .vtm-discipline-list-only .item-row {
+  grid-template-columns: minmax(280px, 1fr) 64px repeat(4, 30px) !important;
+  min-height: 36px !important;
+}
+
+.vtm-revised.sheet .vtm-discipline-list-only .item-name,
+.vtm-revised.sheet .vtm-disciplines-panel .item-name {
+  display: block !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: normal !important;
+  line-height: 1.22 !important;
+  word-break: normal !important;
+}
+
+.vtm-revised.sheet .vtm-disciplines-panel .item-rating {
+  min-width: 56px !important;
+  white-space: nowrap !important;
+}
+
+/* Общий фикс списков: кнопки справа, имя не превращается в "М..." */
+.vtm-revised.sheet .items-list .item-row {
+  align-items: center !important;
+}
+
+.vtm-revised.sheet .items-list .item-name {
+  min-width: 0 !important;
+}
+
+/* Здоровье: теперь человекочитаемый блок, а не микроскопическая таблица. */
+.vtm-revised.sheet .vtm-top-trackers {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  align-items: stretch !important;
+}
+
+.vtm-revised.sheet .vtm-tracker-health {
+  grid-column: 1 / -1 !important;
+  min-height: 0 !important;
+}
+
+.vtm-revised.sheet .vtm-tracker-health .health-active-penalty {
+  margin: 0 0 8px !important;
+  padding: 7px 9px !important;
+  border-radius: 9px !important;
+  font-size: 12px !important;
+  color: var(--vtm-text) !important;
+}
+
+.vtm-revised.sheet .vtm-tracker-health .health-check-grid {
+  display: grid !important;
+  grid-template-columns: repeat(7, minmax(112px, 1fr)) !important;
+  gap: 7px !important;
+}
+
+.vtm-revised.sheet .vtm-tracker-health .health-row {
+  display: grid !important;
+  grid-template-columns: 18px minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 7px !important;
+  min-height: 46px !important;
+  padding: 7px 8px !important;
+  border: 1px solid rgba(112, 35, 56, 0.58) !important;
+  border-radius: 10px !important;
+  background: linear-gradient(180deg, rgba(7,5,7,.76), rgba(29,10,18,.62)) !important;
+  text-align: left !important;
+  overflow: visible !important;
+  cursor: pointer !important;
+}
+
+.vtm-revised.sheet .vtm-tracker-health .health-row input[type="checkbox"] {
+  position: static !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  width: 16px !important;
+  height: 16px !important;
+  accent-color: var(--vtm-blood-2, #c33b54) !important;
+}
+
+.vtm-revised.sheet .vtm-tracker-health .health-info {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  line-height: 1.15 !important;
+}
+
+.vtm-revised.sheet .vtm-tracker-health .health-name {
+  max-width: none !important;
+  overflow: visible !important;
+  color: var(--vtm-text) !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  text-overflow: clip !important;
+  white-space: normal !important;
+}
+
+.vtm-revised.sheet .vtm-tracker-health .health-penalty {
+  color: var(--vtm-muted) !important;
+  font-size: 11px !important;
+  white-space: normal !important;
+}
+
+.vtm-revised.sheet .vtm-tracker-health .health-row.is-checked {
+  border-color: rgba(195, 59, 84, 0.88) !important;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(195, 59, 84, .26), transparent 46%),
+    linear-gradient(180deg, rgba(88, 16, 31, 0.92), rgba(24, 7, 13, 0.94)) !important;
+  box-shadow: 0 0 12px rgba(158,32,57,.28), inset 0 0 14px rgba(0,0,0,.36) !important;
+}
+
+/* Профиль не должен визуально "переезжать" под верхний блок. */
+.vtm-revised.sheet .vtm-profile-grid,
+.vtm-revised.sheet .vtm-powers-grid {
+  margin-top: 0 !important;
+  transform: none !important;
+}
+
+.vtm-revised.sheet .vtm-profile-grid > .vtm-panel:first-child,
+.vtm-revised.sheet .vtm-powers-grid > .vtm-panel:first-child {
+  margin-top: 0 !important;
+}
+
+.vtm-revised.sheet .vtm-section-tabs {
+  position: relative !important;
+  z-index: 5 !important;
+  clear: both !important;
+  margin-top: 10px !important;
+  margin-bottom: 12px !important;
+}
+
+/* На средних окнах здоровье уходит в 2 строки, но остаётся читаемым. */
+@media (max-width: 1280px) {
+  .vtm-revised.sheet .vtm-tracker-health .health-check-grid {
+    grid-template-columns: repeat(4, minmax(120px, 1fr)) !important;
+  }
+
+  .vtm-revised.sheet .vtm-discipline-list-only .item-row {
+    grid-template-columns: minmax(220px, 1fr) 60px repeat(4, 30px) !important;
+  }
+}
+
+@media (max-width: 860px) {
+  .vtm-revised.sheet .vtm-top-trackers {
+    grid-template-columns: 1fr !important;
+  }
+
+  .vtm-revised.sheet .vtm-tracker-health .health-check-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .vtm-revised.sheet .vtm-discipline-list-only .item-row {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+
+/* ==========================================================================
+   VTM Revised v9.5.7 Tabs Position Fix
+   Вкладки вынесены из прокручиваемого тела листа, чтобы не уезжать наверх
+   и не накладываться на здоровье/ресурсы.
+   ========================================================================== */
+
+.vtm-revised.sheet .vtm-vampire-shell {
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+.vtm-revised.sheet .vtm-top-shell {
+  flex: 0 0 auto !important;
+  position: relative !important;
+  z-index: 3 !important;
+  margin-bottom: 12px !important;
+}
+
+.vtm-revised.sheet .vtm-fixed-tabs {
+  flex: 0 0 auto !important;
+  position: relative !important;
+  z-index: 4 !important;
+  clear: both !important;
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(160px, 1fr)) !important;
+  gap: 8px !important;
+  margin: 0 0 12px 0 !important;
+  padding: 0 !important;
+  transform: none !important;
+  background:
+    linear-gradient(180deg, rgba(6, 4, 7, 0.98), rgba(11, 6, 10, 0.96)) !important;
+  border-radius: 13px !important;
+  box-shadow:
+    0 10px 26px rgba(0, 0, 0, 0.34),
+    0 0 0 1px rgba(112, 35, 56, 0.34) inset !important;
+}
+
+.vtm-revised.sheet .vtm-fixed-tabs .vtm-tab-item {
+  position: relative !important;
+  z-index: 1 !important;
+  min-height: 38px !important;
+  border-radius: 11px !important;
+  background: rgba(9, 6, 9, 0.96) !important;
+  opacity: 1 !important;
+}
+
+.vtm-revised.sheet .vtm-fixed-tabs .vtm-tab-item.is-active {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(158, 32, 57, 0.36), transparent 58%),
+    linear-gradient(180deg, rgba(67, 16, 30, 0.94), rgba(8, 5, 7, 0.98)) !important;
+}
+
+.vtm-revised.sheet .vtm-sheet-body {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  position: relative !important;
+  z-index: 2 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  padding: 0 6px 0 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+}
+
+.vtm-revised.sheet .vtm-tab-panels {
+  position: relative !important;
+  z-index: 2 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+.vtm-revised.sheet .vtm-tab-panel {
+  position: relative !important;
+  z-index: 2 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  transform: none !important;
+}
+
+.vtm-revised.sheet .vtm-tab-panel.is-active {
+  display: block !important;
+}
+
+.vtm-revised.sheet .vtm-tab-panel > *:first-child,
+.vtm-revised.sheet .vtm-powers-grid > *:first-child,
+.vtm-revised.sheet .vtm-profile-grid > *:first-child,
+.vtm-revised.sheet .vtm-main-grid > *:first-child {
+  margin-top: 0 !important;
+}
+
+/* Чтобы содержимое вкладок не просвечивало через строку навигации. */
+.vtm-revised.sheet .vtm-panel,
+.vtm-revised.sheet .vtm-disciplines-panel,
+.vtm-revised.sheet .vtm-social-assets-panel {
+  background:
+    radial-gradient(circle at 100% 0%, rgba(158, 32, 57, 0.10), transparent 34%),
+    linear-gradient(145deg, rgba(14, 9, 12, 0.985), rgba(7, 5, 7, 0.975)) !important;
+}
+
+/* Дополнительный отступ безопасности под верхним блоком на маленькой высоте окна. */
+@media (max-height: 820px) {
+  .vtm-revised.sheet .vtm-top-shell {
+    margin-bottom: 14px !important;
+  }
+
+  .vtm-revised.sheet .vtm-fixed-tabs {
+    margin-bottom: 14px !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .vtm-revised.sheet .vtm-fixed-tabs {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+
+/* ==========================================================================
+   VTM Revised v9.5.8 Scroll From Health
+   Верх = портрет + данные. Всё от здоровья вниз прокручивается полноразмерно.
+   Здоровье, ограничения поколения и бросок занимают всю ширину листа.
+   ========================================================================== */
+
+.vtm-revised.sheet .vtm-vampire-shell {
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 0 !important;
+  height: 100% !important;
+  overflow: hidden !important;
+}
+
+.vtm-revised.sheet .vtm-top-shell {
+  flex: 0 0 auto !important;
+  display: grid !important;
+  grid-template-columns: 260px minmax(0, 1fr) !important;
+  gap: 10px !important;
+  min-height: 0 !important;
+  margin-bottom: 10px !important;
+  align-items: stretch !important;
+}
+
+.vtm-revised.sheet .vtm-top-stack {
+  display: block !important;
+  min-width: 0 !important;
+}
+
+.vtm-revised.sheet .vtm-identity-panel {
+  height: 100% !important;
+  min-height: 0 !important;
+}
+
+.vtm-revised.sheet .vtm-portrait-card {
+  height: auto !important;
+  min-height: 0 !important;
+}
+
+.vtm-revised.sheet .vtm-portrait-frame {
+  height: 235px !important;
+}
+
+/* Прокручиваемая зона начинается с здоровья и занимает всю оставшуюся высоту. */
+.vtm-revised.sheet .vtm-scroll-from-health,
+.vtm-revised.sheet .vtm-sheet-body {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  padding: 0 6px 0 0 !important;
+  margin: 0 !important;
+  position: relative !important;
+  z-index: 2 !important;
+  background: transparent !important;
+}
+
+/* Блоки внутри scroll-body занимают всю ширину, включая область под аватаром. */
+.vtm-revised.sheet .vtm-scroll-from-health > .vtm-top-trackers,
+.vtm-revised.sheet .vtm-scroll-from-health > .vtm-generation-strip,
+.vtm-revised.sheet .vtm-scroll-from-health > .vtm-command-strip,
+.vtm-revised.sheet .vtm-scroll-from-health > .vtm-fixed-tabs,
+.vtm-revised.sheet .vtm-scroll-from-health > .vtm-tab-panels {
+  width: 100% !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+}
+
+/* Здоровье теперь full-width первым блоком scroll-зоны. */
+.vtm-revised.sheet .vtm-top-trackers {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+  margin: 0 0 8px 0 !important;
+  align-items: stretch !important;
+}
+
+.vtm-revised.sheet .vtm-tracker-health {
+  grid-column: 1 / -1 !important;
+  order: -1 !important;
+}
+
+.vtm-revised.sheet .vtm-tracker-health .health-check-grid {
+  grid-template-columns: repeat(7, minmax(120px, 1fr)) !important;
+}
+
+.vtm-revised.sheet .vtm-tracker-health .health-row {
+  min-height: 48px !important;
+}
+
+/* Ограничения поколения и бросок тоже full-width. */
+.vtm-revised.sheet .vtm-generation-strip {
+  display: grid !important;
+  grid-template-columns: minmax(190px, 1fr) minmax(360px, 2.2fr) auto !important;
+  width: 100% !important;
+  margin: 0 0 8px 0 !important;
+}
+
+.vtm-revised.sheet .vtm-command-strip {
+  width: 100% !important;
+  margin: 0 0 10px 0 !important;
+}
+
+.vtm-revised.sheet .vtm-command-strip .vtm-roll-builder-grid {
+  grid-template-columns: 1.2fr 1.2fr 86px minmax(180px, 1fr) 134px !important;
+}
+
+/* Вкладки теперь часть scroll-зоны, но ниже броска и не налезают на верх. */
+.vtm-revised.sheet .vtm-fixed-tabs {
+  position: relative !important;
+  z-index: 4 !important;
+  margin: 0 0 10px 0 !important;
+  background:
+    linear-gradient(180deg, rgba(6, 4, 7, 0.985), rgba(11, 6, 10, 0.965)) !important;
+  border-radius: 13px !important;
+  box-shadow:
+    0 10px 26px rgba(0, 0, 0, 0.34),
+    0 0 0 1px rgba(112, 35, 56, 0.34) inset !important;
+}
+
+/* Контент вкладок получил больше полезной высоты. */
+.vtm-revised.sheet .vtm-tab-panels {
+  min-height: 420px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.vtm-revised.sheet .vtm-tab-panel.is-active {
+  display: block !important;
+}
+
+/* При переключении вкладок уже не должно быть ощущения крошечного окна. */
+.vtm-revised.sheet .vtm-main-grid,
+.vtm-revised.sheet .vtm-powers-grid,
+.vtm-revised.sheet .vtm-profile-grid {
+  min-height: 420px !important;
+}
+
+/* На средних окнах здоровье остаётся читаемым. */
+@media (max-width: 1280px) {
+  .vtm-revised.sheet .vtm-top-shell {
+    grid-template-columns: 230px minmax(0, 1fr) !important;
+  }
+
+  .vtm-revised.sheet .vtm-portrait-frame {
+    height: 210px !important;
+  }
+
+  .vtm-revised.sheet .vtm-top-trackers {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .vtm-revised.sheet .vtm-tracker-health {
+    grid-column: 1 / -1 !important;
+  }
+
+  .vtm-revised.sheet .vtm-tracker-health .health-check-grid {
+    grid-template-columns: repeat(4, minmax(120px, 1fr)) !important;
+  }
+}
+
+@media (max-width: 860px) {
+  .vtm-revised.sheet .vtm-top-shell {
+    grid-template-columns: 1fr !important;
+  }
+
+  .vtm-revised.sheet .vtm-portrait-card {
+    width: 230px !important;
+  }
+
+  .vtm-revised.sheet .vtm-top-trackers,
+  .vtm-revised.sheet .vtm-generation-strip,
+  .vtm-revised.sheet .vtm-command-strip .vtm-roll-builder-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .vtm-revised.sheet .vtm-tracker-health .health-check-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+
+/* ==========================================================================
+   VTM Revised v9.5.9 Top Shell Fix
+   Чинит разметку 9.5.8: scroll-body больше не вложен внутрь top-shell.
+   Верхний блок не может съесть всю высоту листа.
+   ========================================================================== */
+
+.vtm-revised.sheet .vtm-top-shell {
+  flex: 0 0 auto !important;
+  max-height: 300px !important;
+  overflow: visible !important;
+}
+
+.vtm-revised.sheet .vtm-top-stack {
+  height: auto !important;
+  max-height: 300px !important;
+  overflow: visible !important;
+}
+
+.vtm-revised.sheet .vtm-identity-panel {
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: 300px !important;
+}
+
+.vtm-revised.sheet .vtm-portrait-card {
+  max-height: 300px !important;
+}
+
+.vtm-revised.sheet .vtm-sheet-body.vtm-scroll-from-health {
+  flex: 1 1 auto !important;
+  min-height: 360px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+.vtm-revised.sheet .vtm-scroll-from-health > .vtm-top-trackers {
+  margin-top: 0 !important;
+}
+
+/* На низких окнах лучше чуть уменьшить портрет, чем снова убить рабочую область. */
+@media (max-height: 820px) {
+  .vtm-revised.sheet .vtm-top-shell,
+  .vtm-revised.sheet .vtm-top-stack,
+  .vtm-revised.sheet .vtm-identity-panel,
+  .vtm-revised.sheet .vtm-portrait-card {
+    max-height: 260px !important;
+  }
+
+  .vtm-revised.sheet .vtm-portrait-frame {
+    height: 200px !important;
+  }
+
+  .vtm-revised.sheet .vtm-character-name input {
+    min-height: 40px !important;
+    font-size: 28px !important;
+  }
+}
+
+
+/* ==========================================================================
+   VTM Revised v9.5.10 Resources In Header
+   Ресурсы и ограничения поколения переехали в свободное место под identity.
+   Здоровье остаётся первым блоком прокрутки.
+   ========================================================================== */
+
+.vtm-revised.sheet .vtm-top-shell {
+  grid-template-columns: 260px minmax(0, 1fr) !important;
+  align-items: stretch !important;
+  max-height: none !important;
+  margin-bottom: 10px !important;
+}
+
+.vtm-revised.sheet .vtm-top-stack {
+  display: grid !important;
+  grid-template-rows: auto minmax(0, auto) !important;
+  gap: 10px !important;
+  max-height: none !important;
+}
+
+.vtm-revised.sheet .vtm-identity-panel {
+  max-height: none !important;
+}
+
+.vtm-revised.sheet .vtm-header-resources {
+  display: grid !important;
+  grid-template-columns: minmax(290px, .85fr) minmax(0, 1.85fr) !important;
+  gap: 8px !important;
+  align-items: stretch !important;
+  min-width: 0 !important;
+}
+
+.vtm-revised.sheet .vtm-header-resources .vtm-generation-strip {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  gap: 7px !important;
+  min-height: 118px !important;
+  margin: 0 !important;
+  padding: 10px !important;
+  border: 1px solid rgba(201,173,102,0.20) !important;
+  border-radius: 12px !important;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(201,173,102,.08), transparent 38%),
+    rgba(6, 4, 7, 0.70) !important;
+}
+
+.vtm-revised.sheet .vtm-header-resources .vtm-generation-title {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+}
+
+.vtm-revised.sheet .vtm-header-resources .generation-cap-values {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+}
+
+.vtm-revised.sheet .vtm-header-resources .generation-cap-values span {
+  padding: 3px 7px !important;
+  border-radius: 999px !important;
+  font-size: 11px !important;
+}
+
+.vtm-revised.sheet .vtm-header-resources .generation-sync {
+  min-height: 29px !important;
+  align-self: stretch !important;
+}
+
+.vtm-revised.sheet .vtm-header-trackers {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+  margin: 0 !important;
+  align-items: stretch !important;
+}
+
+.vtm-revised.sheet .vtm-header-trackers .vtm-tracker-card {
+  min-height: 118px !important;
+  padding: 10px !important;
+  border-radius: 12px !important;
+}
+
+.vtm-revised.sheet .vtm-header-trackers .vtm-tracker-card h3 {
+  margin-bottom: 7px !important;
+  font-size: 11px !important;
+}
+
+.vtm-revised.sheet .vtm-header-trackers .vtm-tracker-controls {
+  justify-content: flex-start !important;
+  gap: 5px !important;
+}
+
+.vtm-revised.sheet .vtm-header-trackers .vtm-tracker-controls input {
+  width: 46px !important;
+  min-height: 27px !important;
+  height: 27px !important;
+}
+
+.vtm-revised.sheet .vtm-header-trackers .vtm-tracker-controls button {
+  width: 27px !important;
+  min-height: 27px !important;
+  height: 27px !important;
+  padding: 0 !important;
+}
+
+.vtm-revised.sheet .vtm-header-trackers .vtm-mini-field {
+  margin-top: 7px !important;
+}
+
+.vtm-revised.sheet .vtm-header-trackers .vtm-mini-field input,
+.vtm-revised.sheet .vtm-header-trackers .vtm-mini-field select {
+  min-height: 27px !important;
+  height: 27px !important;
+}
+
+.vtm-revised.sheet .vtm-header-trackers .vtm-xp-compact {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 6px !important;
+}
+
+.vtm-revised.sheet .vtm-header-trackers .vtm-xp-compact label {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 3px !important;
+}
+
+.vtm-revised.sheet .vtm-header-trackers .vtm-xp-compact input {
+  min-height: 27px !important;
+  height: 27px !important;
+}
+
+/* В прокручиваемой зоне теперь первым живёт только здоровье. */
+.vtm-revised.sheet .vtm-health-scroll-block {
+  margin: 0 0 8px 0 !important;
+  padding: 12px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .vtm-tracker-health {
+  margin: 0 !important;
+  padding: 0 !important;
+  min-height: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-active-penalty {
+  margin: 0 0 8px !important;
+  padding: 7px 9px !important;
+  border-radius: 9px !important;
+  font-size: 12px !important;
+  color: var(--vtm-text) !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-check-grid {
+  display: grid !important;
+  grid-template-columns: repeat(7, minmax(120px, 1fr)) !important;
+  gap: 7px !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row {
+  display: grid !important;
+  grid-template-columns: 18px minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 7px !important;
+  min-height: 46px !important;
+  padding: 7px 8px !important;
+  border: 1px solid rgba(112, 35, 56, 0.58) !important;
+  border-radius: 10px !important;
+  background: linear-gradient(180deg, rgba(7,5,7,.76), rgba(29,10,18,.62)) !important;
+  text-align: left !important;
+  cursor: pointer !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row input[type="checkbox"] {
+  position: static !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  width: 16px !important;
+  height: 16px !important;
+  accent-color: var(--vtm-blood-2, #c33b54) !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-name {
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: normal !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-penalty {
+  font-size: 11px !important;
+  white-space: normal !important;
+}
+
+/* Scroll-body теперь действительно начинается с здоровья, без ресурсных дублей. */
+.vtm-revised.sheet .vtm-scroll-from-health {
+  flex: 1 1 auto !important;
+  min-height: 360px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+@media (max-width: 1320px) {
+  .vtm-revised.sheet .vtm-header-resources {
+    grid-template-columns: 1fr !important;
+  }
+
+  .vtm-revised.sheet .vtm-header-resources .vtm-generation-strip {
+    min-height: 0 !important;
+  }
+
+  .vtm-revised.sheet .vtm-header-trackers {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .vtm-revised.sheet .vtm-health-scroll-block .health-check-grid {
+    grid-template-columns: repeat(4, minmax(120px, 1fr)) !important;
+  }
+}
+
+@media (max-width: 860px) {
+  .vtm-revised.sheet .vtm-header-trackers,
+  .vtm-revised.sheet .vtm-health-scroll-block .health-check-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+
+/* ==========================================================================
+   VTM Revised v9.5.12 Glowing Trait Pips
+   Заполненные точки атрибутов и способностей светятся и мерцают по значению поля.
+   ========================================================================== */
+
+@keyframes vtmBloodPipPulse {
+  0%, 100% {
+    filter: brightness(1);
+    box-shadow:
+      0 0 6px rgba(198, 44, 68, 0.42),
+      0 0 12px rgba(198, 44, 68, 0.20),
+      inset 0 0 4px rgba(255, 226, 200, 0.22);
+    transform: scale(1);
+  }
+
+  45% {
+    filter: brightness(1.28);
+    box-shadow:
+      0 0 8px rgba(255, 78, 102, 0.72),
+      0 0 18px rgba(198, 44, 68, 0.40),
+      0 0 28px rgba(112, 16, 35, 0.26),
+      inset 0 0 5px rgba(255, 226, 200, 0.36);
+    transform: scale(1.08);
+  }
+
+  72% {
+    filter: brightness(0.92);
+    box-shadow:
+      0 0 5px rgba(155, 25, 46, 0.34),
+      0 0 11px rgba(155, 25, 46, 0.18),
+      inset 0 0 5px rgba(0, 0, 0, 0.24);
+    transform: scale(0.98);
+  }
+}
+
+@keyframes vtmBloodPipHalo {
+  0%, 100% {
+    opacity: 0.42;
+  }
+
+  50% {
+    opacity: 0.85;
+  }
+}
+
+.vtm-revised.sheet .trait-pips {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  justify-content: flex-end !important;
+  align-items: center !important;
+  gap: 4px !important;
+  min-width: max-content !important;
+}
+
+.vtm-revised.sheet .trait-pips i {
+  position: relative !important;
+  width: 9px !important;
+  height: 9px !important;
+  flex: 0 0 9px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(201, 173, 102, 0.36) !important;
+  background:
+    radial-gradient(circle at 35% 28%, rgba(112, 96, 70, 0.24), transparent 34%),
+    rgba(5, 3, 6, 0.72) !important;
+  box-shadow:
+    inset 0 0 5px rgba(0, 0, 0, 0.62),
+    0 0 2px rgba(201, 173, 102, 0.12) !important;
+  transition:
+    background 140ms ease,
+    border-color 140ms ease,
+    box-shadow 140ms ease,
+    transform 140ms ease,
+    filter 140ms ease !important;
+}
+
+.vtm-revised.sheet .trait-pips i.is-filled {
+  border-color: rgba(255, 117, 130, 0.88) !important;
+  background:
+    radial-gradient(circle at 34% 26%, rgba(255, 232, 202, 0.92), rgba(255, 134, 124, 0.58) 24%, transparent 35%),
+    radial-gradient(circle at 50% 55%, rgba(236, 57, 83, 0.98), rgba(126, 20, 42, 0.98) 62%, rgba(47, 5, 15, 1)) !important;
+  box-shadow:
+    0 0 7px rgba(255, 71, 96, 0.62),
+    0 0 16px rgba(198, 44, 68, 0.30),
+    inset 0 0 4px rgba(255, 226, 200, 0.30) !important;
+  animation: vtmBloodPipPulse 2.45s ease-in-out infinite !important;
+}
+
+.vtm-revised.sheet .trait-pips i.is-filled::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: -5px !important;
+  z-index: -1 !important;
+  border-radius: 999px !important;
+  background: radial-gradient(circle, rgba(205, 42, 68, 0.36), transparent 66%) !important;
+  animation: vtmBloodPipHalo 2.45s ease-in-out infinite !important;
+  pointer-events: none !important;
+}
+
+.vtm-revised.sheet .trait-pips i.is-filled:nth-child(2) { animation-delay: 0.09s !important; }
+.vtm-revised.sheet .trait-pips i.is-filled:nth-child(3) { animation-delay: 0.18s !important; }
+.vtm-revised.sheet .trait-pips i.is-filled:nth-child(4) { animation-delay: 0.27s !important; }
+.vtm-revised.sheet .trait-pips i.is-filled:nth-child(5) { animation-delay: 0.36s !important; }
+.vtm-revised.sheet .trait-pips i.is-filled:nth-child(6) { animation-delay: 0.45s !important; }
+.vtm-revised.sheet .trait-pips i.is-filled:nth-child(7) { animation-delay: 0.54s !important; }
+.vtm-revised.sheet .trait-pips i.is-filled:nth-child(8) { animation-delay: 0.63s !important; }
+.vtm-revised.sheet .trait-pips i.is-filled:nth-child(9) { animation-delay: 0.72s !important; }
+.vtm-revised.sheet .trait-pips i.is-filled:nth-child(10) { animation-delay: 0.81s !important; }
+
+.vtm-revised.sheet .trait-row:hover .trait-pips i.is-filled {
+  filter: brightness(1.18) !important;
+}
+
+.vtm-revised.sheet .trait-row.trait-over-limit .trait-pips i.is-filled {
+  animation-duration: 1.35s !important;
+  border-color: rgba(255, 165, 128, 0.95) !important;
+}
+
+/* Людям с включённым reduced motion не надо устраивать маленькую дискотеку Каина. */
+@media (prefers-reduced-motion: reduce) {
+  .vtm-revised.sheet .trait-pips i.is-filled,
+  .vtm-revised.sheet .trait-pips i.is-filled::after {
+    animation: none !important;
+  }
+}
+
+
+
+/* ==========================================================================
+   VTM Revised v9.5.13 Health Alignment Polish
+   Чинит геометрию блока здоровья: кастомный чекбокс, ровное выравнивание,
+   более аккуратное состояние отмеченных ранений.
+   ========================================================================== */
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-check-grid {
+  align-items: stretch !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row {
+  position: relative !important;
+  grid-template-columns: 20px minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 10px !important;
+  min-height: 50px !important;
+  padding: 8px 12px !important;
+  overflow: hidden !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row .health-checkbox {
+  position: absolute !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: 0 !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-checkmark {
+  position: relative !important;
+  display: inline-flex !important;
+  width: 18px !important;
+  height: 18px !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 6px !important;
+  border: 1px solid rgba(201, 173, 102, 0.34) !important;
+  background: linear-gradient(180deg, rgba(10,7,10,.96), rgba(27,10,18,.88)) !important;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.38), 0 0 0 1px rgba(0,0,0,.12) !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-checkmark::after {
+  content: "" !important;
+  width: 9px !important;
+  height: 5px !important;
+  border-left: 2px solid transparent !important;
+  border-bottom: 2px solid transparent !important;
+  transform: translateY(-1px) rotate(-45deg) scale(.9) !important;
+  opacity: 0 !important;
+  transition: opacity 140ms ease, border-color 140ms ease, transform 140ms ease !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-info {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  gap: 1px !important;
+  min-height: 0 !important;
+  line-height: 1.08 !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-name {
+  font-size: 11px !important;
+  line-height: 1.05 !important;
+  letter-spacing: .01em !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-penalty {
+  line-height: 1.05 !important;
+  opacity: .92 !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row.is-checked {
+  border-color: rgba(210, 76, 101, 0.92) !important;
+  background:
+    radial-gradient(circle at 22% 20%, rgba(228, 77, 104, .22), transparent 38%),
+    linear-gradient(180deg, rgba(96, 17, 35, 0.96), rgba(34, 8, 15, 0.96)) !important;
+  box-shadow: 0 0 14px rgba(158,32,57,.22), inset 0 0 16px rgba(0,0,0,.34) !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row.is-checked .health-checkmark {
+  border-color: rgba(255, 174, 132, 0.94) !important;
+  background: linear-gradient(180deg, rgba(252, 167, 88, .96), rgba(219, 121, 42, .94)) !important;
+  box-shadow: 0 0 10px rgba(228, 127, 62, .28), inset 0 0 0 1px rgba(255,244,223,.22) !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row.is-checked .health-checkmark::after {
+  opacity: 1 !important;
+  border-color: rgba(58, 17, 5, 0.96) !important;
+  transform: translateY(-1px) rotate(-45deg) scale(1) !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row:hover {
+  border-color: rgba(201, 173, 102, 0.36) !important;
+}
+
+@media (max-width: 1320px) {
+  .vtm-revised.sheet .vtm-health-scroll-block .health-row {
+    min-height: 48px !important;
+  }
+}
+
+
+/* ==========================================================================
+   VTM Revised v9.5.14 Health Compact Selected State
+   Возвращает более узкие карточки здоровья, убирает галочки и оставляет
+   только подсветку выбранного блока.
+   ========================================================================== */
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-check-grid {
+  display: grid !important;
+  grid-template-columns: repeat(7, minmax(104px, 1fr)) !important;
+  gap: 8px !important;
+  align-items: stretch !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row {
+  position: relative !important;
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  align-items: center !important;
+  gap: 0 !important;
+  min-height: 44px !important;
+  padding: 8px 12px !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(112, 35, 56, 0.56) !important;
+  border-radius: 11px !important;
+  background: linear-gradient(180deg, rgba(7,5,7,.76), rgba(24,9,16,.64)) !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row .health-checkbox {
+  position: absolute !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: 0 !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-checkmark {
+  display: none !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-info {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  gap: 1px !important;
+  min-height: 0 !important;
+  line-height: 1.04 !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-name {
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: normal !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  line-height: 1.02 !important;
+  letter-spacing: .01em !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-penalty {
+  color: var(--vtm-muted) !important;
+  font-size: 11px !important;
+  line-height: 1.02 !important;
+  white-space: normal !important;
+  opacity: .92 !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row.is-checked {
+  border-color: rgba(210, 76, 101, 0.9) !important;
+  background:
+    radial-gradient(circle at 20% 18%, rgba(228, 77, 104, .18), transparent 36%),
+    linear-gradient(180deg, rgba(96, 17, 35, 0.95), rgba(34, 8, 15, 0.95)) !important;
+  box-shadow: 0 0 12px rgba(158,32,57,.20), inset 0 0 16px rgba(0,0,0,.32) !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row:hover {
+  border-color: rgba(201, 173, 102, 0.32) !important;
+}
+
+@media (max-width: 1320px) {
+  .vtm-revised.sheet .vtm-health-scroll-block .health-check-grid {
+    grid-template-columns: repeat(4, minmax(110px, 1fr)) !important;
+  }
+}
+
+@media (max-width: 860px) {
+  .vtm-revised.sheet .vtm-health-scroll-block .health-check-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+
+/* ==========================================================================
+   VTM Revised v9.5.15 Health No Checks
+   Полностью убирает видимые чекбоксы/галочки из здоровья.
+   Выбор состояния показывается только подсветкой блока.
+   ========================================================================== */
+
+.vtm-revised.sheet .vtm-health-scroll-block {
+  padding: 10px !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-check-grid {
+  display: grid !important;
+  grid-template-columns: repeat(7, minmax(96px, 1fr)) !important;
+  gap: 7px !important;
+  align-items: stretch !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  min-height: 38px !important;
+  padding: 7px 11px !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(112, 35, 56, 0.56) !important;
+  border-radius: 10px !important;
+  background:
+    linear-gradient(180deg, rgba(7, 5, 7, 0.78), rgba(24, 9, 16, 0.64)) !important;
+  cursor: pointer !important;
+}
+
+/* Убить визуальные чекбоксы. Да, совсем. */
+.vtm-revised.sheet .vtm-health-scroll-block .health-row input.health-checkbox,
+.vtm-revised.sheet .vtm-health-scroll-block .health-row input[type="checkbox"].health-checkbox,
+.vtm-revised.sheet .vtm-health-scroll-block .health-row .health-checkbox,
+.vtm-revised.sheet .vtm-health-scroll-block .health-checkmark {
+  position: absolute !important;
+  left: -9999px !important;
+  top: auto !important;
+  display: block !important;
+  width: 1px !important;
+  height: 1px !important;
+  min-width: 1px !important;
+  min-height: 1px !important;
+  max-width: 1px !important;
+  max-height: 1px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  overflow: hidden !important;
+  clip-path: inset(50%) !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row input.health-checkbox::before,
+.vtm-revised.sheet .vtm-health-scroll-block .health-row input.health-checkbox::after,
+.vtm-revised.sheet .vtm-health-scroll-block .health-checkmark::before,
+.vtm-revised.sheet .vtm-health-scroll-block .health-checkmark::after {
+  display: none !important;
+  content: none !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-info {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  gap: 1px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  line-height: 1.02 !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-name {
+  display: block !important;
+  max-width: 100% !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: normal !important;
+  color: var(--vtm-text) !important;
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  line-height: 1.02 !important;
+  letter-spacing: 0.01em !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-penalty {
+  display: block !important;
+  color: var(--vtm-muted) !important;
+  font-size: 10px !important;
+  line-height: 1.02 !important;
+  white-space: normal !important;
+  opacity: 0.9 !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row.is-checked {
+  border-color: rgba(210, 76, 101, 0.92) !important;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(228, 77, 104, 0.20), transparent 38%),
+    linear-gradient(180deg, rgba(106, 18, 38, 0.96), rgba(34, 8, 15, 0.96)) !important;
+  box-shadow:
+    0 0 12px rgba(158, 32, 57, 0.23),
+    inset 0 0 16px rgba(0, 0, 0, 0.34) !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row.is-checked .health-name {
+  color: #fff1df !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row:hover {
+  border-color: rgba(201, 173, 102, 0.34) !important;
+  background:
+    linear-gradient(180deg, rgba(22, 10, 15, 0.86), rgba(30, 10, 18, 0.72)) !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row.is-checked:hover {
+  border-color: rgba(231, 98, 121, 0.98) !important;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(228, 77, 104, 0.24), transparent 38%),
+    linear-gradient(180deg, rgba(116, 20, 42, 0.98), rgba(39, 8, 17, 0.98)) !important;
+}
+
+@media (max-width: 1320px) {
+  .vtm-revised.sheet .vtm-health-scroll-block .health-check-grid {
+    grid-template-columns: repeat(4, minmax(104px, 1fr)) !important;
+  }
+}
+
+@media (max-width: 860px) {
+  .vtm-revised.sheet .vtm-health-scroll-block .health-check-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+
+/* ==========================================================================
+   VTM Revised v9.5.16 Blood Magic Names Polish
+   Чинит обрезанные названия путей магии крови и ритуалов.
+   ========================================================================== */
+
+.vtm-revised.sheet .blood-magic-section .blood-magic-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(320px, 1fr)) !important;
+  gap: 10px !important;
+  align-items: stretch !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .blood-magic-group,
+.vtm-revised.sheet .blood-magic-section .blood-magic-rituals-panel {
+  min-width: 0 !important;
+  overflow: hidden !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .blood-magic-group-header {
+  align-items: flex-start !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .blood-magic-group-title {
+  min-width: 0 !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .blood-magic-group-title h3,
+.vtm-revised.sheet .blood-magic-section .blood-magic-group-title p {
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: normal !important;
+}
+
+/* Пути и ритуалы: имя получает нормальное пространство, кнопки остаются справа. */
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"],
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 56px repeat(4, 29px) !important;
+  gap: 5px !important;
+  align-items: center !important;
+  min-height: 36px !important;
+  padding: 6px 7px 6px 10px !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-name,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-name {
+  display: block !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+  line-height: 1.18 !important;
+  padding-right: 6px !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-rating,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-rating {
+  min-width: 52px !important;
+  white-space: nowrap !important;
+  text-align: right !important;
+}
+
+/* Ритуалы обычно длиннее путей, поэтому даём им чуть больше воздуха. */
+.vtm-revised.sheet .blood-magic-rituals-panel .item-row[data-item-type="ritual"] {
+  grid-template-columns: minmax(0, 1fr) 48px repeat(4, 30px) !important;
+  min-height: 38px !important;
+}
+
+.vtm-revised.sheet .blood-magic-rituals-panel .item-row[data-item-type="ritual"] .item-name {
+  font-size: 13px !important;
+}
+
+/* Кнопки остаются плотной группой справа и не съедают имя как голодная бюрократия. */
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] button,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] button {
+  width: 28px !important;
+  min-width: 28px !important;
+  height: 28px !important;
+  min-height: 28px !important;
+  padding: 0 !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .empty {
+  min-height: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* На узких окнах пути становятся одной колонкой, иначе снова начнётся театр "За...". */
+@media (max-width: 1180px) {
+  .vtm-revised.sheet .blood-magic-section .blood-magic-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"],
+  .vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] {
+    grid-template-columns: minmax(0, 1fr) 48px repeat(2, 28px) !important;
+  }
+
+  .vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-use,
+  .vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-use {
+    display: none !important;
+  }
+}
+
+
+/* ==========================================================================
+   VTM Revised v9.5.17 Blood Magic Full Row
+   Пути магии крови и ритуалы: название занимает всю первую строку,
+   а рейтинг и кнопки уходят на вторую строку справа.
+   ========================================================================== */
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"],
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto repeat(4, 28px) !important;
+  grid-auto-rows: auto !important;
+  gap: 5px !important;
+  align-items: center !important;
+  min-height: 52px !important;
+  padding: 8px 8px 8px 10px !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-name,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-name {
+  grid-column: 1 / -1 !important;
+  grid-row: 1 !important;
+  display: block !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: normal !important;
+  overflow-wrap: break-word !important;
+  word-break: normal !important;
+  line-height: 1.16 !important;
+  padding-right: 0 !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-rating,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-rating {
+  grid-column: 2 !important;
+  grid-row: 2 !important;
+  justify-self: end !important;
+  align-self: center !important;
+  min-width: 42px !important;
+  text-align: right !important;
+  white-space: nowrap !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] > button,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] > button {
+  grid-row: 2 !important;
+  justify-self: end !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] > button:nth-last-child(4),
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] > button:nth-last-child(4) {
+  grid-column: 3 !important;
+}
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] > button:nth-last-child(3),
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] > button:nth-last-child(3) {
+  grid-column: 4 !important;
+}
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] > button:nth-last-child(2),
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] > button:nth-last-child(2) {
+  grid-column: 5 !important;
+}
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] > button:nth-last-child(1),
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] > button:nth-last-child(1) {
+  grid-column: 6 !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] button,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] button {
+  width: 27px !important;
+  min-width: 27px !important;
+  height: 27px !important;
+  min-height: 27px !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .blood-magic-group .items-list,
+.vtm-revised.sheet .blood-magic-section .blood-magic-rituals-panel .items-list {
+  gap: 7px !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .blood-magic-group,
+.vtm-revised.sheet .blood-magic-section .blood-magic-rituals-panel {
+  overflow: visible !important;
+}
+
+@media (max-width: 760px) {
+  .vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"],
+  .vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] {
+    grid-template-columns: minmax(0, 1fr) auto repeat(3, 28px) !important;
+  }
+}
+
+
+/* ==========================================================================
+   VTM Revised v9.5.18 Clickable Item Name No Background
+   Убирает кнопку-подложку с кликабельных названий путей и ритуалов.
+   ========================================================================== */
+
+.vtm-revised.sheet .items-list .item-name.discipline-card-open,
+.vtm-revised.sheet .items-list .item-name.ritual-card-open,
+.vtm-revised.sheet .items-list .item-name.merit-flaw-card-open,
+.vtm-revised.sheet .items-list .item-name.item-edit {
+  width: auto !important;
+  min-width: 0 !important;
+  height: auto !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--vtm-text) !important;
+  text-align: left !important;
+  justify-self: stretch !important;
+  align-self: center !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-name.discipline-card-open,
+.vtm-revised.sheet .blood-magic-section .item-name.ritual-card-open {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  color: var(--vtm-text) !important;
+}
+
+.vtm-revised.sheet .items-list .item-name.discipline-card-open:hover,
+.vtm-revised.sheet .items-list .item-name.ritual-card-open:hover,
+.vtm-revised.sheet .items-list .item-name.merit-flaw-card-open:hover,
+.vtm-revised.sheet .items-list .item-name.item-edit:hover {
+  color: #fff1df !important;
+  text-shadow: 0 0 8px rgba(201, 62, 88, 0.28) !important;
+}
+
+
+/* ==========================================================================
+   VTM Revised v9.5.19 Blood Magic Glowing Pips
+   Под названиями путей и ритуалов добавлены сияющие точки рейтинга.
+   ========================================================================== */
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-main,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-main {
+  grid-column: 1 / -1 !important;
+  grid-row: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  gap: 5px !important;
+  min-width: 0 !important;
+  width: 100% !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-main .item-name,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-main .item-name {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  line-height: 1.14 !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-main .item-pips,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-main .item-pips {
+  justify-content: flex-start !important;
+  gap: 4px !important;
+  min-height: 10px !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-main .item-pips i,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-main .item-pips i {
+  width: 8px !important;
+  height: 8px !important;
+  flex: 0 0 8px !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-main .item-pips {
+  flex-wrap: wrap !important;
+  max-width: 100% !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"],
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] {
+  min-height: 60px !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-rating,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-rating {
+  align-self: end !important;
+}
+
+
+/* ==========================================================================
+   VTM Revised v9.5.20 Discipline Header Plus Alignment
+   Переносит плюсик дисциплин вправо и выравнивает по строке заголовка.
+   ========================================================================== */
+
+.vtm-revised.sheet .vtm-inline-heading-actions {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+  margin-bottom: 8px !important;
+}
+
+.vtm-revised.sheet .vtm-inline-heading-actions h3 {
+  margin: 0 !important;
+  flex: 1 1 auto !important;
+}
+
+.vtm-revised.sheet .vtm-disciplines-panel .vtm-inline-heading-actions .vtm-small-add-button,
+.vtm-revised.sheet .vtm-disciplines-panel .vtm-inline-heading-actions .item-create {
+  flex: 0 0 auto !important;
+  margin-left: auto !important;
+}
+
+
+/* ==========================================================================
+   VTM Revised v9.5.21 Experience Available Only
+   В блоке опыта оставлено только редактируемое поле "Доступно".
+   ========================================================================== */
+
+.vtm-revised.sheet .vtm-tracker-xp .vtm-xp-single {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+}
+
+.vtm-revised.sheet .vtm-tracker-xp .vtm-xp-single label {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  color: var(--vtm-muted) !important;
+  font-size: 12px !important;
+}
+
+.vtm-revised.sheet .vtm-tracker-xp .vtm-xp-single input[type="number"] {
+  width: 100% !important;
+}
+
+
+/* ==========================================================================
+   VTM Revised v9.5.27 Discipline Glowing Pips
+   Под названиями дисциплин добавлены сияющие точки рейтинга.
+   ========================================================================== */
+
+.vtm-revised.sheet .vtm-disciplines-panel .item-row[data-item-type="discipline"] {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 42px repeat(4, 26px) !important;
+  grid-auto-rows: auto !important;
+  gap: 4px !important;
+  align-items: center !important;
+  min-height: 48px !important;
+  padding: 6px 4px 6px 7px !important;
+}
+
+.vtm-revised.sheet .vtm-disciplines-panel .item-row[data-item-type="discipline"] .item-main {
+  grid-column: 1 !important;
+  grid-row: 1 / span 2 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  gap: 5px !important;
+  min-width: 0 !important;
+  width: 100% !important;
+}
+
+.vtm-revised.sheet .vtm-disciplines-panel .item-row[data-item-type="discipline"] .item-main .item-name {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  line-height: 1.14 !important;
+}
+
+.vtm-revised.sheet .vtm-disciplines-panel .item-row[data-item-type="discipline"] .item-main .item-pips {
+  justify-content: flex-start !important;
+  gap: 4px !important;
+  min-height: 10px !important;
+}
+
+.vtm-revised.sheet .vtm-disciplines-panel .item-row[data-item-type="discipline"] .item-main .item-pips i {
+  width: 8px !important;
+  height: 8px !important;
+  flex: 0 0 8px !important;
+}
+
+.vtm-revised.sheet .vtm-disciplines-panel .item-row[data-item-type="discipline"] .item-rating {
+  align-self: center !important;
+}
+
+@media (max-width: 760px) {
+  .vtm-revised.sheet .vtm-disciplines-panel .item-row[data-item-type="discipline"] {
+    min-height: 52px !important;
+  }
+}
+
+
+/* ==========================================================================
+   VTM Revised v9.5.28 Discipline Pips Centered
+   Центрует сияющие точки дисциплин и убирает ощущение пустой середины строки.
+   ========================================================================== */
+
+.vtm-revised.sheet .vtm-disciplines-panel .item-row[data-item-type="discipline"] .item-main {
+  align-items: stretch !important;
+}
+
+.vtm-revised.sheet .vtm-disciplines-panel .item-row[data-item-type="discipline"] .item-main .item-name {
+  text-align: left !important;
+}
+
+.vtm-revised.sheet .vtm-disciplines-panel .item-row[data-item-type="discipline"] .item-main .item-pips {
+  display: flex !important;
+  width: 100% !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 4px !important;
+  padding: 0 6px 0 0 !important;
+}
+
+.vtm-revised.sheet .vtm-disciplines-panel .item-row[data-item-type="discipline"] .item-main .item-pips i {
+  width: 8px !important;
+  height: 8px !important;
+  flex: 0 0 8px !important;
+}
+
+.vtm-revised.sheet .vtm-disciplines-panel .item-row[data-item-type="discipline"] {
+  min-height: 44px !important;
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+}
+
+
+/* ==========================================================================
+   VTM Revised v9.5.29 Blood Magic Rows Centered
+   Центрует название и сияющие точки в строках путей магии крови и ритуалов.
+   ========================================================================== */
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-main,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-main {
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-main .item-name,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-main .item-name {
+  text-align: center !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-main .item-pips,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-main .item-pips {
+  display: flex !important;
+  width: 100% !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-main .item-pips {
+  max-width: 100% !important;
+}
+
+
+/* ==========================================================================
+   VTM Revised v9.5.30 Blood Magic Vertical Center
+   Левый блок (название + точки) остаётся слева, но центрируется по вертикали.
+   Правый блок (рейтинг + кнопки) выравнивается справа и тоже по вертикали.
+   ========================================================================== */
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"],
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto repeat(4, 28px) !important;
+  grid-template-rows: auto !important;
+  gap: 5px !important;
+  align-items: center !important;
+  min-height: 60px !important;
+  padding: 8px 8px 8px 10px !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-main,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-main {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  gap: 5px !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  text-align: left !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-main .item-name,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-main .item-name {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  line-height: 1.14 !important;
+  text-align: left !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-main .item-pips,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-main .item-pips {
+  display: flex !important;
+  width: 100% !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+  gap: 4px !important;
+  min-height: 10px !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-rating,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-rating {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  justify-self: end !important;
+  align-self: center !important;
+  min-width: 42px !important;
+  text-align: right !important;
+  white-space: nowrap !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] > button,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] > button {
+  grid-row: 1 !important;
+  align-self: center !important;
+  justify-self: end !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] > button:nth-last-child(4),
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] > button:nth-last-child(4) {
+  grid-column: 3 !important;
+}
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] > button:nth-last-child(3),
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] > button:nth-last-child(3) {
+  grid-column: 4 !important;
+}
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] > button:nth-last-child(2),
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] > button:nth-last-child(2) {
+  grid-column: 5 !important;
+}
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] > button:nth-last-child(1),
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] > button:nth-last-child(1) {
+  grid-column: 6 !important;
+}
+
+
+/* ==========================================================================
+   VTM Revised v9.5.31 Readable Chat Cards
+   Чат не наследует переменные листа стабильно, поэтому задаём цвета явно.
+   ========================================================================== */
+
+.chat-message .message-content .vtm-chat-card,
+.message-content .vtm-chat-card,
+.vtm-chat-card {
+  border: 1px solid rgba(139, 48, 70, 0.88) !important;
+  border-radius: 12px !important;
+  padding: 11px 12px !important;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(158, 32, 57, 0.20), transparent 34%),
+    linear-gradient(145deg, #1b0c13 0%, #090508 100%) !important;
+  color: #efe7df !important;
+  box-shadow:
+    0 8px 22px rgba(0, 0, 0, 0.36),
+    inset 0 0 0 1px rgba(255, 230, 190, 0.035) !important;
+}
+
+.chat-message .message-content .vtm-chat-card *,
+.message-content .vtm-chat-card *,
+.vtm-chat-card * {
+  color: inherit !important;
+}
+
+.chat-message .message-content .vtm-chat-card h3,
+.message-content .vtm-chat-card h3,
+.vtm-chat-card h3 {
+  margin: 0 0 7px !important;
+  color: #d7bd74 !important;
+  font-weight: 700 !important;
+  text-shadow: 0 0 8px rgba(178, 48, 70, 0.28) !important;
+}
+
+.chat-message .message-content .vtm-chat-card p,
+.message-content .vtm-chat-card p,
+.vtm-chat-card p {
+  margin: 4px 0 !important;
+  color: #efe7df !important;
+  line-height: 1.35 !important;
+}
+
+.chat-message .message-content .vtm-chat-card strong,
+.message-content .vtm-chat-card strong,
+.vtm-chat-card strong {
+  color: #fff3df !important;
+  font-weight: 700 !important;
+}
+
+.chat-message .message-content .vtm-chat-card .muted,
+.message-content .vtm-chat-card .muted,
+.vtm-chat-card .muted {
+  color: #b9a99c !important;
+}
+
+.chat-message .message-content .vtm-chat-card .roll-component,
+.message-content .vtm-chat-card .roll-component,
+.vtm-chat-card .roll-component {
+  color: #d7bd74 !important;
+  font-weight: 700 !important;
+}
+
+.chat-message .message-content .vtm-chat-card .die,
+.message-content .vtm-chat-card .die,
+.vtm-chat-card .die {
+  display: inline-block !important;
+  min-width: 24px !important;
+  padding: 2px 5px !important;
+  border: 1px solid rgba(215, 189, 116, 0.46) !important;
+  border-radius: 6px !important;
+  background: rgba(8, 5, 8, 0.82) !important;
+  color: #fff3df !important;
+  text-align: center !important;
+}
+
+.chat-message .message-content .vtm-chat-card .result,
+.message-content .vtm-chat-card .result,
+.vtm-chat-card .result {
+  color: #f3d98a !important;
+  font-weight: 800 !important;
+}
+
+.chat-message .message-content .vtm-chat-card .botch,
+.message-content .vtm-chat-card .botch,
+.vtm-chat-card .botch {
+  color: #ff6b82 !important;
+  font-weight: 800 !important;
+}
+
+/* Конкретно карточка изменения ресурсов, которую сейчас было почти не видно. */
+.chat-message .message-content .vtm-chat-card.resource-card,
+.message-content .vtm-chat-card.resource-card,
+.vtm-chat-card.resource-card {
+  background:
+    radial-gradient(circle at 95% 0%, rgba(201, 62, 88, 0.22), transparent 34%),
+    linear-gradient(145deg, #1b0c13 0%, #080407 100%) !important;
+}
+
+.chat-message .message-content .vtm-chat-card.resource-card p,
+.message-content .vtm-chat-card.resource-card p,
+.vtm-chat-card.resource-card p {
+  color: #efe7df !important;
+}
+

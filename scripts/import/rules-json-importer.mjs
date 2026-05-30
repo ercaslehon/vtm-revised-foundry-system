@@ -16,6 +16,10 @@ const TYPE_MAP = {
   equipment: "equipment",
   weapons: "weapon",
   weapon: "weapon",
+  moralityPaths: "moralityPath",
+  pathsOfEnlightenment: "moralityPath",
+  roads: "moralityPath",
+  morality: "moralityPath",
   rules: "ruleEntry",
   ruleEntries: "ruleEntry"
 };
@@ -208,6 +212,26 @@ function buildSystemData(type, entry = {}) {
     isHomebrew: Boolean(entry.isHomebrew ?? false)
   };
 
+
+  if (type === "moralityPath") return {
+    slug: entry.slug ?? "",
+    category: entry.category ?? entry.kind ?? "path",
+    nameEn: entry.nameEn ?? entry.englishName ?? "",
+    aliases: normalizeArray(entry.aliases).join(", "),
+    sourceEra: entry.sourceEra ?? entry.era ?? "modern",
+    virtues: html(entry.virtues ?? entry.virtueText ?? ""),
+    aura: html(entry.aura ?? ""),
+    ethics: html(entry.ethics ?? entry.tenets ?? entry.code ?? ""),
+    hierarchy: html(entry.hierarchy ?? entry.hierarchyOfSins ?? entry.sins ?? ""),
+    initiation: html(entry.initiation ?? entry.adoption ?? ""),
+    description,
+    mechanics,
+    audit,
+    automation,
+    rawName: entry.rawName ?? entry.name ?? "",
+    isHomebrew: Boolean(entry.isHomebrew ?? false)
+  };
+
   if (type === "equipment") return {
     quantity: safeNumber(entry.quantity, 1),
     description: { value: html(entry.description ?? entry.summary ?? "") },
@@ -303,10 +327,28 @@ export class RulesJsonImporter {
     return this.importData(payload);
   }
 
+
+  static async importBuiltInBackgroundCatalog() {
+    const url = "systems/vtm-revised/data/vtm-revised-backgrounds.generated.json";
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`Failed to load built-in backgrounds catalog: ${response.status} ${response.statusText}`);
+    const payload = await response.json();
+    return this.importData(payload);
+  }
+
   static async importBuiltInMeritsFlawsCatalog() {
     const url = "systems/vtm-revised/data/vtm-revised-merits-flaws.generated.json";
     const response = await fetch(url);
     if (!response.ok) throw new Error(`Failed to load built-in merits/flaws catalog: ${response.status} ${response.statusText}`);
+    const payload = await response.json();
+    return this.importData(payload);
+  }
+
+
+  static async importBuiltInMoralityCatalog() {
+    const url = "systems/vtm-revised/data/vtm-revised-morality.generated.json";
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`Failed to load built-in morality catalog: ${response.status} ${response.statusText}`);
     const payload = await response.json();
     return this.importData(payload);
   }

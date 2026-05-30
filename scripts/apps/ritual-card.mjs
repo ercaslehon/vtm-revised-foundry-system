@@ -1,5 +1,6 @@
 import { rollDicePool } from "../dice/dice-pool.mjs";
 import { VTM_REVISED } from "../config.mjs";
+import { applyAutomationCost, normalizeAutomationCost } from "../utils/automation-costs.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 const DialogV1 = foundry.appv1?.api?.Dialog ?? globalThis.Dialog;
@@ -268,7 +269,7 @@ export class VTMRitualCard extends HandlebarsApplicationMixin(ApplicationV2) {
     const source = (await this._prepareContext({})).source ?? this.ritual;
     const auto = source?.system?.automation ?? this.ritual?.system?.automation ?? {};
     const roll = auto.roll ?? {};
-    const cost = auto.cost ?? {};
+    const cost = normalizeAutomationCost(auto.cost ?? {}, source ?? this.ritual);
     const hasRoll = Boolean(roll.firstTrait || roll.secondTrait);
 
     if (hasRoll) {
@@ -281,22 +282,14 @@ export class VTMRitualCard extends HandlebarsApplicationMixin(ApplicationV2) {
       if (!rolled) return;
     }
 
-    await this._applyAutomationCosts(cost, source);
+    const appliedCost = await this._applyAutomationCosts(cost, source);
     const description = source?.system?.description?.chat || source?.system?.description?.system || source?.system?.description?.value || this.ritual?.system?.description?.value || "";
-    const content = await renderTemplateCompat("systems/vtm-revised/templates/chat/item-use-card.hbs", { actor: this.actor, item: source, cost, description });
+    const content = await renderTemplateCompat("systems/vtm-revised/templates/chat/item-use-card.hbs", { actor: this.actor, item: source, cost: appliedCost, description });
     await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this.actor }), content, flags: { "vtm-revised": { type: "ritualUse", actorId: this.actor.id, itemUuid: source?.uuid ?? this.ritual?.uuid, hadRoll: hasRoll } } });
   }
 
   async _applyAutomationCosts(cost = {}, item = null) {
-    const reason = cost.text || item?.name || "Ритуал";
-    const blood = Number(cost.blood || 0);
-    const willpower = Number(cost.willpower || 0);
-    if (blood > 0) await this.actor.changeResource("resources.blood", -blood, reason);
-    if (willpower > 0) await this.actor.changeResource("resources.willpower", -willpower, reason);
-    if (blood > 0 || willpower > 0) return;
-    const resourcePath = this._resolveAutomationResource(cost.resource);
-    const amount = Number(cost.amount || 0);
-    if (resourcePath && amount > 0) await this.actor.changeResource(resourcePath, -amount, reason);
+    return applyAutomationCost(this.actor, cost, item, { reason: cost.text || item?.name || "Ритуал" });
   }
 
   _resolveAutomationResource(resource) {

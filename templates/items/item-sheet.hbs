@@ -15,6 +15,14 @@
       <label>{{localize "VTM_REVISED.Item.Category"}} <input name="system.category" value="{{system.category}}"/></label>
       <label>{{localize "VTM_REVISED.Item.Slug"}} <input name="system.slug" value="{{system.slug}}"/></label>
       <label>{{localize "VTM_REVISED.Item.Aliases"}} <input name="system.aliases" value="{{system.aliases}}"/></label>
+    {{else if (eq item.type "moralityPath")}}
+      <label>Категория <input name="system.category" value="{{system.category}}"/></label>
+      <label>{{localize "VTM_REVISED.Item.Slug"}} <input name="system.slug" value="{{system.slug}}"/></label>
+      <label>{{localize "VTM_REVISED.Item.Aliases"}} <input name="system.aliases" value="{{system.aliases}}"/></label>
+      <label>Аура {{editor system.aura target="system.aura" button=true editable=editable}}</label>
+      <label>Добродетели {{editor system.virtues target="system.virtues" button=true editable=editable}}</label>
+      <label>Этический кодекс {{editor system.ethics target="system.ethics" button=true editable=editable}}</label>
+      <label>Иерархия грехов {{editor system.hierarchy target="system.hierarchy" button=true editable=editable}}</label>
     {{else if (eq item.type "disciplinePower")}}
       <label>{{localize "VTM_REVISED.Item.Level"}} <input type="number" name="system.level" value="{{system.level}}"/></label>
       <label>{{localize "VTM_REVISED.Item.ParentDiscipline"}} <input name="system.parentDiscipline" value="{{system.parentDiscipline}}"/></label>
@@ -78,7 +86,7 @@
       <label>{{localize "VTM_REVISED.MeritFlaw.Category"}} <input name="system.category" value="{{system.category}}"/></label>
       <label>{{localize "VTM_REVISED.MeritFlaw.Trigger"}} <input name="system.trigger" value="{{system.trigger}}"/></label>
     {{/if}}
-    {{#if (or (eq item.type "discipline") (or (eq item.type "disciplinePower") (or (eq item.type "disciplinePath") (or (eq item.type "ritual") (or (eq item.type "clan") (or (eq item.type "sect") (or (eq item.type "weapon") (or (eq item.type "merit") (or (eq item.type "flaw") (eq item.type "ruleEntry"))))))))))}}
+    {{#if (or (eq item.type "discipline") (or (eq item.type "disciplinePower") (or (eq item.type "disciplinePath") (or (eq item.type "ritual") (or (eq item.type "clan") (or (eq item.type "sect") (or (eq item.type "weapon") (or (eq item.type "merit") (or (eq item.type "flaw") (or (eq item.type "background") (or (eq item.type "moralityPath") (eq item.type "ruleEntry"))))))))))))}}
       <label>{{localize "VTM_REVISED.Item.Description"}} {{editor system.description.value target="system.description.value" button=true editable=editable}}</label>
       <label>{{localize "VTM_REVISED.Item.SystemText"}} {{editor system.description.system target="system.description.system" button=true editable=editable}}</label>
       <label>{{localize "VTM_REVISED.Item.ChatText"}} {{editor system.description.chat target="system.description.chat" button=true editable=editable}}</label>

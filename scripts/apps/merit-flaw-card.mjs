@@ -30,7 +30,7 @@ export class VTMMeritFlawCard extends HandlebarsApplicationMixin(ApplicationV2) 
   }
 
   get title() {
-    const typeLabel = this.item?.type === "flaw" ? game.i18n.localize("TYPES.Item.flaw") : game.i18n.localize("TYPES.Item.merit");
+    const typeLabel = this.item?.type === "flaw" ? game.i18n.localize("TYPES.Item.flaw") : (this.item?.type === "background" ? game.i18n.localize("TYPES.Item.background") : game.i18n.localize("TYPES.Item.merit"));
     return `${typeLabel} · ${this.item?.name ?? ""}`.trim();
   }
 
@@ -54,7 +54,7 @@ export class VTMMeritFlawCard extends HandlebarsApplicationMixin(ApplicationV2) 
       sourceUrl,
       sourceBook,
       sourcePage,
-      typeLabel: item?.type === "flaw" ? game.i18n.localize("TYPES.Item.flaw") : game.i18n.localize("TYPES.Item.merit"),
+      typeLabel: item?.type === "flaw" ? game.i18n.localize("TYPES.Item.flaw") : (item?.type === "background" ? game.i18n.localize("TYPES.Item.background") : game.i18n.localize("TYPES.Item.merit")),
       description: system.description?.value || "",
       shortDescription: system.description?.chat || "",
       systemText: system.description?.system || "",
@@ -107,7 +107,7 @@ export function findMeritFlawItemForName(name = "", type = "") {
   if (!wanted) return null;
   return Array.from(game.items ?? [])
     .filter(item => !type || item.type === type)
-    .filter(item => ["merit", "flaw"].includes(item.type))
+    .filter(item => ["merit", "flaw", "background"].includes(item.type))
     .find(item => {
       const original = item.flags?.["vtm-revised"]?.original ?? {};
       const aliases = Array.isArray(original.aliases) ? original.aliases : [];

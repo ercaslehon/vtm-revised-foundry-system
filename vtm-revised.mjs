@@ -11,7 +11,8 @@ import {
   VTMEquipmentItemData,
   VTMWeaponItemData,
   VTMRuleEntryItemData,
-  VTMClanItemData
+  VTMClanItemData,
+  VTMMoralityPathItemData
 } from "./scripts/data-models/item-data.mjs";
 import { VTMVampireActorSheet } from "./scripts/sheets/vampire-actor-sheet.mjs";
 import { VTMItemSheet } from "./scripts/sheets/item-sheet.mjs";
@@ -20,6 +21,7 @@ import { VTMRitualCard } from "./scripts/apps/ritual-card.mjs";
 import { VTMClanCard, findClanItemForName } from "./scripts/apps/clan-card.mjs";
 import { VTMMeritFlawCard } from "./scripts/apps/merit-flaw-card.mjs";
 import { VTMArchetypeCard, findArchetypeForName } from "./scripts/apps/archetype-card.mjs";
+import { VTMMoralityPathCard, findMoralityPathItemForName } from "./scripts/apps/morality-path-card.mjs";
 import { VTMCharacterCreationWizard } from "./scripts/apps/character-creation-wizard.mjs";
 import { rollDicePool } from "./scripts/dice/dice-pool.mjs";
 import { TrechkalovJsonImporter } from "./scripts/import/trechkalov-json-importer.mjs";
@@ -30,6 +32,8 @@ const registerHandlebarsHelpers = () => {
   Handlebars.registerHelper("concat", (...parts) => parts.slice(0, -1).join(""));
   Handlebars.registerHelper("eq", (a, b) => a === b);
   Handlebars.registerHelper("gt", (a, b) => Number(a ?? 0) > Number(b ?? 0));
+  Handlebars.registerHelper("gte", (a, b) => Number(a ?? 0) >= Number(b ?? 0));
+  Handlebars.registerHelper("lte", (a, b) => Number(a ?? 0) <= Number(b ?? 0));
   Handlebars.registerHelper("or", (...args) => args.slice(0, -1).some(Boolean));
   Handlebars.registerHelper("and", (...args) => args.slice(0, -1).every(Boolean));
 };
@@ -95,6 +99,7 @@ const preloadTemplates = async () => loadTemplatesCompat([
   "systems/vtm-revised/templates/apps/clan-card.hbs",
   "systems/vtm-revised/templates/apps/merit-flaw-card.hbs",
   "systems/vtm-revised/templates/apps/archetype-card.hbs",
+  "systems/vtm-revised/templates/apps/morality-path-card.hbs",
   "systems/vtm-revised/templates/apps/character-creation-wizard.hbs",
   "systems/vtm-revised/templates/chat/item-use-card.hbs",
   "systems/vtm-revised/templates/chat/weapon-damage-card.hbs"
@@ -121,6 +126,7 @@ Hooks.once("init", async () => {
   CONFIG.Item.dataModels.equipment = VTMEquipmentItemData;
   CONFIG.Item.dataModels.weapon = VTMWeaponItemData;
   CONFIG.Item.dataModels.clan = VTMClanItemData;
+  CONFIG.Item.dataModels.moralityPath = VTMMoralityPathItemData;
   CONFIG.Item.dataModels.sect = VTMRuleEntryItemData;
   CONFIG.Item.dataModels.ruleEntry = VTMRuleEntryItemData;
 
@@ -156,8 +162,11 @@ Hooks.once("init", async () => {
     importBuiltInWeaponCatalog: RulesJsonImporter.importBuiltInWeaponCatalog.bind(RulesJsonImporter),
     importBuiltInClanCatalog: RulesJsonImporter.importBuiltInClanCatalog.bind(RulesJsonImporter),
     importBuiltInMeritsFlawsCatalog: RulesJsonImporter.importBuiltInMeritsFlawsCatalog.bind(RulesJsonImporter),
+    importBuiltInBackgroundCatalog: RulesJsonImporter.importBuiltInBackgroundCatalog.bind(RulesJsonImporter),
+    importBuiltInMoralityCatalog: RulesJsonImporter.importBuiltInMoralityCatalog.bind(RulesJsonImporter),
     openClanCard,
     openArchetypeCard,
+    openMoralityPathCard,
     openCharacterCreationWizard: (actorOrRef) => openCharacterCreationWizard(actorOrRef),
     openFirstActorCreationWizard: () => openCharacterCreationWizard(game.actors?.contents?.[0]),
     syncActorRitualsFromCatalog,
@@ -493,6 +502,16 @@ Hooks.on("renderItemDirectory", (app, html) => {
   }
 
 
+
+  if (!footer.querySelector(".vtm-import-backgrounds")) {
+    const backgroundsButton = document.createElement("button");
+    backgroundsButton.type = "button";
+    backgroundsButton.classList.add("vtm-import-backgrounds");
+    backgroundsButton.innerHTML = `<i class="fas fa-address-book"></i> ${game.i18n.localize("VTM_REVISED.Import.Backgrounds")}`;
+    backgroundsButton.addEventListener("click", async () => RulesJsonImporter.importBuiltInBackgroundCatalog());
+    footer.append(backgroundsButton);
+  }
+
   if (!footer.querySelector(".vtm-import-merits-flaws")) {
     const meritsFlawsButton = document.createElement("button");
     meritsFlawsButton.type = "button";
@@ -501,8 +520,29 @@ Hooks.on("renderItemDirectory", (app, html) => {
     meritsFlawsButton.addEventListener("click", async () => RulesJsonImporter.importBuiltInMeritsFlawsCatalog());
     footer.append(meritsFlawsButton);
   }
+
+  if (!footer.querySelector(".vtm-import-morality")) {
+    const moralityButton = document.createElement("button");
+    moralityButton.type = "button";
+    moralityButton.classList.add("vtm-import-morality");
+    moralityButton.innerHTML = `<i class="fas fa-road"></i> ${game.i18n.localize("VTM_REVISED.Morality.Import")}`;
+    moralityButton.addEventListener("click", async () => RulesJsonImporter.importBuiltInMoralityCatalog());
+    footer.append(moralityButton);
+  }
 });
 
 Hooks.once("ready", () => {
   console.log("VtM Revised | Ready. Use game.vtmRevised.importJsonText(jsonText) for sheets or game.vtmRevised.importRulesText(jsonText) for authorized rules catalog imports.");
 });
+
+
+async function openMoralityPathCard(actorOrRef) {
+  let actor = actorOrRef;
+  if (typeof actorOrRef === "string") actor = game.actors?.get(actorOrRef) ?? await fromUuid(actorOrRef);
+  if (actorOrRef?.uuid && !actorOrRef?.render) actor = await fromUuid(actorOrRef.uuid);
+  if (!actor) return null;
+  const pathName = actor.system?.resources?.pathName || game.i18n.localize("VTM_REVISED.Resource.Humanity");
+  const path = findMoralityPathItemForName(pathName);
+  if (!path) ui.notifications?.warn?.("Справочник Пути/Дороги не найден. Импортируй каталог: game.vtmRevised.importBuiltInMoralityCatalog()");
+  return new VTMMoralityPathCard({ actor, moralityPath: path }).render({ force: true });
+}
