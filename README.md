@@ -55,7 +55,7 @@ Vampire: The Masquerade Revised - Unofficial System
 
 ## Импорт встроенных каталогов
 
-После установки в мире можно выполнить в консоли Foundry:
+После установки в мире можно выполнить либо во вкладке "предметы", либо в консоли Foundry:
 
 ```js
 game.vtmRevised.importBuiltInClanCatalog()
