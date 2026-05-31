@@ -37,6 +37,20 @@
       </article>
     {{/if}}
 
+    {{#if theme}}
+      <article class="vtm-panel">
+        <h2>{{localize "VTM_REVISED.Clan.Theme"}}</h2>
+        <div class="vtm-rich-text">{{{theme}}}</div>
+      </article>
+    {{/if}}
+
+    {{#if embrace}}
+      <article class="vtm-panel">
+        <h2>{{localize "VTM_REVISED.Clan.Embrace"}}</h2>
+        <div class="vtm-rich-text">{{{embrace}}}</div>
+      </article>
+    {{/if}}
+
     <article class="vtm-panel">
       <h2>{{localize "VTM_REVISED.Clan.Mechanics"}}</h2>
       {{#if disciplines.length}}
@@ -79,10 +93,34 @@
       </article>
     {{/if}}
 
+    {{!-- Legacy roleplayTips is shown only for old/simple clan items.
+         Expanded clan cards use dedicated CharacterHooks and StorytellerHooks sections
+         to avoid duplicated bullets. --}}
     {{#if roleplayTips}}
       <article class="vtm-panel">
         <h2>{{localize "VTM_REVISED.Clan.RoleplayTips"}}</h2>
         <div class="vtm-rich-text">{{{roleplayTips}}}</div>
+      </article>
+    {{/if}}
+
+    {{#if societyPlace}}
+      <article class="vtm-panel">
+        <h2>{{localize "VTM_REVISED.Clan.SocietyPlace"}}</h2>
+        <div class="vtm-rich-text">{{{societyPlace}}}</div>
+      </article>
+    {{/if}}
+
+    {{#if characterHooks}}
+      <article class="vtm-panel">
+        <h2>{{localize "VTM_REVISED.Clan.CharacterHooks"}}</h2>
+        <div class="vtm-rich-text">{{{characterHooks}}}</div>
+      </article>
+    {{/if}}
+
+    {{#if storytellerHooks}}
+      <article class="vtm-panel">
+        <h2>{{localize "VTM_REVISED.Clan.StorytellerHooks"}}</h2>
+        <div class="vtm-rich-text">{{{storytellerHooks}}}</div>
       </article>
     {{/if}}
 

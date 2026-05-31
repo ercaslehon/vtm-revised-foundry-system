@@ -42,7 +42,7 @@
   "VTM_REVISED.Ability.politics": "Политика",
   "VTM_REVISED.Ability.ride": "Верховая езда",
   "VTM_REVISED.Ability.science": "Ест. науки",
-  "VTM_REVISED.Ability.security": "Безопасность",
+  "VTM_REVISED.Ability.security": "Взлом",
   "VTM_REVISED.Ability.stealth": "Скрытность",
   "VTM_REVISED.Ability.streetwise": "Уличное чутьё",
   "VTM_REVISED.Ability.subterfuge": "Хитрость",
@@ -461,7 +461,7 @@
       "politics": "Политика",
       "ride": "Верховая езда",
       "science": "Ест. науки",
-      "security": "Безопасность",
+      "security": "Взлом",
       "stealth": "Скрытность",
       "streetwise": "Уличное чутьё",
       "subterfuge": "Хитрость",
@@ -546,7 +546,12 @@
       "SelectFirst": "Сначала выбери клан персонажа.",
       "ShortView": "Кратко",
       "Stereotypes": "Стереотипы",
-      "Weakness": "Слабость"
+      "Weakness": "Слабость",
+      "Theme": "Темы и атмосфера",
+      "Embrace": "Кого обращают",
+      "SocietyPlace": "Место в обществе Сородичей",
+      "CharacterHooks": "Идеи персонажей",
+      "StorytellerHooks": "Зацепки для хроники"
     },
     "Discipline": {
       "Available": "Доступно персонажу",
@@ -905,5 +910,10 @@
   "VTM_REVISED.Discipline.Add": "Добавить дисциплину",
   "VTM_REVISED.Discipline.Added": "Дисциплина добавлена: {name}",
   "VTM_REVISED.Discipline.AlreadyKnown": "Эта дисциплина уже есть у персонажа.",
-  "VTM_REVISED.Discipline.KnownSuffix": "уже есть"
+  "VTM_REVISED.Discipline.KnownSuffix": "уже есть",
+  "VTM_REVISED.Clan.Theme": "Темы и атмосфера",
+  "VTM_REVISED.Clan.Embrace": "Кого обращают",
+  "VTM_REVISED.Clan.SocietyPlace": "Место в обществе Сородичей",
+  "VTM_REVISED.Clan.CharacterHooks": "Идеи персонажей",
+  "VTM_REVISED.Clan.StorytellerHooks": "Зацепки для хроники"
 }

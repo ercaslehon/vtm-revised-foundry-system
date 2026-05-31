@@ -3,6 +3,7 @@ import { VTMClanCard, findClanItemForName } from "./clan-card.mjs";
 import { VTMDisciplineCard } from "./discipline-card.mjs";
 import { VTMMeritFlawCard } from "./merit-flaw-card.mjs";
 import { VTMArchetypeCard, findArchetypeForName } from "./archetype-card.mjs";
+import { VTMMoralityPathCard, findMoralityPathItemForName } from "./morality-path-card.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -26,9 +27,10 @@ function getFormElement(htmlOrElement) {
   return null;
 }
 
-const STEP_KEYS = ["clan", "attributes", "abilities", "advantages", "freebies", "summary"];
+const STEP_KEYS = ["clan", "morality", "attributes", "abilities", "advantages", "freebies", "summary"];
 const STEP_TITLES = {
   clan: "Клан и основа",
+  morality: "Путь / Дорога",
   attributes: "Характеристики 7/5/3",
   abilities: "Способности 13/9/5",
   advantages: "Дисциплины, факты и добродетели",
@@ -136,7 +138,11 @@ function buildChecklistForActor(actor) {
   const formatSorted = values => values.join("/");
   const groupDetails = rows => rows.map(r => `${r.label}: ${r.points}`).join("; ");
 
+  const selectedPathName = String(system.resources?.pathName || "Человечность").trim() || "Человечность";
+  const selectedPathItem = typeof findMoralityPathItemForName === "function" ? findMoralityPathItemForName(selectedPathName) : null;
+
   const baseRows = [
+    row({ label: "Путь / Дорога", detail: selectedPathItem ? selectedPathItem.name : selectedPathName, ok: Boolean(selectedPathName), warn: !selectedPathItem && selectedPathName !== "Человечность", warning: !selectedPathItem && selectedPathName !== "Человечность" ? "Название задано вручную или каталог Путей/Дорог не импортирован." : "" }),
     row({ label: "Точки по характеристикам", detail: `цель 7/5/3, факт ${formatSorted(attributeSorted)} (${groupDetails(attributeTotalsByGroup)})`, ok: attributeOk, warn: attributeOver, warning: attributeOver ? "Превышение уйдёт в свободные очки." : "" }),
     row({ label: "Точки по способностям", detail: `цель 13/9/5, факт ${formatSorted(abilitySorted)} (${groupDetails(abilityTotalsByGroup)})`, ok: abilityOk, warn: abilityOver, warning: abilityOver ? "Превышение уйдёт в свободные очки." : "" }),
     row({ label: "Не больше 3 точек на способность", detail: abilityOverThree.length ? abilityOverThree.join(", ") : "нарушений нет", ok: !abilityOverThree.length, warn: Boolean(abilityOverThree.length), warning: abilityOverThree.length ? "На первичном этапе способность не должна быть выше 3." : "" }),
@@ -219,6 +225,8 @@ export class VTMCharacterCreationWizard extends HandlebarsApplicationMixin(Appli
       selectedClan: findClanItemForName(actor.system?.profile?.clan),
       selectedNature: findArchetypeForName(actor.system?.profile?.nature),
       selectedDemeanor: findArchetypeForName(actor.system?.profile?.demeanor),
+      selectedMoralityPath: this._resolveMoralityPath(actor.system?.resources?.pathName || "Человечность"),
+      moralityOptions: this._buildMoralityPathOptions(),
       generationCaps: generationCapsForActor(actor),
       generationOptions: VTM_REVISED.generationOptions,
       clanOptions: VTM_REVISED.clanOptions,
@@ -298,6 +306,12 @@ export class VTMCharacterCreationWizard extends HandlebarsApplicationMixin(Appli
         }
         await new VTMArchetypeCard({ actor: this.actor, archetype: findArchetypeForName(value), kind }).render({ force: true });
       });
+    });
+
+    element.querySelector(".wizard-morality-card")?.addEventListener("click", async event => {
+      event.preventDefault();
+      const value = element.querySelector("[name='system.resources.pathName']")?.value || this.actor.system?.resources?.pathName || "Человечность";
+      await this._openMoralityPathCard(value);
     });
 
     element.querySelectorAll("[name^='system.'], [name='name']").forEach(input => {
@@ -425,6 +439,42 @@ export class VTMCharacterCreationWizard extends HandlebarsApplicationMixin(Appli
         };
       })
     }));
+  }
+
+  _buildMoralityPathOptions() {
+    const catalog = Array.from(game.items ?? [])
+      .filter(item => item.type === "moralityPath")
+      .sort((a, b) => {
+        const ca = String(a.system?.category || "");
+        const cb = String(b.system?.category || "");
+        const c = ca.localeCompare(cb);
+        return c || a.name.localeCompare(b.name);
+      });
+
+    if (catalog.length) return catalog.map(item => ({
+      id: item.name,
+      name: item.name,
+      category: item.system?.category || "path",
+      label: `${item.system?.category === "road" ? "Дорога" : item.system?.category === "humanity" ? "Человечность" : "Путь"} · ${item.name}`
+    }));
+
+    return [
+      { id: "Человечность", name: "Человечность", category: "humanity", label: "Человечность · Человечность" }
+    ];
+  }
+
+  _resolveMoralityPath(value = "") {
+    const raw = String(value || "Человечность").trim() || "Человечность";
+    const item = findMoralityPathItemForName(raw);
+    if (item) return { name: item.name, item, category: item.system?.category || "path", imported: true };
+    return { name: raw, item: null, category: raw === "Человечность" ? "humanity" : "custom", imported: false };
+  }
+
+  async _openMoralityPathCard(value = "") {
+    const pathName = String(value || this.actor.system?.resources?.pathName || "Человечность").trim() || "Человечность";
+    const item = findMoralityPathItemForName(pathName);
+    if (!item) ui.notifications?.warn?.("Каталог Путей и Дорог не импортирован или выбранное название не найдено.");
+    return new VTMMoralityPathCard({ actor: this.actor, moralityPath: item }).render({ force: true });
   }
 
   _abilityGroups() {

@@ -49,6 +49,14 @@ export class VTMClanCard extends HandlebarsApplicationMixin(ApplicationV2) {
     const sourceBook = system.sourceBook || system.audit?.sourceBook || "";
     const sourcePage = system.sourcePage || system.audit?.sourcePage || "";
 
+    const theme = system.theme || "";
+    const embrace = system.embrace || "";
+    const societyPlace = system.societyPlace || "";
+    const characterHooks = system.characterHooks || "";
+    const storytellerHooks = system.storytellerHooks || "";
+    const hasExpandedClanSections = Boolean(theme || embrace || societyPlace || characterHooks || storytellerHooks);
+    const legacyRoleplayTips = system.roleplayTips || system.mechanics?.automationNotes || "";
+
     return {
       ...context,
       actor: this.actor,
@@ -67,7 +75,12 @@ export class VTMClanCard extends HandlebarsApplicationMixin(ApplicationV2) {
       organization: system.organization || "",
       stereotypes: system.stereotypes || "",
       opinion: system.opinion || "",
-      roleplayTips: system.roleplayTips || system.mechanics?.automationNotes || ""
+      roleplayTips: hasExpandedClanSections ? "" : legacyRoleplayTips,
+      theme,
+      embrace,
+      societyPlace,
+      characterHooks,
+      storytellerHooks
     };
   }
 }

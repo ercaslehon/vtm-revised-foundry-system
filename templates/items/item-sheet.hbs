@@ -11,6 +11,11 @@
       <label>{{localize "VTM_REVISED.Item.Category"}} <input name="system.category" value="{{system.category}}"/></label>
       <label>{{localize "VTM_REVISED.Item.Slug"}} <input name="system.slug" value="{{system.slug}}"/></label>
       <label>{{localize "VTM_REVISED.Item.Aliases"}} <input name="system.aliases" value="{{system.aliases}}"/></label>
+      <label>{{localize "VTM_REVISED.Clan.Theme"}} {{editor system.theme target="system.theme" button=true editable=editable}}</label>
+      <label>{{localize "VTM_REVISED.Clan.Embrace"}} {{editor system.embrace target="system.embrace" button=true editable=editable}}</label>
+      <label>{{localize "VTM_REVISED.Clan.SocietyPlace"}} {{editor system.societyPlace target="system.societyPlace" button=true editable=editable}}</label>
+      <label>{{localize "VTM_REVISED.Clan.CharacterHooks"}} {{editor system.characterHooks target="system.characterHooks" button=true editable=editable}}</label>
+      <label>{{localize "VTM_REVISED.Clan.StorytellerHooks"}} {{editor system.storytellerHooks target="system.storytellerHooks" button=true editable=editable}}</label>
     {{else if (eq item.type "sect")}}
       <label>{{localize "VTM_REVISED.Item.Category"}} <input name="system.category" value="{{system.category}}"/></label>
       <label>{{localize "VTM_REVISED.Item.Slug"}} <input name="system.slug" value="{{system.slug}}"/></label>

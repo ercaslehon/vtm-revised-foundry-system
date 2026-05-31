@@ -93,9 +93,54 @@
         </section>
       {{/if}}
 
+      {{#if (eq stepKey "morality")}}
+        <section class="wizard-panel wizard-morality-step">
+          <h2>Шаг 2. Выберите Путь или Дорогу</h2>
+          <p class="wizard-hint">Моральная шкала определяет этику персонажа, добродетели, иерархию грехов и то, как Storyteller будет проверять деградацию. Да, мораль в ВТМ тоже надо выбирать руками, потому что само оно обычно выбирает пожар.</p>
+
+          <div class="wizard-morality-grid">
+            <article class="wizard-subpanel">
+              <h3>Моральная шкала</h3>
+              <label>Путь / Дорога
+                <div class="wizard-inline-control">
+                  <select name="system.resources.pathName">
+                    {{#each moralityOptions as |path|}}
+                      <option value="{{path.name}}" {{#if (eq ../system.resources.pathName path.name)}}selected{{/if}}>{{path.label}}</option>
+                    {{/each}}
+                    {{#if selectedMoralityPath}}
+                      {{#unless selectedMoralityPath.imported}}
+                        <option value="{{selectedMoralityPath.name}}" selected>{{selectedMoralityPath.name}} · вручную</option>
+                      {{/unless}}
+                    {{/if}}
+                  </select>
+                  <button type="button" class="wizard-morality-card" title="Открыть описание выбранного Пути или Дороги"><i class="fas fa-book-open"></i></button>
+                </div>
+              </label>
+              <label>Начальное значение
+                <input type="number" name="system.resources.humanity.value" value="{{system.resources.humanity.value}}" min="0" max="10"/>
+              </label>
+              <label>Максимум шкалы
+                <input type="number" name="system.resources.humanity.max" value="{{system.resources.humanity.max}}" min="1" max="10"/>
+              </label>
+            </article>
+
+            <article class="wizard-subpanel wizard-morality-summary">
+              <h3>Текущий выбор</h3>
+              <p><strong>{{selectedMoralityPath.name}}</strong></p>
+              {{#if selectedMoralityPath.imported}}
+                <p class="wizard-hint">Карточка найдена в каталоге. Книжечка откроет описание, этику и иерархию грехов.</p>
+              {{else}}
+                <p class="wizard-warning">Карточка не найдена в каталоге. Можно оставить значение вручную, но для справки импортируй каталог: <code>game.vtmRevised.importBuiltInMoralityCatalog()</code>.</p>
+              {{/if}}
+              <p class="wizard-hint">Если персонаж остаётся на Человечности, просто оставь «Человечность». Если он идёт по Пути Просветления или Дороге Dark Ages, выбери её здесь до финальной проверки.</p>
+            </article>
+          </div>
+        </section>
+      {{/if}}
+
       {{#if (eq stepKey "attributes")}}
         <section class="wizard-panel">
-          <h2>Шаг 2. Распределите Характеристики 7/5/3</h2>
+          <h2>Шаг 3. Распределите Характеристики 7/5/3</h2>
           <p class="wizard-hint">Каждая характеристика уже имеет базовую 1 точку. В чеклист считаются только точки сверх первой. Максимум по поколению {{generationCaps.label}}: {{generationCaps.traitMax}}.</p>
           <div class="wizard-trait-groups">
             {{#each attributeGroups as |group|}}
@@ -124,7 +169,7 @@
 
       {{#if (eq stepKey "abilities")}}
         <section class="wizard-panel">
-          <h2>Шаг 3. Распределите Способности 13/9/5</h2>
+          <h2>Шаг 4. Распределите Способности 13/9/5</h2>
           <p class="wizard-hint">На первичном этапе способность не должна быть выше 3. Максимум по поколению {{generationCaps.label}}: {{generationCaps.traitMax}}. Система предупреждает, но не запрещает, потому что мастера всё равно любят исключения.</p>
           <div class="wizard-trait-groups">
             {{#each abilityGroups as |group|}}
@@ -153,7 +198,7 @@
 
       {{#if (eq stepKey "advantages")}}
         <section class="wizard-panel">
-          <h2>Шаг 4. Дисциплины, факты биографии, добродетели</h2>
+          <h2>Шаг 5. Дисциплины, факты биографии, добродетели</h2>
           <div class="wizard-columns-2">
             <article class="wizard-subpanel">
               <h3>Дисциплины · цель 3, факт {{checklist.totals.disciplineTotal}}</h3>
@@ -208,7 +253,7 @@
 
       {{#if (eq stepKey "freebies")}}
         <section class="wizard-panel">
-          <h2>Шаг 5. Свободные очки, достоинства и недостатки</h2>
+          <h2>Шаг 6. Свободные очки, достоинства и недостатки</h2>
           <div class="freebie-pool-row wizard-freebie-head">
             <label>Изначальный пул свободных очков
               <input type="number" name="system.creation.freebiePool" value="{{checklist.freebie.freebiePool}}"/>

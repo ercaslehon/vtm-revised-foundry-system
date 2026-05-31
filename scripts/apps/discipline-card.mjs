@@ -14,30 +14,74 @@ function normalizeName(value = "") {
     .replace(/[\s_\-]+/g, " ");
 }
 
+const DISCIPLINE_NAME_EQUIVALENTS = [
+  ["даймонион", "демонизм", "daimoinon", "daimonion"],
+  ["духус", "шаманство", "spiritus"],
+  ["obeah", "обеах"],
+  ["valeren", "валерен"]
+].map(group => group.map(normalizeName));
+
+function expandDisciplineNames(values = []) {
+  const out = new Set();
+  for (const value of values) {
+    const normalized = normalizeName(value);
+    if (!normalized) continue;
+    out.add(normalized);
+    for (const group of DISCIPLINE_NAME_EQUIVALENTS) {
+      if (!group.includes(normalized)) continue;
+      for (const alias of group) out.add(alias);
+    }
+  }
+  return Array.from(out);
+}
+
+function splitAliases(value = "") {
+  return String(value ?? "")
+    .split(",")
+    .map(part => part.trim())
+    .filter(Boolean);
+}
+
 function itemDescription(item) {
   const desc = item?.system?.description ?? {};
   return desc.value || desc.system || desc.chat || "";
 }
 
 function matchParentDiscipline(power, discipline) {
-  const parent = normalizeName(power?.system?.parentDiscipline ?? power?.system?.discipline ?? "");
-  const disciplineNames = [
+  const parentNames = expandDisciplineNames([
+    power?.system?.parentDiscipline,
+    power?.system?.discipline,
+    ...(splitAliases(power?.system?.aliases))
+  ]);
+  const disciplineNames = expandDisciplineNames([
     discipline?.name,
     discipline?.system?.rulesId,
     discipline?.system?.rawName,
-    discipline?.system?.source
-  ].map(normalizeName).filter(Boolean);
+    discipline?.system?.source,
+    ...(splitAliases(discipline?.system?.aliases))
+  ]);
 
-  if (!parent) return false;
-  return disciplineNames.some(name => parent === name);
+  if (!parentNames.length || !disciplineNames.length) return false;
+  return parentNames.some(parent => disciplineNames.includes(parent));
 }
 
 
 function matchDisciplineItem(candidate, discipline) {
   if (!candidate || !["discipline", "disciplinePath"].includes(candidate.type)) return false;
   if (discipline?.type && candidate.type !== discipline.type) return false;
-  const candidateNames = [candidate.name, candidate.system?.rulesId, candidate.system?.rawName].map(normalizeName).filter(Boolean);
-  const disciplineNames = [discipline?.name, discipline?.system?.rulesId, discipline?.system?.rawName, discipline?.system?.source].map(normalizeName).filter(Boolean);
+  const candidateNames = expandDisciplineNames([
+    candidate.name,
+    candidate.system?.rulesId,
+    candidate.system?.rawName,
+    ...(splitAliases(candidate.system?.aliases))
+  ]);
+  const disciplineNames = expandDisciplineNames([
+    discipline?.name,
+    discipline?.system?.rulesId,
+    discipline?.system?.rawName,
+    discipline?.system?.source,
+    ...(splitAliases(discipline?.system?.aliases))
+  ]);
   return candidateNames.some(name => disciplineNames.includes(name));
 }
 
