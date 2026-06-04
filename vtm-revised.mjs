@@ -551,3 +551,124 @@ async function openMoralityPathCard(actorOrRef) {
   if (!path) ui.notifications?.warn?.("Справочник Пути/Дороги не найден. Импортируй каталог: game.vtmRevised.importBuiltInMoralityCatalog()");
   return new VTMMoralityPathCard({ actor, moralityPath: path }).render({ force: true });
 }
+
+/**
+ * v10.0.1 visible item directory import actions.
+ * Foundry V14 sidebar layouts may not expose a usable directory footer.
+ * Keep the old footer buttons, but also add a compact top action bar.
+ */
+function vtmEnsureItemImportActionBar(element) {
+  let bar = element.querySelector(".vtm-top-item-import-actions");
+  if (bar) return bar;
+
+  bar = document.createElement("div");
+  bar.classList.add("vtm-top-item-import-actions");
+
+  const header =
+    element.querySelector(".directory-header") ??
+    element.querySelector("header") ??
+    element.querySelector(".directory-list");
+
+  if (header?.insertAdjacentElement) {
+    header.insertAdjacentElement("afterend", bar);
+  } else {
+    element.prepend(bar);
+  }
+
+  return bar;
+}
+
+function vtmAddTopImportButton(bar, className, icon, label, handler) {
+  if (!bar || bar.querySelector(`.${className}`)) return;
+
+  const button = document.createElement("button");
+  button.type = "button";
+  button.classList.add(className);
+  button.innerHTML = `<i class="${icon}"></i> <span>${label}</span>`;
+  button.addEventListener("click", async event => {
+    event.preventDefault();
+    event.stopPropagation();
+    await handler();
+  });
+
+  bar.append(button);
+}
+
+Hooks.on("renderItemDirectory", (app, html) => {
+  const element = getRenderedElement(app, html);
+  if (!element || !game.user?.isGM) return;
+
+  const bar = vtmEnsureItemImportActionBar(element);
+
+  vtmAddTopImportButton(
+    bar,
+    "vtm-top-import-rules-json",
+    "fas fa-book",
+    game.i18n.localize("VTM_REVISED.Import.RulesJson") || "JSON",
+    () => RulesJsonImporter.renderDialog()
+  );
+
+  vtmAddTopImportButton(
+    bar,
+    "vtm-top-import-core-disciplines",
+    "fas fa-droplet",
+    game.i18n.localize("VTM_REVISED.Import.CoreDisciplines") || "Дисциплины",
+    () => RulesJsonImporter.importBuiltInCoreDisciplines()
+  );
+
+  vtmAddTopImportButton(
+    bar,
+    "vtm-top-import-blood-magic",
+    "fas fa-wand-magic-sparkles",
+    game.i18n.localize("VTM_REVISED.Import.BloodMagic") || "Магия крови",
+    () => RulesJsonImporter.importBuiltInBloodMagicCatalog()
+  );
+
+  vtmAddTopImportButton(
+    bar,
+    "vtm-top-import-rituals",
+    "fas fa-scroll",
+    game.i18n.localize("VTM_REVISED.Import.Rituals") || "Ритуалы",
+    () => RulesJsonImporter.importBuiltInRitualCatalog()
+  );
+
+  vtmAddTopImportButton(
+    bar,
+    "vtm-top-import-clans",
+    "fas fa-users",
+    game.i18n.localize("VTM_REVISED.Import.Clans") || "Кланы",
+    () => RulesJsonImporter.importBuiltInClanCatalog()
+  );
+
+  vtmAddTopImportButton(
+    bar,
+    "vtm-top-import-weapons",
+    "fas fa-gun",
+    game.i18n.localize("VTM_REVISED.Import.Weapons") || "Оружие",
+    () => RulesJsonImporter.importBuiltInWeaponCatalog()
+  );
+
+  vtmAddTopImportButton(
+    bar,
+    "vtm-top-import-backgrounds",
+    "fas fa-address-book",
+    game.i18n.localize("VTM_REVISED.Import.Backgrounds") || "Дополнения",
+    () => RulesJsonImporter.importBuiltInBackgroundCatalog()
+  );
+
+  vtmAddTopImportButton(
+    bar,
+    "vtm-top-import-merits-flaws",
+    "fas fa-scale-balanced",
+    game.i18n.localize("VTM_REVISED.Import.MeritsFlaws") || "Д/Н",
+    () => RulesJsonImporter.importBuiltInMeritsFlawsCatalog()
+  );
+
+  vtmAddTopImportButton(
+    bar,
+    "vtm-top-import-morality",
+    "fas fa-road",
+    game.i18n.localize("VTM_REVISED.Morality.Import") || "Пути",
+    () => RulesJsonImporter.importBuiltInMoralityCatalog()
+  );
+});

@@ -1,235 +1,243 @@
-{
-  "id": "vtm-revised",
-  "title": "Vampire: The Masquerade Revised - Unofficial System",
-  "description": "Unofficial Foundry VTT system for Vampire: The Masquerade v3 Revised. Includes actor sheets, portraits, generation limits, Nature/Demeanor and clan reference cards, disciplines, blood magic, rituals, weapons, merits/flaws, Roads/Paths morality reference, and a guided character creation wizard. Morality Path/Road hierarchy tables are verified against wod.su in v9.4.0.",
-  "version": "10.0.0",
-  "compatibility": {
-    "minimum": "13.347",
-    "verified": "14"
-  },
-  "url": "https://github.com/ercaslehon/vtm-revised-foundry-system",
-  "manifest": "https://raw.githubusercontent.com/ercaslehon/vtm-revised-foundry-system/main/system.json",
-  "download": "https://github.com/ercaslehon/vtm-revised-foundry-system/releases/download/v10.0.0/vtm-revised-v10.0.0.zip",
-  "authors": [
-    {
-      "name": "Дима и команда хроники",
-      "flags": {}
-    }
-  ],
-  "esmodules": [
-    "vtm-revised.mjs"
-  ],
-  "styles": [
-    "styles/vtm-revised.css"
-  ],
-  "languages": [
-    {
-      "lang": "ru",
-      "name": "Русский",
-      "path": "lang/ru.json",
-      "flags": {}
-    },
-    {
-      "lang": "en",
-      "name": "English",
-      "path": "lang/en.json",
-      "flags": {}
-    }
-  ],
-  "documentTypes": {
-    "Actor": {
-      "vampire": {
-        "htmlFields": [
-          "profile.appearance",
-          "profile.history",
-          "profile.goals",
-          "profile.notes",
-          "profile.alliesContacts",
-          "profile.possessions"
-        ],
-        "filePathFields": {
-          "profile.avatar": [
-            "IMAGE"
-          ]
-        }
-      },
-      "npc": {
-        "htmlFields": [
-          "profile.appearance",
-          "profile.history",
-          "profile.notes"
-        ],
-        "filePathFields": {
-          "profile.avatar": [
-            "IMAGE"
-          ]
-        }
-      }
-    },
-    "Item": {
-      "discipline": {
-        "htmlFields": [
-          "description.value",
-          "description.system",
-          "description.chat"
-        ]
-      },
-      "disciplinePath": {
-        "htmlFields": [
-          "description.value",
-          "description.system",
-          "description.chat"
-        ]
-      },
-      "ritual": {
-        "htmlFields": [
-          "description.value",
-          "description.system",
-          "description.chat",
-          "description.components",
-          "mechanics.activation",
-          "mechanics.duration",
-          "mechanics.successScaling",
-          "mechanics.resistance",
-          "mechanics.failure",
-          "mechanics.botch",
-          "mechanics.limits",
-          "mechanics.automationNotes",
-          "audit.notes"
-        ]
-      },
-      "merit": {
-        "htmlFields": [
-          "description.value",
-          "description.system",
-          "description.chat",
-          "mechanics.activation",
-          "mechanics.duration",
-          "mechanics.successScaling",
-          "mechanics.resistance",
-          "mechanics.failure",
-          "mechanics.botch",
-          "mechanics.limits",
-          "mechanics.automationNotes",
-          "audit.notes",
-          "effect.notes"
-        ]
-      },
-      "flaw": {
-        "htmlFields": [
-          "description.value",
-          "description.system",
-          "description.chat",
-          "mechanics.activation",
-          "mechanics.duration",
-          "mechanics.successScaling",
-          "mechanics.resistance",
-          "mechanics.failure",
-          "mechanics.botch",
-          "mechanics.limits",
-          "mechanics.automationNotes",
-          "audit.notes",
-          "effect.notes"
-        ]
-      },
-      "background": {
-        "htmlFields": [
-          "description.value"
-        ]
-      },
-      "equipment": {
-        "htmlFields": [
-          "description.value"
-        ]
-      },
-      "disciplinePower": {
-        "htmlFields": [
-          "description.value",
-          "description.system",
-          "description.chat"
-        ]
-      },
-      "clan": {
-        "htmlFields": [
-          "description.value",
-          "description.system",
-          "description.chat",
-          "weakness",
-          "organization",
-          "stereotypes",
-          "opinion",
-          "roleplayTips",
-          "mechanics.activation",
-          "mechanics.duration",
-          "mechanics.successScaling",
-          "mechanics.resistance",
-          "mechanics.failure",
-          "mechanics.botch",
-          "mechanics.limits",
-          "mechanics.automationNotes",
-          "audit.notes"
-        ]
-      },
-      "sect": {
-        "htmlFields": [
-          "description.value",
-          "description.system",
-          "description.chat"
-        ]
-      },
-      "ruleEntry": {
-        "htmlFields": [
-          "description.value",
-          "description.system",
-          "description.chat"
-        ]
-      },
-      "weapon": {
-        "htmlFields": [
-          "description.value",
-          "description.system",
-          "description.chat",
-          "mechanics.activation",
-          "mechanics.duration",
-          "mechanics.successScaling",
-          "mechanics.resistance",
-          "mechanics.failure",
-          "mechanics.botch",
-          "mechanics.limits",
-          "mechanics.automationNotes",
-          "audit.notes"
-        ]
-      },
-      "moralityPath": {
-        "htmlFields": [
-          "description.value",
-          "description.system",
-          "description.chat",
-          "ethics",
-          "hierarchy",
-          "aura",
-          "virtues",
-          "initiation",
-          "mechanics.activation",
-          "mechanics.duration",
-          "mechanics.successScaling",
-          "mechanics.resistance",
-          "mechanics.failure",
-          "mechanics.botch",
-          "mechanics.limits",
-          "mechanics.automationNotes",
-          "audit.notes"
-        ]
-      }
-    }
-  },
-  "packs": [],
-  "socket": false,
-  "initiative": "1d10",
-  "grid": {
-    "distance": 1,
-    "units": "m"
-  },
-  "primaryTokenAttribute": "resources.blood",
-  "secondaryTokenAttribute": "resources.willpower"
+﻿{
+    "id":  "vtm-revised",
+    "title":  "Vampire: The Masquerade Revised - Unofficial System",
+    "description":  "Unofficial Foundry VTT system for Vampire: The Masquerade v3 Revised. Includes actor sheets, portraits, generation limits, Nature/Demeanor and clan reference cards, disciplines, blood magic, rituals, weapons, merits/flaws, Roads/Paths morality reference, and a guided character creation wizard. Morality Path/Road hierarchy tables are verified against wod.su in v9.4.0.",
+    "version":  "10.0.1",
+    "compatibility":  {
+                          "minimum":  "13.347",
+                          "verified":  "14"
+                      },
+    "url":  "https://github.com/ercaslehon/vtm-revised-foundry-system",
+    "manifest":  "https://raw.githubusercontent.com/ercaslehon/vtm-revised-foundry-system/main/system.json",
+    "download":  "https://github.com/ercaslehon/vtm-revised-foundry-system/releases/download/v10.0.1/vtm-revised-v10.0.1.zip",
+    "authors":  [
+                    {
+                        "name":  "Р”РёРјР° Рё РєРѕРјР°РЅРґР° С…СЂРѕРЅРёРєРё",
+                        "flags":  {
+
+                                  }
+                    }
+                ],
+    "esmodules":  [
+                      "vtm-revised.mjs"
+                  ],
+    "styles":  [
+                   "styles/vtm-revised.css"
+               ],
+    "languages":  [
+                      {
+                          "lang":  "ru",
+                          "name":  "Р СѓСЃСЃРєРёР№",
+                          "path":  "lang/ru.json",
+                          "flags":  {
+
+                                    }
+                      },
+                      {
+                          "lang":  "en",
+                          "name":  "English",
+                          "path":  "lang/en.json",
+                          "flags":  {
+
+                                    }
+                      }
+                  ],
+    "documentTypes":  {
+                          "Actor":  {
+                                        "vampire":  {
+                                                        "htmlFields":  [
+                                                                           "profile.appearance",
+                                                                           "profile.history",
+                                                                           "profile.goals",
+                                                                           "profile.notes",
+                                                                           "profile.alliesContacts",
+                                                                           "profile.possessions"
+                                                                       ],
+                                                        "filePathFields":  {
+                                                                               "profile.avatar":  [
+                                                                                                      "IMAGE"
+                                                                                                  ]
+                                                                           }
+                                                    },
+                                        "npc":  {
+                                                    "htmlFields":  [
+                                                                       "profile.appearance",
+                                                                       "profile.history",
+                                                                       "profile.notes"
+                                                                   ],
+                                                    "filePathFields":  {
+                                                                           "profile.avatar":  [
+                                                                                                  "IMAGE"
+                                                                                              ]
+                                                                       }
+                                                }
+                                    },
+                          "Item":  {
+                                       "discipline":  {
+                                                          "htmlFields":  [
+                                                                             "description.value",
+                                                                             "description.system",
+                                                                             "description.chat"
+                                                                         ]
+                                                      },
+                                       "disciplinePath":  {
+                                                              "htmlFields":  [
+                                                                                 "description.value",
+                                                                                 "description.system",
+                                                                                 "description.chat"
+                                                                             ]
+                                                          },
+                                       "ritual":  {
+                                                      "htmlFields":  [
+                                                                         "description.value",
+                                                                         "description.system",
+                                                                         "description.chat",
+                                                                         "description.components",
+                                                                         "mechanics.activation",
+                                                                         "mechanics.duration",
+                                                                         "mechanics.successScaling",
+                                                                         "mechanics.resistance",
+                                                                         "mechanics.failure",
+                                                                         "mechanics.botch",
+                                                                         "mechanics.limits",
+                                                                         "mechanics.automationNotes",
+                                                                         "audit.notes"
+                                                                     ]
+                                                  },
+                                       "merit":  {
+                                                     "htmlFields":  [
+                                                                        "description.value",
+                                                                        "description.system",
+                                                                        "description.chat",
+                                                                        "mechanics.activation",
+                                                                        "mechanics.duration",
+                                                                        "mechanics.successScaling",
+                                                                        "mechanics.resistance",
+                                                                        "mechanics.failure",
+                                                                        "mechanics.botch",
+                                                                        "mechanics.limits",
+                                                                        "mechanics.automationNotes",
+                                                                        "audit.notes",
+                                                                        "effect.notes"
+                                                                    ]
+                                                 },
+                                       "flaw":  {
+                                                    "htmlFields":  [
+                                                                       "description.value",
+                                                                       "description.system",
+                                                                       "description.chat",
+                                                                       "mechanics.activation",
+                                                                       "mechanics.duration",
+                                                                       "mechanics.successScaling",
+                                                                       "mechanics.resistance",
+                                                                       "mechanics.failure",
+                                                                       "mechanics.botch",
+                                                                       "mechanics.limits",
+                                                                       "mechanics.automationNotes",
+                                                                       "audit.notes",
+                                                                       "effect.notes"
+                                                                   ]
+                                                },
+                                       "background":  {
+                                                          "htmlFields":  [
+                                                                             "description.value"
+                                                                         ]
+                                                      },
+                                       "equipment":  {
+                                                         "htmlFields":  [
+                                                                            "description.value"
+                                                                        ]
+                                                     },
+                                       "disciplinePower":  {
+                                                               "htmlFields":  [
+                                                                                  "description.value",
+                                                                                  "description.system",
+                                                                                  "description.chat"
+                                                                              ]
+                                                           },
+                                       "clan":  {
+                                                    "htmlFields":  [
+                                                                       "description.value",
+                                                                       "description.system",
+                                                                       "description.chat",
+                                                                       "weakness",
+                                                                       "organization",
+                                                                       "stereotypes",
+                                                                       "opinion",
+                                                                       "roleplayTips",
+                                                                       "mechanics.activation",
+                                                                       "mechanics.duration",
+                                                                       "mechanics.successScaling",
+                                                                       "mechanics.resistance",
+                                                                       "mechanics.failure",
+                                                                       "mechanics.botch",
+                                                                       "mechanics.limits",
+                                                                       "mechanics.automationNotes",
+                                                                       "audit.notes"
+                                                                   ]
+                                                },
+                                       "sect":  {
+                                                    "htmlFields":  [
+                                                                       "description.value",
+                                                                       "description.system",
+                                                                       "description.chat"
+                                                                   ]
+                                                },
+                                       "ruleEntry":  {
+                                                         "htmlFields":  [
+                                                                            "description.value",
+                                                                            "description.system",
+                                                                            "description.chat"
+                                                                        ]
+                                                     },
+                                       "weapon":  {
+                                                      "htmlFields":  [
+                                                                         "description.value",
+                                                                         "description.system",
+                                                                         "description.chat",
+                                                                         "mechanics.activation",
+                                                                         "mechanics.duration",
+                                                                         "mechanics.successScaling",
+                                                                         "mechanics.resistance",
+                                                                         "mechanics.failure",
+                                                                         "mechanics.botch",
+                                                                         "mechanics.limits",
+                                                                         "mechanics.automationNotes",
+                                                                         "audit.notes"
+                                                                     ]
+                                                  },
+                                       "moralityPath":  {
+                                                            "htmlFields":  [
+                                                                               "description.value",
+                                                                               "description.system",
+                                                                               "description.chat",
+                                                                               "ethics",
+                                                                               "hierarchy",
+                                                                               "aura",
+                                                                               "virtues",
+                                                                               "initiation",
+                                                                               "mechanics.activation",
+                                                                               "mechanics.duration",
+                                                                               "mechanics.successScaling",
+                                                                               "mechanics.resistance",
+                                                                               "mechanics.failure",
+                                                                               "mechanics.botch",
+                                                                               "mechanics.limits",
+                                                                               "mechanics.automationNotes",
+                                                                               "audit.notes"
+                                                                           ]
+                                                        }
+                                   }
+                      },
+    "packs":  [
+
+              ],
+    "socket":  false,
+    "initiative":  "1d10",
+    "grid":  {
+                 "distance":  1,
+                 "units":  "m"
+             },
+    "primaryTokenAttribute":  "resources.blood",
+    "secondaryTokenAttribute":  "resources.willpower"
 }

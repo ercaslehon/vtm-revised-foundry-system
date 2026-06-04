@@ -1,4 +1,4 @@
-import { rollDicePool } from "../dice/dice-pool.mjs";
+﻿import { rollDicePool } from "../dice/dice-pool.mjs";
 import { VTM_REVISED } from "../config.mjs";
 import { applyAutomationCost, normalizeAutomationCost } from "../utils/automation-costs.mjs";
 import { VTMDisciplineCard } from "../apps/discipline-card.mjs";
@@ -77,7 +77,7 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
     const selectedDemeanor = this._resolveArchetype(actor.system?.profile?.demeanor);
     const selectedClan = this._resolveClan(actor.system?.profile?.clan);
     const moralityOptions = this._buildMoralityPathOptions();
-    const selectedMoralityPath = this._resolveMoralityPath(actor.system?.resources?.pathName || "Человечность");
+    const selectedMoralityPath = this._resolveMoralityPath(actor.system?.resources?.pathName || "Р§РµР»РѕРІРµС‡РЅРѕСЃС‚СЊ");
 
     // Do not use foundry.utils.mergeObject here. ActorSheetV2 returns a context that already
     // contains document-like properties. Deep-merging an Actor instance makes Foundry try to
@@ -85,16 +85,16 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
     // "Cannot assign to read only property 'items' of object '#<VTMActor>'".
     // A plain object spread keeps the context shallow and safe. Yes, this is the kind of
     // trap that makes JavaScript feel like a cursed Tremere ritual.
-    const norm = value => String(value ?? "").trim().toLowerCase().replaceAll("ё", "е");
+    const norm = value => String(value ?? "").trim().toLowerCase().replaceAll("С‘", "Рµ");
     const pathMatches = (item, names) => names.map(norm).includes(norm(item.system?.parentDiscipline || item.system?.discipline || ""));
     const allPaths = items.filter(item => item.type === "disciplinePath");
     const bloodMagicGroups = [
-      { key: "thaumaturgy", parentName: "Тауматургия", aliases: ["Тауматургия", "Thaumaturgy"], title: game.i18n.localize("VTM_REVISED.BloodMagic.ThaumaturgyPaths") },
-      { key: "koldunic", parentName: "Колдовство", aliases: ["Колдовство", "Koldunic Sorcery"], title: game.i18n.localize("VTM_REVISED.BloodMagic.KoldunicPaths") },
-      { key: "necromancy", parentName: "Некромантия", aliases: ["Некромантия", "Necromancy"], title: game.i18n.localize("VTM_REVISED.BloodMagic.NecromancyPaths") },
-      { key: "darkThaumaturgy", parentName: "Темная Тауматургия", aliases: ["Темная Тауматургия", "Тёмная Тауматургия", "Dark Thaumaturgy"], title: game.i18n.localize("VTM_REVISED.BloodMagic.DarkThaumaturgyPaths") },
-      { key: "assamiteSorcery", parentName: "Чародейство Ассамитов", aliases: ["Чародейство Ассамитов", "Assamite Sorcery"], title: game.i18n.localize("VTM_REVISED.BloodMagic.AssamiteSorceryPaths") },
-      { key: "setiteSorcery", parentName: "Чародейство Сеттитов", aliases: ["Чародейство Сеттитов", "Setite Sorcery"], title: game.i18n.localize("VTM_REVISED.BloodMagic.SetiteSorceryPaths") }
+      { key: "thaumaturgy", parentName: "РўР°СѓРјР°С‚СѓСЂРіРёСЏ", aliases: ["РўР°СѓРјР°С‚СѓСЂРіРёСЏ", "Thaumaturgy"], title: game.i18n.localize("VTM_REVISED.BloodMagic.ThaumaturgyPaths") },
+      { key: "koldunic", parentName: "РљРѕР»РґРѕРІСЃС‚РІРѕ", aliases: ["РљРѕР»РґРѕРІСЃС‚РІРѕ", "Koldunic Sorcery"], title: game.i18n.localize("VTM_REVISED.BloodMagic.KoldunicPaths") },
+      { key: "necromancy", parentName: "РќРµРєСЂРѕРјР°РЅС‚РёСЏ", aliases: ["РќРµРєСЂРѕРјР°РЅС‚РёСЏ", "Necromancy"], title: game.i18n.localize("VTM_REVISED.BloodMagic.NecromancyPaths") },
+      { key: "darkThaumaturgy", parentName: "РўРµРјРЅР°СЏ РўР°СѓРјР°С‚СѓСЂРіРёСЏ", aliases: ["РўРµРјРЅР°СЏ РўР°СѓРјР°С‚СѓСЂРіРёСЏ", "РўС‘РјРЅР°СЏ РўР°СѓРјР°С‚СѓСЂРіРёСЏ", "Dark Thaumaturgy"], title: game.i18n.localize("VTM_REVISED.BloodMagic.DarkThaumaturgyPaths") },
+      { key: "assamiteSorcery", parentName: "Р§Р°СЂРѕРґРµР№СЃС‚РІРѕ РђСЃСЃР°РјРёС‚РѕРІ", aliases: ["Р§Р°СЂРѕРґРµР№СЃС‚РІРѕ РђСЃСЃР°РјРёС‚РѕРІ", "Assamite Sorcery"], title: game.i18n.localize("VTM_REVISED.BloodMagic.AssamiteSorceryPaths") },
+      { key: "setiteSorcery", parentName: "Р§Р°СЂРѕРґРµР№СЃС‚РІРѕ РЎРµС‚С‚РёС‚РѕРІ", aliases: ["Р§Р°СЂРѕРґРµР№СЃС‚РІРѕ РЎРµС‚С‚РёС‚РѕРІ", "Setite Sorcery"], title: game.i18n.localize("VTM_REVISED.BloodMagic.SetiteSorceryPaths") }
     ].map(group => ({
       ...group,
       items: allPaths.filter(item => pathMatches(item, group.aliases))
@@ -164,6 +164,24 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
     super._onRender(context, options);
     const element = this.element;
     if (!element) return;
+
+    // v10.0.1 sheet size guard.
+    // Foundry can remember an accidentally tiny window position.
+    // If that happens, the vampire sheet looks collapsed into a sad little nameplate.
+    try {
+      const current = this.position ?? {};
+      const width = Number(current.width || element.closest(".application")?.offsetWidth || 0);
+      const height = Number(current.height || element.closest(".application")?.offsetHeight || 0);
+
+      if (width < 1180 || height < 760) {
+        this.setPosition({
+          width: Math.max(width || 0, 1460),
+          height: Math.max(height || 0, 980)
+        });
+      }
+    } catch (err) {
+      console.debug("VtM Revised | Sheet size guard skipped", err);
+    }
 
     const applyActiveTab = (tab, { scroll = false } = {}) => {
       const safeTab = ["main", "powers", "profile"].includes(tab) ? tab : "main";
@@ -322,7 +340,7 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
 
     element.querySelectorAll(".morality-path-select").forEach(select => {
       select.addEventListener("change", async event => {
-        const value = event.currentTarget.value || "Человечность";
+        const value = event.currentTarget.value || "Р§РµР»РѕРІРµС‡РЅРѕСЃС‚СЊ";
         await this.actor.update({ "system.resources.pathName": value });
       });
     });
@@ -832,25 +850,25 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
       id: item.id,
       name: item.name,
       category: item.system?.category || "path",
-      label: `${item.system?.category === "road" ? "Дорога" : item.system?.category === "humanity" ? "Человечность" : "Путь"} · ${item.name}`
+      label: `${item.system?.category === "road" ? "Р”РѕСЂРѕРіР°" : item.system?.category === "humanity" ? "Р§РµР»РѕРІРµС‡РЅРѕСЃС‚СЊ" : "РџСѓС‚СЊ"} В· ${item.name}`
     }));
 
     return [
-      { id: "humanity", name: "Человечность", category: "humanity", label: "Человечность · Человечность" }
+      { id: "humanity", name: "Р§РµР»РѕРІРµС‡РЅРѕСЃС‚СЊ", category: "humanity", label: "Р§РµР»РѕРІРµС‡РЅРѕСЃС‚СЊ В· Р§РµР»РѕРІРµС‡РЅРѕСЃС‚СЊ" }
     ];
   }
 
   _resolveMoralityPath(value = "") {
-    const raw = String(value || "Человечность").trim();
+    const raw = String(value || "Р§РµР»РѕРІРµС‡РЅРѕСЃС‚СЊ").trim();
     const item = findMoralityPathItemForName(raw);
     if (item) return { name: item.name, item, category: item.system?.category || "path", imported: true };
-    return { name: raw, item: null, category: raw === "Человечность" ? "humanity" : "custom", imported: false };
+    return { name: raw, item: null, category: raw === "Р§РµР»РѕРІРµС‡РЅРѕСЃС‚СЊ" ? "humanity" : "custom", imported: false };
   }
 
   async _openMoralityPathCard() {
-    const pathName = this.actor.system?.resources?.pathName || "Человечность";
+    const pathName = this.actor.system?.resources?.pathName || "Р§РµР»РѕРІРµС‡РЅРѕСЃС‚СЊ";
     const item = findMoralityPathItemForName(pathName);
-    if (!item) ui.notifications?.warn?.("Каталог Путей и Дорог не импортирован или выбранное название не найдено.");
+    if (!item) ui.notifications?.warn?.("РљР°С‚Р°Р»РѕРі РџСѓС‚РµР№ Рё Р”РѕСЂРѕРі РЅРµ РёРјРїРѕСЂС‚РёСЂРѕРІР°РЅ РёР»Рё РІС‹Р±СЂР°РЅРЅРѕРµ РЅР°Р·РІР°РЅРёРµ РЅРµ РЅР°Р№РґРµРЅРѕ.");
     return new VTMMoralityPathCard({ actor: this.actor, moralityPath: item }).render({ force: true });
   }
 
@@ -877,7 +895,7 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
     return String(value ?? "")
       .trim()
       .toLowerCase()
-      .replaceAll("ё", "е")
+      .replaceAll("С‘", "Рµ")
       .replace(/[\s_\-]+/g, " ");
   }
 
@@ -1207,7 +1225,7 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
       const weapon = item.system?.weapon ?? {};
       const category = this._weaponCategoryLabel(weapon.category);
       const damage = this._weaponDamageLabel(item);
-      const label = `${category} · ${item.name} · ${damage}`;
+      const label = `${category} В· ${item.name} В· ${damage}`;
       return `<option value="${foundry.utils.escapeHTML(item.id)}">${foundry.utils.escapeHTML(label)}</option>`;
     }).join("");
 
@@ -1539,8 +1557,8 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
 
     const options = availableCandidates.map(({ item }) => {
       const level = Number(item.system?.level || 0);
-      const discipline = item.system?.discipline ? `${item.system.discipline} · ` : "";
-      const label = `${discipline}${level ? `${game.i18n.localize("VTM_REVISED.Item.Level")} ${level} · ` : ""}${item.name}`;
+      const discipline = item.system?.discipline ? `${item.system.discipline} В· ` : "";
+      const label = `${discipline}${level ? `${game.i18n.localize("VTM_REVISED.Item.Level")} ${level} В· ` : ""}${item.name}`;
       return `<option value="${foundry.utils.escapeHTML(item.id)}">${foundry.utils.escapeHTML(label)}</option>`;
     }).join("");
 
@@ -1653,8 +1671,8 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
 
     const options = availableCandidates.map(({ item }) => {
       const points = Number(item.system?.points || 0);
-      const category = item.system?.category ? `${item.system.category} · ` : "";
-      const label = `${category}${points ? `${points} · ` : ""}${item.name}`;
+      const category = item.system?.category ? `${item.system.category} В· ` : "";
+      const label = `${category}${points ? `${points} В· ` : ""}${item.name}`;
       return `<option value="${foundry.utils.escapeHTML(item.id)}">${foundry.utils.escapeHTML(label)}</option>`;
     }).join("");
 
@@ -1736,7 +1754,7 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
 
     const sum = values => values.reduce((total, value) => total + Number(value || 0), 0);
     const statusForExact = (isOk, hasOver = false) => isOk ? "ok" : (hasOver ? "warn" : "info");
-    const iconFor = status => status === "ok" ? "✓" : (status === "warn" ? "!" : "•");
+    const iconFor = status => status === "ok" ? "вњ“" : (status === "warn" ? "!" : "вЂў");
     const statusLabel = status => status === "ok" ? t("StatusOk") : (status === "warn" ? t("StatusWarn") : t("StatusInfo"));
     const makeRow = ({ label, detail, ok = false, warn = false, warning = "" }) => {
       const status = statusForExact(ok, warn);
@@ -1883,13 +1901,13 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
     const freebieRows = [
       freebieRow(t("Merits"), `${meritPoints}`, `-${costs.merits}`, meritPoints ? "" : ""),
       freebieRow(t("Flaws"), `${flawPoints}`, `+${costs.flaws}`, flawPoints > 7 ? t("FlawLimitWarn") : ""),
-      freebieRow(t("AttributesCost"), `${attributeExcess} × 5`, `-${costs.attributes}`),
-      freebieRow(t("AbilitiesCost"), `${abilityExcess} × 2`, `-${costs.abilities}`),
-      freebieRow(t("DisciplinesCost"), `${disciplineExcess} × 7`, `-${costs.disciplines}`),
-      freebieRow(t("BackgroundsCost"), `${backgroundExcess} × 1`, `-${costs.backgrounds}`),
-      freebieRow(t("VirtuesCost"), `${virtueExcess} × 2`, `-${costs.virtues}`),
-      freebieRow(t("HumanityCost"), `${humanityExcess} × 2`, `-${costs.humanity}`),
-      freebieRow(t("WillpowerCost"), `${willpowerExcess} × 1`, `-${costs.willpower}`)
+      freebieRow(t("AttributesCost"), `${attributeExcess} Г— 5`, `-${costs.attributes}`),
+      freebieRow(t("AbilitiesCost"), `${abilityExcess} Г— 2`, `-${costs.abilities}`),
+      freebieRow(t("DisciplinesCost"), `${disciplineExcess} Г— 7`, `-${costs.disciplines}`),
+      freebieRow(t("BackgroundsCost"), `${backgroundExcess} Г— 1`, `-${costs.backgrounds}`),
+      freebieRow(t("VirtuesCost"), `${virtueExcess} Г— 2`, `-${costs.virtues}`),
+      freebieRow(t("HumanityCost"), `${humanityExcess} Г— 2`, `-${costs.humanity}`),
+      freebieRow(t("WillpowerCost"), `${willpowerExcess} Г— 1`, `-${costs.willpower}`)
     ];
 
     return {
@@ -2222,8 +2240,8 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
   _resolveAutomationResource(resource) {
     if (!resource) return "";
     const key = String(resource).trim().toLowerCase();
-    if (["blood", "bloodpool", "кровь"].includes(key)) return "resources.blood";
-    if (["willpower", "wp", "воля", "сила воли"].includes(key)) return "resources.willpower";
+    if (["blood", "bloodpool", "РєСЂРѕРІСЊ"].includes(key)) return "resources.blood";
+    if (["willpower", "wp", "РІРѕР»СЏ", "СЃРёР»Р° РІРѕР»Рё"].includes(key)) return "resources.willpower";
     return "";
   }
 
@@ -2238,3 +2256,4 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
     return Math.max(1, attr + ability);
   }
 }
+
