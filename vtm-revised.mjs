@@ -26,6 +26,7 @@ import { VTMCharacterCreationWizard } from "./scripts/apps/character-creation-wi
 import { rollDicePool } from "./scripts/dice/dice-pool.mjs";
 import { TrechkalovJsonImporter } from "./scripts/import/trechkalov-json-importer.mjs";
 import { RulesJsonImporter } from "./scripts/import/rules-json-importer.mjs";
+import { registerCatalogAutoSeeder, runCatalogAutoSeedIfNeeded } from "./scripts/import/catalog-auto-seeder.mjs";
 
 
 const registerHandlebarsHelpers = () => {
@@ -90,6 +91,7 @@ const preloadTemplates = async () => loadTemplatesCompat([
   "systems/vtm-revised/templates/actors/parts/weapons.hbs",
   "systems/vtm-revised/templates/actors/parts/notes.hbs",
   "systems/vtm-revised/templates/actors/parts/notes-v2.hbs",
+  "systems/vtm-revised/templates/actors/parts/experience-journal.hbs",
   "systems/vtm-revised/templates/items/item-sheet.hbs",
   "systems/vtm-revised/templates/chat/roll-card.hbs",
   "systems/vtm-revised/templates/apps/import-json-dialog.hbs",
@@ -109,6 +111,7 @@ Hooks.once("init", async () => {
   console.log("VtM Revised | Initializing system");
 
   CONFIG.VTM_REVISED = VTM_REVISED;
+  registerCatalogAutoSeeder({ RulesJsonImporter });
   registerHandlebarsHelpers();
   CONFIG.Actor.documentClass = VTMActor;
   CONFIG.Item.documentClass = VTMItem;
@@ -164,6 +167,8 @@ Hooks.once("init", async () => {
     importBuiltInMeritsFlawsCatalog: RulesJsonImporter.importBuiltInMeritsFlawsCatalog.bind(RulesJsonImporter),
     importBuiltInBackgroundCatalog: RulesJsonImporter.importBuiltInBackgroundCatalog.bind(RulesJsonImporter),
     importBuiltInMoralityCatalog: RulesJsonImporter.importBuiltInMoralityCatalog.bind(RulesJsonImporter),
+    importBuiltInAllCatalogs: RulesJsonImporter.importBuiltInAllCatalogs.bind(RulesJsonImporter),
+    seedBuiltInCatalogs: (options = {}) => runCatalogAutoSeedIfNeeded({ force: true, notify: true, ...options }),
     openClanCard,
     openArchetypeCard,
     openMoralityPathCard,
@@ -532,7 +537,7 @@ Hooks.on("renderItemDirectory", (app, html) => {
 });
 
 Hooks.once("ready", () => {
-  console.log("VtM Revised | Ready. Use game.vtmRevised.importJsonText(jsonText) for sheets or game.vtmRevised.importRulesText(jsonText) for authorized rules catalog imports.");
+  console.log("VtM Revised | Ready. Built-in catalog auto-seed runs for the primary active GM on first world launch. Use game.vtmRevised.seedBuiltInCatalogs() to force a manual seed.");
 });
 
 

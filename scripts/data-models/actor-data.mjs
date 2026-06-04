@@ -27,6 +27,20 @@ function namedRatingField() {
   });
 }
 
+function experienceJournalEntryField() {
+  return new fields.SchemaField({
+    id: textField(),
+    type: textField("award"),
+    amount: new fields.NumberField({ required: true, integer: true, min: -999, max: 999, initial: 0 }),
+    delta: new fields.NumberField({ required: true, integer: true, min: -999, max: 999, initial: 0 }),
+    reason: textField(),
+    target: textField(),
+    createdAt: textField(),
+    userId: textField(),
+    userName: textField()
+  });
+}
+
 function attributesSchema() {
   return new fields.SchemaField({
     physical: new fields.SchemaField({
@@ -120,7 +134,8 @@ export class VTMVampireActorData extends foundry.abstract.TypeDataModel {
         experience: new fields.SchemaField({
           total: ratingField(0, 999),
           spent: ratingField(0, 999),
-          available: ratingField(0, 999)
+          available: ratingField(0, 999),
+          journal: new fields.ArrayField(experienceJournalEntryField())
         })
       }),
       health: healthSchema(),
@@ -138,6 +153,8 @@ export class VTMVampireActorData extends foundry.abstract.TypeDataModel {
   prepareDerivedData() {
     const xp = this.resources?.experience;
     if (xp) {
+      xp.total = Math.max(0, Number(xp.total || 0));
+      xp.spent = Math.max(0, Number(xp.spent || 0));
       xp.available = Math.max(0, Number(xp.available || 0));
     }
 

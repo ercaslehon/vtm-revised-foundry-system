@@ -1,0 +1,90 @@
+<section class="vtm-panel vtm-experience-journal-panel">
+  <header class="section-header-row">
+    <div>
+      <h2><i class="fas fa-scroll"></i> {{localize "VTM_REVISED.Experience.JournalTitle"}}</h2>
+      <p class="muted">{{localize "VTM_REVISED.Experience.JournalHelp"}}</p>
+    </div>
+    <button type="button" class="experience-journal-recalc" title="{{localize "VTM_REVISED.Experience.RecalculateHint"}}">
+      <i class="fas fa-calculator"></i> {{localize "VTM_REVISED.Experience.Recalculate"}}
+    </button>
+  </header>
+
+  <div class="experience-summary-grid">
+    <article>
+      <span>{{localize "VTM_REVISED.Resource.ExperienceAvailable"}}</span>
+      <strong>{{experienceJournal.available}}</strong>
+    </article>
+    <article>
+      <span>{{localize "VTM_REVISED.Resource.ExperienceTotal"}}</span>
+      <strong>{{experienceJournal.total}}</strong>
+    </article>
+    <article>
+      <span>{{localize "VTM_REVISED.Resource.ExperienceSpent"}}</span>
+      <strong>{{experienceJournal.spent}}</strong>
+    </article>
+  </div>
+
+  <div class="experience-journal-form">
+    <label>
+      <span>{{localize "VTM_REVISED.Experience.Operation"}}</span>
+      <select data-xp-field="type">
+        <option value="award">{{localize "VTM_REVISED.Experience.TypeAward"}}</option>
+        <option value="spend">{{localize "VTM_REVISED.Experience.TypeSpend"}}</option>
+        <option value="adjust">{{localize "VTM_REVISED.Experience.TypeAdjust"}}</option>
+      </select>
+    </label>
+    <label>
+      <span>{{localize "VTM_REVISED.Experience.Amount"}}</span>
+      <input type="number" data-xp-field="amount" value="1" step="1"/>
+    </label>
+    <label class="experience-wide-field">
+      <span>{{localize "VTM_REVISED.Experience.Reason"}}</span>
+      <input type="text" data-xp-field="reason" placeholder="{{localize "VTM_REVISED.Experience.ReasonPlaceholder"}}"/>
+    </label>
+    <label class="experience-wide-field">
+      <span>{{localize "VTM_REVISED.Experience.Target"}}</span>
+      <input type="text" data-xp-field="target" placeholder="{{localize "VTM_REVISED.Experience.TargetPlaceholder"}}"/>
+    </label>
+    <button type="button" class="experience-journal-add">
+      <i class="fas fa-plus"></i> {{localize "VTM_REVISED.Experience.AddEntry"}}
+    </button>
+  </div>
+
+  <div class="experience-journal-table-wrap">
+    <table class="experience-journal-table">
+      <thead>
+        <tr>
+          <th>{{localize "VTM_REVISED.Experience.Date"}}</th>
+          <th>{{localize "VTM_REVISED.Experience.Operation"}}</th>
+          <th>{{localize "VTM_REVISED.Experience.Change"}}</th>
+          <th>{{localize "VTM_REVISED.Experience.Reason"}}</th>
+          <th>{{localize "VTM_REVISED.Experience.User"}}</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each experienceJournal.entries as |entry|}}
+          <tr class="experience-entry-row experience-entry-{{entry.type}}" data-entry-id="{{entry.id}}">
+            <td>{{entry.dateLabel}}</td>
+            <td>{{entry.typeLabel}}</td>
+            <td class="experience-delta {{#if entry.positive}}is-positive{{else}}is-negative{{/if}}">{{entry.signedDelta}}</td>
+            <td>
+              <strong>{{entry.reason}}</strong>
+              {{#if entry.target}}<small>{{entry.target}}</small>{{/if}}
+            </td>
+            <td>{{entry.userName}}</td>
+            <td>
+              <button type="button" class="experience-entry-delete" data-entry-id="{{entry.id}}" title="{{localize "VTM_REVISED.Experience.DeleteEntry"}}">
+                <i class="fas fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        {{else}}
+          <tr>
+            <td colspan="6" class="empty">{{localize "VTM_REVISED.Experience.EmptyJournal"}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</section>

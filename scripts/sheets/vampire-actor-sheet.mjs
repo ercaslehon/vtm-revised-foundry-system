@@ -22,7 +22,8 @@ const TEMPLATE_PARTIALS = [
   "systems/vtm-revised/templates/actors/parts/weapons.hbs",
   "systems/vtm-revised/templates/actors/parts/creation-checklist.hbs",
   "systems/vtm-revised/templates/actors/parts/item-list.hbs",
-  "systems/vtm-revised/templates/actors/parts/notes-v2.hbs"
+  "systems/vtm-revised/templates/actors/parts/notes-v2.hbs",
+  "systems/vtm-revised/templates/actors/parts/experience-journal.hbs"
 ];
 
 /**
@@ -154,7 +155,8 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
       activeSheetTab: this._activeSheetTab || "main",
       rollTraitOptions: this._buildRollTraitOptions(),
       rollTraitOptionGroups: this._buildRollTraitOptionGroups(),
-      creation: this._buildCreationChecklist()
+      creation: this._buildCreationChecklist(),
+      experienceJournal: this._buildExperienceJournalContext()
     };
   }
 
@@ -369,6 +371,26 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
       });
     });
 
+    const experienceForm = element.querySelector(".experience-journal-form");
+    experienceForm?.querySelector(".experience-journal-add")?.addEventListener("click", async event => {
+      event.preventDefault();
+      await this._addExperienceJournalEntry(experienceForm);
+    });
+
+    element.querySelectorAll(".experience-entry-delete").forEach(button => {
+      button.addEventListener("click", async event => {
+        event.preventDefault();
+        await this._deleteExperienceJournalEntry(button.dataset.entryId || "");
+      });
+    });
+
+    element.querySelectorAll(".experience-journal-recalc").forEach(button => {
+      button.addEventListener("click", async event => {
+        event.preventDefault();
+        await this._recalculateExperienceFromJournal();
+      });
+    });
+
     element.querySelectorAll(".item-create").forEach(button => {
       button.addEventListener("click", async event => {
         event.preventDefault();
@@ -493,6 +515,178 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
         await this.actor.deleteEmbeddedDocuments("Item", [row.dataset.itemId]);
       });
     });
+  }
+
+
+  _experienceJournalEntries() {
+    return Array.isArray(this.actor.system?.resources?.experience?.journal)
+      ? Array.from(this.actor.system.resources.experience.journal)
+      : [];
+  }
+
+  _formatExperienceDate(value = "") {
+    if (!value) return "";
+    try {
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return String(value);
+      return new Intl.DateTimeFormat(game.i18n?.lang || undefined, {
+        dateStyle: "short",
+        timeStyle: "short"
+      }).format(date);
+    } catch (_err) {
+      return String(value);
+    }
+  }
+
+  _experienceTypeLabel(type = "award") {
+    const key = type === "spend" ? "TypeSpend" : type === "adjust" ? "TypeAdjust" : "TypeAward";
+    return game.i18n.localize(`VTM_REVISED.Experience.${key}`);
+  }
+
+  _buildExperienceJournalContext() {
+    const xp = this.actor.system?.resources?.experience ?? {};
+    const entries = this._experienceJournalEntries()
+      .map((entry, index) => {
+        const delta = Number(entry.delta ?? 0);
+        const reason = String(entry.reason || "").trim() || game.i18n.localize("VTM_REVISED.Experience.NoReason");
+        return {
+          ...entry,
+          id: entry.id || String(index),
+          type: entry.type || (delta < 0 ? "spend" : "award"),
+          typeLabel: this._experienceTypeLabel(entry.type || (delta < 0 ? "spend" : "award")),
+          dateLabel: this._formatExperienceDate(entry.createdAt),
+          signedDelta: delta > 0 ? `+${delta}` : String(delta),
+          positive: delta >= 0,
+          reason,
+          target: String(entry.target || "").trim(),
+          userName: String(entry.userName || "").trim()
+        };
+      })
+      .sort((a, b) => String(b.createdAt || "").localeCompare(String(a.createdAt || "")));
+
+    return {
+      available: Number(xp.available || 0),
+      total: Number(xp.total || 0),
+      spent: Number(xp.spent || 0),
+      entries
+    };
+  }
+
+  _newExperienceEntryId() {
+    if (foundry.utils?.randomID) return foundry.utils.randomID(16);
+    if (globalThis.crypto?.randomUUID) return globalThis.crypto.randomUUID();
+    return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  }
+
+  _readExperienceJournalForm(form) {
+    const type = form.querySelector("[data-xp-field='type']")?.value || "award";
+    const rawAmount = Number(form.querySelector("[data-xp-field='amount']")?.value ?? 0);
+    const reason = String(form.querySelector("[data-xp-field='reason']")?.value ?? "").trim();
+    const target = String(form.querySelector("[data-xp-field='target']")?.value ?? "").trim();
+
+    if (!Number.isFinite(rawAmount) || Number(rawAmount) === 0) {
+      ui.notifications?.warn?.(game.i18n.localize("VTM_REVISED.Experience.AmountRequired"));
+      return null;
+    }
+
+    const amount = Math.trunc(Math.abs(rawAmount));
+    let delta = amount;
+    if (type === "spend") delta = -amount;
+    if (type === "adjust") delta = Math.trunc(rawAmount);
+
+    return { type, amount, delta, reason, target };
+  }
+
+  async _addExperienceJournalEntry(form) {
+    const data = this._readExperienceJournalForm(form);
+    if (!data) return null;
+
+    const xp = this.actor.system?.resources?.experience ?? {};
+    const available = Number(xp.available || 0);
+    if (data.type === "spend" && available + data.delta < 0) {
+      ui.notifications?.warn?.(game.i18n.localize("VTM_REVISED.Experience.NotEnoughExperience"));
+      return null;
+    }
+
+    const entry = {
+      id: this._newExperienceEntryId(),
+      type: data.type,
+      amount: data.amount,
+      delta: data.delta,
+      reason: data.reason,
+      target: data.target,
+      createdAt: new Date().toISOString(),
+      userId: game.user?.id || "",
+      userName: game.user?.name || ""
+    };
+
+    const journal = [...this._experienceJournalEntries(), entry];
+    const update = {
+      "system.resources.experience.journal": journal,
+      "system.resources.experience.available": Math.max(0, available + data.delta)
+    };
+
+    if (data.type === "award") update["system.resources.experience.total"] = Math.max(0, Number(xp.total || 0) + data.amount);
+    if (data.type === "spend") update["system.resources.experience.spent"] = Math.max(0, Number(xp.spent || 0) + data.amount);
+
+    await this.actor.update(update);
+
+    form.querySelector("[data-xp-field='amount']").value = "1";
+    form.querySelector("[data-xp-field='reason']").value = "";
+    form.querySelector("[data-xp-field='target']").value = "";
+
+    ui.notifications?.info?.(game.i18n.format("VTM_REVISED.Experience.EntryAdded", { delta: data.delta > 0 ? `+${data.delta}` : String(data.delta) }));
+    return entry;
+  }
+
+  async _deleteExperienceJournalEntry(entryId = "") {
+    if (!entryId) return null;
+
+    const xp = this.actor.system?.resources?.experience ?? {};
+    const journal = this._experienceJournalEntries();
+    const entry = journal.find(item => String(item.id) === String(entryId));
+    if (!entry) return null;
+
+    const type = entry.type || (Number(entry.delta || 0) < 0 ? "spend" : "award");
+    const amount = Math.abs(Number(entry.amount ?? entry.delta ?? 0));
+    const delta = Number(entry.delta || 0);
+    const nextJournal = journal.filter(item => String(item.id) !== String(entryId));
+
+    const update = {
+      "system.resources.experience.journal": nextJournal,
+      "system.resources.experience.available": Math.max(0, Number(xp.available || 0) - delta)
+    };
+
+    if (type === "award") update["system.resources.experience.total"] = Math.max(0, Number(xp.total || 0) - amount);
+    if (type === "spend") update["system.resources.experience.spent"] = Math.max(0, Number(xp.spent || 0) - amount);
+
+    await this.actor.update(update);
+    ui.notifications?.info?.(game.i18n.localize("VTM_REVISED.Experience.EntryDeleted"));
+    return entry;
+  }
+
+  async _recalculateExperienceFromJournal() {
+    const entries = this._experienceJournalEntries();
+    const total = entries
+      .filter(entry => entry.type === "award")
+      .reduce((sum, entry) => sum + Math.abs(Number(entry.amount ?? entry.delta ?? 0)), 0);
+    const spent = entries
+      .filter(entry => entry.type === "spend")
+      .reduce((sum, entry) => sum + Math.abs(Number(entry.amount ?? entry.delta ?? 0)), 0);
+    const adjustments = entries
+      .filter(entry => entry.type === "adjust")
+      .reduce((sum, entry) => sum + Number(entry.delta || 0), 0);
+
+    const available = Math.max(0, total - spent + adjustments);
+
+    await this.actor.update({
+      "system.resources.experience.total": Math.max(0, total),
+      "system.resources.experience.spent": Math.max(0, spent),
+      "system.resources.experience.available": available
+    });
+
+    ui.notifications?.info?.(game.i18n.localize("VTM_REVISED.Experience.Recalculated"));
+    return { total, spent, available };
   }
 
 

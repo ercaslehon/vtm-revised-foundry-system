@@ -272,6 +272,12 @@ function collectEntries(payload) {
   return entries;
 }
 
+async function loadBuiltInCatalog(url, errorLabel) {
+  const response = await fetch(url);
+  if (!response.ok) throw new Error(`Failed to load ${errorLabel}: ${response.status} ${response.statusText}`);
+  return response.json();
+}
+
 export class RulesJsonImporter {
   static renderDialog() {
     new DialogV1({
@@ -292,73 +298,63 @@ export class RulesJsonImporter {
     }, { width: 720 }).render(true);
   }
 
-  static async importBuiltInCoreDisciplines() {
-    const url = "systems/vtm-revised/data/vtm-revised-core-disciplines.generated.json";
-    const response = await fetch(url);
-    if (!response.ok) throw new Error(`Failed to load built-in discipline catalog: ${response.status} ${response.statusText}`);
-    const payload = await response.json();
-    return this.importData(payload);
+  static async importBuiltInCoreDisciplines(options = {}) {
+    const payload = await loadBuiltInCatalog("systems/vtm-revised/data/vtm-revised-core-disciplines.generated.json", "built-in discipline catalog");
+    return this.importData({ ...payload, dedupe: true }, options);
   }
 
-  static async importBuiltInBloodMagicCatalog() {
-    const url = "systems/vtm-revised/data/vtm-revised-blood-magic.generated.json";
-    const response = await fetch(url);
-    if (!response.ok) throw new Error(`Failed to load built-in blood magic catalog: ${response.status} ${response.statusText}`);
-    const payload = await response.json();
-    return this.importData(payload);
+  static async importBuiltInBloodMagicCatalog(options = {}) {
+    const payload = await loadBuiltInCatalog("systems/vtm-revised/data/vtm-revised-blood-magic.generated.json", "built-in blood magic catalog");
+    return this.importData({ ...payload, dedupe: true }, options);
   }
 
-  static async importBuiltInRitualCatalog() {
-    const url = "systems/vtm-revised/data/vtm-revised-rituals.generated.json";
-    const response = await fetch(url);
-    if (!response.ok) throw new Error(`Failed to load built-in ritual catalog: ${response.status} ${response.statusText}`);
-    const payload = await response.json();
-    return this.importData(payload);
+  static async importBuiltInRitualCatalog(options = {}) {
+    const payload = await loadBuiltInCatalog("systems/vtm-revised/data/vtm-revised-rituals.generated.json", "built-in ritual catalog");
+    return this.importData({ ...payload, dedupe: true }, options);
   }
 
-  static async importBuiltInClanCatalog() {
-    const url = "systems/vtm-revised/data/vtm-revised-clans.generated.json";
-    const response = await fetch(url);
-    if (!response.ok) throw new Error(`Failed to load built-in clan catalog: ${response.status} ${response.statusText}`);
-    const payload = await response.json();
-    return this.importData(payload);
+  static async importBuiltInClanCatalog(options = {}) {
+    const payload = await loadBuiltInCatalog("systems/vtm-revised/data/vtm-revised-clans.generated.json", "built-in clan catalog");
+    return this.importData({ ...payload, dedupe: true }, options);
   }
 
-  static async importBuiltInWeaponCatalog() {
-    const url = "systems/vtm-revised/data/vtm-revised-weapons.generated.json";
-    const response = await fetch(url);
-    if (!response.ok) throw new Error(`Failed to load built-in weapon catalog: ${response.status} ${response.statusText}`);
-    const payload = await response.json();
-    return this.importData(payload);
+  static async importBuiltInWeaponCatalog(options = {}) {
+    const payload = await loadBuiltInCatalog("systems/vtm-revised/data/vtm-revised-weapons.generated.json", "built-in weapon catalog");
+    return this.importData({ ...payload, dedupe: true }, options);
   }
 
-
-  static async importBuiltInBackgroundCatalog() {
-    const url = "systems/vtm-revised/data/vtm-revised-backgrounds.generated.json";
-    const response = await fetch(url);
-    if (!response.ok) throw new Error(`Failed to load built-in backgrounds catalog: ${response.status} ${response.statusText}`);
-    const payload = await response.json();
-    return this.importData(payload);
+  static async importBuiltInBackgroundCatalog(options = {}) {
+    const payload = await loadBuiltInCatalog("systems/vtm-revised/data/vtm-revised-backgrounds.generated.json", "built-in backgrounds catalog");
+    return this.importData({ ...payload, dedupe: true }, options);
   }
 
-  static async importBuiltInMeritsFlawsCatalog() {
-    const url = "systems/vtm-revised/data/vtm-revised-merits-flaws.generated.json";
-    const response = await fetch(url);
-    if (!response.ok) throw new Error(`Failed to load built-in merits/flaws catalog: ${response.status} ${response.statusText}`);
-    const payload = await response.json();
-    return this.importData(payload);
+  static async importBuiltInMeritsFlawsCatalog(options = {}) {
+    const payload = await loadBuiltInCatalog("systems/vtm-revised/data/vtm-revised-merits-flaws.generated.json", "built-in merits/flaws catalog");
+    return this.importData({ ...payload, dedupe: true }, options);
   }
 
-
-  static async importBuiltInMoralityCatalog() {
-    const url = "systems/vtm-revised/data/vtm-revised-morality.generated.json";
-    const response = await fetch(url);
-    if (!response.ok) throw new Error(`Failed to load built-in morality catalog: ${response.status} ${response.statusText}`);
-    const payload = await response.json();
-    return this.importData(payload);
+  static async importBuiltInMoralityCatalog(options = {}) {
+    const payload = await loadBuiltInCatalog("systems/vtm-revised/data/vtm-revised-morality.generated.json", "built-in morality catalog");
+    return this.importData({ ...payload, dedupe: true }, options);
   }
 
-  static async importText(text) {
+  static async importBuiltInAllCatalogs(options = {}) {
+    const created = [];
+    const runs = [
+      () => this.importBuiltInCoreDisciplines(options),
+      () => this.importBuiltInBloodMagicCatalog(options),
+      () => this.importBuiltInRitualCatalog(options),
+      () => this.importBuiltInWeaponCatalog(options),
+      () => this.importBuiltInClanCatalog(options),
+      () => this.importBuiltInBackgroundCatalog(options),
+      () => this.importBuiltInMeritsFlawsCatalog(options),
+      () => this.importBuiltInMoralityCatalog(options)
+    ];
+    for (const run of runs) created.push(...await run());
+    return created;
+  }
+
+  static async importText(text, options = {}) {
     let payload;
     try {
       payload = JSON.parse(text);
@@ -367,13 +363,14 @@ export class RulesJsonImporter {
       throw err;
     }
 
-    return this.importData(payload);
+    return this.importData(payload, options);
   }
 
-  static async importData(payload) {
+  static async importData(payload, options = {}) {
+    const notify = options.notify !== false;
     const collected = collectEntries(payload);
     if (!collected.length) {
-      ui.notifications?.warn?.(game.i18n.localize("VTM_REVISED.Import.NoRulesEntries"));
+      if (notify) ui.notifications?.warn?.(game.i18n.localize("VTM_REVISED.Import.NoRulesEntries"));
       return [];
     }
 
@@ -414,12 +411,12 @@ export class RulesJsonImporter {
       .filter(doc => !payload.dedupe || !existingKeys.has(`${doc.type}::${String(doc.name).trim().toLowerCase()}`));
 
     if (!docs.length) {
-      ui.notifications?.info?.(game.i18n.localize("VTM_REVISED.Import.RulesAlreadyImported"));
+      if (notify) ui.notifications?.info?.(game.i18n.localize("VTM_REVISED.Import.RulesAlreadyImported"));
       return [];
     }
 
     const created = await Item.createDocuments(docs);
-    ui.notifications?.info?.(game.i18n.format("VTM_REVISED.Import.RulesCreated", { count: created.length }));
+    if (notify) ui.notifications?.info?.(game.i18n.format("VTM_REVISED.Import.RulesCreated", { count: created.length }));
     return created;
   }
 }

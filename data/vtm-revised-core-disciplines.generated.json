@@ -537,6 +537,38 @@
       }
     },
     {
+      "name": "Полёт",
+      "slug": "flight",
+      "aliases": [
+        "Flight",
+        "flight",
+        "Полёт"
+      ],
+      "sourceUrl": "",
+      "description": "<p><strong>Что это за дисциплина:</strong> Дисциплина Горгулий, отвечающая за сверхъестественное движение в воздухе, вертикальный контроль и охоту с высоты.</p><p><strong>Статус:</strong> справочная дисциплина для расширенного каталога кланов и линий крови.</p>",
+      "summary": "Дисциплина Горгулий, отвечающая за сверхъестественное движение в воздухе, вертикальный контроль и охоту с высоты.",
+      "rulesId": "flight",
+      "audit": {
+        "status": "draft",
+        "sourceUrl": "",
+        "sourceBook": "",
+        "sourcePage": "",
+        "checkedAt": "2026-06-04",
+        "checkedBy": "Catalog validator pass",
+        "notes": "Добавлено для целостности связей кланов, линий крови и сил дисциплин."
+      },
+      "mechanics": {
+        "activation": "",
+        "duration": "",
+        "successScaling": "",
+        "resistance": "",
+        "failure": "",
+        "botch": "",
+        "limits": "",
+        "automationNotes": ""
+      }
+    },
+    {
       "name": "Полёт Горгулий",
       "slug": "gargoyle_flight",
       "aliases": [
@@ -17606,7 +17638,7 @@
   ],
   "dedupe": true,
   "replaceFolder": true,
-  "version": "9.5.41",
+  "version": "9.5.45",
   "auditSummary": {
     "verified": 320,
     "draft": 0,
