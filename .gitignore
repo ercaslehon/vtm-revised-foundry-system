@@ -73,3 +73,5 @@ release-foundry-system.ps1
 release-*.ps1
 fix-*.ps1
 # Local backups
+README.ru.clean.no-release-script.md
+remove-*.ps1
