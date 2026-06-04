@@ -2,17 +2,17 @@
     "id":  "vtm-revised",
     "title":  "Vampire: The Masquerade Revised - Unofficial System",
     "description":  "Unofficial Foundry VTT system for Vampire: The Masquerade v3 Revised. Includes actor sheets, portraits, generation limits, Nature/Demeanor and clan reference cards, disciplines, blood magic, rituals, weapons, merits/flaws, Roads/Paths morality reference, and a guided character creation wizard. Morality Path/Road hierarchy tables are verified against wod.su in v9.4.0.",
-    "version":  "10.0.3",
+    "version":  "10.0.4",
     "compatibility":  {
                           "minimum":  "13.347",
                           "verified":  "14"
                       },
     "url":  "https://github.com/ercaslehon/vtm-revised-foundry-system",
     "manifest":  "https://raw.githubusercontent.com/ercaslehon/vtm-revised-foundry-system/main/system.json",
-    "download":  "https://github.com/ercaslehon/vtm-revised-foundry-system/releases/download/v10.0.3/vtm-revised-v10.0.3.zip",
+    "download":  "https://github.com/ercaslehon/vtm-revised-foundry-system/releases/download/v10.0.4/vtm-revised-v10.0.4.zip",
     "authors":  [
                     {
-                        "name":  "Р вЂќР С‘Р СР В° Р С‘ Р С”Р С•Р СР В°Р Р…Р Т‘Р В° РЎвЂ¦РЎР‚Р С•Р Р…Р С‘Р С”Р С‘",
+                        "name":  "Р В РІР‚СњР В РЎвЂР В РЎВР В Р’В° Р В РЎвЂ Р В РЎвЂќР В РЎвЂўР В РЎВР В Р’В°Р В Р вЂ¦Р В РўвЂР В Р’В° Р РЋРІР‚В¦Р РЋР вЂљР В РЎвЂўР В Р вЂ¦Р В РЎвЂР В РЎвЂќР В РЎвЂ",
                         "flags":  {
 
                                   }
@@ -27,7 +27,7 @@
     "languages":  [
                       {
                           "lang":  "ru",
-                          "name":  "Р В РЎС“РЎРѓРЎРѓР С”Р С‘Р в„–",
+                          "name":  "Р В Р’В Р РЋРЎвЂњР РЋР С“Р РЋР С“Р В РЎвЂќР В РЎвЂР В РІвЂћвЂ“",
                           "path":  "lang/ru.json",
                           "flags":  {
 

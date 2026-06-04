@@ -1,4 +1,4 @@
-﻿import { rollDicePool } from "../dice/dice-pool.mjs";
+import { rollDicePool } from "../dice/dice-pool.mjs";
 import { VTM_REVISED } from "../config.mjs";
 import { applyAutomationCost, normalizeAutomationCost } from "../utils/automation-costs.mjs";
 import { VTMDisciplineCard } from "../apps/discipline-card.mjs";
@@ -340,7 +340,7 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
 
     element.querySelectorAll(".morality-path-select").forEach(select => {
       select.addEventListener("change", async event => {
-        const value = event.currentTarget.value || "Р§РµР»РѕРІРµС‡РЅРѕСЃС‚СЊ";
+        const value = event.currentTarget.value || "\u0427\u0435\u043b\u043e\u0432\u0435\u0447\u043d\u043e\u0441\u0442\u044c";
         await this.actor.update({ "system.resources.pathName": value });
       });
     });
@@ -837,6 +837,17 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
 
 
   _buildMoralityPathOptions() {
+    const labelFor = item => {
+      const category = item.system?.category || "path";
+      const prefix = category === "road"
+        ? "\u0414\u043e\u0440\u043e\u0433\u0430"
+        : category === "humanity"
+          ? "\u0427\u0435\u043b\u043e\u0432\u0435\u0447\u043d\u043e\u0441\u0442\u044c"
+          : "\u041f\u0443\u0442\u044c";
+
+      return `${prefix} \u00b7 ${item.name}`;
+    };
+
     const catalog = Array.from(game.items ?? [])
       .filter(item => item.type === "moralityPath")
       .sort((a, b) => {
@@ -850,25 +861,37 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
       id: item.id,
       name: item.name,
       category: item.system?.category || "path",
-      label: `${item.system?.category === "road" ? "Р”РѕСЂРѕРіР°" : item.system?.category === "humanity" ? "Р§РµР»РѕРІРµС‡РЅРѕСЃС‚СЊ" : "РџСѓС‚СЊ"} В· ${item.name}`
+      label: labelFor(item)
     }));
 
     return [
-      { id: "humanity", name: "Р§РµР»РѕРІРµС‡РЅРѕСЃС‚СЊ", category: "humanity", label: "Р§РµР»РѕРІРµС‡РЅРѕСЃС‚СЊ В· Р§РµР»РѕРІРµС‡РЅРѕСЃС‚СЊ" }
+      {
+        id: "humanity",
+        name: "\u0427\u0435\u043b\u043e\u0432\u0435\u0447\u043d\u043e\u0441\u0442\u044c",
+        category: "humanity",
+        label: "\u0427\u0435\u043b\u043e\u0432\u0435\u0447\u043d\u043e\u0441\u0442\u044c \u00b7 \u0427\u0435\u043b\u043e\u0432\u0435\u0447\u043d\u043e\u0441\u0442\u044c"
+      }
     ];
   }
 
   _resolveMoralityPath(value = "") {
-    const raw = String(value || "Р§РµР»РѕРІРµС‡РЅРѕСЃС‚СЊ").trim();
+    const raw = String(value || "\u0427\u0435\u043b\u043e\u0432\u0435\u0447\u043d\u043e\u0441\u0442\u044c").trim();
     const item = findMoralityPathItemForName(raw);
     if (item) return { name: item.name, item, category: item.system?.category || "path", imported: true };
-    return { name: raw, item: null, category: raw === "Р§РµР»РѕРІРµС‡РЅРѕСЃС‚СЊ" ? "humanity" : "custom", imported: false };
+    return {
+      name: raw,
+      item: null,
+      category: raw === "\u0427\u0435\u043b\u043e\u0432\u0435\u0447\u043d\u043e\u0441\u0442\u044c" ? "humanity" : "custom",
+      imported: false
+    };
   }
 
   async _openMoralityPathCard() {
-    const pathName = this.actor.system?.resources?.pathName || "Р§РµР»РѕРІРµС‡РЅРѕСЃС‚СЊ";
+    const pathName = this.actor.system?.resources?.pathName || "\u0427\u0435\u043b\u043e\u0432\u0435\u0447\u043d\u043e\u0441\u0442\u044c";
     const item = findMoralityPathItemForName(pathName);
-    if (!item) ui.notifications?.warn?.("РљР°С‚Р°Р»РѕРі РџСѓС‚РµР№ Рё Р”РѕСЂРѕРі РЅРµ РёРјРїРѕСЂС‚РёСЂРѕРІР°РЅ РёР»Рё РІС‹Р±СЂР°РЅРЅРѕРµ РЅР°Р·РІР°РЅРёРµ РЅРµ РЅР°Р№РґРµРЅРѕ.");
+    if (!item) {
+      ui.notifications?.warn?.("\u041a\u0430\u0442\u0430\u043b\u043e\u0433 \u041f\u0443\u0442\u0435\u0439 \u0438 \u0414\u043e\u0440\u043e\u0433 \u043d\u0435 \u0438\u043c\u043f\u043e\u0440\u0442\u0438\u0440\u043e\u0432\u0430\u043d \u0438\u043b\u0438 \u0432\u044b\u0431\u0440\u0430\u043d\u043d\u043e\u0435 \u043d\u0430\u0437\u0432\u0430\u043d\u0438\u0435 \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\u043e.");
+    }
     return new VTMMoralityPathCard({ actor: this.actor, moralityPath: item }).render({ force: true });
   }
 
@@ -895,7 +918,7 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
     return String(value ?? "")
       .trim()
       .toLowerCase()
-      .replaceAll("С‘", "Рµ")
+      .replaceAll("\u0451", "\u0435")
       .replace(/[\s_\-]+/g, " ");
   }
 
