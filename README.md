@@ -7,7 +7,7 @@
 ## Статус проекта
 
 - Package ID: `vtm-revised`
-- Текущая версия: `10.0.11`
+- Текущая версия: `10.0.12`
 - Foundry VTT: minimum `13.347`, verified `14`
 - Автор: `Ercaslehon`
 - Тип проекта: fan-made / unofficial system
@@ -191,7 +191,7 @@ https://raw.githubusercontent.com/ercaslehon/vtm-revised-foundry-system/main/sys
 {
   "url": "https://github.com/ercaslehon/vtm-revised-foundry-system",
   "manifest": "https://raw.githubusercontent.com/ercaslehon/vtm-revised-foundry-system/main/system.json",
-  "download": "https://github.com/ercaslehon/vtm-revised-foundry-system/releases/download/v10.0.11/vtm-revised-v10.0.11.zip"
+  "download": "https://github.com/ercaslehon/vtm-revised-foundry-system/releases/download/v10.0.12/vtm-revised-v10.0.12.zip"
 }
 ```
 
