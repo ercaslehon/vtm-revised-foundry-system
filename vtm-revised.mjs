@@ -27,6 +27,7 @@ import { rollDicePool } from "./scripts/dice/dice-pool.mjs";
 import { TrechkalovJsonImporter } from "./scripts/import/trechkalov-json-importer.mjs";
 import { RulesJsonImporter } from "./scripts/import/rules-json-importer.mjs";
 import { registerCatalogAutoSeeder, runCatalogAutoSeedIfNeeded } from "./scripts/import/catalog-auto-seeder.mjs";
+import { registerSearchableSelects } from "./scripts/ui/searchable-select.mjs";
 
 
 const registerHandlebarsHelpers = () => {
@@ -113,6 +114,7 @@ Hooks.once("init", async () => {
   CONFIG.VTM_REVISED = VTM_REVISED;
   registerCatalogAutoSeeder({ RulesJsonImporter });
   registerHandlebarsHelpers();
+  registerSearchableSelects();
   CONFIG.Actor.documentClass = VTMActor;
   CONFIG.Item.documentClass = VTMItem;
 
