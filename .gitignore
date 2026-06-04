@@ -75,3 +75,14 @@ fix-*.ps1
 # Local backups
 README.ru.clean.no-release-script.md
 remove-*.ps1
+*.backup*
+*.bad-cleanup-*
+*.tmp
+*.bak
+__pycache__/
+.venv/
+vtm-revised-v*.zip
+release-foundry-system.ps1
+apply-v*.ps1
+repair-v*.ps1
+remove-release-tool-restore-readme.ps1
