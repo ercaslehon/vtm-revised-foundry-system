@@ -15,9 +15,12 @@
 
     <div class="vtm-top-stack">
       <header class="sheet-header vtm-identity-panel">
-        <h1 class="vtm-character-name">
-          <input name="name" type="text" value="{{actor.name}}" placeholder="{{localize 'VTM_REVISED.Actor.Name'}}"/>
-        </h1>
+        <div class="vtm-name-row">
+          <h1 class="vtm-character-name" data-clan="{{system.profile.clan}}">
+            <input name="name" type="text" value="{{actor.name}}" placeholder="{{localize 'VTM_REVISED.Actor.Name'}}"/>
+          </h1>
+          <img class="vtm-clan-icon" src="{{clanIcon}}" alt="{{system.profile.clan}}" title="{{system.profile.clan}}" {{#unless clanIcon}}hidden{{/unless}}/>
+        </div>
 
         <div class="vtm-identity-grid">
           <label class="vtm-identity-cell clan-picker-label">

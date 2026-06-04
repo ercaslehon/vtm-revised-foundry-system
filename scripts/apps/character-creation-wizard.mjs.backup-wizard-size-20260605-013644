@@ -180,7 +180,7 @@ export class VTMCharacterCreationWizard extends HandlebarsApplicationMixin(Appli
   static DEFAULT_OPTIONS = {
     id: "vtm-revised-character-creation-wizard-{id}",
     classes: ["vtm-revised", "creation-wizard"],
-    position: { width: 1400, height: 860 },
+    position: { width: 980, height: 860 },
     window: { resizable: true }
   };
 

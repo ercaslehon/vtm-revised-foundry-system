@@ -1386,11 +1386,60 @@ input[readonly] {
 }
 
 /* Morality Paths / Roads */
-.morality-picker-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.35rem; align-items: center; }
-.morality-selected-summary { margin: 0.25rem 0 0; font-size: 0.82rem; }
-.vtm-morality-card-root { height: 100%; display: flex; flex-direction: column; min-height: 0; }
-.vtm-morality-card-body { overflow-y: auto; padding: 0.75rem; min-height: 0; }
-.morality-card-header { flex: 0 0 auto; }
+.morality-picker-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.35rem;
+  align-items: center;
+}
+.morality-picker-row button,
+.vtm-morality-card-root button {
+  cursor: pointer;
+}
+.morality-selected-summary {
+  margin: 0.25rem 0 0;
+  font-size: 0.82rem;
+}
+.vtm-morality-card-root {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.vtm-morality-card-body {
+  overflow-y: auto;
+  padding: 0.75rem;
+  min-height: 0;
+}
+.morality-card-header {
+  flex: 0 0 auto;
+}
+
+
+/* Morality hierarchy tables */
+.vtm-hierarchy-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.35rem 0;
+  font-size: 0.92rem;
+}
+.vtm-hierarchy-table th,
+.vtm-hierarchy-table td {
+  border: 1px solid rgba(184, 150, 62, 0.28);
+  padding: 0.35rem 0.45rem;
+  vertical-align: top;
+}
+.vtm-hierarchy-table th {
+  color: var(--vtm-gold, #b8963e);
+  background: rgba(184, 150, 62, 0.08);
+  text-align: left;
+}
+.vtm-hierarchy-table td:first-child {
+  width: 5rem;
+  color: var(--vtm-gold, #b8963e);
+  font-weight: 700;
+  text-align: center;
+}
 
 
 /* ==========================================================================
@@ -1666,15 +1715,6 @@ input[readonly] {
   letter-spacing: 0.12em;
   text-shadow: 0 0 18px rgba(201, 170, 97, 0.18);
   box-shadow: none;
-}
-
-.vtm-character-name::after {
-  content: attr(data-clan-icon);
-  position: absolute;
-  right: 12px;
-  bottom: 13px;
-  color: rgba(201, 170, 97, 0.56);
-  font-size: 16px;
 }
 
 .vtm-identity-grid {
@@ -2570,15 +2610,6 @@ input[readonly] {
   font-size: 34px;
   letter-spacing: 0.15em;
   text-shadow: 0 0 18px rgba(201, 173, 102, 0.17);
-}
-
-.vtm-character-name::after {
-  content: attr(data-clan-icon);
-  position: absolute;
-  right: 12px;
-  bottom: 13px;
-  color: rgba(201,173,102,0.55);
-  font-size: 16px;
 }
 
 .vtm-identity-grid,
@@ -3750,13 +3781,13 @@ input[readonly] {
 }
 
 .vtm-revised.sheet .vtm-optional-weapons > summary::after {
-  content: "▾" !important;
+  content: "в–ѕ" !important;
   float: right !important;
   color: rgba(201,173,102,.72) !important;
 }
 
 .vtm-revised.sheet .vtm-optional-weapons[open] > summary::after {
-  content: "▴" !important;
+  content: "в–ґ" !important;
 }
 
 .vtm-revised.sheet .vtm-optional-weapons .weapons-panel {
@@ -5990,19 +6021,764 @@ input[readonly] {
 }
 
 
+/* ==========================================================================
+   v10.0.1 hotfix: sheet size guard and visible item import buttons
+   ========================================================================== */
+
+.vtm-revised.sheet.actor.vampire {
+  min-width: 1180px !important;
+  min-height: 760px !important;
+}
+
+.vtm-revised.sheet.actor.vampire .window-content {
+  min-width: 1180px !important;
+  min-height: 720px !important;
+}
+
+.vtm-top-item-import-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  padding: 6px;
+  border-bottom: 1px solid rgba(120, 40, 50, 0.35);
+  background: rgba(10, 8, 12, 0.72);
+}
+
+.vtm-top-item-import-actions button {
+  min-width: 0;
+  min-height: 26px;
+  padding: 3px 5px;
+  border: 1px solid rgba(150, 35, 50, 0.55);
+  border-radius: 5px;
+  background: linear-gradient(180deg, rgba(75, 16, 28, 0.95), rgba(28, 7, 12, 0.95));
+  color: #f2e7dc;
+  font-size: 11px;
+  line-height: 1.1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.vtm-top-item-import-actions button:hover {
+  border-color: rgba(210, 72, 92, 0.8);
+  box-shadow: 0 0 8px rgba(180, 24, 32, 0.35);
+}
+
+.vtm-top-item-import-actions button i {
+  margin-right: 3px;
+}
+
+/* ==========================================================================
+   v10.0.5 item directory import buttons layout
+   ========================================================================== */
+
+.vtm-top-item-import-actions {
+  display: grid;
+  grid-template-columns: 1fr !important;
+  gap: 4px;
+  padding: 6px;
+}
+
+.vtm-top-item-import-actions button {
+  width: 100%;
+  justify-content: flex-start;
+  text-align: left;
+  min-height: 28px;
+  padding: 5px 8px;
+  font-size: 12px;
+}
+
+.vtm-top-item-import-actions button i {
+  width: 18px;
+  margin-right: 6px;
+  text-align: center;
+}
+
+/* Hide old footer import buttons. The visible controls now live in the top action bar. */
+.directory-footer .vtm-import-rules-json,
+.directory-footer .vtm-import-core-disciplines,
+.directory-footer .vtm-import-blood-magic,
+.directory-footer .vtm-import-rituals,
+.directory-footer .vtm-import-clans,
+.directory-footer .vtm-import-weapons,
+.directory-footer .vtm-import-backgrounds,
+.directory-footer .vtm-import-merits-flaws,
+.directory-footer .vtm-import-morality,
+footer .vtm-import-rules-json,
+footer .vtm-import-core-disciplines,
+footer .vtm-import-blood-magic,
+footer .vtm-import-rituals,
+footer .vtm-import-clans,
+footer .vtm-import-weapons,
+footer .vtm-import-backgrounds,
+footer .vtm-import-merits-flaws,
+footer .vtm-import-morality {
+  display: none !important;
+}
+
+/* Searchable select */
+.vtm-revised .vtm-search-select-original {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.vtm-revised .vtm-search-select {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  z-index: 1;
+}
+
+.vtm-revised .vtm-search-select.is-open {
+  z-index: 50;
+}
+
+.vtm-revised .vtm-search-select-button {
+  width: 100%;
+  min-height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.25rem 0.55rem;
+  border: 1px solid rgba(180, 30, 45, 0.45);
+  border-radius: 6px;
+  background: rgba(12, 8, 10, 0.92);
+  color: var(--color-text-light-primary, #f0e6d2);
+  font: inherit;
+  cursor: pointer;
+}
+
+.vtm-revised .vtm-search-select-button:hover,
+.vtm-revised .vtm-search-select.is-open .vtm-search-select-button {
+  border-color: rgba(220, 50, 70, 0.85);
+  box-shadow: 0 0 8px rgba(150, 20, 35, 0.35);
+}
+
+.vtm-revised .vtm-search-select-value {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.vtm-revised .vtm-search-select-arrow {
+  flex: 0 0 auto;
+  opacity: 0.8;
+}
+
+.vtm-revised .vtm-search-select-dropdown {
+  display: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 4px);
+  max-height: 260px;
+  padding: 0.45rem;
+  border: 1px solid rgba(180, 30, 45, 0.65);
+  border-radius: 8px;
+  background: rgba(8, 6, 8, 0.98);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.55);
+}
+
+.vtm-revised .vtm-search-select.is-open .vtm-search-select-dropdown {
+  display: block;
+}
+
+.vtm-revised .vtm-search-select-search {
+  width: 100%;
+  margin: 0 0 0.4rem 0;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid rgba(180, 30, 45, 0.45);
+  border-radius: 6px;
+  background: rgba(20, 12, 14, 0.95);
+  color: var(--color-text-light-primary, #f0e6d2);
+}
+
+.vtm-revised .vtm-search-select-list {
+  max-height: 200px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.vtm-revised .vtm-search-select-option {
+  width: 100%;
+  padding: 0.35rem 0.45rem;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--color-text-light-primary, #f0e6d2);
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+
+.vtm-revised .vtm-search-select-option:hover,
+.vtm-revised .vtm-search-select-option.is-selected {
+  background: rgba(140, 20, 35, 0.35);
+}
+
+.vtm-revised .vtm-search-select-option:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.vtm-revised .vtm-search-select-empty {
+  padding: 0.45rem;
+  opacity: 0.7;
+  font-style: italic;
+}
+
+/* Searchable select: visible search query */
+.vtm-revised .vtm-search-select .vtm-search-select-search {
+  display: block !important;
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  box-sizing: border-box;
+  width: 100% !important;
+  min-height: 32px;
+  height: 32px;
+  margin: 0 0 0.45rem 0 !important;
+  padding: 0.35rem 0.55rem !important;
+  border: 1px solid rgba(210, 170, 100, 0.65) !important;
+  border-radius: 6px;
+  background: rgba(16, 10, 12, 0.98) !important;
+  color: #f0e6d2 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  font: inherit;
+  line-height: 1.2;
+  caret-color: #f0e6d2;
+}
+
+.vtm-revised .vtm-search-select .vtm-search-select-search::placeholder {
+  color: rgba(240, 230, 210, 0.55);
+}
+
+.vtm-revised .vtm-search-select-value.is-searching {
+  color: #f2d28a;
+  font-style: italic;
+}
+
+.vtm-revised .vtm-search-select.is-open .vtm-search-select-button {
+  border-color: rgba(210, 170, 100, 0.85);
+}
+
+/* Searchable select hard override */
+.vtm-revised select.vtm-search-select-original {
+  display: none !important;
+}
+
+.vtm-revised .vtm-search-select-search {
+  display: block !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  min-height: 32px !important;
+  height: 32px !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  color: #f0e6d2 !important;
+  background: rgba(16, 10, 12, 0.98) !important;
+  border: 1px solid rgba(210, 170, 100, 0.75) !important;
+  caret-color: #f0e6d2 !important;
+}
+
+/* Searchable select portal dropdown */
+.vtm-revised select.vtm-search-select-original {
+  display: none !important;
+}
+
+.vtm-search-select-portal {
+  display: none;
+  z-index: 999999;
+  padding: 0.45rem;
+  border: 1px solid rgba(180, 30, 45, 0.75);
+  border-radius: 8px;
+  background: rgba(8, 6, 8, 0.99);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.75);
+  overflow: hidden;
+}
+
+.vtm-search-select-portal.is-open {
+  display: block;
+}
+
+.vtm-search-select-portal .vtm-search-select-search {
+  display: block !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  min-height: 32px !important;
+  height: 32px !important;
+  margin: 0 0 0.45rem 0 !important;
+  padding: 0.35rem 0.55rem !important;
+  border: 1px solid rgba(210, 170, 100, 0.75) !important;
+  border-radius: 6px;
+  background: rgba(16, 10, 12, 0.98) !important;
+  color: #f0e6d2 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  font: inherit;
+  line-height: 1.2;
+  caret-color: #f0e6d2;
+}
+
+.vtm-search-select-portal .vtm-search-select-search::placeholder {
+  color: rgba(240, 230, 210, 0.55);
+}
+
+.vtm-search-select-portal .vtm-search-select-list {
+  max-height: calc(100% - 40px);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.vtm-search-select-portal .vtm-search-select-option {
+  width: 100%;
+  padding: 0.35rem 0.45rem;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: #f0e6d2;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+
+.vtm-search-select-portal .vtm-search-select-option:hover,
+.vtm-search-select-portal .vtm-search-select-option.is-selected {
+  background: rgba(140, 20, 35, 0.42);
+}
+
+.vtm-search-select-portal .vtm-search-select-option:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.vtm-search-select-portal .vtm-search-select-empty {
+  padding: 0.45rem;
+  opacity: 0.7;
+  font-style: italic;
+}
+
+/* Searchable select grouping and scroll */
+.vtm-search-select-portal {
+  overflow: hidden !important;
+}
+
+.vtm-search-select-portal .vtm-search-select-list {
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+  padding-right: 0.2rem;
+}
+
+.vtm-search-select-portal .vtm-search-select-group {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  margin: 0.25rem 0 0.15rem 0;
+  padding: 0.25rem 0.45rem;
+  border-top: 1px solid rgba(210, 170, 100, 0.28);
+  border-bottom: 1px solid rgba(210, 170, 100, 0.18);
+  background: rgba(35, 20, 24, 0.98);
+  color: #d8b86a;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+}
+
+.vtm-search-select-portal .vtm-search-select-group:first-child {
+  margin-top: 0;
+}
+
+.vtm-search-select-portal .vtm-search-select-option {
+  text-align: left !important;
+  justify-content: flex-start;
+}
+
+.vtm-search-select-portal .vtm-search-select-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.vtm-search-select-portal .vtm-search-select-list::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.vtm-search-select-portal .vtm-search-select-list::-webkit-scrollbar-thumb {
+  background: rgba(150, 40, 60, 0.75);
+  border-radius: 8px;
+}
+
+/* Searchable select bottom alignment polish */
+.vtm-search-select-portal {
+  box-sizing: border-box !important;
+}
+
+.vtm-search-select-portal * {
+  box-sizing: border-box;
+}
+
+.vtm-search-select-portal .vtm-search-select-list {
+  padding-bottom: 0.35rem;
+  scroll-padding-bottom: 0.75rem;
+}
+
+.vtm-search-select-portal .vtm-search-select-option {
+  min-height: 28px;
+  line-height: 1.25;
+  display: flex;
+  align-items: center;
+}
+
+.vtm-search-select-portal .vtm-search-select-empty {
+  min-height: 28px;
+}
+
 
 /* Clan icon in character name */
-.vtm-revised .vtm-character-name::after {
-  content: attr(data-clan-icon);
-  display: inline-block;
-  margin-left: 0.45rem;
-  color: #d8b86a;
-  font-size: 0.55em;
-  line-height: 1;
-  vertical-align: 0.18em;
-  text-shadow: 0 0 8px rgba(216, 184, 106, 0.45);
+/* Clan icon final override */
+
+
+/* Clan image icon in character name */
+.vtm-revised .vtm-name-row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-width: 0;
 }
 
-.vtm-revised .vtm-character-name[data-clan-icon=""]::after {
-  content: "✦";
+.vtm-revised .vtm-name-row .vtm-character-name {
+  min-width: 0;
+  flex: 1 1 auto;
 }
+
+.vtm-revised .vtm-clan-icon {
+  flex: 0 0 auto;
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+  opacity: 0.96;
+  filter:
+    drop-shadow(0 0 4px rgba(0, 0, 0, 0.85))
+    drop-shadow(0 0 8px rgba(145, 24, 40, 0.38));
+}
+
+.vtm-revised .vtm-clan-icon[hidden] {
+  display: none !important;
+}
+
+
+/* --- Clan header icon: bigger + glowing background --- */
+.vtm-revised .vtm-clan-icon {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  flex: 0 0 34px;
+  display: inline-block;
+  position: relative;
+  z-index: 1;
+  margin-left: 0.75rem;
+  padding: 4px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle,
+      rgba(255, 120, 170, 0.30) 0%,
+      rgba(180, 30, 70, 0.18) 42%,
+      rgba(90, 0, 30, 0.00) 72%);
+  box-shadow:
+    0 0 8px rgba(255, 110, 160, 0.30),
+    0 0 16px rgba(200, 40, 90, 0.22),
+    inset 0 0 10px rgba(255, 180, 210, 0.10);
+  filter:
+    drop-shadow(0 0 4px rgba(255, 170, 210, 0.32))
+    drop-shadow(0 0 10px rgba(210, 40, 90, 0.24));
+  animation: vtmClanIconPulse 2.4s ease-in-out infinite;
+}
+
+@keyframes vtmClanIconPulse {
+  0%, 100% {
+    box-shadow:
+      0 0 8px rgba(255, 110, 160, 0.26),
+      0 0 16px rgba(200, 40, 90, 0.18),
+      inset 0 0 10px rgba(255, 180, 210, 0.08);
+    filter:
+      drop-shadow(0 0 4px rgba(255, 170, 210, 0.26))
+      drop-shadow(0 0 8px rgba(210, 40, 90, 0.18));
+    transform: scale(1);
+    opacity: 0.96;
+  }
+  50% {
+    box-shadow:
+      0 0 12px rgba(255, 130, 180, 0.42),
+      0 0 24px rgba(220, 50, 100, 0.34),
+      inset 0 0 14px rgba(255, 200, 225, 0.16);
+    filter:
+      drop-shadow(0 0 6px rgba(255, 190, 225, 0.42))
+      drop-shadow(0 0 14px rgba(220, 50, 100, 0.30));
+    transform: scale(1.04);
+    opacity: 1;
+  }
+}
+
+
+/* === Clan icon aggressive 64 === */
+.vtm-revised .vtm-character-name {
+  position: relative;
+  padding-right: 96px;
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+}
+
+.vtm-revised .vtm-clan-icon {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  display: block;
+  transform: translateY(-50%);
+  transform-origin: center;
+  z-index: 2;
+  pointer-events: none;
+  border-radius: 999px;
+  padding: 8px;
+  background:
+    radial-gradient(circle,
+      rgba(255, 170, 210, 0.22) 0%,
+      rgba(255, 80, 130, 0.26) 18%,
+      rgba(175, 16, 58, 0.34) 38%,
+      rgba(90, 0, 30, 0.22) 58%,
+      rgba(20, 0, 10, 0.00) 78%);
+  box-shadow:
+    0 0 10px rgba(255, 120, 170, 0.38),
+    0 0 22px rgba(220, 45, 95, 0.42),
+    0 0 40px rgba(140, 10, 40, 0.34),
+    inset 0 0 12px rgba(255, 210, 230, 0.16);
+  filter:
+    drop-shadow(0 0 4px rgba(255, 210, 230, 0.22))
+    drop-shadow(0 0 8px rgba(255, 120, 170, 0.30))
+    drop-shadow(0 0 16px rgba(210, 35, 80, 0.40));
+  animation: vtmClanIconAggroPulse 1.9s ease-in-out infinite;
+}
+
+.vtm-revised .vtm-clan-icon:hover {
+  animation-duration: 1.2s;
+}
+
+@keyframes vtmClanIconAggroPulse {
+  0%, 100% {
+    transform: translateY(-50%) scale(1);
+    opacity: 0.95;
+    box-shadow:
+      0 0 10px rgba(255, 120, 170, 0.34),
+      0 0 22px rgba(220, 45, 95, 0.32),
+      0 0 36px rgba(140, 10, 40, 0.26),
+      inset 0 0 12px rgba(255, 210, 230, 0.12);
+    filter:
+      drop-shadow(0 0 4px rgba(255, 210, 230, 0.20))
+      drop-shadow(0 0 8px rgba(255, 120, 170, 0.24))
+      drop-shadow(0 0 14px rgba(210, 35, 80, 0.28));
+  }
+  50% {
+    transform: translateY(-50%) scale(1.08);
+    opacity: 1;
+    box-shadow:
+      0 0 14px rgba(255, 160, 200, 0.52),
+      0 0 32px rgba(240, 60, 110, 0.56),
+      0 0 56px rgba(170, 20, 55, 0.44),
+      inset 0 0 16px rgba(255, 225, 238, 0.22);
+    filter:
+      drop-shadow(0 0 6px rgba(255, 225, 238, 0.34))
+      drop-shadow(0 0 12px rgba(255, 130, 180, 0.44))
+      drop-shadow(0 0 22px rgba(230, 45, 95, 0.48));
+  }
+}
+/* === /Clan icon aggressive 64 === */
+
+/* === Clan icon inline placement fix === */
+.vtm-revised .vtm-name-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 1rem !important;
+  width: fit-content;
+  max-width: 100%;
+  position: relative;
+}
+
+.vtm-revised .vtm-name-row .vtm-character-name {
+  position: relative !important;
+  padding-right: 0 !important;
+  min-height: auto !important;
+  flex: 0 1 auto !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.vtm-revised .vtm-clan-icon {
+  position: static !important;
+  top: auto !important;
+  right: auto !important;
+  width: 64px !important;
+  height: 64px !important;
+  flex: 0 0 64px !important;
+  transform: none !important;
+  margin-left: 0 !important;
+}
+
+/* Same glow, but without absolute-position translate */
+@keyframes vtmClanIconAggroPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.95;
+    box-shadow:
+      0 0 10px rgba(255, 120, 170, 0.34),
+      0 0 22px rgba(220, 45, 95, 0.32),
+      0 0 36px rgba(140, 10, 40, 0.26),
+      inset 0 0 12px rgba(255, 210, 230, 0.12);
+    filter:
+      drop-shadow(0 0 4px rgba(255, 210, 230, 0.20))
+      drop-shadow(0 0 8px rgba(255, 120, 170, 0.24))
+      drop-shadow(0 0 14px rgba(210, 35, 80, 0.28));
+  }
+
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+    box-shadow:
+      0 0 14px rgba(255, 160, 200, 0.52),
+      0 0 32px rgba(240, 60, 110, 0.56),
+      0 0 56px rgba(170, 20, 55, 0.44),
+      inset 0 0 16px rgba(255, 225, 238, 0.22);
+    filter:
+      drop-shadow(0 0 6px rgba(255, 225, 238, 0.34))
+      drop-shadow(0 0 12px rgba(255, 130, 180, 0.44))
+      drop-shadow(0 0 22px rgba(230, 45, 95, 0.48));
+  }
+}
+/* === /Clan icon inline placement fix === */
+
+/* === Clan icon fixed right header placement === */
+.vtm-revised .vtm-identity-panel {
+  position: relative !important;
+  padding-right: 96px !important;
+}
+
+.vtm-revised .vtm-name-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  width: 100% !important;
+  max-width: calc(100% - 88px) !important;
+  gap: 0 !important;
+}
+
+.vtm-revised .vtm-name-row .vtm-character-name {
+  position: relative !important;
+  padding-right: 0 !important;
+  min-height: auto !important;
+  flex: 1 1 auto !important;
+}
+
+.vtm-revised .vtm-clan-icon {
+  position: absolute !important;
+  top: 1.15rem !important;
+  right: 1.35rem !important;
+  width: 64px !important;
+  height: 64px !important;
+  flex: 0 0 64px !important;
+  margin: 0 !important;
+  transform: none !important;
+  z-index: 5 !important;
+  pointer-events: none !important;
+}
+
+/* чтобы пульсация не сдвигала иконку */
+@keyframes vtmClanIconAggroPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.95;
+    box-shadow:
+      0 0 10px rgba(255, 120, 170, 0.34),
+      0 0 22px rgba(220, 45, 95, 0.32),
+      0 0 36px rgba(140, 10, 40, 0.26),
+      inset 0 0 12px rgba(255, 210, 230, 0.12);
+    filter:
+      drop-shadow(0 0 4px rgba(255, 210, 230, 0.20))
+      drop-shadow(0 0 8px rgba(255, 120, 170, 0.24))
+      drop-shadow(0 0 14px rgba(210, 35, 80, 0.28));
+  }
+
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+    box-shadow:
+      0 0 14px rgba(255, 160, 200, 0.52),
+      0 0 32px rgba(240, 60, 110, 0.56),
+      0 0 56px rgba(170, 20, 55, 0.44),
+      inset 0 0 16px rgba(255, 225, 238, 0.22);
+    filter:
+      drop-shadow(0 0 6px rgba(255, 225, 238, 0.34))
+      drop-shadow(0 0 12px rgba(255, 130, 180, 0.44))
+      drop-shadow(0 0 22px rgba(230, 45, 95, 0.48));
+  }
+}
+/* === /Clan icon fixed right header placement === */
+
+/* === Clan icon final corner placement === */
+.vtm-revised .vtm-identity-panel {
+  position: relative !important;
+  padding-right: 88px !important;
+}
+
+.vtm-revised .vtm-clan-icon {
+  position: absolute !important;
+  top: 0.10rem !important;
+  right: 0.15rem !important;
+  width: 64px !important;
+  height: 64px !important;
+  flex: 0 0 64px !important;
+  margin: 0 !important;
+  transform: none !important;
+  z-index: 20 !important;
+  pointer-events: none !important;
+}
+
+.vtm-revised .vtm-name-row {
+  max-width: calc(100% - 84px) !important;
+}
+/* === /Clan icon final corner placement === */
+
+/* === Clan icon final corner placement === */
+.vtm-revised .vtm-identity-panel {
+  position: relative !important;
+  padding-right: 88px !important;
+}
+
+.vtm-revised .vtm-clan-icon {
+  position: absolute !important;
+  top: -8px !important;
+  right: -86px !important;
+  width: 64px !important;
+  height: 64px !important;
+  flex: 0 0 64px !important;
+  margin: 0 !important;
+  transform: none !important;
+  z-index: 20 !important;
+  pointer-events: none !important;
+}
+
+.vtm-revised .vtm-name-row {
+  max-width: calc(100% - 84px) !important;
+}
+/* === /Clan icon final corner placement === */

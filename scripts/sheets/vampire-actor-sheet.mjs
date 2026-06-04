@@ -13,6 +13,93 @@ const { HandlebarsApplicationMixin } = foundry.applications.api;
 const ActorSheetV2 = foundry.applications.sheets.ActorSheetV2;
 const DialogV1 = foundry.appv1?.api?.Dialog ?? globalThis.Dialog;
 
+function normalizeClanIconName(value = "") {
+  return String(value ?? "")
+    .trim()
+    .toLowerCase()
+    .replaceAll("ё", "е")
+    .replace(/\s+/g, " ");
+}
+
+const CLAN_ICON_FILES = new Map([
+  ["ассамит", "assamite.png"],
+  ["ассамиты", "assamite.png"],
+  ["бруха", "brujah.png"],
+  ["гангрел", "gangrel.png"],
+  ["джованни", "giovanni.png"],
+  ["ласомбра", "lasombra.png"],
+  ["малкавиан", "malkavian.png"],
+  ["носферату", "nosferatu.png"],
+  ["равнос", "ravnos.png"],
+  ["последователи сета", "followersofset.png"],
+  ["сетит", "followersofset.png"],
+  ["сетиты", "followersofset.png"],
+  ["тореадор", "toreador.png"],
+  ["тремер", "tremere.png"],
+  ["тремеры", "tremere.png"],
+  ["цимисхи", "tzimisce.png"],
+  ["тзимисхи", "tzimisce.png"],
+  ["вентру", "ventrue.png"],
+
+  ["ассамит антитрибу", "assamite-antitribu.png"],
+  ["ассамиты антитрибу", "assamite-antitribu.png"],
+  ["бруха антитрибу", "brujah-antitribu.png"],
+  ["гангрел антитрибу", "gangrel-antitribu.png"],
+  ["ласомбра антитрибу", "lasombra-antitribu.png"],
+  ["малкавиан антитрибу", "malkavian-antitribu.png"],
+  ["носферату антитрибу", "nosferatu-antitribu.png"],
+  ["равнос антитрибу", "ravnos-antitribu.png"],
+  ["салюбри антитрибу", "salubri-antitribu.png"],
+  ["тореадор антитрибу", "toreador-antitribu.png"],
+  ["тремер антитрибу", "tremere-antitribu.png"],
+  ["тремеры антитрибу", "tremere-antitribu.png"],
+  ["цимисхи антитрибу", "tzimisce-antitribu.png"],
+  ["тзимисхи антитрибу", "tzimisce-antitribu.png"],
+  ["вентру антитрибу", "ventrue-antitribu.png"],
+  ["змеи света", "serpentsofthelight.png"],
+  ["пандеры", "panders.png"],
+  ["пандер", "panders.png"],
+
+  ["аримейн", "ahrimanes.png"],
+  ["баали", "baali.png"],
+  ["кровавые братья", "bloodbrothers.png"],
+  ["каитифф", "caitiff.png"],
+  ["каитиффы", "caitiff.png"],
+  ["каппадокиец", "cappadocian.png"],
+  ["каппадокийцы", "cappadocian.png"],
+  ["дети осириса", "childrenofosiris.png"],
+  ["дочери какофонии", "daughtersofcacophony.png"],
+  ["горгульи", "gargoyles.png"],
+  ["горгулья", "gargoyles.png"],
+  ["гаргульи", "gargoyles.png"],
+  ["гаргулья", "gargoyles.png"],
+  ["предвестники черепов", "harbingersofskulls.png"],
+  ["каэсид", "kiasyd.png"],
+  ["каесид", "kiasyd.png"],
+  ["киасид", "kiasyd.png"],
+  ["нагараджа", "nagaraja.png"],
+  ["салюбри", "salubri.png"],
+  ["самеди", "samedi.png"],
+  ["истинные бруха", "truebrujah.png"],
+  ["шидунду", "xidundu.png"]
+]);
+
+function clanIconForName(value = "") {
+  const normalized = normalizeClanIconName(value);
+  if (!normalized || normalized === "пусто") return "";
+
+  const file = CLAN_ICON_FILES.get(normalized);
+  if (file) return `systems/vtm-revised/assets/clan-icons/${file}`;
+
+  for (const [key, iconFile] of CLAN_ICON_FILES.entries()) {
+    if (normalized.includes(key) || key.includes(normalized)) {
+      return `systems/vtm-revised/assets/clan-icons/${iconFile}`;
+    }
+  }
+
+  return "";
+}
+
 const TEMPLATE_PARTIALS = [
   "systems/vtm-revised/templates/actors/parts/profile.hbs",
   "systems/vtm-revised/templates/actors/parts/attributes.hbs",
@@ -26,12 +113,6 @@ const TEMPLATE_PARTIALS = [
   "systems/vtm-revised/templates/actors/parts/experience-journal.hbs"
 ];
 
-/**
- * AppV2 actor sheet for Vampire actors.
- * The previous dev builds used the compatibility AppV1 ActorSheet. Foundry V14 renders it,
- * but in some installs the window never gets attached visibly. This sheet uses the V14
- * ApplicationV2 / ActorSheetV2 stack directly.
- */
 export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   static DEFAULT_OPTIONS = {
     id: "vtm-revised-actor-sheet-{id}",
@@ -150,6 +231,7 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
       selectedNature,
       selectedDemeanor,
       selectedClan,
+      clanIcon: clanIconForName(actor.system?.profile?.clan),
       moralityOptions,
       selectedMoralityPath,
       activeSheetTab: this._activeSheetTab || "main",
@@ -158,6 +240,44 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
       creation: this._buildCreationChecklist(),
       experienceJournal: this._buildExperienceJournalContext()
     };
+  }
+
+
+
+
+  _applyClanHeaderIcon(element) {
+    const header = element?.querySelector?.(".vtm-character-name");
+    const icon = element?.querySelector?.(".vtm-clan-icon");
+    const clanSelect = element?.querySelector?.('select[name="system.profile.clan"]');
+
+    if (!header || !icon) return;
+
+    const apply = () => {
+      const currentClan = clanSelect?.value ?? this.actor?.system?.profile?.clan ?? "";
+      const iconPath = clanIconForName(currentClan);
+
+      header.dataset.clan = currentClan;
+      icon.dataset.clan = currentClan;
+
+      if (iconPath) {
+        icon.src = iconPath;
+        icon.alt = currentClan || "Клан";
+        icon.title = currentClan || "Клан";
+        icon.hidden = false;
+      } else {
+        icon.removeAttribute("src");
+        icon.alt = "";
+        icon.title = "";
+        icon.hidden = true;
+      }
+    };
+
+    apply();
+
+    if (clanSelect && !clanSelect.dataset.vtmClanIconBound) {
+      clanSelect.dataset.vtmClanIconBound = "1";
+      clanSelect.addEventListener("change", apply);
+    }
   }
 
   _onRender(context, options) {
@@ -202,6 +322,7 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
     };
 
     applyActiveTab(this._activeSheetTab || context?.activeSheetTab || "main");
+    this._applyClanHeaderIcon(element);
 
     element.querySelectorAll(".vtm-tab-item[data-vtm-tab]").forEach(tabButton => {
       tabButton.addEventListener("click", event => {

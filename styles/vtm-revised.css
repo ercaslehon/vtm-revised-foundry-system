@@ -1717,15 +1717,6 @@ input[readonly] {
   box-shadow: none;
 }
 
-.vtm-character-name::after {
-  content: "вњ¦";
-  position: absolute;
-  right: 12px;
-  bottom: 13px;
-  color: rgba(201, 170, 97, 0.56);
-  font-size: 16px;
-}
-
 .vtm-identity-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(132px, 1fr));
@@ -2619,15 +2610,6 @@ input[readonly] {
   font-size: 34px;
   letter-spacing: 0.15em;
   text-shadow: 0 0 18px rgba(201, 173, 102, 0.17);
-}
-
-.vtm-character-name::after {
-  content: "вњ¦";
-  position: absolute;
-  right: 12px;
-  bottom: 13px;
-  color: rgba(201,173,102,0.55);
-  font-size: 16px;
 }
 
 .vtm-identity-grid,
@@ -6251,3 +6233,1280 @@ footer .vtm-import-morality {
   opacity: 0.7;
   font-style: italic;
 }
+
+/* Searchable select: visible search query */
+.vtm-revised .vtm-search-select .vtm-search-select-search {
+  display: block !important;
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  box-sizing: border-box;
+  width: 100% !important;
+  min-height: 32px;
+  height: 32px;
+  margin: 0 0 0.45rem 0 !important;
+  padding: 0.35rem 0.55rem !important;
+  border: 1px solid rgba(210, 170, 100, 0.65) !important;
+  border-radius: 6px;
+  background: rgba(16, 10, 12, 0.98) !important;
+  color: #f0e6d2 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  font: inherit;
+  line-height: 1.2;
+  caret-color: #f0e6d2;
+}
+
+.vtm-revised .vtm-search-select .vtm-search-select-search::placeholder {
+  color: rgba(240, 230, 210, 0.55);
+}
+
+.vtm-revised .vtm-search-select-value.is-searching {
+  color: #f2d28a;
+  font-style: italic;
+}
+
+.vtm-revised .vtm-search-select.is-open .vtm-search-select-button {
+  border-color: rgba(210, 170, 100, 0.85);
+}
+
+/* Searchable select hard override */
+.vtm-revised select.vtm-search-select-original {
+  display: none !important;
+}
+
+.vtm-revised .vtm-search-select-search {
+  display: block !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  min-height: 32px !important;
+  height: 32px !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  color: #f0e6d2 !important;
+  background: rgba(16, 10, 12, 0.98) !important;
+  border: 1px solid rgba(210, 170, 100, 0.75) !important;
+  caret-color: #f0e6d2 !important;
+}
+
+/* Searchable select portal dropdown */
+.vtm-revised select.vtm-search-select-original {
+  display: none !important;
+}
+
+.vtm-search-select-portal {
+  display: none;
+  z-index: 999999;
+  padding: 0.45rem;
+  border: 1px solid rgba(180, 30, 45, 0.75);
+  border-radius: 8px;
+  background: rgba(8, 6, 8, 0.99);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.75);
+  overflow: hidden;
+}
+
+.vtm-search-select-portal.is-open {
+  display: block;
+}
+
+.vtm-search-select-portal .vtm-search-select-search {
+  display: block !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  min-height: 32px !important;
+  height: 32px !important;
+  margin: 0 0 0.45rem 0 !important;
+  padding: 0.35rem 0.55rem !important;
+  border: 1px solid rgba(210, 170, 100, 0.75) !important;
+  border-radius: 6px;
+  background: rgba(16, 10, 12, 0.98) !important;
+  color: #f0e6d2 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  font: inherit;
+  line-height: 1.2;
+  caret-color: #f0e6d2;
+}
+
+.vtm-search-select-portal .vtm-search-select-search::placeholder {
+  color: rgba(240, 230, 210, 0.55);
+}
+
+.vtm-search-select-portal .vtm-search-select-list {
+  max-height: calc(100% - 40px);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.vtm-search-select-portal .vtm-search-select-option {
+  width: 100%;
+  padding: 0.35rem 0.45rem;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: #f0e6d2;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+
+.vtm-search-select-portal .vtm-search-select-option:hover,
+.vtm-search-select-portal .vtm-search-select-option.is-selected {
+  background: rgba(140, 20, 35, 0.42);
+}
+
+.vtm-search-select-portal .vtm-search-select-option:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.vtm-search-select-portal .vtm-search-select-empty {
+  padding: 0.45rem;
+  opacity: 0.7;
+  font-style: italic;
+}
+
+/* Searchable select grouping and scroll */
+.vtm-search-select-portal {
+  overflow: hidden !important;
+}
+
+.vtm-search-select-portal .vtm-search-select-list {
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+  padding-right: 0.2rem;
+}
+
+.vtm-search-select-portal .vtm-search-select-group {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  margin: 0.25rem 0 0.15rem 0;
+  padding: 0.25rem 0.45rem;
+  border-top: 1px solid rgba(210, 170, 100, 0.28);
+  border-bottom: 1px solid rgba(210, 170, 100, 0.18);
+  background: rgba(35, 20, 24, 0.98);
+  color: #d8b86a;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+}
+
+.vtm-search-select-portal .vtm-search-select-group:first-child {
+  margin-top: 0;
+}
+
+.vtm-search-select-portal .vtm-search-select-option {
+  text-align: left !important;
+  justify-content: flex-start;
+}
+
+.vtm-search-select-portal .vtm-search-select-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.vtm-search-select-portal .vtm-search-select-list::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.vtm-search-select-portal .vtm-search-select-list::-webkit-scrollbar-thumb {
+  background: rgba(150, 40, 60, 0.75);
+  border-radius: 8px;
+}
+
+/* Searchable select bottom alignment polish */
+.vtm-search-select-portal {
+  box-sizing: border-box !important;
+}
+
+.vtm-search-select-portal * {
+  box-sizing: border-box;
+}
+
+.vtm-search-select-portal .vtm-search-select-list {
+  padding-bottom: 0.35rem;
+  scroll-padding-bottom: 0.75rem;
+}
+
+.vtm-search-select-portal .vtm-search-select-option {
+  min-height: 28px;
+  line-height: 1.25;
+  display: flex;
+  align-items: center;
+}
+
+.vtm-search-select-portal .vtm-search-select-empty {
+  min-height: 28px;
+}
+
+
+/* Clan icon in character name */
+/* Clan icon final override */
+
+
+/* Clan image icon in character name */
+.vtm-revised .vtm-name-row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-width: 0;
+}
+
+.vtm-revised .vtm-name-row .vtm-character-name {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.vtm-revised .vtm-clan-icon {
+  flex: 0 0 auto;
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+  opacity: 0.96;
+  filter:
+    drop-shadow(0 0 4px rgba(0, 0, 0, 0.85))
+    drop-shadow(0 0 8px rgba(145, 24, 40, 0.38));
+}
+
+.vtm-revised .vtm-clan-icon[hidden] {
+  display: none !important;
+}
+
+
+/* --- Clan header icon: bigger + glowing background --- */
+.vtm-revised .vtm-clan-icon {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  flex: 0 0 34px;
+  display: inline-block;
+  position: relative;
+  z-index: 1;
+  margin-left: 0.75rem;
+  padding: 4px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle,
+      rgba(255, 120, 170, 0.30) 0%,
+      rgba(180, 30, 70, 0.18) 42%,
+      rgba(90, 0, 30, 0.00) 72%);
+  box-shadow:
+    0 0 8px rgba(255, 110, 160, 0.30),
+    0 0 16px rgba(200, 40, 90, 0.22),
+    inset 0 0 10px rgba(255, 180, 210, 0.10);
+  filter:
+    drop-shadow(0 0 4px rgba(255, 170, 210, 0.32))
+    drop-shadow(0 0 10px rgba(210, 40, 90, 0.24));
+  animation: vtmClanIconPulse 2.4s ease-in-out infinite;
+}
+
+@keyframes vtmClanIconPulse {
+  0%, 100% {
+    box-shadow:
+      0 0 8px rgba(255, 110, 160, 0.26),
+      0 0 16px rgba(200, 40, 90, 0.18),
+      inset 0 0 10px rgba(255, 180, 210, 0.08);
+    filter:
+      drop-shadow(0 0 4px rgba(255, 170, 210, 0.26))
+      drop-shadow(0 0 8px rgba(210, 40, 90, 0.18));
+    transform: scale(1);
+    opacity: 0.96;
+  }
+  50% {
+    box-shadow:
+      0 0 12px rgba(255, 130, 180, 0.42),
+      0 0 24px rgba(220, 50, 100, 0.34),
+      inset 0 0 14px rgba(255, 200, 225, 0.16);
+    filter:
+      drop-shadow(0 0 6px rgba(255, 190, 225, 0.42))
+      drop-shadow(0 0 14px rgba(220, 50, 100, 0.30));
+    transform: scale(1.04);
+    opacity: 1;
+  }
+}
+
+
+/* === Clan icon aggressive 64 === */
+.vtm-revised .vtm-character-name {
+  position: relative;
+  padding-right: 96px;
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+}
+
+.vtm-revised .vtm-clan-icon {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  display: block;
+  transform: translateY(-50%);
+  transform-origin: center;
+  z-index: 2;
+  pointer-events: none;
+  border-radius: 999px;
+  padding: 8px;
+  background:
+    radial-gradient(circle,
+      rgba(255, 170, 210, 0.22) 0%,
+      rgba(255, 80, 130, 0.26) 18%,
+      rgba(175, 16, 58, 0.34) 38%,
+      rgba(90, 0, 30, 0.22) 58%,
+      rgba(20, 0, 10, 0.00) 78%);
+  box-shadow:
+    0 0 10px rgba(255, 120, 170, 0.38),
+    0 0 22px rgba(220, 45, 95, 0.42),
+    0 0 40px rgba(140, 10, 40, 0.34),
+    inset 0 0 12px rgba(255, 210, 230, 0.16);
+  filter:
+    drop-shadow(0 0 4px rgba(255, 210, 230, 0.22))
+    drop-shadow(0 0 8px rgba(255, 120, 170, 0.30))
+    drop-shadow(0 0 16px rgba(210, 35, 80, 0.40));
+  animation: vtmClanIconAggroPulse 1.9s ease-in-out infinite;
+}
+
+.vtm-revised .vtm-clan-icon:hover {
+  animation-duration: 1.2s;
+}
+
+@keyframes vtmClanIconAggroPulse {
+  0%, 100% {
+    transform: translateY(-50%) scale(1);
+    opacity: 0.95;
+    box-shadow:
+      0 0 10px rgba(255, 120, 170, 0.34),
+      0 0 22px rgba(220, 45, 95, 0.32),
+      0 0 36px rgba(140, 10, 40, 0.26),
+      inset 0 0 12px rgba(255, 210, 230, 0.12);
+    filter:
+      drop-shadow(0 0 4px rgba(255, 210, 230, 0.20))
+      drop-shadow(0 0 8px rgba(255, 120, 170, 0.24))
+      drop-shadow(0 0 14px rgba(210, 35, 80, 0.28));
+  }
+  50% {
+    transform: translateY(-50%) scale(1.08);
+    opacity: 1;
+    box-shadow:
+      0 0 14px rgba(255, 160, 200, 0.52),
+      0 0 32px rgba(240, 60, 110, 0.56),
+      0 0 56px rgba(170, 20, 55, 0.44),
+      inset 0 0 16px rgba(255, 225, 238, 0.22);
+    filter:
+      drop-shadow(0 0 6px rgba(255, 225, 238, 0.34))
+      drop-shadow(0 0 12px rgba(255, 130, 180, 0.44))
+      drop-shadow(0 0 22px rgba(230, 45, 95, 0.48));
+  }
+}
+/* === /Clan icon aggressive 64 === */
+
+/* === Clan icon inline placement fix === */
+.vtm-revised .vtm-name-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 1rem !important;
+  width: fit-content;
+  max-width: 100%;
+  position: relative;
+}
+
+.vtm-revised .vtm-name-row .vtm-character-name {
+  position: relative !important;
+  padding-right: 0 !important;
+  min-height: auto !important;
+  flex: 0 1 auto !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.vtm-revised .vtm-clan-icon {
+  position: static !important;
+  top: auto !important;
+  right: auto !important;
+  width: 64px !important;
+  height: 64px !important;
+  flex: 0 0 64px !important;
+  transform: none !important;
+  margin-left: 0 !important;
+}
+
+/* Same glow, but without absolute-position translate */
+@keyframes vtmClanIconAggroPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.95;
+    box-shadow:
+      0 0 10px rgba(255, 120, 170, 0.34),
+      0 0 22px rgba(220, 45, 95, 0.32),
+      0 0 36px rgba(140, 10, 40, 0.26),
+      inset 0 0 12px rgba(255, 210, 230, 0.12);
+    filter:
+      drop-shadow(0 0 4px rgba(255, 210, 230, 0.20))
+      drop-shadow(0 0 8px rgba(255, 120, 170, 0.24))
+      drop-shadow(0 0 14px rgba(210, 35, 80, 0.28));
+  }
+
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+    box-shadow:
+      0 0 14px rgba(255, 160, 200, 0.52),
+      0 0 32px rgba(240, 60, 110, 0.56),
+      0 0 56px rgba(170, 20, 55, 0.44),
+      inset 0 0 16px rgba(255, 225, 238, 0.22);
+    filter:
+      drop-shadow(0 0 6px rgba(255, 225, 238, 0.34))
+      drop-shadow(0 0 12px rgba(255, 130, 180, 0.44))
+      drop-shadow(0 0 22px rgba(230, 45, 95, 0.48));
+  }
+}
+/* === /Clan icon inline placement fix === */
+
+/* === Clan icon fixed right header placement === */
+.vtm-revised .vtm-identity-panel {
+  position: relative !important;
+  padding-right: 96px !important;
+}
+
+.vtm-revised .vtm-name-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  width: 100% !important;
+  max-width: calc(100% - 88px) !important;
+  gap: 0 !important;
+}
+
+.vtm-revised .vtm-name-row .vtm-character-name {
+  position: relative !important;
+  padding-right: 0 !important;
+  min-height: auto !important;
+  flex: 1 1 auto !important;
+}
+
+.vtm-revised .vtm-clan-icon {
+  position: absolute !important;
+  top: 1.15rem !important;
+  right: 1.35rem !important;
+  width: 64px !important;
+  height: 64px !important;
+  flex: 0 0 64px !important;
+  margin: 0 !important;
+  transform: none !important;
+  z-index: 5 !important;
+  pointer-events: none !important;
+}
+
+/* чтобы пульсация не сдвигала иконку */
+@keyframes vtmClanIconAggroPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.95;
+    box-shadow:
+      0 0 10px rgba(255, 120, 170, 0.34),
+      0 0 22px rgba(220, 45, 95, 0.32),
+      0 0 36px rgba(140, 10, 40, 0.26),
+      inset 0 0 12px rgba(255, 210, 230, 0.12);
+    filter:
+      drop-shadow(0 0 4px rgba(255, 210, 230, 0.20))
+      drop-shadow(0 0 8px rgba(255, 120, 170, 0.24))
+      drop-shadow(0 0 14px rgba(210, 35, 80, 0.28));
+  }
+
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+    box-shadow:
+      0 0 14px rgba(255, 160, 200, 0.52),
+      0 0 32px rgba(240, 60, 110, 0.56),
+      0 0 56px rgba(170, 20, 55, 0.44),
+      inset 0 0 16px rgba(255, 225, 238, 0.22);
+    filter:
+      drop-shadow(0 0 6px rgba(255, 225, 238, 0.34))
+      drop-shadow(0 0 12px rgba(255, 130, 180, 0.44))
+      drop-shadow(0 0 22px rgba(230, 45, 95, 0.48));
+  }
+}
+/* === /Clan icon fixed right header placement === */
+
+/* === Clan icon final corner placement === */
+.vtm-revised .vtm-identity-panel {
+  position: relative !important;
+  padding-right: 88px !important;
+}
+
+.vtm-revised .vtm-clan-icon {
+  position: absolute !important;
+  top: 0.10rem !important;
+  right: 0.15rem !important;
+  width: 64px !important;
+  height: 64px !important;
+  flex: 0 0 64px !important;
+  margin: 0 !important;
+  transform: none !important;
+  z-index: 20 !important;
+  pointer-events: none !important;
+}
+
+.vtm-revised .vtm-name-row {
+  max-width: calc(100% - 84px) !important;
+}
+/* === /Clan icon final corner placement === */
+
+/* === Clan icon final corner placement === */
+.vtm-revised .vtm-identity-panel {
+  position: relative !important;
+  padding-right: 88px !important;
+}
+
+.vtm-revised .vtm-clan-icon {
+  position: absolute !important;
+  top: -8px !important;
+  right: -86px !important;
+  width: 64px !important;
+  height: 64px !important;
+  flex: 0 0 64px !important;
+  margin: 0 !important;
+  transform: none !important;
+  z-index: 20 !important;
+  pointer-events: none !important;
+}
+
+.vtm-revised .vtm-name-row {
+  max-width: calc(100% - 84px) !important;
+}
+/* === /Clan icon final corner placement === */
+
+/* ==========================================================================
+   VTM Revised searchable dialogs
+   Search-selects and dark styling for roll/helper dialogs.
+   ========================================================================== */
+
+.vtm-themed-dialog-window .window-content,
+.vtm-themed-dialog-window .application-content {
+  background:
+    radial-gradient(circle at 18% 0%, rgba(130, 23, 42, 0.22), transparent 28%),
+    radial-gradient(circle at 92% 18%, rgba(201, 173, 102, 0.10), transparent 26%),
+    linear-gradient(135deg, #050306 0%, #120810 48%, #050306 100%) !important;
+  color: var(--vtm-text, #efe6d8) !important;
+  padding: 12px !important;
+}
+
+.vtm-searchable-dialog-form,
+.vtm-roll-dialog,
+.vtm-add-blood-path-dialog,
+.vtm-import-dialog {
+  color: var(--vtm-text, #efe6d8) !important;
+  font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif !important;
+}
+
+.vtm-searchable-dialog-form label,
+.vtm-roll-dialog label,
+.vtm-add-blood-path-dialog label,
+.vtm-import-dialog label {
+  color: var(--vtm-muted, #ad9d8e) !important;
+  font-size: 12px !important;
+  letter-spacing: 0.055em !important;
+  text-transform: uppercase !important;
+}
+
+.vtm-searchable-dialog-form input,
+.vtm-searchable-dialog-form textarea,
+.vtm-searchable-dialog-form select,
+.vtm-roll-dialog input,
+.vtm-roll-dialog textarea,
+.vtm-roll-dialog select,
+.vtm-add-blood-path-dialog input,
+.vtm-add-blood-path-dialog textarea,
+.vtm-add-blood-path-dialog select,
+.vtm-import-dialog input,
+.vtm-import-dialog textarea,
+.vtm-import-dialog select {
+  min-height: 30px !important;
+  padding: 4px 8px !important;
+  border: 1px solid rgba(112, 35, 56, 0.78) !important;
+  border-radius: 7px !important;
+  background: rgba(4, 3, 5, 0.76) !important;
+  color: var(--vtm-text, #efe6d8) !important;
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.48) !important;
+}
+
+.vtm-searchable-dialog-form input:focus,
+.vtm-searchable-dialog-form textarea:focus,
+.vtm-roll-dialog input:focus,
+.vtm-roll-dialog textarea:focus,
+.vtm-add-blood-path-dialog input:focus,
+.vtm-add-blood-path-dialog textarea:focus,
+.vtm-import-dialog input:focus,
+.vtm-import-dialog textarea:focus {
+  outline: none !important;
+  border-color: rgba(201, 173, 102, 0.72) !important;
+  box-shadow:
+    0 0 0 1px rgba(201, 173, 102, 0.17),
+    0 0 16px rgba(158, 32, 57, 0.25),
+    inset 0 0 13px rgba(0, 0, 0, 0.48) !important;
+}
+
+.vtm-searchable-dialog-form button,
+.vtm-roll-dialog button,
+.vtm-add-blood-path-dialog button,
+.vtm-import-dialog button {
+  border: 1px solid rgba(201, 173, 102, 0.28) !important;
+  border-radius: 8px !important;
+  background:
+    linear-gradient(180deg, rgba(124, 28, 48, 0.96), rgba(55, 9, 21, 0.98)) !important;
+  color: #fff0dd !important;
+  box-shadow:
+    0 5px 14px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+.vtm-dialog-search-select {
+  position: relative !important;
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+.vtm-dialog-native-select {
+  position: absolute !important;
+  inset: 0 auto auto 0 !important;
+  width: 1px !important;
+  height: 1px !important;
+  min-width: 1px !important;
+  min-height: 1px !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  overflow: hidden !important;
+}
+
+.vtm-dialog-search-button {
+  position: relative !important;
+  width: 100% !important;
+  min-height: 30px !important;
+  padding: 4px 28px 4px 8px !important;
+  border: 1px solid rgba(112, 35, 56, 0.78) !important;
+  border-radius: 7px !important;
+  background: rgba(4, 3, 5, 0.84) !important;
+  color: var(--vtm-text, #efe6d8) !important;
+  text-align: left !important;
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.48) !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.vtm-dialog-search-button::after {
+  content: "▾" !important;
+  position: absolute !important;
+  right: 9px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  color: rgba(201, 173, 102, 0.76) !important;
+  pointer-events: none !important;
+}
+
+.vtm-dialog-search-button.is-open {
+  border-color: rgba(201, 173, 102, 0.72) !important;
+  box-shadow:
+    0 0 0 1px rgba(201, 173, 102, 0.17),
+    0 0 16px rgba(158, 32, 57, 0.25),
+    inset 0 0 13px rgba(0, 0, 0, 0.48) !important;
+}
+
+.vtm-dialog-search-panel {
+  position: fixed !important;
+  z-index: 100000 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(201, 173, 102, 0.42) !important;
+  border-radius: 9px !important;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(158, 32, 57, 0.18), transparent 34%),
+    linear-gradient(180deg, rgba(13, 9, 11, 0.99), rgba(5, 3, 6, 0.99)) !important;
+  color: var(--vtm-text, #efe6d8) !important;
+  box-shadow:
+    0 18px 44px rgba(0, 0, 0, 0.55),
+    inset 0 0 20px rgba(0, 0, 0, 0.38) !important;
+}
+
+.vtm-dialog-search-input {
+  flex: 0 0 auto !important;
+  width: calc(100% - 16px) !important;
+  margin: 8px !important;
+  min-height: 30px !important;
+  padding: 4px 8px !important;
+  border: 1px solid rgba(201, 173, 102, 0.34) !important;
+  border-radius: 7px !important;
+  background: rgba(4, 3, 5, 0.92) !important;
+  color: var(--vtm-text, #efe6d8) !important;
+}
+
+.vtm-dialog-search-options {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  padding: 0 6px 7px !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(201, 173, 102, 0.46) rgba(8, 5, 8, 0.58) !important;
+}
+
+.vtm-dialog-search-group {
+  padding: 7px 8px 4px !important;
+  color: var(--vtm-gold, #c9ad66) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  opacity: 0.95 !important;
+}
+
+.vtm-dialog-search-option {
+  display: block !important;
+  width: 100% !important;
+  min-height: 28px !important;
+  margin: 0 0 3px !important;
+  padding: 5px 9px !important;
+  border: 1px solid transparent !important;
+  border-radius: 7px !important;
+  background: transparent !important;
+  color: var(--vtm-text, #efe6d8) !important;
+  text-align: left !important;
+  box-shadow: none !important;
+}
+
+.vtm-dialog-search-option:hover,
+.vtm-dialog-search-option:focus {
+  outline: none !important;
+  border-color: rgba(201, 173, 102, 0.34) !important;
+  background: rgba(201, 173, 102, 0.08) !important;
+}
+
+.vtm-dialog-search-option.is-selected {
+  border-color: rgba(201, 173, 102, 0.48) !important;
+  background:
+    radial-gradient(circle at 0% 50%, rgba(158, 32, 57, 0.24), transparent 45%),
+    rgba(124, 28, 48, 0.36) !important;
+  color: #fff0dd !important;
+}
+
+.vtm-dialog-search-empty {
+  padding: 10px 9px !important;
+  color: var(--vtm-muted, #ad9d8e) !important;
+  font-style: italic !important;
+}
+
+/* ==========================================================================
+   /VTM Revised searchable dialogs
+   ========================================================================== */
+
+/* ==========================================================================
+   VTM Revised dialog footer buttons visibility fix
+   Чинит читаемость кнопок "Бросить" / "Отмена" в окнах бросков.
+   ========================================================================== */
+
+.vtm-themed-dialog-window .dialog-buttons,
+.vtm-themed-dialog-window .form-footer,
+.vtm-themed-dialog-window footer {
+  display: flex !important;
+  gap: 8px !important;
+}
+
+.vtm-themed-dialog-window .dialog-buttons button,
+.vtm-themed-dialog-window .form-footer button,
+.vtm-themed-dialog-window footer button,
+.vtm-themed-dialog-window button.dialog-button,
+.vtm-themed-dialog-window button[type="submit"],
+.vtm-themed-dialog-window button[type="button"] {
+  min-height: 34px !important;
+  border: 1px solid rgba(201, 173, 102, 0.48) !important;
+  border-radius: 8px !important;
+  background:
+    linear-gradient(180deg, rgba(124, 28, 48, 0.96), rgba(55, 9, 21, 0.98)) !important;
+  color: #fff0dd !important;
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.75) !important;
+  box-shadow:
+    0 5px 14px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  opacity: 1 !important;
+}
+
+.vtm-themed-dialog-window .dialog-buttons button:hover,
+.vtm-themed-dialog-window .form-footer button:hover,
+.vtm-themed-dialog-window footer button:hover,
+.vtm-themed-dialog-window button.dialog-button:hover,
+.vtm-themed-dialog-window button[type="submit"]:hover,
+.vtm-themed-dialog-window button[type="button"]:hover {
+  border-color: rgba(201, 173, 102, 0.76) !important;
+  color: #fff7e8 !important;
+  filter: brightness(1.08) !important;
+}
+
+.vtm-themed-dialog-window .dialog-buttons button:disabled,
+.vtm-themed-dialog-window .form-footer button:disabled,
+.vtm-themed-dialog-window footer button:disabled,
+.vtm-themed-dialog-window button.dialog-button:disabled,
+.vtm-themed-dialog-window button[type="submit"]:disabled,
+.vtm-themed-dialog-window button[type="button"]:disabled {
+  border-color: rgba(120, 95, 65, 0.42) !important;
+  background:
+    linear-gradient(180deg, rgba(45, 24, 33, 0.92), rgba(18, 10, 15, 0.96)) !important;
+  color: rgba(239, 230, 216, 0.58) !important;
+  opacity: 1 !important;
+  cursor: not-allowed !important;
+}
+
+/* ==========================================================================
+   /VTM Revised dialog footer buttons visibility fix
+   ========================================================================== */
+
+/* ==========================================================================
+   VTM Revised character creation wizard final polish
+   Приводит мастер создания персонажа к общему виду листа.
+   ========================================================================== */
+
+.vtm-revised.creation-wizard,
+.vtm-themed-wizard-window {
+  --vtm-bg: #050306;
+  --vtm-panel: rgba(13, 9, 11, 0.96);
+  --vtm-panel-red: rgba(37, 12, 22, 0.86);
+  --vtm-border: #6f2338;
+  --vtm-border-soft: rgba(112, 35, 56, 0.52);
+  --vtm-gold: #c9ad66;
+  --vtm-gold-soft: rgba(201, 173, 102, 0.36);
+  --vtm-blood: #9e2039;
+  --vtm-blood-2: #c33b54;
+  --vtm-text: #efe6d8;
+  --vtm-muted: #ad9d8e;
+  --vtm-shadow: 0 18px 50px rgba(0, 0, 0, 0.55);
+  color: var(--vtm-text) !important;
+  font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif !important;
+}
+
+.vtm-revised.creation-wizard .window-content,
+.vtm-themed-wizard-window .window-content,
+.vtm-revised.creation-wizard .application-content,
+.vtm-themed-wizard-window .application-content {
+  padding: 0 !important;
+  overflow: hidden !important;
+  color: var(--vtm-text) !important;
+  background:
+    radial-gradient(circle at 18% 4%, rgba(124, 20, 39, 0.30), transparent 28%),
+    radial-gradient(circle at 90% 18%, rgba(201, 173, 102, 0.10), transparent 26%),
+    linear-gradient(135deg, #050306, #120810 48%, #050306) !important;
+}
+
+.vtm-revised.creation-wizard .window-content::before,
+.vtm-themed-wizard-window .window-content::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.024) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px) !important;
+  background-size: 32px 32px !important;
+  opacity: 0.22 !important;
+  mix-blend-mode: screen !important;
+}
+
+.vtm-revised.creation-wizard .vtm-character-wizard-form,
+.vtm-themed-wizard-window .vtm-character-wizard-form {
+  position: relative !important;
+  isolation: isolate !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  color: var(--vtm-text) !important;
+}
+
+.vtm-revised.creation-wizard .vtm-wizard-layout,
+.vtm-themed-wizard-window .vtm-wizard-layout {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  display: grid !important;
+  grid-template-columns: 250px minmax(0, 1fr) !important;
+  overflow: hidden !important;
+}
+
+.vtm-revised.creation-wizard .vtm-wizard-sidebar,
+.vtm-themed-wizard-window .vtm-wizard-sidebar {
+  padding: 14px !important;
+  overflow-y: auto !important;
+  border-right: 1px solid rgba(112, 35, 56, 0.58) !important;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(158, 32, 57, 0.16), transparent 38%),
+    linear-gradient(180deg, rgba(12, 8, 10, 0.98), rgba(25, 9, 16, 0.94)) !important;
+}
+
+.vtm-revised.creation-wizard .vtm-wizard-sidebar h2,
+.vtm-themed-wizard-window .vtm-wizard-sidebar h2,
+.vtm-revised.creation-wizard .vtm-wizard-header h1,
+.vtm-themed-wizard-window .vtm-wizard-header h1,
+.vtm-revised.creation-wizard .wizard-panel h2,
+.vtm-themed-wizard-window .wizard-panel h2 {
+  color: var(--vtm-text) !important;
+  font-family: "Cinzel", "Palatino Linotype", "Book Antiqua", Georgia, serif !important;
+  letter-spacing: 0.08em !important;
+  text-shadow: 0 0 18px rgba(201, 173, 102, 0.14) !important;
+}
+
+.vtm-revised.creation-wizard .vtm-wizard-header p,
+.vtm-themed-wizard-window .vtm-wizard-header p,
+.vtm-revised.creation-wizard .wizard-hint,
+.vtm-themed-wizard-window .wizard-hint {
+  color: var(--vtm-muted) !important;
+  opacity: 1 !important;
+}
+
+.vtm-revised.creation-wizard .vtm-wizard-steps,
+.vtm-themed-wizard-window .vtm-wizard-steps {
+  gap: 7px !important;
+}
+
+.vtm-revised.creation-wizard .vtm-wizard-steps button,
+.vtm-themed-wizard-window .vtm-wizard-steps button {
+  min-height: 30px !important;
+  padding: 6px 9px !important;
+  border: 1px solid rgba(201, 173, 102, 0.18) !important;
+  border-radius: 8px !important;
+  background:
+    linear-gradient(180deg, rgba(28, 18, 22, 0.92), rgba(14, 8, 11, 0.96)) !important;
+  color: var(--vtm-text) !important;
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.34) !important;
+}
+
+.vtm-revised.creation-wizard .vtm-wizard-steps button.active,
+.vtm-themed-wizard-window .vtm-wizard-steps button.active {
+  border-color: rgba(201, 173, 102, 0.74) !important;
+  background:
+    radial-gradient(circle at 0% 50%, rgba(158, 32, 57, 0.26), transparent 45%),
+    linear-gradient(180deg, rgba(67, 16, 30, 0.88), rgba(15, 8, 12, 0.98)) !important;
+  color: var(--vtm-gold) !important;
+  box-shadow:
+    0 0 14px rgba(158, 32, 57, 0.22),
+    inset 0 0 0 1px rgba(201, 173, 102, 0.14) !important;
+}
+
+.vtm-revised.creation-wizard .vtm-wizard-steps button span,
+.vtm-themed-wizard-window .vtm-wizard-steps button span {
+  background: rgba(201, 173, 102, 0.10) !important;
+  border: 1px solid rgba(201, 173, 102, 0.22) !important;
+  color: var(--vtm-gold) !important;
+}
+
+.vtm-revised.creation-wizard .vtm-wizard-checklist-mini,
+.vtm-themed-wizard-window .vtm-wizard-checklist-mini {
+  border: 1px solid rgba(112, 35, 56, 0.52) !important;
+  border-radius: 12px !important;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(158, 32, 57, 0.12), transparent 34%),
+    linear-gradient(180deg, rgba(8, 5, 8, 0.86), rgba(20, 8, 14, 0.72)) !important;
+  color: var(--vtm-text) !important;
+}
+
+.vtm-revised.creation-wizard .wizard-mini-row,
+.vtm-themed-wizard-window .wizard-mini-row {
+  color: var(--vtm-text) !important;
+}
+
+.vtm-revised.creation-wizard .wizard-mini-row.status-ok b,
+.vtm-themed-wizard-window .wizard-mini-row.status-ok b {
+  color: #74c476 !important;
+}
+
+.vtm-revised.creation-wizard .wizard-mini-row.status-warn b,
+.vtm-themed-wizard-window .wizard-mini-row.status-warn b {
+  color: #ffcc66 !important;
+}
+
+.vtm-revised.creation-wizard .vtm-wizard-main,
+.vtm-themed-wizard-window .vtm-wizard-main {
+  position: relative !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  padding: 18px !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(201, 173, 102, 0.46) rgba(8, 5, 8, 0.58) !important;
+}
+
+.vtm-revised.creation-wizard .wizard-panel,
+.vtm-revised.creation-wizard .wizard-subpanel,
+.vtm-themed-wizard-window .wizard-panel,
+.vtm-themed-wizard-window .wizard-subpanel {
+  border: 1px solid rgba(201, 173, 102, 0.24) !important;
+  border-radius: 12px !important;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(158, 32, 57, 0.12), transparent 34%),
+    linear-gradient(145deg, rgba(14, 9, 12, 0.96), rgba(7, 5, 7, 0.94)) !important;
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.38),
+    inset 0 0 24px rgba(0, 0, 0, 0.38) !important;
+}
+
+.vtm-revised.creation-wizard label,
+.vtm-themed-wizard-window label {
+  color: var(--vtm-muted) !important;
+  font-size: 12px !important;
+  letter-spacing: 0.055em !important;
+  text-transform: uppercase !important;
+}
+
+.vtm-revised.creation-wizard input,
+.vtm-revised.creation-wizard textarea,
+.vtm-revised.creation-wizard select,
+.vtm-themed-wizard-window input,
+.vtm-themed-wizard-window textarea,
+.vtm-themed-wizard-window select {
+  min-height: 30px !important;
+  padding: 4px 8px !important;
+  border: 1px solid rgba(112, 35, 56, 0.78) !important;
+  border-radius: 7px !important;
+  background: rgba(4, 3, 5, 0.78) !important;
+  color: var(--vtm-text) !important;
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.48) !important;
+}
+
+.vtm-revised.creation-wizard input:focus,
+.vtm-revised.creation-wizard textarea:focus,
+.vtm-themed-wizard-window input:focus,
+.vtm-themed-wizard-window textarea:focus {
+  outline: none !important;
+  border-color: rgba(201, 173, 102, 0.72) !important;
+  box-shadow:
+    0 0 0 1px rgba(201, 173, 102, 0.17),
+    0 0 16px rgba(158, 32, 57, 0.25),
+    inset 0 0 13px rgba(0, 0, 0, 0.48) !important;
+}
+
+.vtm-revised.creation-wizard .vtm-dialog-search-select,
+.vtm-themed-wizard-window .vtm-dialog-search-select {
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+.vtm-revised.creation-wizard .vtm-dialog-search-button,
+.vtm-themed-wizard-window .vtm-dialog-search-button {
+  width: 100% !important;
+  min-height: 30px !important;
+  border-color: rgba(112, 35, 56, 0.78) !important;
+  background: rgba(4, 3, 5, 0.84) !important;
+  color: var(--vtm-text) !important;
+}
+
+.vtm-revised.creation-wizard button,
+.vtm-themed-wizard-window button {
+  border: 1px solid rgba(201, 173, 102, 0.34) !important;
+  border-radius: 8px !important;
+  background:
+    linear-gradient(180deg, rgba(124, 28, 48, 0.96), rgba(55, 9, 21, 0.98)) !important;
+  color: #fff0dd !important;
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.75) !important;
+  box-shadow:
+    0 5px 14px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+.vtm-revised.creation-wizard button:hover,
+.vtm-themed-wizard-window button:hover {
+  border-color: rgba(201, 173, 102, 0.76) !important;
+  color: #fff7e8 !important;
+  filter: brightness(1.08) !important;
+}
+
+.vtm-revised.creation-wizard .vtm-wizard-footer,
+.vtm-themed-wizard-window .vtm-wizard-footer {
+  flex: 0 0 auto !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+  padding: 10px 14px !important;
+  border-top: 1px solid rgba(112, 35, 56, 0.58) !important;
+  background:
+    linear-gradient(180deg, rgba(10, 6, 9, 0.98), rgba(20, 8, 14, 0.98)) !important;
+}
+
+.vtm-revised.creation-wizard .wizard-dot-row,
+.vtm-themed-wizard-window .wizard-dot-row,
+.vtm-revised.creation-wizard .wizard-item-list li,
+.vtm-themed-wizard-window .wizard-item-list li {
+  border: 1px solid rgba(112, 35, 56, 0.34) !important;
+  border-radius: 8px !important;
+  background: rgba(5, 3, 6, 0.48) !important;
+  padding: 6px !important;
+}
+
+.vtm-revised.creation-wizard .wizard-warning,
+.vtm-themed-wizard-window .wizard-warning,
+.vtm-revised.creation-wizard .is-negative,
+.vtm-themed-wizard-window .is-negative {
+  color: #ff9d8f !important;
+}
+
+@media (max-width: 900px) {
+  .vtm-revised.creation-wizard .vtm-wizard-layout,
+  .vtm-themed-wizard-window .vtm-wizard-layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  .vtm-revised.creation-wizard .vtm-wizard-sidebar,
+  .vtm-themed-wizard-window .vtm-wizard-sidebar {
+    border-right: 0 !important;
+    border-bottom: 1px solid rgba(112, 35, 56, 0.58) !important;
+    max-height: 240px !important;
+  }
+}
+
+/* ==========================================================================
+   /VTM Revised character creation wizard final polish
+   ========================================================================== */
+
+/* ==========================================================================
+   VTM Revised wizard searchable select duplicate fix
+   Прячет нативный select внутри кастомного поискового селекта.
+   ========================================================================== */
+
+.vtm-revised.creation-wizard .vtm-dialog-search-select > select.vtm-dialog-native-select,
+.vtm-themed-wizard-window .vtm-dialog-search-select > select.vtm-dialog-native-select,
+.vtm-searchable-wizard-form .vtm-dialog-search-select > select.vtm-dialog-native-select {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  max-width: 0 !important;
+  max-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  pointer-events: none !important;
+}
+
+.vtm-revised.creation-wizard .vtm-dialog-search-select,
+.vtm-themed-wizard-window .vtm-dialog-search-select,
+.vtm-searchable-wizard-form .vtm-dialog-search-select {
+  display: block !important;
+  width: 100% !important;
+  min-height: 30px !important;
+}
+
+/* ==========================================================================
+   /VTM Revised wizard searchable select duplicate fix
+   ========================================================================== */
+
+/* ==========================================================================
+   VTM searchable select native duplicate hard hide
+   Прячет настоящий select внутри кастомного поискового селекта.
+   ========================================================================== */
+
+.vtm-dialog-search-select > select,
+.vtm-dialog-search-select > select.vtm-dialog-native-select,
+.vtm-revised.creation-wizard .vtm-dialog-search-select > select,
+.vtm-themed-wizard-window .vtm-dialog-search-select > select,
+.vtm-searchable-wizard-form .vtm-dialog-search-select > select,
+.vtm-themed-dialog-window .vtm-dialog-search-select > select,
+.vtm-searchable-dialog-form .vtm-dialog-search-select > select {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  position: absolute !important;
+  width: 0 !important;
+  height: 0 !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  max-width: 0 !important;
+  max-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  pointer-events: none !important;
+}
+
+.vtm-dialog-search-select {
+  display: block !important;
+  width: 100% !important;
+  min-height: 30px !important;
+}
+
+/* ==========================================================================
+   /VTM searchable select native duplicate hard hide
+   ========================================================================== */
+
+/* ==========================================================================
+   VTM wizard duplicate search select fix
+   В мастере персонажа оставляем только новый .vtm-dialog-search-select.
+   Старые .vtm-search-select прячем, чтобы поля не дублировались.
+   ========================================================================== */
+
+.vtm-revised.creation-wizard .vtm-search-select,
+.vtm-themed-wizard-window .vtm-search-select,
+.vtm-searchable-wizard-form .vtm-search-select,
+.vtm-character-wizard-form .vtm-search-select {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  max-width: 0 !important;
+  max-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  pointer-events: none !important;
+}
+
+.vtm-revised.creation-wizard .vtm-dialog-search-select,
+.vtm-themed-wizard-window .vtm-dialog-search-select,
+.vtm-searchable-wizard-form .vtm-dialog-search-select,
+.vtm-character-wizard-form .vtm-dialog-search-select {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 100% !important;
+  min-height: 30px !important;
+}
+
+.vtm-revised.creation-wizard .vtm-dialog-search-button,
+.vtm-themed-wizard-window .vtm-dialog-search-button,
+.vtm-searchable-wizard-form .vtm-dialog-search-button,
+.vtm-character-wizard-form .vtm-dialog-search-button {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 100% !important;
+}
+
+/* На всякий случай прячем все настоящие select в мастере.
+   Значения сохраняются, потому что JS работает с hidden select внутри wrapper. */
+.vtm-revised.creation-wizard select,
+.vtm-themed-wizard-window select,
+.vtm-searchable-wizard-form select,
+.vtm-character-wizard-form select {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  max-width: 0 !important;
+  max-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  pointer-events: none !important;
+}
+
+/* ==========================================================================
+   /VTM wizard duplicate search select fix
+   ========================================================================== */
