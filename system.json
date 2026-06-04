@@ -2,22 +2,15 @@
     "id":  "vtm-revised",
     "title":  "Vampire: The Masquerade Revised - Unofficial System",
     "description":  "Unofficial Foundry VTT system for Vampire: The Masquerade v3 Revised. Includes actor sheets, portraits, generation limits, Nature/Demeanor and clan reference cards, disciplines, blood magic, rituals, weapons, merits/flaws, Roads/Paths morality reference, and a guided character creation wizard. Morality Path/Road hierarchy tables are verified against wod.su in v9.4.0.",
-    "version":  "10.0.5",
+    "version": "10.0.6",
     "compatibility":  {
                           "minimum":  "13.347",
                           "verified":  "14"
                       },
-    "url":  "https://github.com/ercaslehon/vtm-revised-foundry-system",
-    "manifest":  "https://raw.githubusercontent.com/ercaslehon/vtm-revised-foundry-system/main/system.json",
-    "download":  "https://github.com/ercaslehon/vtm-revised-foundry-system/releases/download/v10.0.5/vtm-revised-v10.0.5.zip",
-    "authors":  [
-                    {
-                        "name":  "Р В Р’В Р Р†Р вЂљРЎСљР В Р’В Р РЋРІР‚ВР В Р’В Р РЋР’ВР В Р’В Р вЂ™Р’В° Р В Р’В Р РЋРІР‚В Р В Р’В Р РЋРІР‚СњР В Р’В Р РЋРІР‚СћР В Р’В Р РЋР’ВР В Р’В Р вЂ™Р’В°Р В Р’В Р В РІР‚В¦Р В Р’В Р СћРІР‚ВР В Р’В Р вЂ™Р’В° Р В Р Р‹Р Р†Р вЂљР’В¦Р В Р Р‹Р В РІР‚С™Р В Р’В Р РЋРІР‚СћР В Р’В Р В РІР‚В¦Р В Р’В Р РЋРІР‚ВР В Р’В Р РЋРІР‚СњР В Р’В Р РЋРІР‚В",
-                        "flags":  {
-
-                                  }
-                    }
-                ],
+    "url": "https://github.com/ercaslehon/vtm-revised-foundry-system",
+    "manifest": "https://raw.githubusercontent.com/ercaslehon/vtm-revised-foundry-system/main/system.json",
+    "download": "https://github.com/ercaslehon/vtm-revised-foundry-system/releases/download/v10.0.6/vtm-revised-v10.0.6.zip",
+    "authors": [ { "name": "\u0414\u0438\u043c\u0430 \u0438 \u043a\u043e\u043c\u0430\u043d\u0434\u0430 \u0445\u0440\u043e\u043d\u0438\u043a\u0438", "flags": {} } ],
     "esmodules":  [
                       "vtm-revised.mjs"
                   ],
@@ -25,13 +18,7 @@
                    "styles/vtm-revised.css"
                ],
     "languages":  [
-                      {
-                          "lang":  "ru",
-                          "name":  "Р В Р’В Р вЂ™Р’В Р В Р Р‹Р РЋРІР‚СљР В Р Р‹Р В РЎвЂњР В Р Р‹Р В РЎвЂњР В Р’В Р РЋРІР‚СњР В Р’В Р РЋРІР‚ВР В Р’В Р Р†РІР‚С›РІР‚вЂњ",
-                          "path":  "lang/ru.json",
-                          "flags":  {
-
-                                    }
+                      { "lang": "ru", "name": "\u0420\u0443\u0441\u0441\u043a\u0438\u0439", "path": "lang/ru.json", "flags": {} }
                       },
                       {
                           "lang":  "en",
