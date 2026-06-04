@@ -149,6 +149,21 @@ function validateSystemManifest(system) {
   if (!isMeaningful(system.id)) fail("system.json: missing id");
   if (!isMeaningful(system.title)) fail("system.json: missing title");
   if (!isMeaningful(system.version)) fail("system.json: missing version");
+  if (!isMeaningful(system.url)) fail("system.json: missing public repository url");
+  if (!isMeaningful(system.manifest)) fail("system.json: missing public manifest url");
+  if (!isMeaningful(system.download)) fail("system.json: missing public download url");
+
+  if (isMeaningful(system.manifest) && String(system.manifest).includes("/blob/")) {
+    fail("system.json: manifest must use a raw JSON URL, not a github.com/blob URL");
+  }
+
+  if (isMeaningful(system.manifest) && !String(system.manifest).endsWith("/system.json")) {
+    warn("system.json: manifest URL does not end with /system.json");
+  }
+
+  if (isMeaningful(system.download) && !String(system.download).endsWith(".zip")) {
+    fail("system.json: download URL must point to a .zip archive");
+  }
 
   for (const esm of system.esmodules ?? []) if (!fs.existsSync(path.join(ROOT, esm))) fail(`system.json: esmodule does not exist: ${esm}`);
   for (const style of system.styles ?? []) if (!fs.existsSync(path.join(ROOT, style))) fail(`system.json: style does not exist: ${style}`);

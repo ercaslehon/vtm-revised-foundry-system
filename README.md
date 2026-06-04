@@ -355,3 +355,41 @@ npm run check
 ## v9.5.47 Experience Journal Hotfix
 
 Исправлен критический баг v9.5.46: в контекст чарника был добавлен вызов `_buildExperienceJournalContext()`, но сами методы журнала опыта не попали в класс `VTMVampireActorSheet`. Из-за этого чарник падал при открытии с ошибкой `TypeError: this._buildExperienceJournalContext is not a function`. В hotfix методы журнала опыта добавлены в класс чарника.
+
+## v9.5.48 Installable Foundry Manifest
+
+`system.json` приведён к формату публичного Foundry manifest: добавлены поля `url`, `manifest` и `download`.
+
+Для установки системы в Foundry нужно использовать raw-ссылку на manifest:
+
+```text
+https://raw.githubusercontent.com/ercaslehon/vtm-revised-foundry-system/main/system.json
+```
+
+Важно: ссылка вида `https://github.com/.../blob/main/system.json` не подходит для установки, потому что GitHub отдаёт HTML-страницу, а Foundry ждёт чистый JSON.
+
+Поле `download` указывает на zip-asset GitHub Release:
+
+```text
+https://github.com/ercaslehon/vtm-revised-foundry-system/releases/download/v10.0.0/vtm-revised-v10.0.0.zip
+```
+
+После публикации релиза `v9.5.48` нужно загрузить asset с именем `vtm-revised-v9.5.48.zip`, чтобы установка по manifest скачивала готовую систему.
+
+## v10.0.0 Stable Foundry Install Release
+
+Версия `10.0.0` фиксирует текущую систему как стабильную installable-сборку для Foundry VTT.
+
+Правильная ссылка для установки через Foundry:
+
+```text
+https://raw.githubusercontent.com/ercaslehon/vtm-revised-foundry-system/main/system.json
+```
+
+Manifest использует release-asset:
+
+```text
+https://github.com/ercaslehon/vtm-revised-foundry-system/releases/download/v10.0.0/vtm-revised-v10.0.0.zip
+```
+
+После публикации тега `v10.0.0` нужно создать GitHub Release `v10.0.0` и загрузить asset с именем `vtm-revised-v10.0.0.zip`.

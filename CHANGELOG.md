@@ -1,3 +1,23 @@
+# v10.0.0 Stable Foundry Install Release
+
+- Текущая installable-сборка повышена до версии `10.0.0`.
+- `system.json` обновлён до версии `10.0.0`.
+- `package.json` обновлён до версии `10.0.0`.
+- Поле `download` в `system.json` теперь указывает на GitHub Release asset `vtm-revised-v10.0.0.zip`.
+- Правильная manifest-ссылка для установки остаётся: `https://raw.githubusercontent.com/ercaslehon/vtm-revised-foundry-system/main/system.json`.
+- Перед публикацией релиза нужно создать тег `v10.0.0`, GitHub Release `v10.0.0` и загрузить zip-asset `vtm-revised-v10.0.0.zip`.
+
+# v9.5.48 Installable Foundry Manifest
+
+- `system.json` приведён к публичному installable manifest для Foundry.
+- Добавлено поле `url`: `https://github.com/ercaslehon/vtm-revised-foundry-system`.
+- Добавлено поле `manifest`: `https://raw.githubusercontent.com/ercaslehon/vtm-revised-foundry-system/main/system.json`.
+- Добавлено поле `download`: `https://github.com/ercaslehon/vtm-revised-foundry-system/releases/download/v10.0.0/vtm-revised-v10.0.0.zip`.
+- В README добавлена правильная ссылка для установки системы через Foundry.
+- Валидатор каталогов теперь проверяет наличие `url`, `manifest`, `download`.
+- Валидатор блокирует `github.com/.../blob/.../system.json` в `manifest`, потому что Foundry получает HTML вместо JSON.
+- Валидатор проверяет, что `download` указывает на `.zip`.
+
 # v9.5.47 Experience Journal Hotfix
 
 - Исправлен критический баг v9.5.46.
