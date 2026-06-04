@@ -2,7 +2,7 @@
     "name":  "vtm-revised-foundry-system",
     "private":  true,
     "type":  "module",
-    "version":  "10.0.4",
+    "version":  "10.0.5",
     "scripts":  {
                     "validate:catalogs":  "node scripts/validate-catalogs.mjs",
                     "prerelease":  "npm run validate:catalogs",
