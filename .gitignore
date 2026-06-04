@@ -68,3 +68,8 @@ repair-v*.ps1
 apply-v*.ps1
 .encoding-backup-*/
 # Local OS/editor noise
+# Local release tooling
+release-foundry-system.ps1
+release-*.ps1
+fix-*.ps1
+# Local backups
