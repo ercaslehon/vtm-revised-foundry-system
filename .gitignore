@@ -50,3 +50,21 @@ uploads/
 !styles/
 !templates/
 !ui/
+# Local secrets
+*.token
+*.secret
+secrets/
+.secrets/
+# Release artifacts
+vtm-revised-v*.zip
+# Temporary repair files
+*.tmp
+*.bak
+*.backup
+README.backup.*.md
+README.ru.fixed.md
+fix-repo-encoding.ps1
+repair-v*.ps1
+apply-v*.ps1
+.encoding-backup-*/
+# Local OS/editor noise
