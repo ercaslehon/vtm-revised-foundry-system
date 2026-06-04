@@ -26,6 +26,14 @@ function Fail {
   throw "[release failed] $Text"
 }
 
+function Test-NoUtf8Bom {
+  param([Parameter(Mandatory = $true)][string]$Path)
+
+  $bytes = [System.IO.File]::ReadAllBytes((Resolve-Path $Path))
+  if ($bytes.Length -ge 3 -and $bytes[0] -eq 0xEF -and $bytes[1] -eq 0xBB -and $bytes[2] -eq 0xBF) {
+    Fail "$Path contains UTF-8 BOM. Foundry installer rejects BOM before JSON."
+  }
+}
 function Test-CommandExists {
   param([string]$Name)
 

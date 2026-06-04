@@ -1,4 +1,12 @@
-﻿# v10.0.1 Sheet and Item Directory Hotfix
+# v10.0.2 Manifest Encoding Hotfix
+
+- Исправлена установка системы через Foundry manifest.
+- system.json теперь записывается в UTF-8 без BOM.
+- Исправлена ошибка Foundry: Unexpected token '﻿'.
+- package.json также переписан в UTF-8 без BOM.
+- В релизный скрипт добавлена проверка, что system.json не содержит UTF-8 BOM.
+- Версия системы обновлена до 10.0.2.
+# v10.0.1 Sheet and Item Directory Hotfix
 
 - Добавлен guard размера чарника: если Foundry открыл лист в слишком маленьком сохранённом размере, система возвращает нормальный размер окна.
 - Добавлен минимальный размер окна чарника через CSS.
