@@ -85,6 +85,27 @@ function shouldEnhanceSelect(select) {
   return false;
 }
 
+
+function isRitualCatalogSelect(select) {
+  const title = getVtmWindowTitle(select);
+  if (/ритуал|ritual/i.test(title)) return true;
+  if (select.closest?.(".vtm-add-ritual-dialog")) return true;
+  return false;
+}
+
+function splitRitualOptionLabel(select, label = "") {
+  const text = String(label || "").trim();
+  if (!isRitualCatalogSelect(select)) return { group: "", label: text };
+
+  const match = text.match(/^(.+?)\s*[·•]\s*(Уровень\s+\d+.*)$/i);
+  if (!match) return { group: "", label: text };
+
+  return {
+    group: match[1].trim(),
+    label: match[2].trim()
+  };
+}
+
 function getOptionRows(select) {
   const rows = [];
 
@@ -111,13 +132,23 @@ function getOptionRows(select) {
     }
 
     if (node instanceof HTMLOptionElement) {
+      const rawLabel = node.textContent?.trim() || node.value;
+      const split = splitRitualOptionLabel(select, rawLabel);
+
+      if (split.group && rows[rows.length - 1]?.label !== split.group) {
+        rows.push({
+          type: "group",
+          label: split.group
+        });
+      }
+
       rows.push({
         type: "option",
         value: node.value,
-        label: node.textContent?.trim() || node.value,
+        label: split.label || rawLabel,
         disabled: node.disabled,
         selected: node.selected,
-        group: ""
+        group: split.group || ""
       });
     }
   }
@@ -127,7 +158,8 @@ function getOptionRows(select) {
 
 function selectedLabel(select) {
   const option = select.selectedOptions?.[0];
-  return option?.textContent?.trim() || select.value || "Выбрать";
+  const label = option?.textContent?.trim() || select.value || "Выбрать";
+  return splitRitualOptionLabel(select, label).label || label;
 }
 
 function closePanel() {
