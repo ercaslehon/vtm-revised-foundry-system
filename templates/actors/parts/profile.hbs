@@ -10,13 +10,20 @@
     </p>
     <div class="health-grid health-check-grid">
       {{#each healthRows as |row|}}
-        <label class="health-row {{#if row.checked}}is-checked{{/if}}">
-          <input type="checkbox" class="health-checkbox" data-health="{{row.key}}" {{checked row.checked}}/>
+        <button
+          type="button"
+          class="health-row {{#if row.checked}}is-checked{{/if}} health-damage-{{row.damageType}}"
+          data-health="{{row.key}}"
+          data-damage-state="{{row.damageState}}"
+          title="{{row.damageTitle}}"
+          aria-label="{{row.label}}: {{row.damageTitle}}"
+        >
           <span class="health-info">
             <span class="health-name">{{row.label}}</span>
             <span class="health-penalty">{{row.penaltyLabel}}</span>
+            <span class="health-damage-label">{{row.damageLabel}}</span>
           </span>
-        </label>
+        </button>
       {{/each}}
     </div>
   </article>

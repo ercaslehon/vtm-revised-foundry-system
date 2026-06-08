@@ -184,18 +184,41 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
     const groupedPathIds = new Set(bloodMagicGroups.flatMap(group => group.items.map(item => item.id)));
     const otherMagicPaths = allPaths.filter(item => !groupedPathIds.has(item.id));
 
+    const healthDamageLabels = {
+      0: "Нет урона",
+      1: "Поверхностный",
+      2: "Летальный",
+      3: "Тяжёлый"
+    };
+
+    const healthDamageTypes = {
+      0: "none",
+      1: "bash",
+      2: "lethal",
+      3: "aggravated"
+    };
+
     const healthRows = VTM_REVISED.healthLevels.map(key => {
       const penalty = VTM_REVISED.healthPenalties[key] ?? "";
       const penaltyLabel = penalty === "out"
         ? game.i18n.localize("VTM_REVISED.HealthPenalty.out")
         : game.i18n.format("VTM_REVISED.HealthPenalty.dice", { penalty });
 
+      const rawDamageState = Number(actor.system?.health?.[key] || 0);
+      const damageState = Math.max(0, Math.min(3, Number.isFinite(rawDamageState) ? Math.trunc(rawDamageState) : 0));
+      const damageLabel = healthDamageLabels[damageState] || healthDamageLabels[0];
+      const damageType = healthDamageTypes[damageState] || healthDamageTypes[0];
+
       return {
         key,
         label: game.i18n.localize(`VTM_REVISED.Health.${key}`),
         penalty,
         penaltyLabel,
-        checked: Number(actor.system?.health?.[key] || 0) > 0
+        damageState,
+        damageType,
+        damageLabel,
+        damageTitle: `${damageLabel}. Нажми, чтобы изменить тип урона.`,
+        checked: damageState > 0
       };
     });
 
@@ -474,12 +497,17 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
       });
     });
 
-    element.querySelectorAll(".health-checkbox").forEach(checkbox => {
-      checkbox.addEventListener("change", async event => {
+    element.querySelectorAll(".health-row[data-health]").forEach(row => {
+      row.addEventListener("click", async event => {
         event.preventDefault();
-        const key = checkbox.dataset.health;
+        const key = row.dataset.health;
         if (!key) return;
-        await this.actor.update({ [`system.health.${key}`]: checkbox.checked ? 1 : 0 });
+
+        const current = Number(this.actor.system?.health?.[key] || 0);
+        const safeCurrent = Number.isFinite(current) ? Math.max(0, Math.min(3, Math.trunc(current))) : 0;
+        const next = safeCurrent >= 3 ? 0 : safeCurrent + 1;
+
+        await this.actor.update({ [`system.health.${key}`]: next });
       });
     });
 
