@@ -150,20 +150,36 @@ function buildSystemData(type, entry = {}) {
     isHomebrew: Boolean(entry.isHomebrew ?? false)
   };
 
-  if (type === "ritual") return {
-    level: safeNumber(entry.level, 0),
-    discipline: entry.discipline ?? "Тауматургия",
-    castingTime: entry.castingTime ?? "",
-    cost: entry.costText ?? entry.cost?.text ?? "",
-    components: entry.components ?? entry.componentsText ?? "",
-    rulesId: entry.rulesId ?? entry.slug ?? "",
-    description: { ...description, components: html(entry.components ?? entry.componentsText ?? "") },
-    mechanics,
-    audit,
-    automation,
-    rawName: entry.rawName ?? entry.name ?? "",
-    isHomebrew: Boolean(entry.isHomebrew ?? false)
-  };
+  if (type === "ritual") {
+    const category = entry.category ?? entry.group ?? "";
+    const categoryText = String(category || "");
+
+    let discipline = entry.discipline ?? "";
+    if (!discipline) {
+      if (/колдов|koldunic/i.test(categoryText)) discipline = "Колдовство";
+      else if (/некромант|necromancy/i.test(categoryText)) discipline = "Некромантия";
+      else if (/ассамит|assamite/i.test(categoryText)) discipline = "Чародейство Ассамитов";
+      else if (/сеттит|setite/i.test(categoryText)) discipline = "Чародейство Сеттитов";
+      else if (/темн|тёмн|dark/i.test(categoryText)) discipline = "Темная Тауматургия";
+      else discipline = "Тауматургия";
+    }
+
+    return {
+      level: safeNumber(entry.level, 0),
+      discipline,
+      category,
+      castingTime: entry.castingTime ?? "",
+      cost: entry.costText ?? entry.cost?.text ?? "",
+      components: entry.components ?? entry.componentsText ?? "",
+      rulesId: entry.rulesId ?? entry.slug ?? "",
+      description: { ...description, components: html(entry.components ?? entry.componentsText ?? "") },
+      mechanics,
+      audit,
+      automation,
+      rawName: entry.rawName ?? entry.name ?? "",
+      isHomebrew: Boolean(entry.isHomebrew ?? false)
+    };
+  }
 
   if (["merit", "flaw", "background"].includes(type)) return {
     rating: safeNumber(entry.rating ?? entry.value, 0),
