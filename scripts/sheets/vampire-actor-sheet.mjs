@@ -963,11 +963,43 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
     const name = this._normalizeName(option.name || "");
 
     if (slug === "custom") return "Другое / хоумбрю";
-    if (slug.includes("antitribu") || name.includes("антитрибу")) return "Шабаш / антитрибу";
 
-    const camarilla = new Set(["brujah", "gangrel", "malkavian", "nosferatu", "toreador", "tremere", "ventrue"]);
-    const sabbat = new Set(["lasombra", "tzimisce"]);
-    const independent = new Set(["assamite", "giovanni", "followers-of-set", "ravnos"]);
+    const camarilla = new Set([
+      "brujah",
+      "gangrel",
+      "malkavian",
+      "nosferatu",
+      "toreador",
+      "tremere",
+      "ventrue"
+    ]);
+
+    const sabbat = new Set([
+      "lasombra",
+      "tzimisce",
+      "assamite-antitribu",
+      "brujah-antitribu",
+      "gangrel-antitribu",
+      "lasombra-antitribu",
+      "malkavian-antitribu",
+      "nosferatu-antitribu",
+      "ravnos-antitribu",
+      "salubri-antitribu",
+      "toreador-antitribu",
+      "tremere-antitribu",
+      "tzimisce-antitribu",
+      "ventrue-antitribu",
+      "serpents-of-light",
+      "pander"
+    ]);
+
+    const independent = new Set([
+      "assamite",
+      "giovanni",
+      "followers-of-set",
+      "ravnos"
+    ]);
+
     const bloodlines = new Set([
       "ahrimanes",
       "baali",
@@ -981,30 +1013,21 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
       "harbingers-of-skulls",
       "kiasyd",
       "nagaraja",
-      "pander",
       "salubri",
       "samedi",
-      "serpents-of-light",
       "truebrujah",
       "xidundu"
     ]);
 
     if (camarilla.has(slug)) return "Камарилья";
-    if (sabbat.has(slug)) return "Шабаш";
+    if (sabbat.has(slug) || slug.includes("antitribu") || name.includes("антитрибу")) return "Шабаш";
     if (independent.has(slug)) return "Независимые";
     if (bloodlines.has(slug)) return "Линии крови и редкие";
 
-    return "Прочие";
+    return "Линии крови и редкие";
   }
 
   _clanGroupForOption(option = {}) {
-    if (!option || option.slug === "custom") return "Другое / хоумбрю";
-
-    const catalogItem = findClanItemForName(option.name);
-    const sect = String(catalogItem?.system?.sect || option.sect || "").trim();
-
-    if (sect) return sect;
-
     return this._clanFallbackGroup(option);
   }
 
