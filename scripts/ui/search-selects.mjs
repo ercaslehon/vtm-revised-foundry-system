@@ -108,38 +108,48 @@ function splitRitualOptionLabel(select, label = "") {
 
 function getOptionRows(select) {
   const rows = [];
+  let lastFlatGroup = "";
 
   for (const node of Array.from(select.children)) {
     if (node instanceof HTMLOptGroupElement) {
+      const groupLabel = node.label || "";
+
       rows.push({
         type: "group",
-        label: node.label || ""
+        label: groupLabel
       });
 
       for (const option of Array.from(node.children)) {
         if (!(option instanceof HTMLOptionElement)) continue;
+
+        const rawLabel = option.textContent?.trim() || option.value;
+        const split = splitRitualOptionLabel(select, rawLabel);
+
         rows.push({
           type: "option",
           value: option.value,
-          label: option.textContent?.trim() || option.value,
+          label: split.label || rawLabel,
           disabled: option.disabled,
           selected: option.selected,
-          group: node.label || ""
+          group: groupLabel || split.group || ""
         });
       }
 
+      lastFlatGroup = groupLabel;
       continue;
     }
 
     if (node instanceof HTMLOptionElement) {
       const rawLabel = node.textContent?.trim() || node.value;
       const split = splitRitualOptionLabel(select, rawLabel);
+      const groupLabel = split.group || "";
 
-      if (split.group && rows[rows.length - 1]?.label !== split.group) {
+      if (groupLabel && groupLabel !== lastFlatGroup) {
         rows.push({
           type: "group",
-          label: split.group
+          label: groupLabel
         });
+        lastFlatGroup = groupLabel;
       }
 
       rows.push({
@@ -148,7 +158,7 @@ function getOptionRows(select) {
         label: split.label || rawLabel,
         disabled: node.disabled,
         selected: node.selected,
-        group: split.group || ""
+        group: groupLabel
       });
     }
   }
