@@ -33,8 +33,12 @@
                     <option value="{{system.profile.clan}}" selected>{{system.profile.clan}} · {{localize "VTM_REVISED.Archetype.Custom"}}</option>
                   {{/unless}}
                 {{/if}}
-                {{#each config.clanOptions as |clan|}}
-                  <option value="{{clan.name}}" {{#if (eq ../system.profile.clan clan.name)}}selected{{/if}}>{{clan.name}}</option>
+                {{#each clanOptionGroups as |group|}}
+                  <optgroup label="{{group.label}}">
+                    {{#each group.options as |clan|}}
+                      <option value="{{clan.name}}" {{#if (eq ../../system.profile.clan clan.name)}}selected{{/if}}>{{clan.name}}</option>
+                    {{/each}}
+                  </optgroup>
                 {{/each}}
               </select>
               <button type="button" class="clan-card-open vtm-book-button" title="{{localize 'VTM_REVISED.Clan.OpenCard'}}"><i class="fas fa-book-open"></i></button>

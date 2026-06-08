@@ -157,6 +157,7 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
     const selectedNature = this._resolveArchetype(actor.system?.profile?.nature);
     const selectedDemeanor = this._resolveArchetype(actor.system?.profile?.demeanor);
     const selectedClan = this._resolveClan(actor.system?.profile?.clan);
+    const clanOptionGroups = this._buildClanOptionGroups();
     const moralityOptions = this._buildMoralityPathOptions();
     const selectedMoralityPath = this._resolveMoralityPath(actor.system?.resources?.pathName || "Человечность");
 
@@ -206,6 +207,7 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
       editable: this.isEditable,
       cssClass: "vtm-revised sheet actor vampire",
       config: VTM_REVISED,
+      clanOptionGroups,
       disciplines: items.filter(item => item.type === "discipline"),
       powers: items.filter(item => item.type === "disciplinePower"),
       paths: allPaths,
@@ -940,6 +942,90 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
       return names.some(name => this._normalizeName(name) === normalized);
     });
     return option ? { ...option, imported: false } : { name: raw, slug: "custom", imported: false };
+  }
+
+  _clanGroupSortKey(label = "") {
+    const key = this._normalizeName(label);
+
+    if (key.includes("камарилья") || key.includes("camarilla")) return 10;
+    if (key.includes("шабаш") || key.includes("sabbat")) return 20;
+    if (key.includes("анарх") || key.includes("anarch")) return 30;
+    if (key.includes("независ") || key.includes("independent")) return 40;
+    if (key.includes("инконню") || key.includes("inconnu")) return 50;
+    if (key.includes("линии") || key.includes("редкие") || key.includes("bloodline")) return 60;
+    if (key.includes("другое") || key.includes("хоумбрю")) return 999;
+
+    return 500;
+  }
+
+  _clanFallbackGroup(option = {}) {
+    const slug = this._normalizeName(option.slug || "");
+    const name = this._normalizeName(option.name || "");
+
+    if (slug === "custom") return "Другое / хоумбрю";
+    if (slug.includes("antitribu") || name.includes("антитрибу")) return "Шабаш / антитрибу";
+
+    const camarilla = new Set(["brujah", "gangrel", "malkavian", "nosferatu", "toreador", "tremere", "ventrue"]);
+    const sabbat = new Set(["lasombra", "tzimisce"]);
+    const independent = new Set(["assamite", "giovanni", "followers-of-set", "ravnos"]);
+    const bloodlines = new Set([
+      "ahrimanes",
+      "baali",
+      "blood-brothers",
+      "caitiff",
+      "cappadocian",
+      "children-of-osiris",
+      "daughters-of-cacophony",
+      "gargoyle",
+      "gargoyles",
+      "harbingers-of-skulls",
+      "kiasyd",
+      "nagaraja",
+      "pander",
+      "salubri",
+      "samedi",
+      "serpents-of-light",
+      "truebrujah",
+      "xidundu"
+    ]);
+
+    if (camarilla.has(slug)) return "Камарилья";
+    if (sabbat.has(slug)) return "Шабаш";
+    if (independent.has(slug)) return "Независимые";
+    if (bloodlines.has(slug)) return "Линии крови и редкие";
+
+    return "Прочие";
+  }
+
+  _clanGroupForOption(option = {}) {
+    if (!option || option.slug === "custom") return "Другое / хоумбрю";
+
+    const catalogItem = findClanItemForName(option.name);
+    const sect = String(catalogItem?.system?.sect || option.sect || "").trim();
+
+    if (sect) return sect;
+
+    return this._clanFallbackGroup(option);
+  }
+
+  _buildClanOptionGroups() {
+    const grouped = new Map();
+
+    for (const option of VTM_REVISED.clanOptions ?? []) {
+      const group = this._clanGroupForOption(option);
+      if (!grouped.has(group)) grouped.set(group, []);
+      grouped.get(group).push(option);
+    }
+
+    return Array.from(grouped.entries())
+      .sort(([a], [b]) => {
+        const order = this._clanGroupSortKey(a) - this._clanGroupSortKey(b);
+        return order || a.localeCompare(b);
+      })
+      .map(([label, options]) => ({
+        label,
+        options: options.sort((a, b) => String(a.name || "").localeCompare(String(b.name || "")))
+      }));
   }
 
   async _openClanCard() {
