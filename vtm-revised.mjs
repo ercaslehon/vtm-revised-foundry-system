@@ -169,6 +169,8 @@ Hooks.once("init", async () => {
     importBuiltInWeaponCatalog: RulesJsonImporter.importBuiltInWeaponCatalog.bind(RulesJsonImporter),
     importBuiltInClanCatalog: RulesJsonImporter.importBuiltInClanCatalog.bind(RulesJsonImporter),
     importBuiltInMeritsFlawsCatalog: RulesJsonImporter.importBuiltInMeritsFlawsCatalog.bind(RulesJsonImporter),
+    findDuplicateMeritsFlawsCatalog: RulesJsonImporter.findDuplicateMeritFlawCatalogItems.bind(RulesJsonImporter),
+    cleanupDuplicateMeritsFlawsCatalog: RulesJsonImporter.cleanupDuplicateMeritFlawCatalogItems.bind(RulesJsonImporter),
     importBuiltInBackgroundCatalog: RulesJsonImporter.importBuiltInBackgroundCatalog.bind(RulesJsonImporter),
     importBuiltInMoralityCatalog: RulesJsonImporter.importBuiltInMoralityCatalog.bind(RulesJsonImporter),
     importBuiltInAllCatalogs: RulesJsonImporter.importBuiltInAllCatalogs.bind(RulesJsonImporter),

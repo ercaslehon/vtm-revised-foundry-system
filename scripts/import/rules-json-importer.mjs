@@ -38,6 +38,68 @@ function html(value = "") {
   return String(value ?? "");
 }
 
+function normalizeCatalogIdentityPart(value = "") {
+  return String(value ?? "")
+    .trim()
+    .toLowerCase()
+    .replaceAll("ё", "е")
+    .replace(/\s+/g, " ");
+}
+
+function catalogPointsFromSystem(system = {}) {
+  return String(system.points ?? system.cost ?? system.rating ?? system.value ?? "");
+}
+
+function catalogIdentityFromData({ type = "", name = "", system = {} } = {}) {
+  const normalizedType = normalizeCatalogIdentityPart(type);
+  const normalizedName = normalizeCatalogIdentityPart(name);
+
+  if (["merit", "flaw", "background"].includes(normalizedType)) {
+    return `${normalizedType}::${normalizedName}::${catalogPointsFromSystem(system)}`;
+  }
+
+  if (normalizedType === "disciplinepower") {
+    return [
+      normalizedType,
+      normalizeCatalogIdentityPart(system.parentDiscipline),
+      String(system.level ?? system.rating ?? ""),
+      normalizedName
+    ].join("::");
+  }
+
+  if (normalizedType === "ritual") {
+    return [
+      normalizedType,
+      normalizeCatalogIdentityPart(system.discipline),
+      String(system.level ?? ""),
+      normalizedName
+    ].join("::");
+  }
+
+  if (normalizedType === "disciplinepath") {
+    return [
+      normalizedType,
+      normalizeCatalogIdentityPart(system.parentDiscipline),
+      normalizedName
+    ].join("::");
+  }
+
+  return `${normalizedType}::${normalizedName}`;
+}
+
+function catalogIdentityFromItem(item) {
+  return catalogIdentityFromData({
+    type: item?.type,
+    name: item?.name,
+    system: item?.system ?? {}
+  });
+}
+
+function isVtmImportedItem(item) {
+  const flags = item?.flags?.["vtm-revised"] ?? {};
+  return Boolean(flags.source || flags.original || flags.importedAt);
+}
+
 function buildSystemData(type, entry = {}) {
   const description = {
     value: html(entry.description ?? entry.summary ?? ""),
@@ -346,7 +408,7 @@ export class RulesJsonImporter {
 
   static async importBuiltInMeritsFlawsCatalog(options = {}) {
     const payload = await loadBuiltInCatalog("systems/vtm-revised/data/vtm-revised-merits-flaws.generated.json", "built-in merits/flaws catalog");
-    return this.importData({ ...payload, dedupe: true }, options);
+    return this.importData({ ...payload, dedupe: true, dedupeWorld: true }, options);
   }
 
   static async importBuiltInMoralityCatalog(options = {}) {
@@ -368,6 +430,49 @@ export class RulesJsonImporter {
     ];
     for (const run of runs) created.push(...await run());
     return created;
+  }
+
+  static findDuplicateMeritFlawCatalogItems({ folderName = "VtM Revised Merits and Flaws Catalog" } = {}) {
+    const groups = new Map();
+
+    for (const item of Array.from(game.items ?? []).filter(i => ["merit", "flaw"].includes(i.type))) {
+      const key = catalogIdentityFromItem(item);
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(item);
+    }
+
+    return [...groups.entries()]
+      .filter(([, items]) => items.length > 1)
+      .map(([key, items]) => {
+        const catalogItems = items.filter(item => item.folder?.name === folderName);
+        const keep = catalogItems[0] ?? items[0];
+        const remove = items.filter(item => item.id !== keep.id);
+
+        return {
+          key,
+          count: items.length,
+          keep,
+          remove,
+          removeIds: remove.map(item => item.id)
+        };
+      });
+  }
+
+  static async cleanupDuplicateMeritFlawCatalogItems({ folderName = "VtM Revised Merits and Flaws Catalog", dryRun = true, notify = true } = {}) {
+    const plan = this.findDuplicateMeritFlawCatalogItems({ folderName });
+    const ids = [...new Set(plan.flatMap(row => row.removeIds))];
+
+    if (!ids.length) {
+      if (notify) ui.notifications?.info?.("Дубли достоинств/недостатков не найдены.");
+      return { dryRun, deleted: 0, planned: 0, plan };
+    }
+
+    if (!dryRun) {
+      await Item.deleteDocuments(ids);
+      if (notify) ui.notifications?.info?.(`Удалены дубли достоинств/недостатков: ${ids.length}`);
+    }
+
+    return { dryRun, deleted: dryRun ? 0 : ids.length, planned: ids.length, plan };
   }
 
   static async importText(text, options = {}) {
@@ -406,12 +511,16 @@ export class RulesJsonImporter {
 
     if (!folder) folder = await Folder.create({ name: folderName, type: "Item", sorting: "a" });
 
-    const existingKeys = new Set(Array.from(game.items ?? [])
-      .filter(item => item.folder?.id === folder.id || item.folder?.name === folderName)
-      .map(item => `${item.type}::${String(item.name).trim().toLowerCase()}`));
+    const existingScopeItems = Array.from(game.items ?? []).filter(item => {
+      if (item.folder?.id === folder.id || item.folder?.name === folderName) return true;
+      return Boolean(payload.dedupeWorld && isVtmImportedItem(item));
+    });
 
-    const docs = collected
-      .map(({ type, entry }) => ({
+    const existingKeys = new Set(existingScopeItems.map(catalogIdentityFromItem));
+    const docs = [];
+
+    for (const { type, entry } of collected) {
+      const doc = {
         name: entry.name ?? entry.title ?? entry.slug ?? game.i18n.localize(`TYPES.Item.${type}`),
         type,
         folder: folder.id,
@@ -423,8 +532,14 @@ export class RulesJsonImporter {
             original: entry
           }
         }
-      }))
-      .filter(doc => !payload.dedupe || !existingKeys.has(`${doc.type}::${String(doc.name).trim().toLowerCase()}`));
+      };
+
+      const key = catalogIdentityFromData(doc);
+      if (payload.dedupe && existingKeys.has(key)) continue;
+
+      if (payload.dedupe) existingKeys.add(key);
+      docs.push(doc);
+    }
 
     if (!docs.length) {
       if (notify) ui.notifications?.info?.(game.i18n.localize("VTM_REVISED.Import.RulesAlreadyImported"));
