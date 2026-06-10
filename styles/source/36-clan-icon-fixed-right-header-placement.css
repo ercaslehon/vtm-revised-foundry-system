@@ -1,0 +1,65 @@
+/* === Clan icon fixed right header placement === */
+.vtm-revised .vtm-identity-panel {
+  position: relative !important;
+  padding-right: 96px !important;
+}
+
+.vtm-revised .vtm-name-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  width: 100% !important;
+  max-width: calc(100% - 88px) !important;
+  gap: 0 !important;
+}
+
+.vtm-revised .vtm-name-row .vtm-character-name {
+  position: relative !important;
+  padding-right: 0 !important;
+  min-height: auto !important;
+  flex: 1 1 auto !important;
+}
+
+.vtm-revised .vtm-clan-icon {
+  position: absolute !important;
+  top: 1.15rem !important;
+  right: 1.35rem !important;
+  width: 64px !important;
+  height: 64px !important;
+  flex: 0 0 64px !important;
+  margin: 0 !important;
+  transform: none !important;
+  z-index: 5 !important;
+  pointer-events: none !important;
+}
+
+/* чтобы пульсация не сдвигала иконку */
+@keyframes vtmClanIconAggroPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.95;
+    box-shadow:
+      0 0 10px rgba(255, 120, 170, 0.34),
+      0 0 22px rgba(220, 45, 95, 0.32),
+      0 0 36px rgba(140, 10, 40, 0.26),
+      inset 0 0 12px rgba(255, 210, 230, 0.12);
+    filter:
+      drop-shadow(0 0 4px rgba(255, 210, 230, 0.20))
+      drop-shadow(0 0 8px rgba(255, 120, 170, 0.24))
+      drop-shadow(0 0 14px rgba(210, 35, 80, 0.28));
+  }
+
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+    box-shadow:
+      0 0 14px rgba(255, 160, 200, 0.52),
+      0 0 32px rgba(240, 60, 110, 0.56),
+      0 0 56px rgba(170, 20, 55, 0.44),
+      inset 0 0 16px rgba(255, 225, 238, 0.22);
+    filter:
+      drop-shadow(0 0 6px rgba(255, 225, 238, 0.34))
+      drop-shadow(0 0 12px rgba(255, 130, 180, 0.44))
+      drop-shadow(0 0 22px rgba(230, 45, 95, 0.48));
+  }
+}

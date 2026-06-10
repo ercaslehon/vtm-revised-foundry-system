@@ -1,0 +1,182 @@
+/* ==========================================================================
+   VTM Revised v9.5.8 Scroll From Health
+   Верх = портрет + данные. Всё от здоровья вниз прокручивается полноразмерно.
+   Здоровье, ограничения поколения и бросок занимают всю ширину листа.
+   ========================================================================== */
+
+.vtm-revised.sheet .vtm-vampire-shell {
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 0 !important;
+  height: 100% !important;
+  overflow: hidden !important;
+}
+
+.vtm-revised.sheet .vtm-top-shell {
+  flex: 0 0 auto !important;
+  display: grid !important;
+  grid-template-columns: 260px minmax(0, 1fr) !important;
+  gap: 10px !important;
+  min-height: 0 !important;
+  margin-bottom: 10px !important;
+  align-items: stretch !important;
+}
+
+.vtm-revised.sheet .vtm-top-stack {
+  display: block !important;
+  min-width: 0 !important;
+}
+
+.vtm-revised.sheet .vtm-identity-panel {
+  height: 100% !important;
+  min-height: 0 !important;
+}
+
+.vtm-revised.sheet .vtm-portrait-card {
+  height: auto !important;
+  min-height: 0 !important;
+}
+
+.vtm-revised.sheet .vtm-portrait-frame {
+  height: 235px !important;
+}
+
+/* Прокручиваемая зона начинается с здоровья и занимает всю оставшуюся высоту. */
+.vtm-revised.sheet .vtm-scroll-from-health,
+.vtm-revised.sheet .vtm-sheet-body {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  padding: 0 6px 0 0 !important;
+  margin: 0 !important;
+  position: relative !important;
+  z-index: 2 !important;
+  background: transparent !important;
+}
+
+/* Блоки внутри scroll-body занимают всю ширину, включая область под аватаром. */
+.vtm-revised.sheet .vtm-scroll-from-health > .vtm-top-trackers,
+.vtm-revised.sheet .vtm-scroll-from-health > .vtm-generation-strip,
+.vtm-revised.sheet .vtm-scroll-from-health > .vtm-command-strip,
+.vtm-revised.sheet .vtm-scroll-from-health > .vtm-fixed-tabs,
+.vtm-revised.sheet .vtm-scroll-from-health > .vtm-tab-panels {
+  width: 100% !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+}
+
+/* Здоровье теперь full-width первым блоком scroll-зоны. */
+.vtm-revised.sheet .vtm-top-trackers {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+  margin: 0 0 8px 0 !important;
+  align-items: stretch !important;
+}
+
+.vtm-revised.sheet .vtm-tracker-health {
+  grid-column: 1 / -1 !important;
+  order: -1 !important;
+}
+
+.vtm-revised.sheet .vtm-tracker-health .health-check-grid {
+  grid-template-columns: repeat(7, minmax(120px, 1fr)) !important;
+}
+
+.vtm-revised.sheet .vtm-tracker-health .health-row {
+  min-height: 48px !important;
+}
+
+/* Ограничения поколения и бросок тоже full-width. */
+.vtm-revised.sheet .vtm-generation-strip {
+  display: grid !important;
+  grid-template-columns: minmax(190px, 1fr) minmax(360px, 2.2fr) auto !important;
+  width: 100% !important;
+  margin: 0 0 8px 0 !important;
+}
+
+.vtm-revised.sheet .vtm-command-strip {
+  width: 100% !important;
+  margin: 0 0 10px 0 !important;
+}
+
+.vtm-revised.sheet .vtm-command-strip .vtm-roll-builder-grid {
+  grid-template-columns: 1.2fr 1.2fr 86px minmax(180px, 1fr) 134px !important;
+}
+
+/* Вкладки теперь часть scroll-зоны, но ниже броска и не налезают на верх. */
+.vtm-revised.sheet .vtm-fixed-tabs {
+  position: relative !important;
+  z-index: 4 !important;
+  margin: 0 0 10px 0 !important;
+  background:
+    linear-gradient(180deg, rgba(6, 4, 7, 0.985), rgba(11, 6, 10, 0.965)) !important;
+  border-radius: 13px !important;
+  box-shadow:
+    0 10px 26px rgba(0, 0, 0, 0.34),
+    0 0 0 1px rgba(112, 35, 56, 0.34) inset !important;
+}
+
+/* Контент вкладок получил больше полезной высоты. */
+.vtm-revised.sheet .vtm-tab-panels {
+  min-height: 420px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.vtm-revised.sheet .vtm-tab-panel.is-active {
+  display: block !important;
+}
+
+/* При переключении вкладок уже не должно быть ощущения крошечного окна. */
+.vtm-revised.sheet .vtm-main-grid,
+.vtm-revised.sheet .vtm-powers-grid,
+.vtm-revised.sheet .vtm-profile-grid {
+  min-height: 420px !important;
+}
+
+/* На средних окнах здоровье остаётся читаемым. */
+@media (max-width: 1280px) {
+  .vtm-revised.sheet .vtm-top-shell {
+    grid-template-columns: 230px minmax(0, 1fr) !important;
+  }
+
+  .vtm-revised.sheet .vtm-portrait-frame {
+    height: 210px !important;
+  }
+
+  .vtm-revised.sheet .vtm-top-trackers {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .vtm-revised.sheet .vtm-tracker-health {
+    grid-column: 1 / -1 !important;
+  }
+
+  .vtm-revised.sheet .vtm-tracker-health .health-check-grid {
+    grid-template-columns: repeat(4, minmax(120px, 1fr)) !important;
+  }
+}
+
+@media (max-width: 860px) {
+  .vtm-revised.sheet .vtm-top-shell {
+    grid-template-columns: 1fr !important;
+  }
+
+  .vtm-revised.sheet .vtm-portrait-card {
+    width: 230px !important;
+  }
+
+  .vtm-revised.sheet .vtm-top-trackers,
+  .vtm-revised.sheet .vtm-generation-strip,
+  .vtm-revised.sheet .vtm-command-strip .vtm-roll-builder-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .vtm-revised.sheet .vtm-tracker-health .health-check-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+

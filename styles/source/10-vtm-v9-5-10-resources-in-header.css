@@ -1,0 +1,235 @@
+/* ==========================================================================
+   VTM Revised v9.5.10 Resources In Header
+   Ресурсы и ограничения поколения переехали в свободное место под identity.
+   Здоровье остаётся первым блоком прокрутки.
+   ========================================================================== */
+
+.vtm-revised.sheet .vtm-top-shell {
+  grid-template-columns: 260px minmax(0, 1fr) !important;
+  align-items: stretch !important;
+  max-height: none !important;
+  margin-bottom: 10px !important;
+}
+
+.vtm-revised.sheet .vtm-top-stack {
+  display: grid !important;
+  grid-template-rows: auto minmax(0, auto) !important;
+  gap: 10px !important;
+  max-height: none !important;
+}
+
+.vtm-revised.sheet .vtm-identity-panel {
+  max-height: none !important;
+}
+
+.vtm-revised.sheet .vtm-header-resources {
+  display: grid !important;
+  grid-template-columns: minmax(290px, .85fr) minmax(0, 1.85fr) !important;
+  gap: 8px !important;
+  align-items: stretch !important;
+  min-width: 0 !important;
+}
+
+.vtm-revised.sheet .vtm-header-resources .vtm-generation-strip {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  gap: 7px !important;
+  min-height: 118px !important;
+  margin: 0 !important;
+  padding: 10px !important;
+  border: 1px solid rgba(201,173,102,0.20) !important;
+  border-radius: 12px !important;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(201,173,102,.08), transparent 38%),
+    rgba(6, 4, 7, 0.70) !important;
+}
+
+.vtm-revised.sheet .vtm-header-resources .vtm-generation-title {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+}
+
+.vtm-revised.sheet .vtm-header-resources .generation-cap-values {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+}
+
+.vtm-revised.sheet .vtm-header-resources .generation-cap-values span {
+  padding: 3px 7px !important;
+  border-radius: 999px !important;
+  font-size: 11px !important;
+}
+
+.vtm-revised.sheet .vtm-header-resources .generation-sync {
+  min-height: 29px !important;
+  align-self: stretch !important;
+}
+
+.vtm-revised.sheet .vtm-header-trackers {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+  margin: 0 !important;
+  align-items: stretch !important;
+}
+
+.vtm-revised.sheet .vtm-header-trackers .vtm-tracker-card {
+  min-height: 118px !important;
+  padding: 10px !important;
+  border-radius: 12px !important;
+}
+
+.vtm-revised.sheet .vtm-header-trackers .vtm-tracker-card h3 {
+  margin-bottom: 7px !important;
+  font-size: 11px !important;
+}
+
+.vtm-revised.sheet .vtm-header-trackers .vtm-tracker-controls {
+  justify-content: flex-start !important;
+  gap: 5px !important;
+}
+
+.vtm-revised.sheet .vtm-header-trackers .vtm-tracker-controls input {
+  width: 46px !important;
+  min-height: 27px !important;
+  height: 27px !important;
+}
+
+.vtm-revised.sheet .vtm-header-trackers .vtm-tracker-controls button {
+  width: 27px !important;
+  min-height: 27px !important;
+  height: 27px !important;
+  padding: 0 !important;
+}
+
+.vtm-revised.sheet .vtm-header-trackers .vtm-mini-field {
+  margin-top: 7px !important;
+}
+
+.vtm-revised.sheet .vtm-header-trackers .vtm-mini-field input,
+.vtm-revised.sheet .vtm-header-trackers .vtm-mini-field select {
+  min-height: 27px !important;
+  height: 27px !important;
+}
+
+.vtm-revised.sheet .vtm-header-trackers .vtm-xp-compact {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 6px !important;
+}
+
+.vtm-revised.sheet .vtm-header-trackers .vtm-xp-compact label {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 3px !important;
+}
+
+.vtm-revised.sheet .vtm-header-trackers .vtm-xp-compact input {
+  min-height: 27px !important;
+  height: 27px !important;
+}
+
+/* В прокручиваемой зоне теперь первым живёт только здоровье. */
+.vtm-revised.sheet .vtm-health-scroll-block {
+  margin: 0 0 8px 0 !important;
+  padding: 12px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .vtm-tracker-health {
+  margin: 0 !important;
+  padding: 0 !important;
+  min-height: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-active-penalty {
+  margin: 0 0 8px !important;
+  padding: 7px 9px !important;
+  border-radius: 9px !important;
+  font-size: 12px !important;
+  color: var(--vtm-text) !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-check-grid {
+  display: grid !important;
+  grid-template-columns: repeat(7, minmax(120px, 1fr)) !important;
+  gap: 7px !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row {
+  display: grid !important;
+  grid-template-columns: 18px minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 7px !important;
+  min-height: 46px !important;
+  padding: 7px 8px !important;
+  border: 1px solid rgba(112, 35, 56, 0.58) !important;
+  border-radius: 10px !important;
+  background: linear-gradient(180deg, rgba(7,5,7,.76), rgba(29,10,18,.62)) !important;
+  text-align: left !important;
+  cursor: pointer !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row input[type="checkbox"] {
+  position: static !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  width: 16px !important;
+  height: 16px !important;
+  accent-color: var(--vtm-blood-2, #c33b54) !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-name {
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: normal !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-penalty {
+  font-size: 11px !important;
+  white-space: normal !important;
+}
+
+/* Scroll-body теперь действительно начинается с здоровья, без ресурсных дублей. */
+.vtm-revised.sheet .vtm-scroll-from-health {
+  flex: 1 1 auto !important;
+  min-height: 260px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+@media (max-width: 1320px) {
+  .vtm-revised.sheet .vtm-header-resources {
+    grid-template-columns: 1fr !important;
+  }
+
+  .vtm-revised.sheet .vtm-header-resources .vtm-generation-strip {
+    min-height: 0 !important;
+  }
+
+  .vtm-revised.sheet .vtm-header-trackers {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .vtm-revised.sheet .vtm-health-scroll-block .health-check-grid {
+    grid-template-columns: repeat(4, minmax(120px, 1fr)) !important;
+  }
+}
+
+@media (max-width: 860px) {
+  .vtm-revised.sheet .vtm-header-trackers,
+  .vtm-revised.sheet .vtm-health-scroll-block .health-check-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+

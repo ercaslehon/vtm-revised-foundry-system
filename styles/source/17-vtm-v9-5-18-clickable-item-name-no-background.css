@@ -1,0 +1,41 @@
+/* ==========================================================================
+   VTM Revised v9.5.18 Clickable Item Name No Background
+   Убирает кнопку-подложку с кликабельных названий путей и ритуалов.
+   ========================================================================== */
+
+.vtm-revised.sheet .items-list .item-name.discipline-card-open,
+.vtm-revised.sheet .items-list .item-name.ritual-card-open,
+.vtm-revised.sheet .items-list .item-name.merit-flaw-card-open,
+.vtm-revised.sheet .items-list .item-name.item-edit {
+  width: auto !important;
+  min-width: 0 !important;
+  height: auto !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--vtm-text) !important;
+  text-align: left !important;
+  justify-self: stretch !important;
+  align-self: center !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-name.discipline-card-open,
+.vtm-revised.sheet .blood-magic-section .item-name.ritual-card-open {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  color: var(--vtm-text) !important;
+}
+
+.vtm-revised.sheet .items-list .item-name.discipline-card-open:hover,
+.vtm-revised.sheet .items-list .item-name.ritual-card-open:hover,
+.vtm-revised.sheet .items-list .item-name.merit-flaw-card-open:hover,
+.vtm-revised.sheet .items-list .item-name.item-edit:hover {
+  color: #fff1df !important;
+  text-shadow: 0 0 8px rgba(201, 62, 88, 0.28) !important;
+}
+
+

@@ -1,0 +1,70 @@
+/* ==========================================================================
+   VTM catalog picker fixed size restore
+   Возвращает фиксированную высоту/ширину окон выбора каталогов.
+   Никакой динамической подгонки высоты.
+   ========================================================================== */
+
+.vtm-catalog-picker-dialog {
+  width: 1040px !important;
+  min-width: 1040px !important;
+  height: 460px !important;
+  min-height: 460px !important;
+  max-width: 96vw !important;
+  max-height: 82vh !important;
+}
+
+.vtm-catalog-picker-dialog .window-content,
+.vtm-catalog-picker-dialog .application-content {
+  height: calc(100% - 30px) !important;
+  min-height: 380px !important;
+  max-height: calc(82vh - 32px) !important;
+  overflow-y: auto !important;
+  padding: 12px !important;
+}
+
+.vtm-catalog-picker-dialog form,
+.vtm-catalog-picker-dialog .standard-form,
+.vtm-catalog-picker-dialog .vtm-catalog-picker-form {
+  display: flex !important;
+  flex-direction: column !important;
+  height: auto !important;
+  min-height: 0 !important;
+  gap: 10px !important;
+}
+
+.vtm-catalog-picker-dialog .dialog-content {
+  flex: 0 0 auto !important;
+  min-height: 0 !important;
+  overflow: visible !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.vtm-catalog-picker-dialog .form-group {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 8px !important;
+  height: auto !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+}
+
+.vtm-catalog-picker-dialog .vtm-catalog-preview {
+  flex: 0 0 auto !important;
+  min-height: 0 !important;
+  max-height: 230px !important;
+  overflow-y: auto !important;
+  margin-top: 10px !important;
+}
+
+.vtm-catalog-picker-dialog .dialog-buttons {
+  flex: 0 0 auto !important;
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 8px !important;
+  margin-top: 10px !important;
+  padding-top: 0 !important;
+  position: static !important;
+}
+

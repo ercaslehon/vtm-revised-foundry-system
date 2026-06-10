@@ -1,3 +1,10 @@
+# v11.0.14
+
+## Стили
+- Добавлена модульная структура исходников CSS в styles/source.
+- Добавлены команды npm run styles:split, styles:build и styles:check.
+- Загружаемый styles/vtm-revised.css сохранён без визуальных изменений.
+
 # v11.0.13
 
 ## Техническая уборка

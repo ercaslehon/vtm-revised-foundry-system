@@ -1,0 +1,843 @@
+/* ==========================================================================
+   VTM Revised v9.5.3 Vampire UI Shell
+   Более близко к целевому макету: портрет слева, справа identity/tracker/roll,
+   ограниченная ширина листа, компактные трекеры, pips для черт.
+   ========================================================================== */
+
+.vtm-revised.sheet {
+  --vtm-canvas: #050306;
+  --vtm-black: #09060a;
+  --vtm-black-2: #10080e;
+  --vtm-panel: rgba(13, 9, 11, 0.95);
+  --vtm-panel-red: rgba(37, 12, 22, 0.86);
+  --vtm-border: #6f2338;
+  --vtm-border-soft: rgba(112, 35, 56, 0.50);
+  --vtm-border-hot: rgba(190, 56, 82, 0.72);
+  --vtm-gold: #c9ad66;
+  --vtm-gold-soft: rgba(201, 173, 102, 0.36);
+  --vtm-gold-dim: rgba(201, 173, 102, 0.18);
+  --vtm-blood: #9e2039;
+  --vtm-blood-2: #c33b54;
+  --vtm-blood-dark: #440916;
+  --vtm-text: #efe6d8;
+  --vtm-muted: #ad9d8e;
+  --vtm-dim: #7d6f65;
+  --vtm-shadow: 0 18px 50px rgba(0, 0, 0, 0.55);
+  --vtm-inset: inset 0 0 28px rgba(0, 0, 0, 0.48);
+  color: var(--vtm-text);
+  font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif;
+}
+
+.vtm-revised.sheet .window-content {
+  padding: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 18% 4%, rgba(124, 20, 39, 0.32), transparent 28%),
+    radial-gradient(circle at 90% 18%, rgba(201, 173, 102, 0.10), transparent 26%),
+    linear-gradient(135deg, #050306, #120810 48%, #050306);
+  color: var(--vtm-text);
+}
+
+.vtm-vampire-shell {
+  width: min(100%, 1480px);
+  max-width: 1480px;
+  margin: 0 auto;
+  padding: 12px 14px 14px;
+  gap: 10px;
+  box-sizing: border-box;
+}
+
+.vtm-vampire-shell::before {
+  inset: 7px;
+  border-radius: 18px;
+  border-color: rgba(201, 173, 102, 0.13);
+}
+
+.vtm-sheet input,
+.vtm-sheet select,
+.vtm-sheet textarea {
+  min-height: 28px;
+  padding: 4px 8px;
+  border: 1px solid rgba(112, 35, 56, 0.78);
+  border-radius: 7px;
+  background: rgba(4, 3, 5, 0.76);
+  color: var(--vtm-text);
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.48);
+}
+
+.vtm-sheet input:focus,
+.vtm-sheet select:focus,
+.vtm-sheet textarea:focus {
+  outline: none;
+  border-color: rgba(201, 173, 102, 0.72);
+  box-shadow: 0 0 0 1px rgba(201, 173, 102, 0.17), 0 0 16px rgba(158, 32, 57, 0.25), inset 0 0 13px rgba(0,0,0,0.48);
+}
+
+.vtm-sheet label {
+  color: var(--vtm-muted);
+  font-size: 11px;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+}
+
+.vtm-sheet button {
+  border: 1px solid rgba(201, 173, 102, 0.28);
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(124, 28, 48, 0.96), rgba(55, 9, 21, 0.98));
+  color: #fff0dd;
+  box-shadow: 0 5px 14px rgba(0,0,0,0.34), inset 0 1px 0 rgba(255,255,255,0.08);
+}
+
+.vtm-sheet button:hover {
+  border-color: rgba(201, 173, 102, 0.68);
+  filter: brightness(1.08);
+  box-shadow: 0 0 16px rgba(158,32,57,0.30), inset 0 1px 0 rgba(255,255,255,0.12);
+}
+
+.vtm-panel {
+  margin-bottom: 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(112, 35, 56, 0.42);
+  background:
+    radial-gradient(circle at 100% 0%, rgba(158, 32, 57, 0.11), transparent 34%),
+    linear-gradient(145deg, rgba(14, 9, 12, 0.96), rgba(7, 5, 7, 0.94));
+  box-shadow: 0 12px 30px rgba(0,0,0,0.38), inset 0 0 24px rgba(0,0,0,0.38);
+}
+
+.vtm-sheet h2,
+.vtm-sheet h3 {
+  color: var(--vtm-gold);
+  font-family: "Cinzel", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.vtm-sheet h2 {
+  margin: 0 0 9px;
+  font-size: 14px;
+}
+
+/* Top shell: this is the main structural change versus 9.5.2 */
+.vtm-top-shell {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  gap: 12px;
+  min-height: 392px;
+}
+
+.vtm-top-stack {
+  display: grid;
+  grid-template-rows: auto auto auto;
+  gap: 10px;
+  min-width: 0;
+}
+
+.vtm-sheet .vtm-portrait-card {
+  min-height: 392px;
+  padding: 10px;
+  border: 1px solid rgba(112, 35, 56, 0.76);
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(112, 35, 56, 0.25), transparent 52%),
+    linear-gradient(180deg, rgba(10, 7, 9, 0.98), rgba(32, 11, 19, 0.88));
+  box-shadow: var(--vtm-shadow), var(--vtm-inset);
+}
+
+.vtm-portrait-frame {
+  height: 300px;
+  padding: 5px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(201, 173, 102, 0.80), rgba(112, 35, 56, 0.50), rgba(201, 173, 102, 0.20));
+}
+
+.vtm-sheet .profile-img {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: 9px;
+  object-fit: cover;
+  background: #030203;
+  filter: contrast(1.06) saturate(0.90);
+}
+
+.vtm-portrait-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 7px;
+  margin-top: 10px;
+}
+
+.vtm-portrait-actions button {
+  min-height: 32px;
+}
+
+.vtm-sheet .vtm-identity-panel {
+  display: block;
+  margin: 0;
+  padding: 16px 18px 14px;
+  border: 1px solid rgba(112, 35, 56, 0.58);
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 90% 15%, rgba(201, 173, 102, 0.10), transparent 26%),
+    linear-gradient(145deg, rgba(12, 8, 10, 0.98), rgba(29, 10, 18, 0.82));
+  box-shadow: var(--vtm-shadow), var(--vtm-inset);
+}
+
+.vtm-character-name {
+  position: relative;
+  margin: 0 0 11px;
+}
+
+.vtm-character-name input {
+  width: 100%;
+  min-height: 50px;
+  padding: 2px 42px 7px 6px;
+  border: 0;
+  border-bottom: 1px solid rgba(201, 173, 102, 0.44);
+  border-radius: 0;
+  background: transparent;
+  color: var(--vtm-gold);
+  box-shadow: none;
+  font-family: "Cinzel", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  font-size: 34px;
+  letter-spacing: 0.15em;
+  text-shadow: 0 0 18px rgba(201, 173, 102, 0.17);
+}
+
+.vtm-identity-grid,
+.vtm-lore-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.vtm-lore-grid {
+  margin-top: 10px;
+}
+
+.vtm-identity-cell,
+.vtm-lore-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+  padding-left: 10px;
+  border-left: 1px solid rgba(201, 173, 102, 0.22);
+}
+
+.vtm-identity-cell > span,
+.vtm-lore-cell > span,
+.vtm-command-strip label > span,
+.vtm-mini-field {
+  color: var(--vtm-muted);
+}
+
+.vtm-control-with-book,
+.clan-picker-row,
+.archetype-picker-row,
+.morality-picker-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 32px;
+  gap: 6px;
+  align-items: center;
+}
+
+.vtm-book-button,
+.clan-card-open,
+.archetype-card-open,
+.morality-path-card-open,
+.discipline-card-open,
+.ritual-card-open,
+.merit-flaw-card-open {
+  width: 32px;
+  min-width: 32px;
+  height: 29px;
+  min-height: 29px;
+  padding: 0;
+  background: linear-gradient(180deg, rgba(124, 28, 48, 0.96), rgba(55, 9, 21, 0.98));
+  border-color: rgba(201,173,102,0.38);
+}
+
+/* Compact trackers, now living to the right of the portrait like in the mockup */
+.vtm-top-trackers {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.08fr .9fr 1.55fr;
+  gap: 8px;
+}
+
+.vtm-tracker-card {
+  min-height: 88px;
+  padding: 10px 10px 9px;
+  border: 1px solid rgba(112, 35, 56, 0.54);
+  border-radius: 12px;
+  background:
+    radial-gradient(circle at 84% 10%, rgba(158, 32, 57, 0.18), transparent 42%),
+    linear-gradient(180deg, rgba(9, 6, 8, 0.96), rgba(30, 10, 18, 0.82));
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.38);
+}
+
+.vtm-tracker-card h3 {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 0 8px;
+  font-size: 11px;
+  line-height: 1;
+}
+
+.vtm-tracker-card h3 i {
+  color: var(--vtm-blood-2);
+}
+
+.vtm-tracker-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.vtm-tracker-controls input {
+  width: 44px;
+  height: 28px;
+  min-height: 28px;
+  padding-inline: 4px;
+  text-align: center;
+  color: var(--vtm-gold);
+  font-weight: 700;
+}
+
+.vtm-tracker-controls button {
+  width: 27px;
+  height: 27px;
+  min-height: 27px;
+  padding: 0;
+}
+
+.vtm-mini-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 7px;
+  font-size: 10px;
+}
+
+.vtm-mini-field input,
+.vtm-path-mini select {
+  height: 27px;
+  min-height: 27px;
+}
+
+.vtm-xp-compact {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.vtm-xp-compact label {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 9px;
+}
+
+.vtm-xp-compact input {
+  height: 27px;
+  min-height: 27px;
+}
+
+.vtm-xp-available {
+  margin: 6px 0 0;
+  color: var(--vtm-muted);
+  font-size: 11px;
+}
+
+.vtm-xp-available strong {
+  color: var(--vtm-gold);
+}
+
+.vtm-tracker-health {
+  min-width: 0;
+}
+
+.vtm-tracker-health .health-active-penalty {
+  margin: 0 0 7px;
+  padding: 5px 7px;
+  border: 1px solid rgba(201, 173, 102, 0.20);
+  border-radius: 8px;
+  background: rgba(201, 173, 102, 0.06);
+  color: var(--vtm-muted);
+  font-size: 11px;
+}
+
+.vtm-tracker-health .health-check-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.vtm-tracker-health .health-row {
+  display: block;
+  min-height: 30px;
+  padding: 0;
+  border: 1px solid rgba(112, 35, 56, 0.50);
+  border-radius: 7px;
+  background: rgba(5, 3, 6, 0.72);
+  text-align: center;
+  overflow: hidden;
+}
+
+.vtm-tracker-health .health-row input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.vtm-tracker-health .health-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 30px;
+  padding: 2px;
+  line-height: 1.05;
+}
+
+.vtm-tracker-health .health-name {
+  max-width: 100%;
+  overflow: hidden;
+  color: var(--vtm-text);
+  font-size: 9px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.vtm-tracker-health .health-penalty {
+  color: var(--vtm-dim);
+  font-size: 9px;
+}
+
+.vtm-tracker-health .health-row.is-checked {
+  border-color: rgba(195, 59, 84, 0.86);
+  background: linear-gradient(180deg, rgba(117, 24, 43, 0.92), rgba(35, 7, 15, 0.94));
+  box-shadow: 0 0 10px rgba(158,32,57,0.30);
+}
+
+.vtm-generation-strip {
+  display: grid;
+  grid-template-columns: minmax(140px, .75fr) minmax(280px, 1.6fr) auto;
+  gap: 8px;
+  align-items: center;
+  min-height: 38px;
+  margin-top: -2px;
+  padding: 7px 9px;
+  border: 1px solid rgba(201,173,102,0.20);
+  border-radius: 11px;
+  background: rgba(6, 4, 7, 0.62);
+}
+
+.vtm-generation-title {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.vtm-generation-title strong,
+.generation-cap-values strong {
+  color: var(--vtm-gold);
+}
+
+.generation-cap-values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.generation-cap-values span {
+  padding: 3px 8px;
+  border: 1px solid rgba(201,173,102,0.14);
+  border-radius: 999px;
+  background: rgba(201,173,102,0.06);
+  color: var(--vtm-muted);
+  font-size: 11px;
+}
+
+.generation-sync {
+  white-space: nowrap;
+}
+
+/* Roll strip */
+.vtm-command-strip {
+  margin: 0;
+  padding: 10px 12px 12px;
+  border-color: rgba(201,173,102,0.23);
+  background: linear-gradient(90deg, rgba(8,5,7,0.96), rgba(45,13,24,0.92), rgba(8,5,7,0.96));
+}
+
+.vtm-command-strip h2 {
+  margin-bottom: 7px;
+}
+
+.vtm-command-strip .vtm-roll-builder-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1.3fr 92px minmax(160px, 1fr) 150px;
+  gap: 8px;
+  align-items: end;
+}
+
+.vtm-command-strip label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.vtm-roll-builder-submit,
+.vtm-roll,
+.weapon-attack {
+  background: linear-gradient(180deg, var(--vtm-blood-2), var(--vtm-blood) 50%, var(--vtm-blood-dark));
+  border-color: rgba(201,173,102,0.42);
+  font-weight: 700;
+}
+
+.vtm-roll-builder-submit {
+  min-height: 31px;
+  text-transform: uppercase;
+  letter-spacing: .055em;
+}
+
+/* Body */
+.vtm-sheet-v2 .vtm-sheet-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(201,173,102,.42) rgba(5,3,6,.55);
+}
+
+.vtm-section-tabs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.vtm-tab-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 36px;
+  border: 1px solid rgba(112,35,56,.42);
+  border-radius: 10px;
+  background: rgba(7,5,7,.70);
+  color: var(--vtm-muted);
+  font-size: 12px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.vtm-tab-item.is-active {
+  border-color: rgba(201,173,102,.42);
+  color: var(--vtm-gold);
+  background: radial-gradient(circle at 50% 0%, rgba(158,32,57,.30), transparent 58%), linear-gradient(180deg, rgba(67,16,30,.78), rgba(8,5,7,.74));
+  box-shadow: 0 0 18px rgba(158,32,57,.20);
+}
+
+.vtm-main-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(390px, .72fr);
+  gap: 10px;
+  align-items: start;
+}
+
+.vtm-main-left,
+.vtm-main-right {
+  min-width: 0;
+}
+
+/* Trait panels with visual pips */
+.trait-columns {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.trait-column {
+  padding: 10px;
+  border: 1px solid rgba(112,35,56,.42);
+  border-radius: 11px;
+  background: linear-gradient(180deg, rgba(7,5,7,.74), rgba(29,10,18,.52));
+}
+
+.trait-column h3 {
+  margin: 0 0 8px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--vtm-gold);
+}
+
+.trait-row {
+  display: grid;
+  grid-template-columns: minmax(82px, 1fr) auto 34px 28px;
+  gap: 6px;
+  align-items: center;
+  min-height: 30px;
+  margin: 0;
+  padding: 3px 4px 3px 7px;
+  border-bottom: 1px solid rgba(112,35,56,.20);
+  border-radius: 7px;
+}
+
+.trait-row:hover {
+  background: rgba(201,173,102,.055);
+}
+
+.trait-name {
+  overflow: hidden;
+  color: var(--vtm-text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.trait-pips {
+  display: inline-grid;
+  grid-template-columns: repeat(5, 10px);
+  gap: 4px;
+  align-items: center;
+  justify-content: end;
+}
+
+.trait-pips i {
+  width: 9px;
+  height: 9px;
+  border: 1px solid rgba(201,173,102,.40);
+  border-radius: 50%;
+  background: rgba(5,3,6,.72);
+  box-shadow: inset 0 0 5px rgba(0,0,0,.58);
+}
+
+.trait-pips i.is-filled {
+  border-color: rgba(227, 91, 103, .72);
+  background: radial-gradient(circle at 35% 30%, #f0a08f, #9e2039 62%, #3d0714);
+  box-shadow: 0 0 7px rgba(158,32,57,.38);
+}
+
+.trait-value-input {
+  width: 34px !important;
+  height: 24px !important;
+  min-height: 24px !important;
+  padding: 0 2px !important;
+  text-align: center;
+  color: var(--vtm-gold) !important;
+  font-weight: 700;
+}
+
+.trait-row .vtm-roll {
+  width: 27px;
+  height: 25px;
+  min-height: 25px;
+  padding: 0;
+}
+
+.trait-cap-note {
+  margin-left: 6px;
+  padding: 2px 7px;
+  border: 1px solid rgba(201,173,102,.18);
+  border-radius: 999px;
+  background: rgba(201,173,102,.055);
+  color: var(--vtm-muted);
+  font-size: 10px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.trait-over-limit {
+  box-shadow: inset 3px 0 0 rgba(195,59,84,.78);
+}
+
+.grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+/* Advantage and item cards */
+.advantage-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.advantage-grid > div,
+.blood-magic-group,
+.blood-magic-rituals-panel {
+  padding: 10px;
+  border: 1px solid rgba(112,35,56,.42);
+  border-radius: 11px;
+  background: linear-gradient(180deg, rgba(7,5,7,.74), rgba(29,10,18,.52));
+}
+
+.advantage-grid h3,
+.blood-magic-group h3,
+.blood-magic-rituals-panel h3 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin: 0 0 8px;
+  font-size: 11px;
+}
+
+.items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.item-row {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) 42px repeat(4, 26px);
+  gap: 4px;
+  align-items: center;
+  min-height: 30px;
+  padding: 4px 4px 4px 7px;
+  border: 1px solid rgba(112,35,56,.26);
+  border-radius: 8px;
+  background: rgba(5,3,6,.58);
+}
+
+.item-row:hover {
+  border-color: rgba(201,173,102,.32);
+  background: rgba(201,173,102,.05);
+}
+
+.item-name {
+  overflow: hidden;
+  color: var(--vtm-text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.item-rating {
+  color: var(--vtm-gold);
+  text-align: center;
+  font-weight: 700;
+}
+
+.item-row button {
+  width: 25px;
+  height: 25px;
+  min-height: 25px;
+  padding: 0;
+}
+
+/* Right column */
+.blood-magic-section {
+  border-color: rgba(158,32,57,.42);
+  background: radial-gradient(circle at 84% 14%, rgba(158,32,57,.20), transparent 32%), linear-gradient(145deg, rgba(10,6,9,.97), rgba(40,12,22,.82));
+}
+
+.blood-magic-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.blood-magic-rituals-panel {
+  margin-top: 8px;
+}
+
+.blood-magic-group-header,
+.section-header-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: center;
+}
+
+.weapon-list .weapon-row {
+  grid-template-columns: minmax(110px,1fr) repeat(4, minmax(45px, auto)) 28px 28px 28px;
+  gap: 4px;
+}
+
+.weapon-meta {
+  color: var(--vtm-muted);
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.weapon-attack {
+  width: auto !important;
+  min-width: 58px;
+  padding-inline: 7px !important;
+}
+
+.text-blocks {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.text-blocks label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.text-blocks textarea {
+  min-height: 82px;
+}
+
+/* Chat cards */
+.vtm-chat-card {
+  border: 1px solid rgba(112,35,56,.70);
+  border-radius: 12px;
+  padding: 11px;
+  background: radial-gradient(circle at 100% 0%, rgba(158,32,57,.16), transparent 30%), linear-gradient(145deg, #150b10, #060407);
+  color: var(--vtm-text);
+}
+
+.vtm-chat-card h3 { color: var(--vtm-gold); }
+
+@media (max-width: 1320px) {
+  .vtm-top-shell { grid-template-columns: 240px minmax(0, 1fr); }
+  .vtm-sheet .vtm-portrait-card { min-height: 342px; }
+  .vtm-portrait-frame { height: 250px; }
+  .vtm-top-trackers { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .vtm-tracker-health { grid-column: span 2; }
+  .vtm-command-strip .vtm-roll-builder-grid { grid-template-columns: 1fr 1fr 80px 1fr; }
+  .vtm-roll-builder-submit { grid-column: 4; }
+}
+
+@media (max-width: 1040px) {
+  .vtm-top-shell,
+  .vtm-main-grid { grid-template-columns: 1fr; }
+  .vtm-sheet .vtm-portrait-card { width: 260px; min-height: auto; }
+  .vtm-portrait-frame { height: 260px; }
+  .vtm-identity-grid,
+  .vtm-lore-grid,
+  .advantage-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .trait-columns { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 760px) {
+  .vtm-vampire-shell { padding: 10px; }
+  .vtm-identity-grid,
+  .vtm-lore-grid,
+  .vtm-top-trackers,
+  .vtm-generation-strip,
+  .vtm-command-strip .vtm-roll-builder-grid,
+  .vtm-section-tabs,
+  .advantage-grid,
+  .blood-magic-grid,
+  .grid-2,
+  .grid-3,
+  .grid-4 { grid-template-columns: 1fr; }
+  .vtm-tracker-health { grid-column: auto; }
+  .item-row,
+  .weapon-list .weapon-row { grid-template-columns: 1fr; }
+}
+
+

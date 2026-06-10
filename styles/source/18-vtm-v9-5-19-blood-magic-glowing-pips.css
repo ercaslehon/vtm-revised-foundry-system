@@ -1,0 +1,59 @@
+/* ==========================================================================
+   VTM Revised v9.5.19 Blood Magic Glowing Pips
+   Под названиями путей и ритуалов добавлены сияющие точки рейтинга.
+   ========================================================================== */
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-main,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-main {
+  grid-column: 1 / -1 !important;
+  grid-row: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  gap: 5px !important;
+  min-width: 0 !important;
+  width: 100% !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-main .item-name,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-main .item-name {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  line-height: 1.14 !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-main .item-pips,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-main .item-pips {
+  justify-content: flex-start !important;
+  gap: 4px !important;
+  min-height: 10px !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-main .item-pips i,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-main .item-pips i {
+  width: 8px !important;
+  height: 8px !important;
+  flex: 0 0 8px !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-main .item-pips {
+  flex-wrap: wrap !important;
+  max-width: 100% !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"],
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] {
+  min-height: 60px !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-rating,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-rating {
+  align-self: end !important;
+}
+
+

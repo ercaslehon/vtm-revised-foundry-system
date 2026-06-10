@@ -1,0 +1,90 @@
+/* ==========================================================================
+   VTM Revised v9.5.30 Blood Magic Vertical Center
+   Левый блок (название + точки) остаётся слева, но центрируется по вертикали.
+   Правый блок (рейтинг + кнопки) выравнивается справа и тоже по вертикали.
+   ========================================================================== */
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"],
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto repeat(4, 28px) !important;
+  grid-template-rows: auto !important;
+  gap: 5px !important;
+  align-items: center !important;
+  min-height: 60px !important;
+  padding: 8px 8px 8px 10px !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-main,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-main {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  gap: 5px !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  text-align: left !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-main .item-name,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-main .item-name {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  line-height: 1.14 !important;
+  text-align: left !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-main .item-pips,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-main .item-pips {
+  display: flex !important;
+  width: 100% !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+  gap: 4px !important;
+  min-height: 10px !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-rating,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-rating {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  justify-self: end !important;
+  align-self: center !important;
+  min-width: 42px !important;
+  text-align: right !important;
+  white-space: nowrap !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] > button,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] > button {
+  grid-row: 1 !important;
+  align-self: center !important;
+  justify-self: end !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] > button:nth-last-child(4),
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] > button:nth-last-child(4) {
+  grid-column: 3 !important;
+}
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] > button:nth-last-child(3),
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] > button:nth-last-child(3) {
+  grid-column: 4 !important;
+}
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] > button:nth-last-child(2),
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] > button:nth-last-child(2) {
+  grid-column: 5 !important;
+}
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] > button:nth-last-child(1),
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] > button:nth-last-child(1) {
+  grid-column: 6 !important;
+}
+
+

@@ -1,0 +1,109 @@
+/* =========================================================
+   Health damage state colors
+   0 = none, 1 = bash, 2 = lethal, 3 = aggravated
+   ========================================================= */
+
+.vtm-revised .health-grid.health-check-grid {
+  align-items: stretch;
+}
+
+.vtm-revised .health-row {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  min-height: 42px;
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  transition:
+    background 0.16s ease,
+    border-color 0.16s ease,
+    box-shadow 0.16s ease,
+    color 0.16s ease,
+    transform 0.12s ease;
+}
+
+.vtm-revised .health-row:hover {
+  transform: translateY(-1px);
+}
+
+.vtm-revised .health-row:focus-visible {
+  outline: 1px solid rgba(222, 190, 112, 0.85);
+  outline-offset: 2px;
+}
+
+.vtm-revised .health-row[data-damage-state="0"] {
+  background: rgba(12, 5, 8, 0.72);
+  border-color: rgba(116, 35, 54, 0.78);
+  box-shadow: none;
+}
+
+.vtm-revised .health-row[data-damage-state="1"] {
+  background:
+    radial-gradient(circle at 18% 0%, rgba(255, 175, 165, 0.18), transparent 42%),
+    linear-gradient(180deg, rgba(135, 48, 45, 0.58), rgba(62, 12, 16, 0.78));
+  border-color: rgba(216, 112, 104, 0.95);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 205, 196, 0.10),
+    0 0 10px rgba(210, 72, 64, 0.16);
+}
+
+.vtm-revised .health-row[data-damage-state="2"] {
+  background:
+    radial-gradient(circle at 18% 0%, rgba(255, 95, 82, 0.22), transparent 42%),
+    linear-gradient(180deg, rgba(128, 18, 24, 0.78), rgba(55, 4, 10, 0.88));
+  border-color: rgba(225, 55, 55, 0.98);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 180, 170, 0.12),
+    0 0 13px rgba(210, 28, 35, 0.24);
+}
+
+.vtm-revised .health-row[data-damage-state="3"] {
+  background:
+    radial-gradient(circle at 18% 0%, rgba(120, 16, 20, 0.35), transparent 44%),
+    linear-gradient(180deg, rgba(62, 4, 9, 0.94), rgba(18, 0, 4, 0.96));
+  border-color: rgba(126, 24, 32, 0.98);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 120, 120, 0.08),
+    0 0 14px rgba(95, 0, 10, 0.30);
+}
+
+.vtm-revised .health-row[data-damage-state="1"] .health-name,
+.vtm-revised .health-row[data-damage-state="2"] .health-name,
+.vtm-revised .health-row[data-damage-state="3"] .health-name {
+  color: #fff1ec;
+}
+
+.vtm-revised .health-row[data-damage-state="1"] .health-penalty,
+.vtm-revised .health-row[data-damage-state="2"] .health-penalty,
+.vtm-revised .health-row[data-damage-state="3"] .health-penalty {
+  color: rgba(255, 220, 212, 0.88);
+}
+
+.vtm-revised .health-damage-label {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.66rem;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: rgba(210, 190, 150, 0.68);
+}
+
+.vtm-revised .health-row[data-damage-state="0"] .health-damage-label {
+  display: none;
+}
+
+.vtm-revised .health-row[data-damage-state="1"] .health-damage-label {
+  color: rgba(255, 184, 174, 0.92);
+}
+
+.vtm-revised .health-row[data-damage-state="2"] .health-damage-label {
+  color: rgba(255, 122, 112, 0.94);
+}
+
+.vtm-revised .health-row[data-damage-state="3"] .health-damage-label {
+  color: rgba(210, 62, 72, 0.96);
+}
+

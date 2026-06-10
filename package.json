@@ -2,10 +2,13 @@
   "name": "vtm-revised-foundry-system",
   "private": true,
   "type": "module",
-  "version": "11.0.13",
+  "version": "11.0.14",
   "scripts": {
     "validate:catalogs": "node scripts/validate-catalogs.mjs",
     "prerelease": "npm run validate:catalogs",
-    "check": "npm run validate:catalogs"
+    "check": "npm run validate:catalogs",
+    "styles:split": "node scripts/split-styles.mjs",
+    "styles:build": "node scripts/build-styles.mjs",
+    "styles:check": "node scripts/build-styles.mjs --check"
   }
 }

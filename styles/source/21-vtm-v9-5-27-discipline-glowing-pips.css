@@ -1,0 +1,60 @@
+/* ==========================================================================
+   VTM Revised v9.5.27 Discipline Glowing Pips
+   Под названиями дисциплин добавлены сияющие точки рейтинга.
+   ========================================================================== */
+
+.vtm-revised.sheet .vtm-disciplines-panel .item-row[data-item-type="discipline"] {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 42px repeat(4, 26px) !important;
+  grid-auto-rows: auto !important;
+  gap: 4px !important;
+  align-items: center !important;
+  min-height: 48px !important;
+  padding: 6px 4px 6px 7px !important;
+}
+
+.vtm-revised.sheet .vtm-disciplines-panel .item-row[data-item-type="discipline"] .item-main {
+  grid-column: 1 !important;
+  grid-row: 1 / span 2 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  gap: 5px !important;
+  min-width: 0 !important;
+  width: 100% !important;
+}
+
+.vtm-revised.sheet .vtm-disciplines-panel .item-row[data-item-type="discipline"] .item-main .item-name {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  line-height: 1.14 !important;
+}
+
+.vtm-revised.sheet .vtm-disciplines-panel .item-row[data-item-type="discipline"] .item-main .item-pips {
+  justify-content: flex-start !important;
+  gap: 4px !important;
+  min-height: 10px !important;
+}
+
+.vtm-revised.sheet .vtm-disciplines-panel .item-row[data-item-type="discipline"] .item-main .item-pips i {
+  width: 8px !important;
+  height: 8px !important;
+  flex: 0 0 8px !important;
+}
+
+.vtm-revised.sheet .vtm-disciplines-panel .item-row[data-item-type="discipline"] .item-rating {
+  align-self: center !important;
+}
+
+@media (max-width: 760px) {
+  .vtm-revised.sheet .vtm-disciplines-panel .item-row[data-item-type="discipline"] {
+    min-height: 52px !important;
+  }
+}
+
+

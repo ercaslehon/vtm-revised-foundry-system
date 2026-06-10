@@ -1,0 +1,139 @@
+/* ==========================================================================
+   VTM Revised v9.5.15 Health No Checks
+   Полностью убирает видимые чекбоксы/галочки из здоровья.
+   Выбор состояния показывается только подсветкой блока.
+   ========================================================================== */
+
+.vtm-revised.sheet .vtm-health-scroll-block {
+  padding: 10px !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-check-grid {
+  display: grid !important;
+  grid-template-columns: repeat(7, minmax(96px, 1fr)) !important;
+  gap: 7px !important;
+  align-items: stretch !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  min-height: 38px !important;
+  padding: 7px 11px !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(112, 35, 56, 0.56) !important;
+  border-radius: 10px !important;
+  background:
+    linear-gradient(180deg, rgba(7, 5, 7, 0.78), rgba(24, 9, 16, 0.64)) !important;
+  cursor: pointer !important;
+}
+
+/* Убить визуальные чекбоксы. Да, совсем. */
+.vtm-revised.sheet .vtm-health-scroll-block .health-row input.health-checkbox,
+.vtm-revised.sheet .vtm-health-scroll-block .health-row input[type="checkbox"].health-checkbox,
+.vtm-revised.sheet .vtm-health-scroll-block .health-row .health-checkbox,
+.vtm-revised.sheet .vtm-health-scroll-block .health-checkmark {
+  position: absolute !important;
+  left: -9999px !important;
+  top: auto !important;
+  display: block !important;
+  width: 1px !important;
+  height: 1px !important;
+  min-width: 1px !important;
+  min-height: 1px !important;
+  max-width: 1px !important;
+  max-height: 1px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  overflow: hidden !important;
+  clip-path: inset(50%) !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row input.health-checkbox::before,
+.vtm-revised.sheet .vtm-health-scroll-block .health-row input.health-checkbox::after,
+.vtm-revised.sheet .vtm-health-scroll-block .health-checkmark::before,
+.vtm-revised.sheet .vtm-health-scroll-block .health-checkmark::after {
+  display: none !important;
+  content: none !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-info {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  gap: 1px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  line-height: 1.02 !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-name {
+  display: block !important;
+  max-width: 100% !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: normal !important;
+  color: var(--vtm-text) !important;
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  line-height: 1.02 !important;
+  letter-spacing: 0.01em !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-penalty {
+  display: block !important;
+  color: var(--vtm-muted) !important;
+  font-size: 10px !important;
+  line-height: 1.02 !important;
+  white-space: normal !important;
+  opacity: 0.9 !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row.is-checked {
+  border-color: rgba(210, 76, 101, 0.92) !important;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(228, 77, 104, 0.20), transparent 38%),
+    linear-gradient(180deg, rgba(106, 18, 38, 0.96), rgba(34, 8, 15, 0.96)) !important;
+  box-shadow:
+    0 0 12px rgba(158, 32, 57, 0.23),
+    inset 0 0 16px rgba(0, 0, 0, 0.34) !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row.is-checked .health-name {
+  color: #fff1df !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row:hover {
+  border-color: rgba(201, 173, 102, 0.34) !important;
+  background:
+    linear-gradient(180deg, rgba(22, 10, 15, 0.86), rgba(30, 10, 18, 0.72)) !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row.is-checked:hover {
+  border-color: rgba(231, 98, 121, 0.98) !important;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(228, 77, 104, 0.24), transparent 38%),
+    linear-gradient(180deg, rgba(116, 20, 42, 0.98), rgba(39, 8, 17, 0.98)) !important;
+}
+
+@media (max-width: 1320px) {
+  .vtm-revised.sheet .vtm-health-scroll-block .health-check-grid {
+    grid-template-columns: repeat(4, minmax(104px, 1fr)) !important;
+  }
+}
+
+@media (max-width: 860px) {
+  .vtm-revised.sheet .vtm-health-scroll-block .health-check-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+

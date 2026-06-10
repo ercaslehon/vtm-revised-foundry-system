@@ -1,0 +1,35 @@
+/* ==========================================================================
+   VTM Revised v9.5.28 Discipline Pips Centered
+   Центрует сияющие точки дисциплин и убирает ощущение пустой середины строки.
+   ========================================================================== */
+
+.vtm-revised.sheet .vtm-disciplines-panel .item-row[data-item-type="discipline"] .item-main {
+  align-items: stretch !important;
+}
+
+.vtm-revised.sheet .vtm-disciplines-panel .item-row[data-item-type="discipline"] .item-main .item-name {
+  text-align: left !important;
+}
+
+.vtm-revised.sheet .vtm-disciplines-panel .item-row[data-item-type="discipline"] .item-main .item-pips {
+  display: flex !important;
+  width: 100% !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 4px !important;
+  padding: 0 6px 0 0 !important;
+}
+
+.vtm-revised.sheet .vtm-disciplines-panel .item-row[data-item-type="discipline"] .item-main .item-pips i {
+  width: 8px !important;
+  height: 8px !important;
+  flex: 0 0 8px !important;
+}
+
+.vtm-revised.sheet .vtm-disciplines-panel .item-row[data-item-type="discipline"] {
+  min-height: 44px !important;
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+}
+
+

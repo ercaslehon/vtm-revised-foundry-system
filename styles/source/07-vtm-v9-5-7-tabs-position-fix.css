@@ -1,0 +1,122 @@
+/* ==========================================================================
+   VTM Revised v9.5.7 Tabs Position Fix
+   Вкладки вынесены из прокручиваемого тела листа, чтобы не уезжать наверх
+   и не накладываться на здоровье/ресурсы.
+   ========================================================================== */
+
+.vtm-revised.sheet .vtm-vampire-shell {
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+.vtm-revised.sheet .vtm-top-shell {
+  flex: 0 0 auto !important;
+  position: relative !important;
+  z-index: 3 !important;
+  margin-bottom: 12px !important;
+}
+
+.vtm-revised.sheet .vtm-fixed-tabs {
+  flex: 0 0 auto !important;
+  position: relative !important;
+  z-index: 4 !important;
+  clear: both !important;
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(160px, 1fr)) !important;
+  gap: 8px !important;
+  margin: 0 0 12px 0 !important;
+  padding: 0 !important;
+  transform: none !important;
+  background:
+    linear-gradient(180deg, rgba(6, 4, 7, 0.98), rgba(11, 6, 10, 0.96)) !important;
+  border-radius: 13px !important;
+  box-shadow:
+    0 10px 26px rgba(0, 0, 0, 0.34),
+    0 0 0 1px rgba(112, 35, 56, 0.34) inset !important;
+}
+
+.vtm-revised.sheet .vtm-fixed-tabs .vtm-tab-item {
+  position: relative !important;
+  z-index: 1 !important;
+  min-height: 38px !important;
+  border-radius: 11px !important;
+  background: rgba(9, 6, 9, 0.96) !important;
+  opacity: 1 !important;
+}
+
+.vtm-revised.sheet .vtm-fixed-tabs .vtm-tab-item.is-active {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(158, 32, 57, 0.36), transparent 58%),
+    linear-gradient(180deg, rgba(67, 16, 30, 0.94), rgba(8, 5, 7, 0.98)) !important;
+}
+
+.vtm-revised.sheet .vtm-sheet-body {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  position: relative !important;
+  z-index: 2 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  padding: 0 6px 0 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+}
+
+.vtm-revised.sheet .vtm-tab-panels {
+  position: relative !important;
+  z-index: 2 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+.vtm-revised.sheet .vtm-tab-panel {
+  position: relative !important;
+  z-index: 2 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  transform: none !important;
+}
+
+.vtm-revised.sheet .vtm-tab-panel.is-active {
+  display: block !important;
+}
+
+.vtm-revised.sheet .vtm-tab-panel > *:first-child,
+.vtm-revised.sheet .vtm-powers-grid > *:first-child,
+.vtm-revised.sheet .vtm-profile-grid > *:first-child,
+.vtm-revised.sheet .vtm-main-grid > *:first-child {
+  margin-top: 0 !important;
+}
+
+/* Чтобы содержимое вкладок не просвечивало через строку навигации. */
+.vtm-revised.sheet .vtm-panel,
+.vtm-revised.sheet .vtm-disciplines-panel,
+.vtm-revised.sheet .vtm-social-assets-panel {
+  background:
+    radial-gradient(circle at 100% 0%, rgba(158, 32, 57, 0.10), transparent 34%),
+    linear-gradient(145deg, rgba(14, 9, 12, 0.985), rgba(7, 5, 7, 0.975)) !important;
+}
+
+/* Дополнительный отступ безопасности под верхним блоком на маленькой высоте окна. */
+@media (max-height: 820px) {
+  .vtm-revised.sheet .vtm-top-shell {
+    margin-bottom: 14px !important;
+  }
+
+  .vtm-revised.sheet .vtm-fixed-tabs {
+    margin-bottom: 14px !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .vtm-revised.sheet .vtm-fixed-tabs {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+

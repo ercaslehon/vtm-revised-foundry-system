@@ -1,0 +1,105 @@
+/* ==========================================================================
+   VTM Revised v9.5.13 Health Alignment Polish
+   Чинит геометрию блока здоровья: кастомный чекбокс, ровное выравнивание,
+   более аккуратное состояние отмеченных ранений.
+   ========================================================================== */
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-check-grid {
+  align-items: stretch !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row {
+  position: relative !important;
+  grid-template-columns: 20px minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 10px !important;
+  min-height: 50px !important;
+  padding: 8px 12px !important;
+  overflow: hidden !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row .health-checkbox {
+  position: absolute !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: 0 !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-checkmark {
+  position: relative !important;
+  display: inline-flex !important;
+  width: 18px !important;
+  height: 18px !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 6px !important;
+  border: 1px solid rgba(201, 173, 102, 0.34) !important;
+  background: linear-gradient(180deg, rgba(10,7,10,.96), rgba(27,10,18,.88)) !important;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.38), 0 0 0 1px rgba(0,0,0,.12) !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-checkmark::after {
+  content: "" !important;
+  width: 9px !important;
+  height: 5px !important;
+  border-left: 2px solid transparent !important;
+  border-bottom: 2px solid transparent !important;
+  transform: translateY(-1px) rotate(-45deg) scale(.9) !important;
+  opacity: 0 !important;
+  transition: opacity 140ms ease, border-color 140ms ease, transform 140ms ease !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-info {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  gap: 1px !important;
+  min-height: 0 !important;
+  line-height: 1.08 !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-name {
+  font-size: 11px !important;
+  line-height: 1.05 !important;
+  letter-spacing: .01em !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-penalty {
+  line-height: 1.05 !important;
+  opacity: .92 !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row.is-checked {
+  border-color: rgba(210, 76, 101, 0.92) !important;
+  background:
+    radial-gradient(circle at 22% 20%, rgba(228, 77, 104, .22), transparent 38%),
+    linear-gradient(180deg, rgba(96, 17, 35, 0.96), rgba(34, 8, 15, 0.96)) !important;
+  box-shadow: 0 0 14px rgba(158,32,57,.22), inset 0 0 16px rgba(0,0,0,.34) !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row.is-checked .health-checkmark {
+  border-color: rgba(255, 174, 132, 0.94) !important;
+  background: linear-gradient(180deg, rgba(252, 167, 88, .96), rgba(219, 121, 42, .94)) !important;
+  box-shadow: 0 0 10px rgba(228, 127, 62, .28), inset 0 0 0 1px rgba(255,244,223,.22) !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row.is-checked .health-checkmark::after {
+  opacity: 1 !important;
+  border-color: rgba(58, 17, 5, 0.96) !important;
+  transform: translateY(-1px) rotate(-45deg) scale(1) !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row:hover {
+  border-color: rgba(201, 173, 102, 0.36) !important;
+}
+
+@media (max-width: 1320px) {
+  .vtm-revised.sheet .vtm-health-scroll-block .health-row {
+    min-height: 48px !important;
+  }
+}
+
+

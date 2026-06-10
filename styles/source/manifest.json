@@ -1,0 +1,282 @@
+{
+  "generatedFrom": "styles/vtm-revised.css",
+  "note": "Do not edit styles/vtm-revised.css directly. Edit files listed in order, then run npm run styles:build.",
+  "files": [
+    {
+      "file": "styles/source/01-base-legacy-styles-before-versioned-overrides.css",
+      "title": "Base legacy styles before versioned overrides"
+    },
+    {
+      "file": "styles/source/02-vtm-v9-5-2-vampire-ui-layout-refresh.css",
+      "title": "VTM Revised v9.5.2 Vampire UI Layout Refresh"
+    },
+    {
+      "file": "styles/source/03-vtm-v9-5-3-vampire-ui-shell.css",
+      "title": "VTM Revised v9.5.3 Vampire UI Shell"
+    },
+    {
+      "file": "styles/source/04-vtm-v9-5-4-vampire-ui-fix.css",
+      "title": "VTM Revised v9.5.4 Vampire UI Fix"
+    },
+    {
+      "file": "styles/source/05-vtm-v9-5-5-actual-tabs.css",
+      "title": "VTM Revised v9.5.5 Actual Tabs"
+    },
+    {
+      "file": "styles/source/06-vtm-v9-5-6-tabs-polish.css",
+      "title": "VTM Revised v9.5.6 Tabs Polish"
+    },
+    {
+      "file": "styles/source/07-vtm-v9-5-7-tabs-position-fix.css",
+      "title": "VTM Revised v9.5.7 Tabs Position Fix"
+    },
+    {
+      "file": "styles/source/08-vtm-v9-5-8-scroll-from-health.css",
+      "title": "VTM Revised v9.5.8 Scroll From Health"
+    },
+    {
+      "file": "styles/source/09-vtm-v9-5-9-top-shell-fix.css",
+      "title": "VTM Revised v9.5.9 Top Shell Fix"
+    },
+    {
+      "file": "styles/source/10-vtm-v9-5-10-resources-in-header.css",
+      "title": "VTM Revised v9.5.10 Resources In Header"
+    },
+    {
+      "file": "styles/source/11-vtm-v9-5-12-glowing-trait-pips.css",
+      "title": "VTM Revised v9.5.12 Glowing Trait Pips"
+    },
+    {
+      "file": "styles/source/12-vtm-v9-5-13-health-alignment-polish.css",
+      "title": "VTM Revised v9.5.13 Health Alignment Polish"
+    },
+    {
+      "file": "styles/source/13-vtm-v9-5-14-health-compact-selected-state.css",
+      "title": "VTM Revised v9.5.14 Health Compact Selected State"
+    },
+    {
+      "file": "styles/source/14-vtm-v9-5-15-health-no-checks.css",
+      "title": "VTM Revised v9.5.15 Health No Checks"
+    },
+    {
+      "file": "styles/source/15-vtm-v9-5-16-blood-magic-names-polish.css",
+      "title": "VTM Revised v9.5.16 Blood Magic Names Polish"
+    },
+    {
+      "file": "styles/source/16-vtm-v9-5-17-blood-magic-full-row.css",
+      "title": "VTM Revised v9.5.17 Blood Magic Full Row"
+    },
+    {
+      "file": "styles/source/17-vtm-v9-5-18-clickable-item-name-no-background.css",
+      "title": "VTM Revised v9.5.18 Clickable Item Name No Background"
+    },
+    {
+      "file": "styles/source/18-vtm-v9-5-19-blood-magic-glowing-pips.css",
+      "title": "VTM Revised v9.5.19 Blood Magic Glowing Pips"
+    },
+    {
+      "file": "styles/source/19-vtm-v9-5-20-discipline-header-plus-alignment.css",
+      "title": "VTM Revised v9.5.20 Discipline Header Plus Alignment"
+    },
+    {
+      "file": "styles/source/20-vtm-v9-5-21-experience-available-only.css",
+      "title": "VTM Revised v9.5.21 Experience Available Only"
+    },
+    {
+      "file": "styles/source/21-vtm-v9-5-27-discipline-glowing-pips.css",
+      "title": "VTM Revised v9.5.27 Discipline Glowing Pips"
+    },
+    {
+      "file": "styles/source/22-vtm-v9-5-28-discipline-pips-centered.css",
+      "title": "VTM Revised v9.5.28 Discipline Pips Centered"
+    },
+    {
+      "file": "styles/source/23-vtm-v9-5-29-blood-magic-rows-centered.css",
+      "title": "VTM Revised v9.5.29 Blood Magic Rows Centered"
+    },
+    {
+      "file": "styles/source/24-vtm-v9-5-30-blood-magic-vertical-center.css",
+      "title": "VTM Revised v9.5.30 Blood Magic Vertical Center"
+    },
+    {
+      "file": "styles/source/25-vtm-v9-5-31-readable-chat-cards.css",
+      "title": "VTM Revised v9.5.31 Readable Chat Cards"
+    },
+    {
+      "file": "styles/source/26-vtm-v9-5-34-portrait-viewer.css",
+      "title": "VTM Revised v9.5.34 Portrait Viewer"
+    },
+    {
+      "file": "styles/source/27-vtm-v9-5-35-character-creation-morality-step.css",
+      "title": "VTM Revised v9.5.35 Character Creation Morality Step"
+    },
+    {
+      "file": "styles/source/28-vtm-v9-5-36-expanded-clan-cards.css",
+      "title": "VTM Revised v9.5.36 Expanded Clan Cards"
+    },
+    {
+      "file": "styles/source/29-vtm-v9-5-46-experience-journal.css",
+      "title": "VTM Revised v9.5.46 Experience Journal"
+    },
+    {
+      "file": "styles/source/30-v10-0-1-hotfix-sheet-size-guard-and-visible-item-import-buttons.css",
+      "title": "v10.0.1 hotfix: sheet size guard and visible item import buttons"
+    },
+    {
+      "file": "styles/source/31-v10-0-5-item-directory-import-buttons-layout.css",
+      "title": "v10.0.5 item directory import buttons layout"
+    },
+    {
+      "file": "styles/source/32-clan-icon-aggressive-64.css",
+      "title": "Clan icon aggressive 64"
+    },
+    {
+      "file": "styles/source/33-clan-icon-aggressive-64.css",
+      "title": "/Clan icon aggressive 64"
+    },
+    {
+      "file": "styles/source/34-clan-icon-inline-placement-fix.css",
+      "title": "Clan icon inline placement fix"
+    },
+    {
+      "file": "styles/source/35-clan-icon-inline-placement-fix.css",
+      "title": "/Clan icon inline placement fix"
+    },
+    {
+      "file": "styles/source/36-clan-icon-fixed-right-header-placement.css",
+      "title": "Clan icon fixed right header placement"
+    },
+    {
+      "file": "styles/source/37-clan-icon-fixed-right-header-placement.css",
+      "title": "/Clan icon fixed right header placement"
+    },
+    {
+      "file": "styles/source/38-clan-icon-final-corner-placement.css",
+      "title": "Clan icon final corner placement"
+    },
+    {
+      "file": "styles/source/39-clan-icon-final-corner-placement.css",
+      "title": "/Clan icon final corner placement"
+    },
+    {
+      "file": "styles/source/40-clan-icon-final-corner-placement.css",
+      "title": "Clan icon final corner placement"
+    },
+    {
+      "file": "styles/source/41-clan-icon-final-corner-placement.css",
+      "title": "/Clan icon final corner placement"
+    },
+    {
+      "file": "styles/source/42-vtm-searchable-dialogs.css",
+      "title": "VTM Revised searchable dialogs"
+    },
+    {
+      "file": "styles/source/43-vtm-searchable-dialogs.css",
+      "title": "VTM Revised searchable dialogs"
+    },
+    {
+      "file": "styles/source/44-vtm-dialog-footer-buttons-visibility-fix.css",
+      "title": "VTM Revised dialog footer buttons visibility fix"
+    },
+    {
+      "file": "styles/source/45-vtm-dialog-footer-buttons-visibility-fix.css",
+      "title": "VTM Revised dialog footer buttons visibility fix"
+    },
+    {
+      "file": "styles/source/46-vtm-character-creation-wizard-final-polish.css",
+      "title": "VTM Revised character creation wizard final polish"
+    },
+    {
+      "file": "styles/source/47-vtm-character-creation-wizard-final-polish.css",
+      "title": "VTM Revised character creation wizard final polish"
+    },
+    {
+      "file": "styles/source/48-vtm-wizard-searchable-select-duplicate-fix.css",
+      "title": "VTM Revised wizard searchable select duplicate fix"
+    },
+    {
+      "file": "styles/source/49-vtm-wizard-searchable-select-duplicate-fix.css",
+      "title": "VTM Revised wizard searchable select duplicate fix"
+    },
+    {
+      "file": "styles/source/50-vtm-searchable-select-native-duplicate-hard-hide.css",
+      "title": "VTM searchable select native duplicate hard hide"
+    },
+    {
+      "file": "styles/source/51-vtm-searchable-select-native-duplicate-hard-hide.css",
+      "title": "/VTM searchable select native duplicate hard hide"
+    },
+    {
+      "file": "styles/source/52-vtm-wizard-duplicate-search-select-fix.css",
+      "title": "VTM wizard duplicate search select fix"
+    },
+    {
+      "file": "styles/source/53-vtm-wizard-duplicate-search-select-fix.css",
+      "title": "/VTM wizard duplicate search select fix"
+    },
+    {
+      "file": "styles/source/54-vtm-merit-flaw-catalog-dialogs-final-theme.css",
+      "title": "VTM merit flaw catalog dialogs final theme"
+    },
+    {
+      "file": "styles/source/55-vtm-merit-flaw-catalog-dialogs-final-theme.css",
+      "title": "/VTM merit flaw catalog dialogs final theme"
+    },
+    {
+      "file": "styles/source/56-vtm-merit-flaw-catalog-dialog-sizing.css",
+      "title": "VTM merit flaw catalog dialog sizing"
+    },
+    {
+      "file": "styles/source/57-vtm-merit-flaw-catalog-dialog-sizing.css",
+      "title": "/VTM merit flaw catalog dialog sizing"
+    },
+    {
+      "file": "styles/source/58-vtm-merit-flaw-picker-layout-fix.css",
+      "title": "VTM merit/flaw picker layout fix"
+    },
+    {
+      "file": "styles/source/59-vtm-merit-flaw-picker-layout-fix.css",
+      "title": "/VTM merit/flaw picker layout fix"
+    },
+    {
+      "file": "styles/source/60-vtm-merit-flaw-catalog-preview.css",
+      "title": "VTM merit flaw catalog preview"
+    },
+    {
+      "file": "styles/source/61-vtm-merit-flaw-catalog-preview.css",
+      "title": "/VTM merit flaw catalog preview"
+    },
+    {
+      "file": "styles/source/62-vtm-extended-catalog-picker-preview.css",
+      "title": "VTM extended catalog picker preview"
+    },
+    {
+      "file": "styles/source/63-vtm-extended-catalog-picker-preview.css",
+      "title": "/VTM extended catalog picker preview"
+    },
+    {
+      "file": "styles/source/64-vtm-catalog-picker-fixed-size-restore.css",
+      "title": "VTM catalog picker fixed size restore"
+    },
+    {
+      "file": "styles/source/65-vtm-catalog-picker-fixed-size-restore.css",
+      "title": "/VTM catalog picker fixed size restore"
+    },
+    {
+      "file": "styles/source/66-health-damage-state-colors.css",
+      "title": "Health damage state colors"
+    },
+    {
+      "file": "styles/source/67-health-damage-state-colors.css",
+      "title": "Health damage state colors"
+    },
+    {
+      "file": "styles/source/68-strong-health-damage-background-tint-override.css",
+      "title": "Strong health damage background tint override"
+    },
+    {
+      "file": "styles/source/69-strong-health-damage-background-tint-override.css",
+      "title": "Strong health damage background tint override"
+    }
+  ]
+}
