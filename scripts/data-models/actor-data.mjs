@@ -82,13 +82,13 @@ function abilitiesSchema() {
 
 function healthSchema() {
   return new fields.SchemaField({
-    bruised: ratingField(0, 1),
-    hurt: ratingField(0, 1),
-    injured: ratingField(0, 1),
-    wounded: ratingField(0, 1),
-    mauled: ratingField(0, 1),
-    crippled: ratingField(0, 1),
-    incapacitated: ratingField(0, 1),
+    bruised: ratingField(0, 3),
+    hurt: ratingField(0, 3),
+    injured: ratingField(0, 3),
+    wounded: ratingField(0, 3),
+    mauled: ratingField(0, 3),
+    crippled: ratingField(0, 3),
+    incapacitated: ratingField(0, 3),
     summary: textField()
   });
 }
