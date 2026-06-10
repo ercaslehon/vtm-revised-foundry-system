@@ -198,6 +198,13 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
       3: "aggravated"
     };
 
+    const healthDamageStyles = {
+      0: "background: linear-gradient(180deg, rgba(18, 5, 10, 0.82), rgba(8, 2, 6, 0.92)) !important; border-color: rgba(118, 28, 50, 0.72) !important; box-shadow: none !important;",
+      1: "background: radial-gradient(circle at 14% 10%, rgba(255, 165, 170, 0.38), transparent 48%), linear-gradient(180deg, rgba(185, 42, 70, 0.82), rgba(92, 8, 28, 0.90)) !important; border-color: rgba(255, 105, 135, 0.98) !important; box-shadow: inset 0 0 0 1px rgba(255, 205, 210, 0.16), 0 0 12px rgba(255, 80, 120, 0.24) !important;",
+      2: "background: radial-gradient(circle at 14% 10%, rgba(255, 56, 72, 0.48), transparent 50%), linear-gradient(180deg, rgba(150, 8, 26, 0.98), rgba(72, 0, 12, 1)) !important; border-color: rgba(255, 45, 65, 1) !important; box-shadow: inset 0 0 0 1px rgba(255, 150, 155, 0.15), 0 0 15px rgba(225, 18, 45, 0.34) !important;",
+      3: "background: radial-gradient(circle at 14% 10%, rgba(95, 0, 18, 0.62), transparent 52%), linear-gradient(180deg, rgba(52, 0, 10, 1), rgba(12, 0, 4, 1)) !important; border-color: rgba(135, 0, 24, 1) !important; box-shadow: inset 0 0 0 1px rgba(190, 35, 55, 0.14), 0 0 16px rgba(90, 0, 18, 0.42) !important;"
+    };
+
     const healthRows = VTM_REVISED.healthLevels.map(key => {
       const penalty = VTM_REVISED.healthPenalties[key] ?? "";
       const penaltyLabel = penalty === "out"
@@ -218,6 +225,7 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
         damageType,
         damageLabel,
         damageTitle: `${damageLabel}. Нажми, чтобы изменить тип урона.`,
+        damageStyle: healthDamageStyles[damageState] || healthDamageStyles[0],
         checked: damageState > 0
       };
     });

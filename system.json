@@ -2,7 +2,7 @@
   "id": "vtm-revised",
   "title": "Vampire: The Masquerade Revised - Unofficial System",
   "description": "Unofficial Foundry VTT system for Vampire: The Masquerade v3 Revised. Includes actor sheets, portraits, generation limits, Nature/Demeanor and clan reference cards, disciplines, blood magic, rituals, weapons, merits/flaws, Roads/Paths morality reference, and a guided character creation wizard.",
-  "version": "11.0.9",
+  "version": "11.0.10",
   "compatibility": {
     "minimum": "13.347",
     "verified": "14"
