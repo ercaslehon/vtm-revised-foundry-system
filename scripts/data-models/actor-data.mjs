@@ -88,7 +88,7 @@ function healthSchema() {
     wounded: ratingField(0, 3),
     mauled: ratingField(0, 3),
     crippled: ratingField(0, 3),
-    incapacitated: ratingField(0, 3),
+    incapacitated: ratingField(0, 1),
     summary: textField()
   });
 }

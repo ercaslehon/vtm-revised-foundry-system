@@ -202,7 +202,8 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
       0: "background: linear-gradient(180deg, rgba(18, 5, 10, 0.82), rgba(8, 2, 6, 0.92)) !important; border-color: rgba(118, 28, 50, 0.72) !important; box-shadow: none !important;",
       1: "background: radial-gradient(circle at 14% 10%, rgba(255, 165, 170, 0.38), transparent 48%), linear-gradient(180deg, rgba(185, 42, 70, 0.82), rgba(92, 8, 28, 0.90)) !important; border-color: rgba(255, 105, 135, 0.98) !important; box-shadow: inset 0 0 0 1px rgba(255, 205, 210, 0.16), 0 0 12px rgba(255, 80, 120, 0.24) !important;",
       2: "background: radial-gradient(circle at 14% 10%, rgba(255, 56, 72, 0.48), transparent 50%), linear-gradient(180deg, rgba(150, 8, 26, 0.98), rgba(72, 0, 12, 1)) !important; border-color: rgba(255, 45, 65, 1) !important; box-shadow: inset 0 0 0 1px rgba(255, 150, 155, 0.15), 0 0 15px rgba(225, 18, 45, 0.34) !important;",
-      3: "background: radial-gradient(circle at 14% 10%, rgba(95, 0, 18, 0.62), transparent 52%), linear-gradient(180deg, rgba(52, 0, 10, 1), rgba(12, 0, 4, 1)) !important; border-color: rgba(135, 0, 24, 1) !important; box-shadow: inset 0 0 0 1px rgba(190, 35, 55, 0.14), 0 0 16px rgba(90, 0, 18, 0.42) !important;"
+      3: "background: radial-gradient(circle at 14% 10%, rgba(95, 0, 18, 0.62), transparent 52%), linear-gradient(180deg, rgba(52, 0, 10, 1), rgba(12, 0, 4, 1)) !important; border-color: rgba(135, 0, 24, 1) !important; box-shadow: inset 0 0 0 1px rgba(190, 35, 55, 0.14), 0 0 16px rgba(90, 0, 18, 0.42) !important;",
+      out: "background: radial-gradient(circle at 14% 10%, rgba(150, 0, 30, 0.48), transparent 52%), linear-gradient(180deg, rgba(48, 0, 8, 1), rgba(8, 0, 2, 1)) !important; border-color: rgba(180, 20, 45, 1) !important; box-shadow: inset 0 0 0 1px rgba(220, 60, 80, 0.16), 0 0 18px rgba(120, 0, 24, 0.44) !important;"
     };
 
     const healthRows = VTM_REVISED.healthLevels.map(key => {
@@ -212,9 +213,16 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
         : game.i18n.format("VTM_REVISED.HealthPenalty.dice", { penalty });
 
       const rawDamageState = Number(actor.system?.health?.[key] || 0);
-      const damageState = Math.max(0, Math.min(3, Number.isFinite(rawDamageState) ? Math.trunc(rawDamageState) : 0));
-      const damageLabel = healthDamageLabels[damageState] || healthDamageLabels[0];
-      const damageType = healthDamageTypes[damageState] || healthDamageTypes[0];
+      const isIncapacitated = key === "incapacitated";
+      const damageState = isIncapacitated
+        ? (rawDamageState > 0 ? 1 : 0)
+        : Math.max(0, Math.min(3, Number.isFinite(rawDamageState) ? Math.trunc(rawDamageState) : 0));
+      const damageLabel = isIncapacitated
+        ? (damageState > 0 ? game.i18n.localize("VTM_REVISED.HealthPenalty.out") : healthDamageLabels[0])
+        : (healthDamageLabels[damageState] || healthDamageLabels[0]);
+      const damageType = isIncapacitated
+        ? (damageState > 0 ? "out" : "none")
+        : (healthDamageTypes[damageState] || healthDamageTypes[0]);
 
       return {
         key,
@@ -225,7 +233,8 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
         damageType,
         damageLabel,
         damageTitle: `${damageLabel}. Нажми, чтобы изменить тип урона.`,
-        damageStyle: healthDamageStyles[damageState] || healthDamageStyles[0],
+        damageStyle: isIncapacitated && damageState > 0 ? healthDamageStyles.out : (healthDamageStyles[damageState] || healthDamageStyles[0]),
+        showDamageLabel: !isIncapacitated && damageState > 0,
         checked: damageState > 0
       };
     });
@@ -512,8 +521,15 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
         if (!key) return;
 
         const current = Number(this.actor.system?.health?.[key] || 0);
-        const safeCurrent = Number.isFinite(current) ? Math.max(0, Math.min(3, Math.trunc(current))) : 0;
-        const next = safeCurrent >= 3 ? 0 : safeCurrent + 1;
+        const isIncapacitated = key === "incapacitated";
+
+        const safeCurrent = isIncapacitated
+          ? (current > 0 ? 1 : 0)
+          : (Number.isFinite(current) ? Math.max(0, Math.min(3, Math.trunc(current))) : 0);
+
+        const next = isIncapacitated
+          ? (safeCurrent > 0 ? 0 : 1)
+          : (safeCurrent >= 3 ? 0 : safeCurrent + 1);
 
         await this.actor.update({ [`system.health.${key}`]: next });
       });

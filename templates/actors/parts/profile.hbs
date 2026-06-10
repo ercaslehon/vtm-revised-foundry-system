@@ -22,7 +22,7 @@
           <span class="health-info">
             <span class="health-name">{{row.label}}</span>
             <span class="health-penalty">{{row.penaltyLabel}}</span>
-            <span class="health-damage-label">{{row.damageLabel}}</span>
+            {{#if row.showDamageLabel}}<span class="health-damage-label">{{row.damageLabel}}</span>{{/if}}
           </span>
         </button>
       {{/each}}
