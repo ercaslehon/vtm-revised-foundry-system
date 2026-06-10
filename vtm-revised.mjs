@@ -675,3 +675,116 @@ Hooks.on("renderItemDirectory", (app, html) => {
     () => RulesJsonImporter.importBuiltInMoralityCatalog()
   );
 });
+
+/* === HEALTH DAMAGE TINT PATCH START === */
+(function setupHealthDamageTinting() {
+  const LABEL_TO_KEY = {
+    "синяки": "bruised",
+    "ушиблен": "hurt",
+    "ранен": "injured",
+    "тяжело ранен": "wounded",
+    "искалечен": "mauled",
+    "покалечен": "crippled",
+    "недееспособен": "incapacitated"
+  };
+
+  const ALL_LABELS = Object.keys(LABEL_TO_KEY);
+
+  function normalizeText(value) {
+    return String(value ?? "")
+      .toLowerCase()
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function healthStateClass(value) {
+    const n = Number(value || 0);
+    if (n === 1) return "bashing";
+    if (n === 2) return "lethal";
+    if (n === 3) return "aggravated";
+    return "none";
+  }
+
+  function findHealthCard(root, label) {
+    const target = normalizeText(label);
+    const candidates = Array.from(root.querySelectorAll("div, section, article, li, button"));
+
+    const matched = candidates.filter((el) => {
+      const text = normalizeText(el.innerText || el.textContent || "");
+      if (!text) return false;
+      if (!text.includes(target)) return false;
+
+      const hitCount = ALL_LABELS.filter((x) => text.includes(normalizeText(x))).length;
+      if (hitCount !== 1) return false;
+
+      const rect = el.getBoundingClientRect();
+      if (rect.width < 80 || rect.height < 20) return false;
+
+      return true;
+    });
+
+    if (!matched.length) return null;
+
+    matched.sort((a, b) => {
+      const ah = a.getBoundingClientRect().height;
+      const bh = b.getBoundingClientRect().height;
+      return ah - bh;
+    });
+
+    return matched[0];
+  }
+
+  function applyHealthDamageTints(app, html) {
+    const actor = app?.actor;
+    if (!actor) return;
+
+    const root =
+      html instanceof HTMLElement ? html :
+      html?.[0] instanceof HTMLElement ? html[0] :
+      app?.element instanceof HTMLElement ? app.element :
+      app?.element?.[0] instanceof HTMLElement ? app.element[0] :
+      null;
+
+    if (!root) return;
+
+    const health = actor.system?.health;
+    if (!health) return;
+
+    for (const [label, key] of Object.entries(LABEL_TO_KEY)) {
+      const card = findHealthCard(root, label);
+      if (!card) continue;
+
+      const state = healthStateClass(health[key]);
+
+      card.classList.add("vtm-health-card");
+      card.classList.remove(
+        "vtm-health-card--none",
+        "vtm-health-card--bashing",
+        "vtm-health-card--lethal",
+        "vtm-health-card--aggravated"
+      );
+      card.classList.add(`vtm-health-card--${state}`);
+      card.dataset.damageState = state;
+      card.dataset.healthKey = key;
+    }
+  }
+
+  Hooks.on("renderActorSheet", (app, html) => {
+    try {
+      applyHealthDamageTints(app, html);
+    } catch (err) {
+      console.error("vtm-revised | health damage tint failed", err);
+    }
+  });
+
+  Hooks.on("renderApplication", (app, html) => {
+    try {
+      if (app?.actor?.system?.health) applyHealthDamageTints(app, html);
+    } catch (err) {
+      console.error("vtm-revised | health damage tint failed", err);
+    }
+  });
+
+  window.vtmRevisedApplyHealthDamageTints = applyHealthDamageTints;
+})();
+/* === HEALTH DAMAGE TINT PATCH END === */
