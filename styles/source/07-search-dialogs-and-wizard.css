@@ -1,0 +1,728 @@
+/* ==========================================================================
+   VTM Revised searchable dialogs
+   Search-selects and dark styling for roll/helper dialogs.
+   ========================================================================== */
+
+.vtm-themed-dialog-window .window-content,
+.vtm-themed-dialog-window .application-content {
+  background:
+    radial-gradient(circle at 18% 0%, rgba(130, 23, 42, 0.22), transparent 28%),
+    radial-gradient(circle at 92% 18%, rgba(201, 173, 102, 0.10), transparent 26%),
+    linear-gradient(135deg, #050306 0%, #120810 48%, #050306 100%) !important;
+  color: var(--vtm-text, #efe6d8) !important;
+  padding: 12px !important;
+}
+
+.vtm-searchable-dialog-form,
+.vtm-roll-dialog,
+.vtm-add-blood-path-dialog,
+.vtm-import-dialog {
+  color: var(--vtm-text, #efe6d8) !important;
+  font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif !important;
+}
+
+.vtm-searchable-dialog-form label,
+.vtm-roll-dialog label,
+.vtm-add-blood-path-dialog label,
+.vtm-import-dialog label {
+  color: var(--vtm-muted, #ad9d8e) !important;
+  font-size: 12px !important;
+  letter-spacing: 0.055em !important;
+  text-transform: uppercase !important;
+}
+
+.vtm-searchable-dialog-form input,
+.vtm-searchable-dialog-form textarea,
+.vtm-searchable-dialog-form select,
+.vtm-roll-dialog input,
+.vtm-roll-dialog textarea,
+.vtm-roll-dialog select,
+.vtm-add-blood-path-dialog input,
+.vtm-add-blood-path-dialog textarea,
+.vtm-add-blood-path-dialog select,
+.vtm-import-dialog input,
+.vtm-import-dialog textarea,
+.vtm-import-dialog select {
+  min-height: 30px !important;
+  padding: 4px 8px !important;
+  border: 1px solid rgba(112, 35, 56, 0.78) !important;
+  border-radius: 7px !important;
+  background: rgba(4, 3, 5, 0.76) !important;
+  color: var(--vtm-text, #efe6d8) !important;
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.48) !important;
+}
+
+.vtm-searchable-dialog-form input:focus,
+.vtm-searchable-dialog-form textarea:focus,
+.vtm-roll-dialog input:focus,
+.vtm-roll-dialog textarea:focus,
+.vtm-add-blood-path-dialog input:focus,
+.vtm-add-blood-path-dialog textarea:focus,
+.vtm-import-dialog input:focus,
+.vtm-import-dialog textarea:focus {
+  outline: none !important;
+  border-color: rgba(201, 173, 102, 0.72) !important;
+  box-shadow:
+    0 0 0 1px rgba(201, 173, 102, 0.17),
+    0 0 16px rgba(158, 32, 57, 0.25),
+    inset 0 0 13px rgba(0, 0, 0, 0.48) !important;
+}
+
+.vtm-searchable-dialog-form button,
+.vtm-roll-dialog button,
+.vtm-add-blood-path-dialog button,
+.vtm-import-dialog button {
+  border: 1px solid rgba(201, 173, 102, 0.28) !important;
+  border-radius: 8px !important;
+  background:
+    linear-gradient(180deg, rgba(124, 28, 48, 0.96), rgba(55, 9, 21, 0.98)) !important;
+  color: #fff0dd !important;
+  box-shadow:
+    0 5px 14px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+.vtm-dialog-search-select {
+  position: relative !important;
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+.vtm-dialog-native-select {
+  position: absolute !important;
+  inset: 0 auto auto 0 !important;
+  width: 1px !important;
+  height: 1px !important;
+  min-width: 1px !important;
+  min-height: 1px !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  overflow: hidden !important;
+}
+
+.vtm-dialog-search-button {
+  position: relative !important;
+  width: 100% !important;
+  min-height: 30px !important;
+  padding: 4px 28px 4px 8px !important;
+  border: 1px solid rgba(112, 35, 56, 0.78) !important;
+  border-radius: 7px !important;
+  background: rgba(4, 3, 5, 0.84) !important;
+  color: var(--vtm-text, #efe6d8) !important;
+  text-align: left !important;
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.48) !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.vtm-dialog-search-button::after {
+  content: "▾" !important;
+  position: absolute !important;
+  right: 9px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  color: rgba(201, 173, 102, 0.76) !important;
+  pointer-events: none !important;
+}
+
+.vtm-dialog-search-button.is-open {
+  border-color: rgba(201, 173, 102, 0.72) !important;
+  box-shadow:
+    0 0 0 1px rgba(201, 173, 102, 0.17),
+    0 0 16px rgba(158, 32, 57, 0.25),
+    inset 0 0 13px rgba(0, 0, 0, 0.48) !important;
+}
+
+.vtm-dialog-search-panel {
+  position: fixed !important;
+  z-index: 100000 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(201, 173, 102, 0.42) !important;
+  border-radius: 9px !important;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(158, 32, 57, 0.18), transparent 34%),
+    linear-gradient(180deg, rgba(13, 9, 11, 0.99), rgba(5, 3, 6, 0.99)) !important;
+  color: var(--vtm-text, #efe6d8) !important;
+  box-shadow:
+    0 18px 44px rgba(0, 0, 0, 0.55),
+    inset 0 0 20px rgba(0, 0, 0, 0.38) !important;
+}
+
+.vtm-dialog-search-input {
+  flex: 0 0 auto !important;
+  width: calc(100% - 16px) !important;
+  margin: 8px !important;
+  min-height: 30px !important;
+  padding: 4px 8px !important;
+  border: 1px solid rgba(201, 173, 102, 0.34) !important;
+  border-radius: 7px !important;
+  background: rgba(4, 3, 5, 0.92) !important;
+  color: var(--vtm-text, #efe6d8) !important;
+}
+
+.vtm-dialog-search-options {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  padding: 0 6px 7px !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(201, 173, 102, 0.46) rgba(8, 5, 8, 0.58) !important;
+}
+
+.vtm-dialog-search-group {
+  padding: 7px 8px 4px !important;
+  color: var(--vtm-gold, #c9ad66) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  opacity: 0.95 !important;
+}
+
+.vtm-dialog-search-option {
+  display: block !important;
+  width: 100% !important;
+  min-height: 28px !important;
+  margin: 0 0 3px !important;
+  padding: 5px 9px !important;
+  border: 1px solid transparent !important;
+  border-radius: 7px !important;
+  background: transparent !important;
+  color: var(--vtm-text, #efe6d8) !important;
+  text-align: left !important;
+  box-shadow: none !important;
+}
+
+.vtm-dialog-search-option:hover,
+.vtm-dialog-search-option:focus {
+  outline: none !important;
+  border-color: rgba(201, 173, 102, 0.34) !important;
+  background: rgba(201, 173, 102, 0.08) !important;
+}
+
+.vtm-dialog-search-option.is-selected {
+  border-color: rgba(201, 173, 102, 0.48) !important;
+  background:
+    radial-gradient(circle at 0% 50%, rgba(158, 32, 57, 0.24), transparent 45%),
+    rgba(124, 28, 48, 0.36) !important;
+  color: #fff0dd !important;
+}
+
+.vtm-dialog-search-empty {
+  padding: 10px 9px !important;
+  color: var(--vtm-muted, #ad9d8e) !important;
+  font-style: italic !important;
+}
+
+/* ==========================================================================
+   /VTM Revised searchable dialogs
+   ========================================================================== */
+
+/* ==========================================================================
+   VTM Revised dialog footer buttons visibility fix
+   Чинит читаемость кнопок "Бросить" / "Отмена" в окнах бросков.
+   ========================================================================== */
+
+.vtm-themed-dialog-window .dialog-buttons,
+.vtm-themed-dialog-window .form-footer,
+.vtm-themed-dialog-window footer {
+  display: flex !important;
+  gap: 8px !important;
+}
+
+.vtm-themed-dialog-window .dialog-buttons button,
+.vtm-themed-dialog-window .form-footer button,
+.vtm-themed-dialog-window footer button,
+.vtm-themed-dialog-window button.dialog-button,
+.vtm-themed-dialog-window button[type="submit"],
+.vtm-themed-dialog-window button[type="button"] {
+  min-height: 34px !important;
+  border: 1px solid rgba(201, 173, 102, 0.48) !important;
+  border-radius: 8px !important;
+  background:
+    linear-gradient(180deg, rgba(124, 28, 48, 0.96), rgba(55, 9, 21, 0.98)) !important;
+  color: #fff0dd !important;
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.75) !important;
+  box-shadow:
+    0 5px 14px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  opacity: 1 !important;
+}
+
+.vtm-themed-dialog-window .dialog-buttons button:hover,
+.vtm-themed-dialog-window .form-footer button:hover,
+.vtm-themed-dialog-window footer button:hover,
+.vtm-themed-dialog-window button.dialog-button:hover,
+.vtm-themed-dialog-window button[type="submit"]:hover,
+.vtm-themed-dialog-window button[type="button"]:hover {
+  border-color: rgba(201, 173, 102, 0.76) !important;
+  color: #fff7e8 !important;
+  filter: brightness(1.08) !important;
+}
+
+.vtm-themed-dialog-window .dialog-buttons button:disabled,
+.vtm-themed-dialog-window .form-footer button:disabled,
+.vtm-themed-dialog-window footer button:disabled,
+.vtm-themed-dialog-window button.dialog-button:disabled,
+.vtm-themed-dialog-window button[type="submit"]:disabled,
+.vtm-themed-dialog-window button[type="button"]:disabled {
+  border-color: rgba(120, 95, 65, 0.42) !important;
+  background:
+    linear-gradient(180deg, rgba(45, 24, 33, 0.92), rgba(18, 10, 15, 0.96)) !important;
+  color: rgba(239, 230, 216, 0.58) !important;
+  opacity: 1 !important;
+  cursor: not-allowed !important;
+}
+
+/* ==========================================================================
+   /VTM Revised dialog footer buttons visibility fix
+   ========================================================================== */
+
+/* ==========================================================================
+   VTM Revised character creation wizard final polish
+   Приводит мастер создания персонажа к общему виду листа.
+   ========================================================================== */
+
+.vtm-revised.creation-wizard,
+.vtm-themed-wizard-window {
+  --vtm-bg: #050306;
+  --vtm-panel: rgba(13, 9, 11, 0.96);
+  --vtm-panel-red: rgba(37, 12, 22, 0.86);
+  --vtm-border: #6f2338;
+  --vtm-border-soft: rgba(112, 35, 56, 0.52);
+  --vtm-gold: #c9ad66;
+  --vtm-gold-soft: rgba(201, 173, 102, 0.36);
+  --vtm-blood: #9e2039;
+  --vtm-blood-2: #c33b54;
+  --vtm-text: #efe6d8;
+  --vtm-muted: #ad9d8e;
+  --vtm-shadow: 0 18px 50px rgba(0, 0, 0, 0.55);
+  color: var(--vtm-text) !important;
+  font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif !important;
+}
+
+.vtm-revised.creation-wizard .window-content,
+.vtm-themed-wizard-window .window-content,
+.vtm-revised.creation-wizard .application-content,
+.vtm-themed-wizard-window .application-content {
+  padding: 0 !important;
+  overflow: hidden !important;
+  color: var(--vtm-text) !important;
+  background:
+    radial-gradient(circle at 18% 4%, rgba(124, 20, 39, 0.30), transparent 28%),
+    radial-gradient(circle at 90% 18%, rgba(201, 173, 102, 0.10), transparent 26%),
+    linear-gradient(135deg, #050306, #120810 48%, #050306) !important;
+}
+
+.vtm-revised.creation-wizard .window-content::before,
+.vtm-themed-wizard-window .window-content::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.024) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px) !important;
+  background-size: 32px 32px !important;
+  opacity: 0.22 !important;
+  mix-blend-mode: screen !important;
+}
+
+.vtm-revised.creation-wizard .vtm-character-wizard-form,
+.vtm-themed-wizard-window .vtm-character-wizard-form {
+  position: relative !important;
+  isolation: isolate !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  color: var(--vtm-text) !important;
+}
+
+.vtm-revised.creation-wizard .vtm-wizard-layout,
+.vtm-themed-wizard-window .vtm-wizard-layout {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  display: grid !important;
+  grid-template-columns: 250px minmax(0, 1fr) !important;
+  overflow: hidden !important;
+}
+
+.vtm-revised.creation-wizard .vtm-wizard-sidebar,
+.vtm-themed-wizard-window .vtm-wizard-sidebar {
+  padding: 14px !important;
+  overflow-y: auto !important;
+  border-right: 1px solid rgba(112, 35, 56, 0.58) !important;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(158, 32, 57, 0.16), transparent 38%),
+    linear-gradient(180deg, rgba(12, 8, 10, 0.98), rgba(25, 9, 16, 0.94)) !important;
+}
+
+.vtm-revised.creation-wizard .vtm-wizard-sidebar h2,
+.vtm-themed-wizard-window .vtm-wizard-sidebar h2,
+.vtm-revised.creation-wizard .vtm-wizard-header h1,
+.vtm-themed-wizard-window .vtm-wizard-header h1,
+.vtm-revised.creation-wizard .wizard-panel h2,
+.vtm-themed-wizard-window .wizard-panel h2 {
+  color: var(--vtm-text) !important;
+  font-family: "Cinzel", "Palatino Linotype", "Book Antiqua", Georgia, serif !important;
+  letter-spacing: 0.08em !important;
+  text-shadow: 0 0 18px rgba(201, 173, 102, 0.14) !important;
+}
+
+.vtm-revised.creation-wizard .vtm-wizard-header p,
+.vtm-themed-wizard-window .vtm-wizard-header p,
+.vtm-revised.creation-wizard .wizard-hint,
+.vtm-themed-wizard-window .wizard-hint {
+  color: var(--vtm-muted) !important;
+  opacity: 1 !important;
+}
+
+.vtm-revised.creation-wizard .vtm-wizard-steps,
+.vtm-themed-wizard-window .vtm-wizard-steps {
+  gap: 7px !important;
+}
+
+.vtm-revised.creation-wizard .vtm-wizard-steps button,
+.vtm-themed-wizard-window .vtm-wizard-steps button {
+  min-height: 30px !important;
+  padding: 6px 9px !important;
+  border: 1px solid rgba(201, 173, 102, 0.18) !important;
+  border-radius: 8px !important;
+  background:
+    linear-gradient(180deg, rgba(28, 18, 22, 0.92), rgba(14, 8, 11, 0.96)) !important;
+  color: var(--vtm-text) !important;
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.34) !important;
+}
+
+.vtm-revised.creation-wizard .vtm-wizard-steps button.active,
+.vtm-themed-wizard-window .vtm-wizard-steps button.active {
+  border-color: rgba(201, 173, 102, 0.74) !important;
+  background:
+    radial-gradient(circle at 0% 50%, rgba(158, 32, 57, 0.26), transparent 45%),
+    linear-gradient(180deg, rgba(67, 16, 30, 0.88), rgba(15, 8, 12, 0.98)) !important;
+  color: var(--vtm-gold) !important;
+  box-shadow:
+    0 0 14px rgba(158, 32, 57, 0.22),
+    inset 0 0 0 1px rgba(201, 173, 102, 0.14) !important;
+}
+
+.vtm-revised.creation-wizard .vtm-wizard-steps button span,
+.vtm-themed-wizard-window .vtm-wizard-steps button span {
+  background: rgba(201, 173, 102, 0.10) !important;
+  border: 1px solid rgba(201, 173, 102, 0.22) !important;
+  color: var(--vtm-gold) !important;
+}
+
+.vtm-revised.creation-wizard .vtm-wizard-checklist-mini,
+.vtm-themed-wizard-window .vtm-wizard-checklist-mini {
+  border: 1px solid rgba(112, 35, 56, 0.52) !important;
+  border-radius: 12px !important;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(158, 32, 57, 0.12), transparent 34%),
+    linear-gradient(180deg, rgba(8, 5, 8, 0.86), rgba(20, 8, 14, 0.72)) !important;
+  color: var(--vtm-text) !important;
+}
+
+.vtm-revised.creation-wizard .wizard-mini-row,
+.vtm-themed-wizard-window .wizard-mini-row {
+  color: var(--vtm-text) !important;
+}
+
+.vtm-revised.creation-wizard .wizard-mini-row.status-ok b,
+.vtm-themed-wizard-window .wizard-mini-row.status-ok b {
+  color: #74c476 !important;
+}
+
+.vtm-revised.creation-wizard .wizard-mini-row.status-warn b,
+.vtm-themed-wizard-window .wizard-mini-row.status-warn b {
+  color: #ffcc66 !important;
+}
+
+.vtm-revised.creation-wizard .vtm-wizard-main,
+.vtm-themed-wizard-window .vtm-wizard-main {
+  position: relative !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  padding: 18px !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(201, 173, 102, 0.46) rgba(8, 5, 8, 0.58) !important;
+}
+
+.vtm-revised.creation-wizard .wizard-panel,
+.vtm-revised.creation-wizard .wizard-subpanel,
+.vtm-themed-wizard-window .wizard-panel,
+.vtm-themed-wizard-window .wizard-subpanel {
+  border: 1px solid rgba(201, 173, 102, 0.24) !important;
+  border-radius: 12px !important;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(158, 32, 57, 0.12), transparent 34%),
+    linear-gradient(145deg, rgba(14, 9, 12, 0.96), rgba(7, 5, 7, 0.94)) !important;
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.38),
+    inset 0 0 24px rgba(0, 0, 0, 0.38) !important;
+}
+
+.vtm-revised.creation-wizard label,
+.vtm-themed-wizard-window label {
+  color: var(--vtm-muted) !important;
+  font-size: 12px !important;
+  letter-spacing: 0.055em !important;
+  text-transform: uppercase !important;
+}
+
+.vtm-revised.creation-wizard input,
+.vtm-revised.creation-wizard textarea,
+.vtm-revised.creation-wizard select,
+.vtm-themed-wizard-window input,
+.vtm-themed-wizard-window textarea,
+.vtm-themed-wizard-window select {
+  min-height: 30px !important;
+  padding: 4px 8px !important;
+  border: 1px solid rgba(112, 35, 56, 0.78) !important;
+  border-radius: 7px !important;
+  background: rgba(4, 3, 5, 0.78) !important;
+  color: var(--vtm-text) !important;
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.48) !important;
+}
+
+.vtm-revised.creation-wizard input:focus,
+.vtm-revised.creation-wizard textarea:focus,
+.vtm-themed-wizard-window input:focus,
+.vtm-themed-wizard-window textarea:focus {
+  outline: none !important;
+  border-color: rgba(201, 173, 102, 0.72) !important;
+  box-shadow:
+    0 0 0 1px rgba(201, 173, 102, 0.17),
+    0 0 16px rgba(158, 32, 57, 0.25),
+    inset 0 0 13px rgba(0, 0, 0, 0.48) !important;
+}
+
+.vtm-revised.creation-wizard .vtm-dialog-search-select,
+.vtm-themed-wizard-window .vtm-dialog-search-select {
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+.vtm-revised.creation-wizard .vtm-dialog-search-button,
+.vtm-themed-wizard-window .vtm-dialog-search-button {
+  width: 100% !important;
+  min-height: 30px !important;
+  border-color: rgba(112, 35, 56, 0.78) !important;
+  background: rgba(4, 3, 5, 0.84) !important;
+  color: var(--vtm-text) !important;
+}
+
+.vtm-revised.creation-wizard button,
+.vtm-themed-wizard-window button {
+  border: 1px solid rgba(201, 173, 102, 0.34) !important;
+  border-radius: 8px !important;
+  background:
+    linear-gradient(180deg, rgba(124, 28, 48, 0.96), rgba(55, 9, 21, 0.98)) !important;
+  color: #fff0dd !important;
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.75) !important;
+  box-shadow:
+    0 5px 14px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+.vtm-revised.creation-wizard button:hover,
+.vtm-themed-wizard-window button:hover {
+  border-color: rgba(201, 173, 102, 0.76) !important;
+  color: #fff7e8 !important;
+  filter: brightness(1.08) !important;
+}
+
+.vtm-revised.creation-wizard .vtm-wizard-footer,
+.vtm-themed-wizard-window .vtm-wizard-footer {
+  flex: 0 0 auto !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+  padding: 10px 14px !important;
+  border-top: 1px solid rgba(112, 35, 56, 0.58) !important;
+  background:
+    linear-gradient(180deg, rgba(10, 6, 9, 0.98), rgba(20, 8, 14, 0.98)) !important;
+}
+
+.vtm-revised.creation-wizard .wizard-dot-row,
+.vtm-themed-wizard-window .wizard-dot-row,
+.vtm-revised.creation-wizard .wizard-item-list li,
+.vtm-themed-wizard-window .wizard-item-list li {
+  border: 1px solid rgba(112, 35, 56, 0.34) !important;
+  border-radius: 8px !important;
+  background: rgba(5, 3, 6, 0.48) !important;
+  padding: 6px !important;
+}
+
+.vtm-revised.creation-wizard .wizard-warning,
+.vtm-themed-wizard-window .wizard-warning,
+.vtm-revised.creation-wizard .is-negative,
+.vtm-themed-wizard-window .is-negative {
+  color: #ff9d8f !important;
+}
+
+@media (max-width: 900px) {
+  .vtm-revised.creation-wizard .vtm-wizard-layout,
+  .vtm-themed-wizard-window .vtm-wizard-layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  .vtm-revised.creation-wizard .vtm-wizard-sidebar,
+  .vtm-themed-wizard-window .vtm-wizard-sidebar {
+    border-right: 0 !important;
+    border-bottom: 1px solid rgba(112, 35, 56, 0.58) !important;
+    max-height: 240px !important;
+  }
+}
+
+/* ==========================================================================
+   /VTM Revised character creation wizard final polish
+   ========================================================================== */
+
+/* ==========================================================================
+   VTM Revised wizard searchable select duplicate fix
+   Прячет нативный select внутри кастомного поискового селекта.
+   ========================================================================== */
+
+.vtm-revised.creation-wizard .vtm-dialog-search-select > select.vtm-dialog-native-select,
+.vtm-themed-wizard-window .vtm-dialog-search-select > select.vtm-dialog-native-select,
+.vtm-searchable-wizard-form .vtm-dialog-search-select > select.vtm-dialog-native-select {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  max-width: 0 !important;
+  max-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  pointer-events: none !important;
+}
+
+.vtm-revised.creation-wizard .vtm-dialog-search-select,
+.vtm-themed-wizard-window .vtm-dialog-search-select,
+.vtm-searchable-wizard-form .vtm-dialog-search-select {
+  display: block !important;
+  width: 100% !important;
+  min-height: 30px !important;
+}
+
+/* ==========================================================================
+   /VTM Revised wizard searchable select duplicate fix
+   ========================================================================== */
+
+/* ==========================================================================
+   VTM searchable select native duplicate hard hide
+   Прячет настоящий select внутри кастомного поискового селекта.
+   ========================================================================== */
+
+.vtm-dialog-search-select > select,
+.vtm-dialog-search-select > select.vtm-dialog-native-select,
+.vtm-revised.creation-wizard .vtm-dialog-search-select > select,
+.vtm-themed-wizard-window .vtm-dialog-search-select > select,
+.vtm-searchable-wizard-form .vtm-dialog-search-select > select,
+.vtm-themed-dialog-window .vtm-dialog-search-select > select,
+.vtm-searchable-dialog-form .vtm-dialog-search-select > select {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  position: absolute !important;
+  width: 0 !important;
+  height: 0 !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  max-width: 0 !important;
+  max-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  pointer-events: none !important;
+}
+
+.vtm-dialog-search-select {
+  display: block !important;
+  width: 100% !important;
+  min-height: 30px !important;
+}
+
+/* ==========================================================================
+   /VTM searchable select native duplicate hard hide
+   ========================================================================== */
+
+/* ==========================================================================
+   VTM wizard duplicate search select fix
+   В мастере персонажа оставляем только новый .vtm-dialog-search-select.
+   Старые .vtm-search-select прячем, чтобы поля не дублировались.
+   ========================================================================== */
+
+.vtm-revised.creation-wizard .vtm-search-select,
+.vtm-themed-wizard-window .vtm-search-select,
+.vtm-searchable-wizard-form .vtm-search-select,
+.vtm-character-wizard-form .vtm-search-select {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  max-width: 0 !important;
+  max-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  pointer-events: none !important;
+}
+
+.vtm-revised.creation-wizard .vtm-dialog-search-select,
+.vtm-themed-wizard-window .vtm-dialog-search-select,
+.vtm-searchable-wizard-form .vtm-dialog-search-select,
+.vtm-character-wizard-form .vtm-dialog-search-select {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 100% !important;
+  min-height: 30px !important;
+}
+
+.vtm-revised.creation-wizard .vtm-dialog-search-button,
+.vtm-themed-wizard-window .vtm-dialog-search-button,
+.vtm-searchable-wizard-form .vtm-dialog-search-button,
+.vtm-character-wizard-form .vtm-dialog-search-button {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 100% !important;
+}
+
+/* На всякий случай прячем все настоящие select в мастере.
+   Значения сохраняются, потому что JS работает с hidden select внутри wrapper. */
+.vtm-revised.creation-wizard select,
+.vtm-themed-wizard-window select,
+.vtm-searchable-wizard-form select,
+.vtm-character-wizard-form select {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  max-width: 0 !important;
+  max-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  pointer-events: none !important;
+}
+
+/* ==========================================================================
+   /VTM wizard duplicate search select fix
+   ========================================================================== */
+

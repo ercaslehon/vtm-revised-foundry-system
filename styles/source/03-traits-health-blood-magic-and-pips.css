@@ -1,0 +1,1031 @@
+/* ==========================================================================
+   VTM Revised v9.5.12 Glowing Trait Pips
+   Заполненные точки атрибутов и способностей светятся и мерцают по значению поля.
+   ========================================================================== */
+
+@keyframes vtmBloodPipPulse {
+  0%, 100% {
+    filter: brightness(1);
+    box-shadow:
+      0 0 6px rgba(198, 44, 68, 0.42),
+      0 0 12px rgba(198, 44, 68, 0.20),
+      inset 0 0 4px rgba(255, 226, 200, 0.22);
+    transform: scale(1);
+  }
+
+  45% {
+    filter: brightness(1.28);
+    box-shadow:
+      0 0 8px rgba(255, 78, 102, 0.72),
+      0 0 18px rgba(198, 44, 68, 0.40),
+      0 0 28px rgba(112, 16, 35, 0.26),
+      inset 0 0 5px rgba(255, 226, 200, 0.36);
+    transform: scale(1.08);
+  }
+
+  72% {
+    filter: brightness(0.92);
+    box-shadow:
+      0 0 5px rgba(155, 25, 46, 0.34),
+      0 0 11px rgba(155, 25, 46, 0.18),
+      inset 0 0 5px rgba(0, 0, 0, 0.24);
+    transform: scale(0.98);
+  }
+}
+
+@keyframes vtmBloodPipHalo {
+  0%, 100% {
+    opacity: 0.42;
+  }
+
+  50% {
+    opacity: 0.85;
+  }
+}
+
+.vtm-revised.sheet .trait-pips {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  justify-content: flex-end !important;
+  align-items: center !important;
+  gap: 4px !important;
+  min-width: max-content !important;
+}
+
+.vtm-revised.sheet .trait-pips i {
+  position: relative !important;
+  width: 9px !important;
+  height: 9px !important;
+  flex: 0 0 9px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(201, 173, 102, 0.36) !important;
+  background:
+    radial-gradient(circle at 35% 28%, rgba(112, 96, 70, 0.24), transparent 34%),
+    rgba(5, 3, 6, 0.72) !important;
+  box-shadow:
+    inset 0 0 5px rgba(0, 0, 0, 0.62),
+    0 0 2px rgba(201, 173, 102, 0.12) !important;
+  transition:
+    background 140ms ease,
+    border-color 140ms ease,
+    box-shadow 140ms ease,
+    transform 140ms ease,
+    filter 140ms ease !important;
+}
+
+.vtm-revised.sheet .trait-pips i.is-filled {
+  border-color: rgba(255, 117, 130, 0.88) !important;
+  background:
+    radial-gradient(circle at 34% 26%, rgba(255, 232, 202, 0.92), rgba(255, 134, 124, 0.58) 24%, transparent 35%),
+    radial-gradient(circle at 50% 55%, rgba(236, 57, 83, 0.98), rgba(126, 20, 42, 0.98) 62%, rgba(47, 5, 15, 1)) !important;
+  box-shadow:
+    0 0 7px rgba(255, 71, 96, 0.62),
+    0 0 16px rgba(198, 44, 68, 0.30),
+    inset 0 0 4px rgba(255, 226, 200, 0.30) !important;
+  animation: vtmBloodPipPulse 2.45s ease-in-out infinite !important;
+}
+
+.vtm-revised.sheet .trait-pips i.is-filled::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: -5px !important;
+  z-index: -1 !important;
+  border-radius: 999px !important;
+  background: radial-gradient(circle, rgba(205, 42, 68, 0.36), transparent 66%) !important;
+  animation: vtmBloodPipHalo 2.45s ease-in-out infinite !important;
+  pointer-events: none !important;
+}
+
+.vtm-revised.sheet .trait-pips i.is-filled:nth-child(2) { animation-delay: 0.09s !important; }
+.vtm-revised.sheet .trait-pips i.is-filled:nth-child(3) { animation-delay: 0.18s !important; }
+.vtm-revised.sheet .trait-pips i.is-filled:nth-child(4) { animation-delay: 0.27s !important; }
+.vtm-revised.sheet .trait-pips i.is-filled:nth-child(5) { animation-delay: 0.36s !important; }
+.vtm-revised.sheet .trait-pips i.is-filled:nth-child(6) { animation-delay: 0.45s !important; }
+.vtm-revised.sheet .trait-pips i.is-filled:nth-child(7) { animation-delay: 0.54s !important; }
+.vtm-revised.sheet .trait-pips i.is-filled:nth-child(8) { animation-delay: 0.63s !important; }
+.vtm-revised.sheet .trait-pips i.is-filled:nth-child(9) { animation-delay: 0.72s !important; }
+.vtm-revised.sheet .trait-pips i.is-filled:nth-child(10) { animation-delay: 0.81s !important; }
+
+.vtm-revised.sheet .trait-row:hover .trait-pips i.is-filled {
+  filter: brightness(1.18) !important;
+}
+
+.vtm-revised.sheet .trait-row.trait-over-limit .trait-pips i.is-filled {
+  animation-duration: 1.35s !important;
+  border-color: rgba(255, 165, 128, 0.95) !important;
+}
+
+/* Людям с включённым reduced motion не надо устраивать маленькую дискотеку Каина. */
+@media (prefers-reduced-motion: reduce) {
+  .vtm-revised.sheet .trait-pips i.is-filled,
+  .vtm-revised.sheet .trait-pips i.is-filled::after {
+    animation: none !important;
+  }
+}
+
+
+
+/* ==========================================================================
+   VTM Revised v9.5.13 Health Alignment Polish
+   Чинит геометрию блока здоровья: кастомный чекбокс, ровное выравнивание,
+   более аккуратное состояние отмеченных ранений.
+   ========================================================================== */
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-check-grid {
+  align-items: stretch !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row {
+  position: relative !important;
+  grid-template-columns: 20px minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 10px !important;
+  min-height: 50px !important;
+  padding: 8px 12px !important;
+  overflow: hidden !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row .health-checkbox {
+  position: absolute !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: 0 !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-checkmark {
+  position: relative !important;
+  display: inline-flex !important;
+  width: 18px !important;
+  height: 18px !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 6px !important;
+  border: 1px solid rgba(201, 173, 102, 0.34) !important;
+  background: linear-gradient(180deg, rgba(10,7,10,.96), rgba(27,10,18,.88)) !important;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.38), 0 0 0 1px rgba(0,0,0,.12) !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-checkmark::after {
+  content: "" !important;
+  width: 9px !important;
+  height: 5px !important;
+  border-left: 2px solid transparent !important;
+  border-bottom: 2px solid transparent !important;
+  transform: translateY(-1px) rotate(-45deg) scale(.9) !important;
+  opacity: 0 !important;
+  transition: opacity 140ms ease, border-color 140ms ease, transform 140ms ease !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-info {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  gap: 1px !important;
+  min-height: 0 !important;
+  line-height: 1.08 !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-name {
+  font-size: 11px !important;
+  line-height: 1.05 !important;
+  letter-spacing: .01em !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-penalty {
+  line-height: 1.05 !important;
+  opacity: .92 !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row.is-checked {
+  border-color: rgba(210, 76, 101, 0.92) !important;
+  background:
+    radial-gradient(circle at 22% 20%, rgba(228, 77, 104, .22), transparent 38%),
+    linear-gradient(180deg, rgba(96, 17, 35, 0.96), rgba(34, 8, 15, 0.96)) !important;
+  box-shadow: 0 0 14px rgba(158,32,57,.22), inset 0 0 16px rgba(0,0,0,.34) !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row.is-checked .health-checkmark {
+  border-color: rgba(255, 174, 132, 0.94) !important;
+  background: linear-gradient(180deg, rgba(252, 167, 88, .96), rgba(219, 121, 42, .94)) !important;
+  box-shadow: 0 0 10px rgba(228, 127, 62, .28), inset 0 0 0 1px rgba(255,244,223,.22) !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row.is-checked .health-checkmark::after {
+  opacity: 1 !important;
+  border-color: rgba(58, 17, 5, 0.96) !important;
+  transform: translateY(-1px) rotate(-45deg) scale(1) !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row:hover {
+  border-color: rgba(201, 173, 102, 0.36) !important;
+}
+
+@media (max-width: 1320px) {
+  .vtm-revised.sheet .vtm-health-scroll-block .health-row {
+    min-height: 48px !important;
+  }
+}
+
+
+/* ==========================================================================
+   VTM Revised v9.5.14 Health Compact Selected State
+   Возвращает более узкие карточки здоровья, убирает галочки и оставляет
+   только подсветку выбранного блока.
+   ========================================================================== */
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-check-grid {
+  display: grid !important;
+  grid-template-columns: repeat(7, minmax(104px, 1fr)) !important;
+  gap: 8px !important;
+  align-items: stretch !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row {
+  position: relative !important;
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  align-items: center !important;
+  gap: 0 !important;
+  min-height: 44px !important;
+  padding: 8px 12px !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(112, 35, 56, 0.56) !important;
+  border-radius: 11px !important;
+  background: linear-gradient(180deg, rgba(7,5,7,.76), rgba(24,9,16,.64)) !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row .health-checkbox {
+  position: absolute !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: 0 !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-checkmark {
+  display: none !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-info {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  gap: 1px !important;
+  min-height: 0 !important;
+  line-height: 1.04 !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-name {
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: normal !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  line-height: 1.02 !important;
+  letter-spacing: .01em !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-penalty {
+  color: var(--vtm-muted) !important;
+  font-size: 11px !important;
+  line-height: 1.02 !important;
+  white-space: normal !important;
+  opacity: .92 !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row.is-checked {
+  border-color: rgba(210, 76, 101, 0.9) !important;
+  background:
+    radial-gradient(circle at 20% 18%, rgba(228, 77, 104, .18), transparent 36%),
+    linear-gradient(180deg, rgba(96, 17, 35, 0.95), rgba(34, 8, 15, 0.95)) !important;
+  box-shadow: 0 0 12px rgba(158,32,57,.20), inset 0 0 16px rgba(0,0,0,.32) !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row:hover {
+  border-color: rgba(201, 173, 102, 0.32) !important;
+}
+
+@media (max-width: 1320px) {
+  .vtm-revised.sheet .vtm-health-scroll-block .health-check-grid {
+    grid-template-columns: repeat(4, minmax(110px, 1fr)) !important;
+  }
+}
+
+@media (max-width: 860px) {
+  .vtm-revised.sheet .vtm-health-scroll-block .health-check-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+
+/* ==========================================================================
+   VTM Revised v9.5.15 Health No Checks
+   Полностью убирает видимые чекбоксы/галочки из здоровья.
+   Выбор состояния показывается только подсветкой блока.
+   ========================================================================== */
+
+.vtm-revised.sheet .vtm-health-scroll-block {
+  padding: 10px !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-check-grid {
+  display: grid !important;
+  grid-template-columns: repeat(7, minmax(96px, 1fr)) !important;
+  gap: 7px !important;
+  align-items: stretch !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  min-height: 38px !important;
+  padding: 7px 11px !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(112, 35, 56, 0.56) !important;
+  border-radius: 10px !important;
+  background:
+    linear-gradient(180deg, rgba(7, 5, 7, 0.78), rgba(24, 9, 16, 0.64)) !important;
+  cursor: pointer !important;
+}
+
+/* Убить визуальные чекбоксы. Да, совсем. */
+.vtm-revised.sheet .vtm-health-scroll-block .health-row input.health-checkbox,
+.vtm-revised.sheet .vtm-health-scroll-block .health-row input[type="checkbox"].health-checkbox,
+.vtm-revised.sheet .vtm-health-scroll-block .health-row .health-checkbox,
+.vtm-revised.sheet .vtm-health-scroll-block .health-checkmark {
+  position: absolute !important;
+  left: -9999px !important;
+  top: auto !important;
+  display: block !important;
+  width: 1px !important;
+  height: 1px !important;
+  min-width: 1px !important;
+  min-height: 1px !important;
+  max-width: 1px !important;
+  max-height: 1px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  overflow: hidden !important;
+  clip-path: inset(50%) !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row input.health-checkbox::before,
+.vtm-revised.sheet .vtm-health-scroll-block .health-row input.health-checkbox::after,
+.vtm-revised.sheet .vtm-health-scroll-block .health-checkmark::before,
+.vtm-revised.sheet .vtm-health-scroll-block .health-checkmark::after {
+  display: none !important;
+  content: none !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-info {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  gap: 1px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  line-height: 1.02 !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-name {
+  display: block !important;
+  max-width: 100% !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: normal !important;
+  color: var(--vtm-text) !important;
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  line-height: 1.02 !important;
+  letter-spacing: 0.01em !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-penalty {
+  display: block !important;
+  color: var(--vtm-muted) !important;
+  font-size: 10px !important;
+  line-height: 1.02 !important;
+  white-space: normal !important;
+  opacity: 0.9 !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row.is-checked {
+  border-color: rgba(210, 76, 101, 0.92) !important;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(228, 77, 104, 0.20), transparent 38%),
+    linear-gradient(180deg, rgba(106, 18, 38, 0.96), rgba(34, 8, 15, 0.96)) !important;
+  box-shadow:
+    0 0 12px rgba(158, 32, 57, 0.23),
+    inset 0 0 16px rgba(0, 0, 0, 0.34) !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row.is-checked .health-name {
+  color: #fff1df !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row:hover {
+  border-color: rgba(201, 173, 102, 0.34) !important;
+  background:
+    linear-gradient(180deg, rgba(22, 10, 15, 0.86), rgba(30, 10, 18, 0.72)) !important;
+}
+
+.vtm-revised.sheet .vtm-health-scroll-block .health-row.is-checked:hover {
+  border-color: rgba(231, 98, 121, 0.98) !important;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(228, 77, 104, 0.24), transparent 38%),
+    linear-gradient(180deg, rgba(116, 20, 42, 0.98), rgba(39, 8, 17, 0.98)) !important;
+}
+
+@media (max-width: 1320px) {
+  .vtm-revised.sheet .vtm-health-scroll-block .health-check-grid {
+    grid-template-columns: repeat(4, minmax(104px, 1fr)) !important;
+  }
+}
+
+@media (max-width: 860px) {
+  .vtm-revised.sheet .vtm-health-scroll-block .health-check-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+
+/* ==========================================================================
+   VTM Revised v9.5.16 Blood Magic Names Polish
+   Чинит обрезанные названия путей магии крови и ритуалов.
+   ========================================================================== */
+
+.vtm-revised.sheet .blood-magic-section .blood-magic-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(320px, 1fr)) !important;
+  gap: 10px !important;
+  align-items: stretch !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .blood-magic-group,
+.vtm-revised.sheet .blood-magic-section .blood-magic-rituals-panel {
+  min-width: 0 !important;
+  overflow: hidden !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .blood-magic-group-header {
+  align-items: flex-start !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .blood-magic-group-title {
+  min-width: 0 !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .blood-magic-group-title h3,
+.vtm-revised.sheet .blood-magic-section .blood-magic-group-title p {
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: normal !important;
+}
+
+/* Пути и ритуалы: имя получает нормальное пространство, кнопки остаются справа. */
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"],
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 56px repeat(4, 29px) !important;
+  gap: 5px !important;
+  align-items: center !important;
+  min-height: 36px !important;
+  padding: 6px 7px 6px 10px !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-name,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-name {
+  display: block !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+  line-height: 1.18 !important;
+  padding-right: 6px !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-rating,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-rating {
+  min-width: 52px !important;
+  white-space: nowrap !important;
+  text-align: right !important;
+}
+
+/* Ритуалы обычно длиннее путей, поэтому даём им чуть больше воздуха. */
+.vtm-revised.sheet .blood-magic-rituals-panel .item-row[data-item-type="ritual"] {
+  grid-template-columns: minmax(0, 1fr) 48px repeat(4, 30px) !important;
+  min-height: 38px !important;
+}
+
+.vtm-revised.sheet .blood-magic-rituals-panel .item-row[data-item-type="ritual"] .item-name {
+  font-size: 13px !important;
+}
+
+/* Кнопки остаются плотной группой справа и не съедают имя как голодная бюрократия. */
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] button,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] button {
+  width: 28px !important;
+  min-width: 28px !important;
+  height: 28px !important;
+  min-height: 28px !important;
+  padding: 0 !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .empty {
+  min-height: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* На узких окнах пути становятся одной колонкой, иначе снова начнётся театр "За...". */
+@media (max-width: 1180px) {
+  .vtm-revised.sheet .blood-magic-section .blood-magic-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"],
+  .vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] {
+    grid-template-columns: minmax(0, 1fr) 48px repeat(2, 28px) !important;
+  }
+
+  .vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-use,
+  .vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-use {
+    display: none !important;
+  }
+}
+
+
+/* ==========================================================================
+   VTM Revised v9.5.17 Blood Magic Full Row
+   Пути магии крови и ритуалы: название занимает всю первую строку,
+   а рейтинг и кнопки уходят на вторую строку справа.
+   ========================================================================== */
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"],
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto repeat(4, 28px) !important;
+  grid-auto-rows: auto !important;
+  gap: 5px !important;
+  align-items: center !important;
+  min-height: 52px !important;
+  padding: 8px 8px 8px 10px !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-name,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-name {
+  grid-column: 1 / -1 !important;
+  grid-row: 1 !important;
+  display: block !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: normal !important;
+  overflow-wrap: break-word !important;
+  word-break: normal !important;
+  line-height: 1.16 !important;
+  padding-right: 0 !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-rating,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-rating {
+  grid-column: 2 !important;
+  grid-row: 2 !important;
+  justify-self: end !important;
+  align-self: center !important;
+  min-width: 42px !important;
+  text-align: right !important;
+  white-space: nowrap !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] > button,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] > button {
+  grid-row: 2 !important;
+  justify-self: end !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] > button:nth-last-child(4),
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] > button:nth-last-child(4) {
+  grid-column: 3 !important;
+}
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] > button:nth-last-child(3),
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] > button:nth-last-child(3) {
+  grid-column: 4 !important;
+}
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] > button:nth-last-child(2),
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] > button:nth-last-child(2) {
+  grid-column: 5 !important;
+}
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] > button:nth-last-child(1),
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] > button:nth-last-child(1) {
+  grid-column: 6 !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] button,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] button {
+  width: 27px !important;
+  min-width: 27px !important;
+  height: 27px !important;
+  min-height: 27px !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .blood-magic-group .items-list,
+.vtm-revised.sheet .blood-magic-section .blood-magic-rituals-panel .items-list {
+  gap: 7px !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .blood-magic-group,
+.vtm-revised.sheet .blood-magic-section .blood-magic-rituals-panel {
+  overflow: visible !important;
+}
+
+@media (max-width: 760px) {
+  .vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"],
+  .vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] {
+    grid-template-columns: minmax(0, 1fr) auto repeat(3, 28px) !important;
+  }
+}
+
+
+/* ==========================================================================
+   VTM Revised v9.5.18 Clickable Item Name No Background
+   Убирает кнопку-подложку с кликабельных названий путей и ритуалов.
+   ========================================================================== */
+
+.vtm-revised.sheet .items-list .item-name.discipline-card-open,
+.vtm-revised.sheet .items-list .item-name.ritual-card-open,
+.vtm-revised.sheet .items-list .item-name.merit-flaw-card-open,
+.vtm-revised.sheet .items-list .item-name.item-edit {
+  width: auto !important;
+  min-width: 0 !important;
+  height: auto !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--vtm-text) !important;
+  text-align: left !important;
+  justify-self: stretch !important;
+  align-self: center !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-name.discipline-card-open,
+.vtm-revised.sheet .blood-magic-section .item-name.ritual-card-open {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  color: var(--vtm-text) !important;
+}
+
+.vtm-revised.sheet .items-list .item-name.discipline-card-open:hover,
+.vtm-revised.sheet .items-list .item-name.ritual-card-open:hover,
+.vtm-revised.sheet .items-list .item-name.merit-flaw-card-open:hover,
+.vtm-revised.sheet .items-list .item-name.item-edit:hover {
+  color: #fff1df !important;
+  text-shadow: 0 0 8px rgba(201, 62, 88, 0.28) !important;
+}
+
+
+/* ==========================================================================
+   VTM Revised v9.5.19 Blood Magic Glowing Pips
+   Под названиями путей и ритуалов добавлены сияющие точки рейтинга.
+   ========================================================================== */
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-main,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-main {
+  grid-column: 1 / -1 !important;
+  grid-row: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  gap: 5px !important;
+  min-width: 0 !important;
+  width: 100% !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-main .item-name,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-main .item-name {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  line-height: 1.14 !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-main .item-pips,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-main .item-pips {
+  justify-content: flex-start !important;
+  gap: 4px !important;
+  min-height: 10px !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-main .item-pips i,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-main .item-pips i {
+  width: 8px !important;
+  height: 8px !important;
+  flex: 0 0 8px !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-main .item-pips {
+  flex-wrap: wrap !important;
+  max-width: 100% !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"],
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] {
+  min-height: 60px !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-rating,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-rating {
+  align-self: end !important;
+}
+
+
+/* ==========================================================================
+   VTM Revised v9.5.20 Discipline Header Plus Alignment
+   Переносит плюсик дисциплин вправо и выравнивает по строке заголовка.
+   ========================================================================== */
+
+.vtm-revised.sheet .vtm-inline-heading-actions {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+  margin-bottom: 8px !important;
+}
+
+.vtm-revised.sheet .vtm-inline-heading-actions h3 {
+  margin: 0 !important;
+  flex: 1 1 auto !important;
+}
+
+.vtm-revised.sheet .vtm-disciplines-panel .vtm-inline-heading-actions .vtm-small-add-button,
+.vtm-revised.sheet .vtm-disciplines-panel .vtm-inline-heading-actions .item-create {
+  flex: 0 0 auto !important;
+  margin-left: auto !important;
+}
+
+
+/* ==========================================================================
+   VTM Revised v9.5.21 Experience Available Only
+   В блоке опыта оставлено только редактируемое поле "Доступно".
+   ========================================================================== */
+
+.vtm-revised.sheet .vtm-tracker-xp .vtm-xp-single {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+}
+
+.vtm-revised.sheet .vtm-tracker-xp .vtm-xp-single label {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  color: var(--vtm-muted) !important;
+  font-size: 12px !important;
+}
+
+.vtm-revised.sheet .vtm-tracker-xp .vtm-xp-single input[type="number"] {
+  width: 100% !important;
+}
+
+
+/* ==========================================================================
+   VTM Revised v9.5.27 Discipline Glowing Pips
+   Под названиями дисциплин добавлены сияющие точки рейтинга.
+   ========================================================================== */
+
+.vtm-revised.sheet .vtm-disciplines-panel .item-row[data-item-type="discipline"] {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 42px repeat(4, 26px) !important;
+  grid-auto-rows: auto !important;
+  gap: 4px !important;
+  align-items: center !important;
+  min-height: 48px !important;
+  padding: 6px 4px 6px 7px !important;
+}
+
+.vtm-revised.sheet .vtm-disciplines-panel .item-row[data-item-type="discipline"] .item-main {
+  grid-column: 1 !important;
+  grid-row: 1 / span 2 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  gap: 5px !important;
+  min-width: 0 !important;
+  width: 100% !important;
+}
+
+.vtm-revised.sheet .vtm-disciplines-panel .item-row[data-item-type="discipline"] .item-main .item-name {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  line-height: 1.14 !important;
+}
+
+.vtm-revised.sheet .vtm-disciplines-panel .item-row[data-item-type="discipline"] .item-main .item-pips {
+  justify-content: flex-start !important;
+  gap: 4px !important;
+  min-height: 10px !important;
+}
+
+.vtm-revised.sheet .vtm-disciplines-panel .item-row[data-item-type="discipline"] .item-main .item-pips i {
+  width: 8px !important;
+  height: 8px !important;
+  flex: 0 0 8px !important;
+}
+
+.vtm-revised.sheet .vtm-disciplines-panel .item-row[data-item-type="discipline"] .item-rating {
+  align-self: center !important;
+}
+
+@media (max-width: 760px) {
+  .vtm-revised.sheet .vtm-disciplines-panel .item-row[data-item-type="discipline"] {
+    min-height: 52px !important;
+  }
+}
+
+
+/* ==========================================================================
+   VTM Revised v9.5.28 Discipline Pips Centered
+   Центрует сияющие точки дисциплин и убирает ощущение пустой середины строки.
+   ========================================================================== */
+
+.vtm-revised.sheet .vtm-disciplines-panel .item-row[data-item-type="discipline"] .item-main {
+  align-items: stretch !important;
+}
+
+.vtm-revised.sheet .vtm-disciplines-panel .item-row[data-item-type="discipline"] .item-main .item-name {
+  text-align: left !important;
+}
+
+.vtm-revised.sheet .vtm-disciplines-panel .item-row[data-item-type="discipline"] .item-main .item-pips {
+  display: flex !important;
+  width: 100% !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 4px !important;
+  padding: 0 6px 0 0 !important;
+}
+
+.vtm-revised.sheet .vtm-disciplines-panel .item-row[data-item-type="discipline"] .item-main .item-pips i {
+  width: 8px !important;
+  height: 8px !important;
+  flex: 0 0 8px !important;
+}
+
+.vtm-revised.sheet .vtm-disciplines-panel .item-row[data-item-type="discipline"] {
+  min-height: 44px !important;
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+}
+
+
+/* ==========================================================================
+   VTM Revised v9.5.29 Blood Magic Rows Centered
+   Центрует название и сияющие точки в строках путей магии крови и ритуалов.
+   ========================================================================== */
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-main,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-main {
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-main .item-name,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-main .item-name {
+  text-align: center !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-main .item-pips,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-main .item-pips {
+  display: flex !important;
+  width: 100% !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-main .item-pips {
+  max-width: 100% !important;
+}
+
+
+/* ==========================================================================
+   VTM Revised v9.5.30 Blood Magic Vertical Center
+   Левый блок (название + точки) остаётся слева, но центрируется по вертикали.
+   Правый блок (рейтинг + кнопки) выравнивается справа и тоже по вертикали.
+   ========================================================================== */
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"],
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto repeat(4, 28px) !important;
+  grid-template-rows: auto !important;
+  gap: 5px !important;
+  align-items: center !important;
+  min-height: 60px !important;
+  padding: 8px 8px 8px 10px !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-main,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-main {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  gap: 5px !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  text-align: left !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-main .item-name,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-main .item-name {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  line-height: 1.14 !important;
+  text-align: left !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-main .item-pips,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-main .item-pips {
+  display: flex !important;
+  width: 100% !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+  gap: 4px !important;
+  min-height: 10px !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] .item-rating,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] .item-rating {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  justify-self: end !important;
+  align-self: center !important;
+  min-width: 42px !important;
+  text-align: right !important;
+  white-space: nowrap !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] > button,
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] > button {
+  grid-row: 1 !important;
+  align-self: center !important;
+  justify-self: end !important;
+}
+
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] > button:nth-last-child(4),
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] > button:nth-last-child(4) {
+  grid-column: 3 !important;
+}
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] > button:nth-last-child(3),
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] > button:nth-last-child(3) {
+  grid-column: 4 !important;
+}
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] > button:nth-last-child(2),
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] > button:nth-last-child(2) {
+  grid-column: 5 !important;
+}
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="disciplinePath"] > button:nth-last-child(1),
+.vtm-revised.sheet .blood-magic-section .item-row[data-item-type="ritual"] > button:nth-last-child(1) {
+  grid-column: 6 !important;
+}
+
+
