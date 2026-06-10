@@ -115,7 +115,8 @@ Hooks.once("init", async () => {
   CONFIG.VTM_REVISED = VTM_REVISED;
   registerCatalogAutoSeeder({ RulesJsonImporter });
   registerHandlebarsHelpers();
-  registerSearchableSelects();
+  // TEMP HOTFIX: disabled sheet-wide searchable selects because they break actor sheet re-render
+  // registerSearchableSelects();
   CONFIG.Actor.documentClass = VTMActor;
   CONFIG.Item.documentClass = VTMItem;
 
