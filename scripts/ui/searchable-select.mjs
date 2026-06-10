@@ -287,6 +287,9 @@ function buildList({ select, wrapper, list, searchInput, buttonLabel }) {
 }
 
 function enhanceSelect(select) {
+  // Do not enhance selects inside the main actor sheet.
+  // Actor sheet re-renders frequently and custom wrappers break the layout.
+  if (select?.closest?.(".vtm-sheet, .vtm-sheet-v2, .vtm-vampire-shell")) return;
   if (!(select instanceof HTMLSelectElement)) return;
   if (select.multiple) return;
   if (select.hasAttribute(ENHANCED_ATTR)) return;

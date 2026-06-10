@@ -71,6 +71,9 @@ function sizeCatalogPickerWindow(app) {
 }
 
 function shouldEnhanceSelect(select) {
+  // Actor sheets must not be enhanced by dialog/catalog searchable selects.
+  // This module is only for dialogs, catalog pickers and the character creation wizard.
+  if (select?.closest?.(".vtm-sheet, .vtm-sheet-v2, .vtm-vampire-shell")) return false;
   if (!(select instanceof HTMLSelectElement)) return false;
   if (select.multiple) return false;
   if (select.dataset.vtmDialogSearchEnhanced === "1") return false;
