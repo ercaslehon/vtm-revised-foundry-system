@@ -1,0 +1,647 @@
+{
+  "generatedAt": "2026-06-10T15:59:29.705Z",
+  "sourceModules": 9,
+  "cssBytes": 233364,
+  "cssLines": 8421,
+  "cssSha256": "c1e9a03c1e9dc0a164553baee1c2a512f4021a649a3e34a803ec8620dd9be756",
+  "totalImportant": 1945,
+  "totalRules": 1001,
+  "modules": [
+    {
+      "file": "styles/source/01-foundation-and-legacy-apps.css",
+      "title": "Foundation, legacy base styles, cards, wizard, morality, early app styles",
+      "bytes": 28638,
+      "lines": 1445,
+      "rules": 236,
+      "uniqueSelectors": 219,
+      "important": 1,
+      "media": 7,
+      "keyframes": 0
+    },
+    {
+      "file": "styles/source/02-vampire-sheet-layout-history.css",
+      "title": "Vampire sheet layout history from v9.5.2 to v9.5.10",
+      "bytes": 79871,
+      "lines": 3181,
+      "rules": 391,
+      "uniqueSelectors": 265,
+      "important": 606,
+      "media": 19,
+      "keyframes": 0
+    },
+    {
+      "file": "styles/source/03-traits-health-blood-magic-and-pips.css",
+      "title": "Trait pips, health states, blood magic rows and discipline list polish",
+      "bytes": 38878,
+      "lines": 1032,
+      "rules": 115,
+      "uniqueSelectors": 69,
+      "important": 458,
+      "media": 10,
+      "keyframes": 2
+    },
+    {
+      "file": "styles/source/04-chat-portrait-clan-and-experience.css",
+      "title": "Readable chat cards, portrait viewer, clan cards and experience journal",
+      "bytes": 11258,
+      "lines": 369,
+      "rules": 48,
+      "uniqueSelectors": 46,
+      "important": 147,
+      "media": 2,
+      "keyframes": 0
+    },
+    {
+      "file": "styles/source/05-release-hotfixes-and-item-directory.css",
+      "title": "Release hotfixes and item directory import button layout",
+      "bytes": 12305,
+      "lines": 509,
+      "rules": 48,
+      "uniqueSelectors": 38,
+      "important": 50,
+      "media": 0,
+      "keyframes": 1
+    },
+    {
+      "file": "styles/source/06-clan-icon-overrides.css",
+      "title": "Clan icon placement overrides",
+      "bytes": 6891,
+      "lines": 255,
+      "rules": 22,
+      "uniqueSelectors": 8,
+      "important": 66,
+      "media": 0,
+      "keyframes": 3
+    },
+    {
+      "file": "styles/source/07-search-dialogs-and-wizard.css",
+      "title": "Searchable dialogs and character creation wizard select polish",
+      "bytes": 25630,
+      "lines": 729,
+      "rules": 46,
+      "uniqueSelectors": 43,
+      "important": 309,
+      "media": 1,
+      "keyframes": 0
+    },
+    {
+      "file": "styles/source/08-merit-flaw-and-catalog-pickers.css",
+      "title": "Merit/flaw and extended catalog picker previews",
+      "bytes": 17823,
+      "lines": 546,
+      "rules": 47,
+      "uniqueSelectors": 23,
+      "important": 273,
+      "media": 0,
+      "keyframes": 0
+    },
+    {
+      "file": "styles/source/09-health-damage-state-overrides.css",
+      "title": "Final health damage state colors and strong tint overrides",
+      "bytes": 12070,
+      "lines": 363,
+      "rules": 48,
+      "uniqueSelectors": 24,
+      "important": 35,
+      "media": 0,
+      "keyframes": 0
+    }
+  ],
+  "topSelectors": [
+    {
+      "selector": ".vtm-revised.sheet .vtm-health-scroll-block .health-check-grid",
+      "count": 9
+    },
+    {
+      "selector": ".vtm-revised .vtm-clan-icon",
+      "count": 7
+    },
+    {
+      "selector": ".vtm-revised.sheet .blood-magic-section .item-row[data-item-type=\"disciplinePath\"], .vtm-revised.sheet .blood-magic-section .item-row[data-item-type=\"ritual\"]",
+      "count": 6
+    },
+    {
+      "selector": ".vtm-revised.sheet .vtm-tracker-health .health-check-grid",
+      "count": 6
+    },
+    {
+      "selector": "0%, 100%",
+      "count": 6
+    },
+    {
+      "selector": ".vtm-catalog-picker-dialog .form-group",
+      "count": 5
+    },
+    {
+      "selector": ".vtm-catalog-picker-dialog .window-content, .vtm-catalog-picker-dialog .application-content",
+      "count": 5
+    },
+    {
+      "selector": ".vtm-revised .vtm-name-row",
+      "count": 5
+    },
+    {
+      "selector": ".vtm-revised.sheet .vtm-health-scroll-block .health-row",
+      "count": 5
+    },
+    {
+      "selector": ".vtm-revised.sheet .vtm-portrait-card",
+      "count": 5
+    },
+    {
+      "selector": ".vtm-revised.sheet .vtm-portrait-frame",
+      "count": 5
+    },
+    {
+      "selector": ".vtm-revised.sheet .vtm-tracker-health",
+      "count": 5
+    },
+    {
+      "selector": ".vtm-sheet .vtm-portrait-card",
+      "count": 5
+    },
+    {
+      "selector": "50%",
+      "count": 5
+    },
+    {
+      "selector": ".trait-columns",
+      "count": 4
+    },
+    {
+      "selector": ".vtm-catalog-picker-dialog",
+      "count": 4
+    },
+    {
+      "selector": ".vtm-portrait-frame",
+      "count": 4
+    },
+    {
+      "selector": ".vtm-revised.sheet .blood-magic-section .item-row[data-item-type=\"disciplinePath\"] .item-rating, .vtm-revised.sheet .blood-magic-section .item-row[data-item-type=\"ritual\"] .item-rating",
+      "count": 4
+    },
+    {
+      "selector": ".vtm-revised.sheet .vtm-fixed-tabs",
+      "count": 4
+    },
+    {
+      "selector": ".vtm-revised.sheet .vtm-health-scroll-block .health-name",
+      "count": 4
+    },
+    {
+      "selector": ".vtm-revised.sheet .vtm-health-scroll-block .health-penalty",
+      "count": 4
+    },
+    {
+      "selector": ".vtm-revised.sheet .vtm-identity-panel",
+      "count": 4
+    },
+    {
+      "selector": ".vtm-revised.sheet .vtm-tab-panel.is-active",
+      "count": 4
+    },
+    {
+      "selector": ".vtm-revised.sheet .vtm-tab-panels",
+      "count": 4
+    },
+    {
+      "selector": ".vtm-revised.sheet .window-content",
+      "count": 4
+    },
+    {
+      "selector": ".blood-magic-rituals-panel",
+      "count": 3
+    },
+    {
+      "selector": ".generation-cap-values",
+      "count": 3
+    },
+    {
+      "selector": ".item-name",
+      "count": 3
+    },
+    {
+      "selector": ".item-rating",
+      "count": 3
+    },
+    {
+      "selector": ".item-row",
+      "count": 3
+    },
+    {
+      "selector": ".items-list",
+      "count": 3
+    },
+    {
+      "selector": ".text-blocks label",
+      "count": 3
+    },
+    {
+      "selector": ".trait-cap-note",
+      "count": 3
+    },
+    {
+      "selector": ".trait-row",
+      "count": 3
+    },
+    {
+      "selector": ".vtm-catalog-picker-dialog .vtm-catalog-preview",
+      "count": 3
+    },
+    {
+      "selector": ".vtm-catalog-picker-dialog .vtm-dialog-search-select",
+      "count": 3
+    },
+    {
+      "selector": ".vtm-chat-card",
+      "count": 3
+    },
+    {
+      "selector": ".vtm-chat-card h3",
+      "count": 3
+    },
+    {
+      "selector": ".vtm-command-strip .vtm-roll-builder-grid",
+      "count": 3
+    },
+    {
+      "selector": ".vtm-main-grid",
+      "count": 3
+    }
+  ],
+  "importantHotspots": [
+    {
+      "selector": ".vtm-revised.sheet .vtm-health-scroll-block .health-check-grid",
+      "count": 9
+    },
+    {
+      "selector": ".vtm-revised.sheet .blood-magic-section .item-row[data-item-type=\"disciplinePath\"], .vtm-revised.sheet .blood-magic-section .item-row[data-item-type=\"ritual\"]",
+      "count": 6
+    },
+    {
+      "selector": ".vtm-revised.sheet .vtm-tracker-health .health-check-grid",
+      "count": 6
+    },
+    {
+      "selector": ".vtm-catalog-picker-dialog .form-group",
+      "count": 5
+    },
+    {
+      "selector": ".vtm-catalog-picker-dialog .window-content, .vtm-catalog-picker-dialog .application-content",
+      "count": 5
+    },
+    {
+      "selector": ".vtm-revised.sheet .vtm-health-scroll-block .health-row",
+      "count": 5
+    },
+    {
+      "selector": ".vtm-revised.sheet .vtm-portrait-card",
+      "count": 5
+    },
+    {
+      "selector": ".vtm-revised.sheet .vtm-portrait-frame",
+      "count": 5
+    },
+    {
+      "selector": ".vtm-revised.sheet .vtm-tracker-health",
+      "count": 5
+    },
+    {
+      "selector": ".vtm-catalog-picker-dialog",
+      "count": 4
+    },
+    {
+      "selector": ".vtm-revised .vtm-clan-icon",
+      "count": 4
+    },
+    {
+      "selector": ".vtm-revised .vtm-name-row",
+      "count": 4
+    },
+    {
+      "selector": ".vtm-revised.sheet .blood-magic-section .item-row[data-item-type=\"disciplinePath\"] .item-rating, .vtm-revised.sheet .blood-magic-section .item-row[data-item-type=\"ritual\"] .item-rating",
+      "count": 4
+    },
+    {
+      "selector": ".vtm-revised.sheet .vtm-fixed-tabs",
+      "count": 4
+    },
+    {
+      "selector": ".vtm-revised.sheet .vtm-health-scroll-block .health-name",
+      "count": 4
+    },
+    {
+      "selector": ".vtm-revised.sheet .vtm-health-scroll-block .health-penalty",
+      "count": 4
+    },
+    {
+      "selector": ".vtm-revised.sheet .vtm-identity-panel",
+      "count": 4
+    },
+    {
+      "selector": ".vtm-revised.sheet .vtm-tab-panel.is-active",
+      "count": 4
+    },
+    {
+      "selector": ".vtm-revised.sheet .vtm-tab-panels",
+      "count": 4
+    },
+    {
+      "selector": ".vtm-catalog-picker-dialog .vtm-catalog-preview",
+      "count": 3
+    },
+    {
+      "selector": ".vtm-catalog-picker-dialog .vtm-dialog-search-select",
+      "count": 3
+    },
+    {
+      "selector": ".vtm-revised .vtm-identity-panel",
+      "count": 3
+    },
+    {
+      "selector": ".vtm-revised.sheet .blood-magic-section .item-row[data-item-type=\"disciplinePath\"] .item-main .item-name, .vtm-revised.sheet .blood-magic-section .item-row[data-item-type=\"ritual\"] .item-main .item-name",
+      "count": 3
+    },
+    {
+      "selector": ".vtm-revised.sheet .blood-magic-section .item-row[data-item-type=\"disciplinePath\"] .item-main .item-pips, .vtm-revised.sheet .blood-magic-section .item-row[data-item-type=\"ritual\"] .item-main .item-pips",
+      "count": 3
+    },
+    {
+      "selector": ".vtm-revised.sheet .blood-magic-section .item-row[data-item-type=\"disciplinePath\"] .item-main, .vtm-revised.sheet .blood-magic-section .item-row[data-item-type=\"ritual\"] .item-main",
+      "count": 3
+    },
+    {
+      "selector": ".vtm-revised.sheet .vtm-discipline-list-only .item-row",
+      "count": 3
+    },
+    {
+      "selector": ".vtm-revised.sheet .vtm-disciplines-panel .item-row[data-item-type=\"discipline\"]",
+      "count": 3
+    },
+    {
+      "selector": ".vtm-revised.sheet .vtm-health-scroll-block .health-info",
+      "count": 3
+    },
+    {
+      "selector": ".vtm-revised.sheet .vtm-health-scroll-block .health-row:hover",
+      "count": 3
+    },
+    {
+      "selector": ".vtm-revised.sheet .vtm-health-scroll-block .health-row.is-checked",
+      "count": 3
+    },
+    {
+      "selector": ".vtm-revised.sheet .vtm-section-tabs",
+      "count": 3
+    },
+    {
+      "selector": ".vtm-revised.sheet .vtm-sheet-body",
+      "count": 3
+    },
+    {
+      "selector": ".vtm-revised.sheet .vtm-tab-panel",
+      "count": 3
+    },
+    {
+      "selector": ".vtm-revised.sheet .vtm-vampire-shell",
+      "count": 3
+    },
+    {
+      "selector": ".vtm-catalog-picker-dialog .dialog-content, .vtm-catalog-picker-dialog .vtm-catalog-picker-form, .vtm-catalog-picker-dialog form",
+      "count": 2
+    },
+    {
+      "selector": ".vtm-catalog-picker-dialog .form-group label",
+      "count": 2
+    },
+    {
+      "selector": ".vtm-catalog-picker-dialog .vtm-catalog-preview-empty",
+      "count": 2
+    },
+    {
+      "selector": ".vtm-catalog-picker-dialog .vtm-catalog-preview-meta",
+      "count": 2
+    },
+    {
+      "selector": ".vtm-catalog-picker-dialog .vtm-catalog-preview-section",
+      "count": 2
+    },
+    {
+      "selector": ".vtm-catalog-picker-dialog .vtm-catalog-preview-section h4",
+      "count": 2
+    }
+  ],
+  "exactDuplicates": [
+    {
+      "count": 4,
+      "selector": ".vtm-revised.sheet .vtm-tab-panel.is-active",
+      "files": [
+        "styles/source/02-vampire-sheet-layout-history.css"
+      ]
+    },
+    {
+      "count": 2,
+      "selector": ".empty, .muted",
+      "files": [
+        "styles/source/01-foundation-and-legacy-apps.css",
+        "styles/source/02-vampire-sheet-layout-history.css"
+      ]
+    },
+    {
+      "count": 2,
+      "selector": ".vtm-main-left, .vtm-main-right",
+      "files": [
+        "styles/source/02-vampire-sheet-layout-history.css"
+      ]
+    },
+    {
+      "count": 2,
+      "selector": ".grid-2",
+      "files": [
+        "styles/source/02-vampire-sheet-layout-history.css"
+      ]
+    },
+    {
+      "count": 2,
+      "selector": ".vtm-chat-card h3",
+      "files": [
+        "styles/source/02-vampire-sheet-layout-history.css"
+      ]
+    },
+    {
+      "count": 2,
+      "selector": ".vtm-revised.sheet .vtm-tracker-health .health-check-grid",
+      "files": [
+        "styles/source/02-vampire-sheet-layout-history.css"
+      ]
+    },
+    {
+      "count": 2,
+      "selector": ".vtm-revised.sheet .vtm-tracker-health .health-check-grid",
+      "files": [
+        "styles/source/02-vampire-sheet-layout-history.css"
+      ]
+    },
+    {
+      "count": 2,
+      "selector": ".vtm-revised.sheet .vtm-health-scroll-block .health-row .health-checkbox",
+      "files": [
+        "styles/source/03-traits-health-blood-magic-and-pips.css"
+      ]
+    },
+    {
+      "count": 2,
+      "selector": ".vtm-revised.sheet .vtm-health-scroll-block .health-check-grid",
+      "files": [
+        "styles/source/03-traits-health-blood-magic-and-pips.css"
+      ]
+    },
+    {
+      "count": 2,
+      "selector": ".vtm-revised.sheet .vtm-disciplines-panel .item-row[data-item-type=\"discipline\"] .item-main .item-pips i",
+      "files": [
+        "styles/source/03-traits-health-blood-magic-and-pips.css"
+      ]
+    },
+    {
+      "count": 2,
+      "selector": ".vtm-revised select.vtm-search-select-original",
+      "files": [
+        "styles/source/05-release-hotfixes-and-item-directory.css"
+      ]
+    },
+    {
+      "count": 2,
+      "selector": "0%, 100%",
+      "files": [
+        "styles/source/06-clan-icon-overrides.css"
+      ]
+    },
+    {
+      "count": 2,
+      "selector": "50%",
+      "files": [
+        "styles/source/06-clan-icon-overrides.css"
+      ]
+    },
+    {
+      "count": 2,
+      "selector": ".vtm-revised .vtm-identity-panel",
+      "files": [
+        "styles/source/06-clan-icon-overrides.css"
+      ]
+    },
+    {
+      "count": 2,
+      "selector": ".vtm-revised .vtm-name-row",
+      "files": [
+        "styles/source/06-clan-icon-overrides.css"
+      ]
+    },
+    {
+      "count": 2,
+      "selector": ".vtm-catalog-picker-dialog .vtm-dialog-search-select",
+      "files": [
+        "styles/source/08-merit-flaw-and-catalog-pickers.css"
+      ]
+    },
+    {
+      "count": 2,
+      "selector": ".vtm-catalog-picker-dialog .vtm-catalog-preview-title",
+      "files": [
+        "styles/source/08-merit-flaw-and-catalog-pickers.css"
+      ]
+    },
+    {
+      "count": 2,
+      "selector": ".vtm-catalog-picker-dialog .vtm-catalog-preview-meta",
+      "files": [
+        "styles/source/08-merit-flaw-and-catalog-pickers.css"
+      ]
+    },
+    {
+      "count": 2,
+      "selector": ".vtm-catalog-picker-dialog .vtm-catalog-preview-section",
+      "files": [
+        "styles/source/08-merit-flaw-and-catalog-pickers.css"
+      ]
+    },
+    {
+      "count": 2,
+      "selector": ".vtm-catalog-picker-dialog .vtm-catalog-preview-section:first-of-type",
+      "files": [
+        "styles/source/08-merit-flaw-and-catalog-pickers.css"
+      ]
+    },
+    {
+      "count": 2,
+      "selector": ".vtm-catalog-picker-dialog .vtm-catalog-preview-section h4",
+      "files": [
+        "styles/source/08-merit-flaw-and-catalog-pickers.css"
+      ]
+    },
+    {
+      "count": 2,
+      "selector": ".vtm-catalog-picker-dialog .vtm-catalog-preview-section p, .vtm-catalog-picker-dialog .vtm-catalog-preview-section div",
+      "files": [
+        "styles/source/08-merit-flaw-and-catalog-pickers.css"
+      ]
+    },
+    {
+      "count": 2,
+      "selector": ".vtm-catalog-picker-dialog .vtm-catalog-preview-empty",
+      "files": [
+        "styles/source/08-merit-flaw-and-catalog-pickers.css"
+      ]
+    },
+    {
+      "count": 2,
+      "selector": ".vtm-revised .health-grid.health-check-grid",
+      "files": [
+        "styles/source/09-health-damage-state-overrides.css"
+      ]
+    },
+    {
+      "count": 2,
+      "selector": ".vtm-revised .health-row",
+      "files": [
+        "styles/source/09-health-damage-state-overrides.css"
+      ]
+    },
+    {
+      "count": 2,
+      "selector": ".vtm-revised .health-row:hover",
+      "files": [
+        "styles/source/09-health-damage-state-overrides.css"
+      ]
+    },
+    {
+      "count": 2,
+      "selector": ".vtm-revised .health-row:focus-visible",
+      "files": [
+        "styles/source/09-health-damage-state-overrides.css"
+      ]
+    },
+    {
+      "count": 2,
+      "selector": ".vtm-revised .health-row[data-damage-state=\"0\"]",
+      "files": [
+        "styles/source/09-health-damage-state-overrides.css"
+      ]
+    },
+    {
+      "count": 2,
+      "selector": ".vtm-revised .health-row[data-damage-state=\"1\"]",
+      "files": [
+        "styles/source/09-health-damage-state-overrides.css"
+      ]
+    },
+    {
+      "count": 2,
+      "selector": ".vtm-revised .health-row[data-damage-state=\"2\"]",
+      "files": [
+        "styles/source/09-health-damage-state-overrides.css"
+      ]
+    }
+  ]
+}

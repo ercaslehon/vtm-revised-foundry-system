@@ -10,6 +10,7 @@
     "styles:split": "node scripts/split-styles.mjs",
     "styles:build": "node scripts/build-styles.mjs",
     "styles:check": "node scripts/build-styles.mjs --check",
-    "styles:regroup": "node scripts/regroup-styles.mjs"
+    "styles:regroup": "node scripts/regroup-styles.mjs",
+    "styles:audit": "node scripts/audit-styles.mjs"
   }
 }
