@@ -8,39 +8,32 @@ Desktop.ini
 .idea/
 *.swp
 *.swo
-
 # Logs
 *.log
 logs/
-
 # Node / package managers
 node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-
 # Environment / local config
 .env
 .env.*
 !.env.example
-
 # Archives / generated bundles
 *.zip
 *.tar
 *.tar.gz
 *.tgz
-
 # Temporary files
 tmp/
 temp/
 .cache/
-
 # Foundry runtime / local world data
 worlds/
 Data/worlds/
 uploads/
-
 # Keep source directories tracked
 !data/
 !docs/
@@ -86,3 +79,10 @@ release-foundry-system.ps1
 apply-v*.ps1
 repair-v*.ps1
 remove-release-tool-restore-readme.ps1
+# Local repair / generated working artifacts
+/main
+/repair-*.ps1
+/apply-*.ps1
+/remove-*.ps1
+/README.ru*.md
+/vtm-revised.css

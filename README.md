@@ -210,3 +210,5 @@ https://raw.githubusercontent.com/ercaslehon/vtm-revised-foundry-system/main/sys
 Проект не связан с White Wolf, Paradox Interactive, Renegade Game Studios или Foundry Gaming LLC.
 
 Vampire: The Masquerade и связанные материалы принадлежат их правообладателям.
+
+Текущая версия: 11.0.13
