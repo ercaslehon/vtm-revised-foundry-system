@@ -8409,3 +8409,12 @@ footer .vtm-import-morality {
   color: #d74455 !important;
 }
 
+
+/* Hide system catalog folders/items from Foundry Items directory.
+   They remain in the world for lookups and reference cards. */
+#items .vtm-hidden-system-catalog-entry,
+.items-sidebar .vtm-hidden-system-catalog-entry,
+.directory .vtm-hidden-system-catalog-entry {
+  display: none !important;
+}
+

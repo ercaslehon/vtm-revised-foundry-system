@@ -194,6 +194,90 @@ function getRenderedElement(app, html) {
 }
 
 
+function isVtmSystemCatalogFolder(folder) {
+  const name = String(folder?.name || "");
+  return folder?.type === "Item"
+    && /^VtM Revised\b/i.test(name)
+    && /Catalog/i.test(name);
+}
+
+function hideVtmSystemCatalogDirectoryRows(app, html) {
+  const root = getRenderedElement(app, html);
+  if (!root) return;
+
+  const itemDirectory =
+    app?.constructor?.name === "ItemDirectory"
+    || app?.tabName === "items"
+    || root.closest?.("#items")
+    || root.querySelector?.("#items, .items-sidebar, .directory-list");
+
+  if (!itemDirectory) return;
+
+  const catalogFolders = Array.from(game.folders ?? []).filter(isVtmSystemCatalogFolder);
+  if (!catalogFolders.length) return;
+
+  const catalogFolderIds = new Set(catalogFolders.map(folder => folder.id).filter(Boolean));
+  const catalogFolderNames = new Set(catalogFolders.map(folder => String(folder.name || "").trim()).filter(Boolean));
+
+  const catalogItemIds = new Set(
+    Array.from(game.items ?? [])
+      .filter(item => catalogFolderIds.has(item.folder?.id) || catalogFolderNames.has(String(item.folder?.name || "").trim()))
+      .map(item => item.id)
+      .filter(Boolean)
+  );
+
+  const hideRow = row => {
+    row.classList.add("vtm-hidden-system-catalog-entry");
+    row.hidden = true;
+    row.style.setProperty("display", "none", "important");
+  };
+
+  root.querySelectorAll("[data-folder-id], [data-entry-id], [data-document-id], [data-uuid], .directory-item").forEach(row => {
+    const dataset = row.dataset ?? {};
+    const folderId = dataset.folderId || dataset.entryId || dataset.documentId || "";
+    const documentId = dataset.documentId || dataset.entryId || "";
+
+    if (catalogFolderIds.has(folderId)) {
+      hideRow(row);
+      return;
+    }
+
+    if (catalogItemIds.has(documentId)) {
+      hideRow(row);
+      return;
+    }
+
+    const uuid = String(dataset.uuid || dataset.documentUuid || "");
+    const uuidId = uuid.split(".").at(-1);
+    if (catalogItemIds.has(uuidId)) {
+      hideRow(row);
+      return;
+    }
+
+    const label = String(row.querySelector?.(".folder-name, .entry-name, .document-name, h3, h4")?.textContent || row.textContent || "").trim();
+    if (catalogFolderNames.has(label)) {
+      hideRow(row);
+    }
+  });
+}
+
+Hooks.on("renderItemDirectory", hideVtmSystemCatalogDirectoryRows);
+Hooks.on("renderSidebarTab", (app, html) => {
+  if (app?.tabName === "items" || app?.options?.id === "items") hideVtmSystemCatalogDirectoryRows(app, html);
+});
+
+Hooks.on("createItem", () => {
+  const directory = ui?.items;
+  if (directory?.rendered) setTimeout(() => hideVtmSystemCatalogDirectoryRows(directory, directory.element), 50);
+});
+
+Hooks.on("createFolder", folder => {
+  if (!isVtmSystemCatalogFolder(folder)) return;
+  const directory = ui?.items;
+  if (directory?.rendered) setTimeout(() => hideVtmSystemCatalogDirectoryRows(directory, directory.element), 50);
+});
+
+
 function resolveActorFromElement(element) {
   const row = element?.closest?.("[data-document-id], [data-entry-id], [data-document-uuid], [data-uuid]");
   if (!row) return null;
