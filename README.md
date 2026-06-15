@@ -211,4 +211,4 @@ https://raw.githubusercontent.com/ercaslehon/vtm-revised-foundry-system/main/sys
 
 Vampire: The Masquerade и связанные материалы принадлежат их правообладателям.
 
-Текущая версия: 11.0.17
+Текущая версия: 11.0.15
