@@ -18,7 +18,9 @@ const DISCIPLINE_NAME_EQUIVALENTS = [
   ["даймонион", "демонизм", "daimoinon", "daimonion"],
   ["духус", "шаманство", "spiritus"],
   ["obeah", "обеах"],
-  ["valeren", "валерен"]
+  ["valeren", "валерен"],
+  ["превращение", "превращения", "протеан", "protean"],
+  ["изменчивость", "метаморфозы", "метаморфоза", "висцисситуда", "висцисситуд", "vicissitude"]
 ].map(group => group.map(normalizeName));
 
 function expandDisciplineNames(values = []) {
