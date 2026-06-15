@@ -1,3 +1,5 @@
+import { resolveTrechkalovAlias } from "./trechkalov-aliases.mjs";
+
 const renderTemplateCompat = foundry.applications?.handlebars?.renderTemplate ?? globalThis.renderTemplate;
 const DialogV1 = foundry.appv1?.api?.Dialog ?? globalThis.Dialog;
 
@@ -91,7 +93,12 @@ export class TrechkalovJsonImporter {
       }
     };
 
-    for (const [source, target] of Object.entries(PROFILE_MAP)) system.profile[target] = profile[source] ?? "";
+    for (const [source, target] of Object.entries(PROFILE_MAP)) {
+      const value = profile[source] ?? "";
+      system.profile[target] = target === "clan"
+        ? resolveTrechkalovAlias("clan", value)
+        : value;
+    }
     system.profile.appearance = sheet.appearanceDescription ?? "";
     system.profile.history = sheet.charHistory ?? "";
     system.profile.goals = sheet.goals ?? "";
@@ -142,25 +149,37 @@ export class TrechkalovJsonImporter {
   static _buildItems(sheet) {
     const items = [];
     for (const entry of sheet.disciplines ?? []) {
-      items.push({ name: entry.name || "Discipline", type: "discipline", system: { rating: Number(entry.value ?? 0), rawName: entry.name || "" } });
+      const rawName = entry.name || "Discipline";
+      const name = resolveTrechkalovAlias("discipline", rawName);
+      items.push({ name, type: "discipline", system: { rating: Number(entry.value ?? 0), rawName } });
     }
     for (const entry of sheet.disciplinePaths ?? []) {
-      items.push({ name: entry.name || "Path", type: "disciplinePath", system: { rating: Number(entry.value ?? 0), rawName: entry.name || "", parentDiscipline: entry.disciplineName || "Тауматургия" } });
+      const rawName = entry.name || "Path";
+      const parentRawName = entry.disciplineName || "Тауматургия";
+      const name = resolveTrechkalovAlias("disciplinePath", rawName);
+      const parentDiscipline = resolveTrechkalovAlias("disciplinePathParent", parentRawName);
+      items.push({ name, type: "disciplinePath", system: { rating: Number(entry.value ?? 0), rawName, parentDiscipline, rawParentDiscipline: parentRawName } });
     }
     for (const entry of sheet.rituals ?? []) {
       const parsed = this._parseRitual(entry);
-      items.push({ name: parsed.name, type: "ritual", system: { level: parsed.level, rawName: parsed.rawName, discipline: "Тауматургия" } });
+      const rawDiscipline = entry?.disciplineName ?? entry?.discipline ?? "Тауматургия";
+      const discipline = resolveTrechkalovAlias("ritualDiscipline", rawDiscipline);
+      items.push({ name: parsed.name, type: "ritual", system: { level: parsed.level, rawName: parsed.rawName, discipline, rawDiscipline } });
     }
     for (const entry of sheet.backgrounds ?? []) {
-      items.push({ name: entry.name || "Background", type: "background", system: { rating: Number(entry.value ?? 0), rawText: entry.name || "" } });
+      const rawName = entry.name || "Background";
+      const name = resolveTrechkalovAlias("background", rawName);
+      items.push({ name, type: "background", system: { rating: Number(entry.value ?? 0), rawText: rawName, rawName } });
     }
     for (const rawText of sheet.merits ?? []) {
       const parsed = this._parseRatedText(rawText);
-      items.push({ name: parsed.name, type: "merit", system: { points: parsed.points, rawText } });
+      const name = resolveTrechkalovAlias("merit", parsed.name);
+      items.push({ name, type: "merit", system: { points: parsed.points, rawText, rawName: parsed.name } });
     }
     for (const rawText of sheet.flaws ?? []) {
       const parsed = this._parseRatedText(rawText);
-      items.push({ name: parsed.name, type: "flaw", system: { points: parsed.points, rawText } });
+      const name = resolveTrechkalovAlias("flaw", parsed.name);
+      items.push({ name, type: "flaw", system: { points: parsed.points, rawText, rawName: parsed.name } });
     }
     return items;
   }

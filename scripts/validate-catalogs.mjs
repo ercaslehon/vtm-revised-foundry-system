@@ -356,7 +356,14 @@ function validateVersionReferences(systemVersion) {
 }
 
 function validateNodeSyntax() {
-  const files = ["vtm-revised.mjs", "scripts/import/rules-json-importer.mjs", "scripts/import/catalog-auto-seeder.mjs", "scripts/validate-catalogs.mjs"].filter(file => fs.existsSync(path.join(ROOT, file)));
+  const files = [
+    "vtm-revised.mjs",
+    "scripts/import/rules-json-importer.mjs",
+    "scripts/import/trechkalov-json-importer.mjs",
+    "scripts/import/trechkalov-aliases.mjs",
+    "scripts/import/catalog-auto-seeder.mjs",
+    "scripts/validate-catalogs.mjs"
+  ].filter(file => fs.existsSync(path.join(ROOT, file)));
   for (const file of files) {
     const result = spawnSync(process.execPath, ["--check", path.join(ROOT, file)], { encoding: "utf8" });
     if (result.status !== 0) fail(`${file}: JavaScript syntax check failed: ${result.stderr || result.stdout || `exit code ${result.status}`}`);
