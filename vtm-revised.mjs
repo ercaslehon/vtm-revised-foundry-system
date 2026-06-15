@@ -1,4 +1,5 @@
 import "./scripts/ui/search-selects.mjs";
+import "./scripts/ui/actor-roll-search-select.mjs";
 import { VTM_REVISED } from "./scripts/config.mjs";
 import { VTMActor } from "./scripts/documents/vtm-actor.mjs";
 import { VTMItem } from "./scripts/documents/vtm-item.mjs";

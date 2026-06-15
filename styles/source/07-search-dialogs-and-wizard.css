@@ -726,3 +726,321 @@
    /VTM wizard duplicate search select fix
    ========================================================================== */
 
+
+/* Actor roll trait selects: fallback native select styling.
+   Search enhancer will replace these when JS is active. */
+.vtm-revised select.vtm-trait-roll-select,
+.vtm-revised .vtm-roll-dialog select,
+.vtm-revised .vtm-sheet select[name*="Trait"],
+.vtm-revised .vtm-sheet select[name*="trait"] {
+  width: 100%;
+  min-height: 32px;
+  padding: 6px 34px 6px 10px;
+  border: 1px solid rgba(180, 36, 66, 0.72);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(45, 7, 18, 0.96), rgba(12, 3, 8, 0.98));
+  color: #f1dfb0;
+  font-family: inherit;
+  font-size: 14px;
+  box-shadow:
+    inset 0 0 10px rgba(0, 0, 0, 0.55),
+    0 0 10px rgba(140, 18, 42, 0.22);
+}
+
+.vtm-revised select.vtm-trait-roll-select:focus,
+.vtm-revised .vtm-roll-dialog select:focus,
+.vtm-revised .vtm-sheet select[name*="Trait"]:focus,
+.vtm-revised .vtm-sheet select[name*="trait"]:focus {
+  outline: none;
+  border-color: rgba(235, 194, 103, 0.9);
+  box-shadow:
+    inset 0 0 10px rgba(0, 0, 0, 0.65),
+    0 0 14px rgba(235, 194, 103, 0.24);
+}
+
+.vtm-revised select.vtm-trait-roll-select option,
+.vtm-revised select.vtm-trait-roll-select optgroup,
+.vtm-revised .vtm-roll-dialog select option,
+.vtm-revised .vtm-roll-dialog select optgroup {
+  background: #1b1118;
+  color: #f1dfb0;
+}
+
+/* Actor roll searchable trait select */
+.vtm-trait-search-select {
+  position: relative;
+  width: 100%;
+  min-width: 220px;
+  font-family: inherit;
+}
+
+.vtm-trait-search-select__native {
+  position: absolute !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  width: 1px !important;
+  height: 1px !important;
+}
+
+.vtm-trait-search-select__button {
+  width: 100%;
+  min-height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 10px;
+  border: 1px solid rgba(160, 35, 57, 0.82);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(39, 6, 17, 0.98), rgba(8, 2, 6, 0.98));
+  color: #f0dba4;
+  font-family: inherit;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  box-shadow:
+    inset 0 0 12px rgba(0, 0, 0, 0.62),
+    0 0 12px rgba(130, 16, 39, 0.22);
+}
+
+.vtm-trait-search-select__button:hover,
+.vtm-trait-search-select.is-open .vtm-trait-search-select__button {
+  border-color: rgba(232, 190, 99, 0.9);
+  box-shadow:
+    inset 0 0 12px rgba(0, 0, 0, 0.7),
+    0 0 16px rgba(232, 190, 99, 0.22);
+}
+
+.vtm-trait-search-select__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.vtm-trait-search-select__caret {
+  color: #d6a947;
+  opacity: 0.9;
+}
+
+.vtm-trait-search-select__panel {
+  position: absolute;
+  z-index: 99999;
+  left: 0;
+  right: 0;
+  top: calc(100% + 4px);
+  max-height: 340px;
+  padding: 8px;
+  border: 1px solid rgba(164, 38, 64, 0.9);
+  border-radius: 10px;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(109, 18, 38, 0.55), transparent 42%),
+    linear-gradient(180deg, rgba(28, 6, 17, 0.98), rgba(8, 3, 8, 0.99));
+  box-shadow:
+    0 18px 34px rgba(0, 0, 0, 0.72),
+    0 0 22px rgba(135, 18, 45, 0.32);
+}
+
+.vtm-trait-search-select__search {
+  width: 100%;
+  min-height: 30px;
+  margin: 0 0 8px;
+  padding: 5px 8px;
+  border: 1px solid rgba(219, 179, 94, 0.58);
+  border-radius: 7px;
+  background: rgba(5, 2, 5, 0.86);
+  color: #f3e3b7;
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.vtm-trait-search-select__search:focus {
+  outline: none;
+  border-color: rgba(242, 204, 122, 0.95);
+  box-shadow: 0 0 10px rgba(242, 204, 122, 0.2);
+}
+
+.vtm-trait-search-select__list {
+  max-height: 280px;
+  overflow-y: auto;
+  padding-right: 3px;
+}
+
+.vtm-trait-search-select__group {
+  margin: 8px 0 4px;
+  padding: 2px 4px;
+  color: #f4d88f;
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid rgba(164, 38, 64, 0.32);
+}
+
+.vtm-trait-search-select__option {
+  width: 100%;
+  display: block;
+  margin: 2px 0;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #eee0bd;
+  font-family: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.vtm-trait-search-select__option:hover,
+.vtm-trait-search-select__option.is-selected {
+  background:
+    linear-gradient(90deg, rgba(148, 32, 58, 0.82), rgba(80, 15, 35, 0.54));
+  color: #fff4cb;
+}
+
+.vtm-trait-search-select__empty {
+  padding: 10px 8px;
+  color: rgba(238, 224, 189, 0.68);
+  font-style: italic;
+}
+
+/* Actor roll searchable trait select */
+.vtm-trait-search-select {
+  position: relative;
+  width: 100%;
+  min-width: 220px;
+  font-family: inherit;
+}
+
+.vtm-trait-search-select__native {
+  position: absolute !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  width: 1px !important;
+  height: 1px !important;
+}
+
+.vtm-trait-search-select__button {
+  width: 100%;
+  min-height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 10px;
+  border: 1px solid rgba(160, 35, 57, 0.82);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(39, 6, 17, 0.98), rgba(8, 2, 6, 0.98));
+  color: #f0dba4;
+  font-family: inherit;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  box-shadow:
+    inset 0 0 12px rgba(0, 0, 0, 0.62),
+    0 0 12px rgba(130, 16, 39, 0.22);
+}
+
+.vtm-trait-search-select__button:hover,
+.vtm-trait-search-select.is-open .vtm-trait-search-select__button {
+  border-color: rgba(232, 190, 99, 0.9);
+  box-shadow:
+    inset 0 0 12px rgba(0, 0, 0, 0.7),
+    0 0 16px rgba(232, 190, 99, 0.22);
+}
+
+.vtm-trait-search-select__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.vtm-trait-search-select__caret {
+  color: #d6a947;
+  opacity: 0.9;
+}
+
+.vtm-trait-search-select__panel {
+  position: absolute;
+  z-index: 99999;
+  left: 0;
+  right: 0;
+  top: calc(100% + 4px);
+  max-height: 340px;
+  padding: 8px;
+  border: 1px solid rgba(164, 38, 64, 0.9);
+  border-radius: 10px;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(109, 18, 38, 0.55), transparent 42%),
+    linear-gradient(180deg, rgba(28, 6, 17, 0.98), rgba(8, 3, 8, 0.99));
+  box-shadow:
+    0 18px 34px rgba(0, 0, 0, 0.72),
+    0 0 22px rgba(135, 18, 45, 0.32);
+}
+
+.vtm-trait-search-select__search {
+  width: 100%;
+  min-height: 30px;
+  margin: 0 0 8px;
+  padding: 5px 8px;
+  border: 1px solid rgba(219, 179, 94, 0.58);
+  border-radius: 7px;
+  background: rgba(5, 2, 5, 0.86);
+  color: #f3e3b7;
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.vtm-trait-search-select__search:focus {
+  outline: none;
+  border-color: rgba(242, 204, 122, 0.95);
+  box-shadow: 0 0 10px rgba(242, 204, 122, 0.2);
+}
+
+.vtm-trait-search-select__list {
+  max-height: 280px;
+  overflow-y: auto;
+  padding-right: 3px;
+}
+
+.vtm-trait-search-select__group {
+  margin: 8px 0 4px;
+  padding: 2px 4px;
+  color: #f4d88f;
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid rgba(164, 38, 64, 0.32);
+}
+
+.vtm-trait-search-select__option {
+  width: 100%;
+  display: block;
+  margin: 2px 0;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #eee0bd;
+  font-family: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.vtm-trait-search-select__option:hover,
+.vtm-trait-search-select__option.is-selected {
+  background:
+    linear-gradient(90deg, rgba(148, 32, 58, 0.82), rgba(80, 15, 35, 0.54));
+  color: #fff4cb;
+}
+
+.vtm-trait-search-select__empty {
+  padding: 10px 8px;
+  color: rgba(238, 224, 189, 0.68);
+  font-style: italic;
+}

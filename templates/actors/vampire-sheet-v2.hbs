@@ -177,7 +177,7 @@
         <h2>{{localize "VTM_REVISED.Roll.BuilderTitle"}}</h2>
         <div class="vtm-roll-builder-grid">
           <label><span>{{localize "VTM_REVISED.Roll.FirstTrait"}}</span>
-            <select data-roll-field="firstTrait">
+            <select class="vtm-trait-roll-select" name="firstTrait" data-roll-field="firstTrait">
               {{#each rollTraitOptionGroups as |group|}}
                 <optgroup label="{{group.label}}">
                   {{#each group.options as |option|}}
@@ -188,7 +188,7 @@
             </select>
           </label>
           <label><span>{{localize "VTM_REVISED.Roll.SecondTrait"}}</span>
-            <select data-roll-field="secondTrait">
+            <select class="vtm-trait-roll-select" name="secondTrait" data-roll-field="secondTrait">
               <option value="">{{localize "VTM_REVISED.Roll.NoSecondTrait"}}</option>
               {{#each rollTraitOptionGroups as |group|}}
                 <optgroup label="{{group.label}}">

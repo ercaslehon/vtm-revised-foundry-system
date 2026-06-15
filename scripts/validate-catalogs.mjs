@@ -361,6 +361,7 @@ function validateNodeSyntax() {
     "scripts/import/rules-json-importer.mjs",
     "scripts/import/trechkalov-json-importer.mjs",
     "scripts/import/trechkalov-aliases.mjs",
+    "scripts/ui/actor-roll-search-select.mjs",
     "scripts/import/catalog-auto-seeder.mjs",
     "scripts/validate-catalogs.mjs"
   ].filter(file => fs.existsSync(path.join(ROOT, file)));
