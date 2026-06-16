@@ -8,6 +8,7 @@ import { VTMMeritFlawCard } from "../apps/merit-flaw-card.mjs";
 import { VTMArchetypeCard, findArchetypeForName } from "../apps/archetype-card.mjs";
 import { VTMMoralityPathCard, findMoralityPathItemForName } from "../apps/morality-path-card.mjs";
 import { VTMCharacterCreationWizard } from "../apps/character-creation-wizard.mjs";
+import { enhanceActorRollSearchSelects } from "../ui/actor-roll-search-select.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const ActorSheetV2 = foundry.applications.sheets.ActorSheetV2;
@@ -326,6 +327,7 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
     super._onRender(context, options);
     const element = this.element;
     if (!element) return;
+    enhanceActorRollSearchSelects(element);
 
     // v10.0.1 sheet size guard.
     // Foundry can remember an accidentally tiny window position.

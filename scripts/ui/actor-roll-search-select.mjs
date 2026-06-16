@@ -6,6 +6,19 @@ function normalize(value = "") {
     .replace(/\s+/g, " ");
 }
 
+function closeOpenTraitSearchSelects(except = null) {
+  document.querySelectorAll(".vtm-trait-search-select.is-open").forEach(wrapper => {
+    if (except && wrapper === except) return;
+    wrapper.classList.remove("is-open");
+
+    const panel = wrapper.querySelector(".vtm-trait-search-select__panel");
+    if (panel) panel.hidden = true;
+
+    const button = wrapper.querySelector(".vtm-trait-search-select__button");
+    if (button) button.setAttribute("aria-expanded", "false");
+  });
+}
+
 function getOptionRows(select) {
   const rows = [];
 
@@ -46,15 +59,18 @@ function shouldEnhanceTraitSelect(select) {
   if (!(select instanceof HTMLSelectElement)) return false;
   if (select.dataset.vtmTraitSearchEnhanced === "1") return false;
 
-  const hasGroups = select.querySelector("optgroup");
+  const hasGroups = Boolean(select.querySelector("optgroup"));
+  const hasEnoughOptions = Number(select.options?.length ?? 0) >= 6;
   const name = String(select.name || "").toLowerCase();
   const className = String(select.className || "").toLowerCase();
   const rollField = String(select.dataset?.rollField || "").toLowerCase();
+  const explicit = select.dataset?.vtmSearchableSelect === "true";
 
   return Boolean(
-    hasGroups
+    (hasGroups || hasEnoughOptions)
     && (
-      rollField.includes("trait")
+      explicit
+      || rollField.includes("trait")
       || name.includes("trait")
       || className.includes("trait")
       || select.closest(".vtm-roll-dialog")
@@ -75,6 +91,8 @@ function enhanceTraitSelect(select) {
   const button = document.createElement("button");
   button.type = "button";
   button.className = "vtm-trait-search-select__button";
+  button.setAttribute("aria-haspopup", "listbox");
+  button.setAttribute("aria-expanded", "false");
 
   const label = document.createElement("span");
   label.className = "vtm-trait-search-select__label";
@@ -110,16 +128,41 @@ function enhanceTraitSelect(select) {
 
   const selectedText = () => select.selectedOptions?.[0]?.textContent?.trim() || "Выберите значение";
 
+  const positionPanel = () => {
+    const rect = button.getBoundingClientRect();
+    const gap = 6;
+    const viewportPadding = 14;
+    const preferredHeight = 300;
+    const minHeight = 150;
+
+    const availableBelow = window.innerHeight - rect.bottom - gap - viewportPadding;
+    const availableAbove = rect.top - gap - viewportPadding;
+    const shouldOpenUp = availableBelow < 210 && availableAbove > availableBelow;
+
+    const available = Math.max(
+      minHeight,
+      Math.min(preferredHeight, shouldOpenUp ? availableAbove : availableBelow)
+    );
+
+    wrapper.classList.toggle("opens-up", shouldOpenUp);
+    wrapper.style.setProperty("--vtm-trait-search-panel-max-height", `${available}px`);
+    wrapper.style.setProperty("--vtm-trait-search-list-max-height", `${Math.max(95, available - 52)}px`);
+  };
+
   const close = () => {
     panel.hidden = true;
-    wrapper.classList.remove("is-open");
+    wrapper.classList.remove("is-open", "opens-up");
+    button.setAttribute("aria-expanded", "false");
   };
 
   const open = () => {
+    closeOpenTraitSearchSelects(wrapper);
     panel.hidden = false;
     wrapper.classList.add("is-open");
+    button.setAttribute("aria-expanded", "true");
     search.value = "";
     renderList("");
+    positionPanel();
     requestAnimationFrame(() => search.focus());
   };
 
@@ -200,6 +243,14 @@ function enhanceTraitSelect(select) {
   document.addEventListener("click", event => {
     if (!wrapper.contains(event.target)) close();
   });
+
+  window.addEventListener("resize", () => {
+    if (wrapper.classList.contains("is-open")) positionPanel();
+  });
+
+  document.addEventListener("scroll", () => {
+    if (wrapper.classList.contains("is-open")) positionPanel();
+  }, true);
 
   select.addEventListener("change", () => {
     label.textContent = selectedText();

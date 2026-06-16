@@ -26,7 +26,7 @@
           <label class="vtm-identity-cell clan-picker-label">
             <span>{{localize "VTM_REVISED.Profile.Clan"}}</span>
             <div class="clan-picker-row vtm-control-with-book">
-              <select name="system.profile.clan" class="clan-select">
+              <select name="system.profile.clan" class="clan-select vtm-sheet-search-select" data-vtm-searchable-select="true">
                 <option value="">{{localize "VTM_REVISED.Empty"}}</option>
                 {{#if selectedClan}}
                   {{#unless selectedClan.slug}}
@@ -57,7 +57,7 @@
           <label class="vtm-identity-cell">
             <span>{{localize "VTM_REVISED.Profile.Nature"}}</span>
             <div class="archetype-picker-row vtm-control-with-book">
-              <select name="system.profile.nature" class="archetype-select">
+              <select name="system.profile.nature" class="archetype-select vtm-sheet-search-select" data-vtm-searchable-select="true">
                 <option value="">{{localize "VTM_REVISED.Empty"}}</option>
                 {{#if selectedNature.isCustom}}
                   <option value="{{system.profile.nature}}" selected>{{system.profile.nature}} · {{localize "VTM_REVISED.Archetype.Custom"}}</option>
@@ -73,7 +73,7 @@
           <label class="vtm-identity-cell">
             <span>{{localize "VTM_REVISED.Profile.Demeanor"}}</span>
             <div class="archetype-picker-row vtm-control-with-book">
-              <select name="system.profile.demeanor" class="archetype-select">
+              <select name="system.profile.demeanor" class="archetype-select vtm-sheet-search-select" data-vtm-searchable-select="true">
                 <option value="">{{localize "VTM_REVISED.Empty"}}</option>
                 {{#if selectedDemeanor.isCustom}}
                   <option value="{{system.profile.demeanor}}" selected>{{system.profile.demeanor}} · {{localize "VTM_REVISED.Archetype.Custom"}}</option>
@@ -90,7 +90,7 @@
         <div class="vtm-lore-grid">
           <label class="vtm-lore-cell"><span>{{localize "VTM_REVISED.Profile.Concept"}}</span><input name="system.profile.concept" value="{{system.profile.concept}}"/></label>
           <label class="vtm-lore-cell"><span>{{localize "VTM_REVISED.Profile.Sect"}}</span>
-            <select name="system.profile.sect">
+            <select class="vtm-sheet-search-select" name="system.profile.sect" data-vtm-searchable-select="true">
               <option value="">{{localize "VTM_REVISED.Empty"}}</option>
               {{#each config.sectOptions as |sect|}}
                 <option value="{{sect.name}}" {{#if (eq ../system.profile.sect sect.name)}}selected{{/if}}>{{sect.name}}</option>
