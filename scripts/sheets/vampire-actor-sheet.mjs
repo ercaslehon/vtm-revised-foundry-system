@@ -2413,7 +2413,7 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
       return `<optgroup label="${foundry.utils.escapeHTML(group)}">${inner}</optgroup>`;
     }).join("");
 
-    return `<select name="${name}">${empty}${body}</select>`;
+    return `<select class="vtm-trait-roll-select" name="${name}" data-roll-field="${name}" data-vtm-searchable-select="true">${empty}${body}</select>`;
   }
 
   async _openRollDialog({ firstTrait = "", secondTrait = "", difficulty = 6, label = "" } = {}) {

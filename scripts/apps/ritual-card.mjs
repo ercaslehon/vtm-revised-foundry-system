@@ -216,7 +216,7 @@ export class VTMRitualCard extends HandlebarsApplicationMixin(ApplicationV2) {
       const inner = entries.map(option => `<option value="${foundry.utils.escapeHTML(option.key)}"${option.key === selected ? " selected" : ""}>${foundry.utils.escapeHTML(option.display)}</option>`).join("");
       return `<optgroup label="${foundry.utils.escapeHTML(group)}">${inner}</optgroup>`;
     }).join("");
-    return `<select name="${name}">${empty}${body}</select>`;
+    return `<select class="vtm-trait-roll-select" name="${name}" data-roll-field="${name}" data-vtm-searchable-select="true">${empty}${body}</select>`;
   }
 
   async _openRollDialog({ firstTrait = "attribute.mental.intelligence", secondTrait = "ability.knowledges.occult", difficulty = 6, label = "" } = {}) {

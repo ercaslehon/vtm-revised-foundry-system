@@ -768,253 +768,7 @@
 }
 
 
-/* Searchable actor sheet and roll trait selects */
-.vtm-trait-search-select {
-  position: relative;
-  width: 100%;
-  min-width: 0;
-  font-family: inherit;
-}
 
-.vtm-trait-search-select__native {
-  position: absolute !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-  width: 1px !important;
-  height: 1px !important;
-  min-height: 1px !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-.vtm-trait-search-select__button {
-  width: 100%;
-  min-height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  padding: 5px 9px;
-  border: 1px solid rgba(166, 43, 67, 0.82);
-  border-radius: 7px;
-  background:
-    linear-gradient(180deg, rgba(118, 18, 40, 0.96), rgba(42, 5, 18, 0.98));
-  color: #f1dfb0;
-  font-family: inherit;
-  font-size: 13px;
-  line-height: 1.2;
-  text-align: left;
-  cursor: pointer;
-  box-shadow:
-    inset 0 0 9px rgba(0, 0, 0, 0.52),
-    0 0 8px rgba(139, 16, 40, 0.24);
-}
-
-.vtm-trait-search-select__button:hover,
-.vtm-trait-search-select.is-open .vtm-trait-search-select__button {
-  border-color: rgba(231, 188, 94, 0.9);
-  color: #fff0be;
-  box-shadow:
-    inset 0 0 9px rgba(0, 0, 0, 0.62),
-    0 0 12px rgba(231, 188, 94, 0.18);
-}
-
-.vtm-trait-search-select__label {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.vtm-trait-search-select__caret {
-  flex: 0 0 auto;
-  color: #d8ad4b;
-  font-size: 11px;
-  opacity: 0.9;
-}
-
-.vtm-trait-search-select__panel {
-  position: absolute;
-  z-index: 100000;
-  left: 0;
-  right: 0;
-  top: calc(100% + 3px);
-  min-width: min(300px, 90vw);
-  max-height: 300px;
-  padding: 7px;
-  border: 1px solid rgba(165, 38, 64, 0.9);
-  border-radius: 8px;
-  background:
-    radial-gradient(circle at 20% 0%, rgba(92, 16, 34, 0.48), transparent 46%),
-    linear-gradient(180deg, rgba(25, 5, 15, 0.99), rgba(8, 2, 7, 0.99));
-  box-shadow:
-    0 14px 28px rgba(0, 0, 0, 0.74),
-    0 0 18px rgba(132, 18, 43, 0.26);
-}
-
-.vtm-trait-search-select__search {
-  width: 100%;
-  min-height: 28px;
-  margin: 0 0 7px;
-  padding: 5px 8px;
-  border: 1px solid rgba(216, 174, 88, 0.62);
-  border-radius: 6px;
-  background: rgba(5, 2, 5, 0.9);
-  color: #f3e3b7;
-  font-family: inherit;
-  font-size: 13px;
-}
-
-.vtm-trait-search-select__search::placeholder {
-  color: rgba(243, 227, 183, 0.55);
-}
-
-.vtm-trait-search-select__search:focus {
-  outline: none;
-  border-color: rgba(242, 204, 122, 0.95);
-  box-shadow: 0 0 8px rgba(242, 204, 122, 0.18);
-}
-
-.vtm-trait-search-select__list {
-  max-height: 245px;
-  overflow-y: auto;
-  padding-right: 3px;
-}
-
-.vtm-trait-search-select__group {
-  margin: 7px 0 3px;
-  padding: 2px 3px;
-  color: #f4d88f;
-  font-weight: 700;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.035em;
-  border-bottom: 1px solid rgba(164, 38, 64, 0.28);
-}
-
-.vtm-trait-search-select__option {
-  width: 100%;
-  display: block;
-  margin: 1px 0;
-  padding: 5px 7px;
-  border: 1px solid transparent;
-  border-radius: 5px;
-  background: transparent;
-  color: #ead9ae;
-  font-family: inherit;
-  font-size: 13px;
-  line-height: 1.2;
-  text-align: left;
-  cursor: pointer;
-}
-
-.vtm-trait-search-select__option:hover,
-.vtm-trait-search-select__option.is-selected {
-  border-color: rgba(194, 61, 87, 0.44);
-  background:
-    linear-gradient(90deg, rgba(126, 25, 49, 0.78), rgba(63, 12, 29, 0.54));
-  color: #fff2c2;
-}
-
-.vtm-trait-search-select__empty {
-  padding: 9px 7px;
-  color: rgba(238, 224, 189, 0.68);
-  font-style: italic;
-}
-
-/* === Actor sheet searchable selects: softer list style like catalog dialogs === */
-
-.vtm-sheet .vtm-trait-search-select__panel {
-  border: 1px solid rgba(151, 31, 56, 0.95);
-  border-radius: 10px;
-  padding: 8px;
-  background:
-    radial-gradient(circle at top, rgba(76, 8, 24, 0.18), transparent 34%),
-    linear-gradient(180deg, rgba(20, 4, 13, 0.985), rgba(9, 2, 7, 0.992));
-  box-shadow:
-    0 10px 28px rgba(0, 0, 0, 0.70),
-    0 0 14px rgba(135, 24, 46, 0.16);
-}
-
-.vtm-sheet .vtm-trait-search-select__search {
-  width: 100%;
-  min-height: 32px;
-  margin: 0 0 8px;
-  padding: 6px 10px;
-  border: 1px solid rgba(214, 177, 96, 0.60);
-  border-radius: 8px;
-  background: rgba(7, 2, 7, 0.96);
-  color: #ead9ae;
-  font-family: inherit;
-  font-size: 14px;
-  line-height: 1.2;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
-}
-
-.vtm-sheet .vtm-trait-search-select__search::placeholder {
-  color: rgba(234, 217, 174, 0.60);
-}
-
-.vtm-sheet .vtm-trait-search-select__search:focus {
-  outline: none;
-  border-color: rgba(238, 201, 117, 0.95);
-  box-shadow:
-    0 0 0 1px rgba(238, 201, 117, 0.20),
-    0 0 10px rgba(238, 201, 117, 0.10);
-}
-
-.vtm-sheet .vtm-trait-search-select__list {
-  max-height: 270px;
-  overflow-y: auto;
-  padding-right: 4px;
-}
-
-.vtm-sheet .vtm-trait-search-select__group {
-  margin: 10px 0 4px;
-  padding: 0 2px;
-  border: 0;
-  background: transparent;
-  color: #d8b25f;
-  font-size: 13px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-
-.vtm-sheet .vtm-trait-search-select__option {
-  display: block;
-  width: 100%;
-  margin: 0;
-  padding: 5px 8px;
-  border: 1px solid transparent;
-  border-radius: 6px;
-  background: transparent;
-  color: #f0e0b8;
-  font-family: inherit;
-  font-size: 15px;
-  line-height: 1.25;
-  text-align: left;
-  cursor: pointer;
-  box-shadow: none;
-}
-
-.vtm-sheet .vtm-trait-search-select__option:hover {
-  background: rgba(120, 19, 44, 0.24);
-  border-color: rgba(195, 148, 74, 0.30);
-  color: #fff0c8;
-}
-
-.vtm-sheet .vtm-trait-search-select__option.is-selected {
-  background: linear-gradient(180deg, rgba(123, 23, 49, 0.88), rgba(96, 16, 39, 0.82));
-  border-color: rgba(197, 149, 74, 0.45);
-  color: #fff0c8;
-}
-
-.vtm-sheet .vtm-trait-search-select__empty {
-  padding: 8px 6px;
-  color: rgba(234, 217, 174, 0.66);
-  font-style: italic;
-}
 
 /* less “button-like” closed state */
 .vtm-sheet .vtm-trait-search-select__button {
@@ -1026,29 +780,6 @@
 
 .vtm-sheet .vtm-trait-search-select__label {
   font-size: 14px;
-}
-/* === searchable selects must open above nearby sheet sections === */
-
-.vtm-sheet .vtm-trait-search-select,
-.vtm-sheet .vtm-searchable-select {
-  position: relative;
-  z-index: 20;
-}
-
-.vtm-sheet .vtm-trait-search-select.is-open,
-.vtm-sheet .vtm-searchable-select.is-open,
-.vtm-sheet .vtm-trait-search-select:focus-within,
-.vtm-sheet .vtm-searchable-select:focus-within {
-  z-index: 2000;
-}
-
-.vtm-sheet .vtm-trait-search-select__panel,
-.vtm-sheet .vtm-searchable-select__panel {
-  position: absolute;
-  top: calc(100% + 6px);
-  left: 0;
-  right: 0;
-  z-index: 2100;
 }
 
 /* important: do not clip open dropdowns inside sheet sections */
@@ -1072,12 +803,259 @@
   overflow: visible !important;
 }
 
-/* === Final polish: searchable selects should look like sheet inputs, not action buttons === */
 
-.vtm-sheet .vtm-trait-search-select__button,
-.vtm-sheet .vtm-search-select__button,
-.vtm-sheet .vtm-dialog-search-select__button,
-.vtm-sheet .searchable-select__button {
+/* Keep actual action buttons red, but form-like searchable selects dark. */
+.vtm-sheet .vtm-roll-panel .vtm-trait-search-select__button,
+.vtm-sheet .vtm-profile-grid .vtm-trait-search-select__button,
+.vtm-sheet .vtm-profile-grid .vtm-search-select__button {
+  background:
+    linear-gradient(180deg, rgba(12, 3, 8, 0.98), rgba(4, 1, 4, 0.98)) !important;
+}
+
+
+/* Do not let long option lists become a second character sheet. */
+.vtm-sheet .vtm-trait-search-select__option,
+.vtm-sheet .vtm-trait-search-select__group {
+  max-width: 100%;
+}
+
+
+/* === Final searchable selects: sheet-input style, no duplicated native select === */
+
+.vtm-trait-search-select {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  font-family: inherit;
+  overflow: visible;
+}
+
+.vtm-trait-search-select__native {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  position: absolute !important;
+  width: 0 !important;
+  height: 0 !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  opacity: 0 !important;
+}
+
+.vtm-trait-search-select__button {
+  width: 100%;
+  min-height: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 5px 10px;
+  border: 1px solid rgba(150, 32, 58, 0.82);
+  border-radius: 7px;
+  background:
+    linear-gradient(180deg, rgba(12, 3, 8, 0.98), rgba(4, 1, 4, 0.98)) !important;
+  color: #f1dfb0;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.2;
+  text-align: left;
+  cursor: pointer;
+  box-shadow:
+    inset 0 0 8px rgba(0, 0, 0, 0.72),
+    0 0 0 1px rgba(255, 255, 255, 0.015);
+}
+
+.vtm-trait-search-select__button:hover {
+  border-color: rgba(190, 56, 82, 0.95);
+  color: #f6e5b8;
+  box-shadow:
+    inset 0 0 8px rgba(0, 0, 0, 0.78),
+    0 0 8px rgba(150, 32, 58, 0.16);
+}
+
+.vtm-trait-search-select.is-open {
+  z-index: 100000;
+}
+
+.vtm-trait-search-select.is-open .vtm-trait-search-select__button {
+  border-color: rgba(218, 179, 88, 0.92);
+  box-shadow:
+    inset 0 0 8px rgba(0, 0, 0, 0.78),
+    0 0 9px rgba(218, 179, 88, 0.16);
+}
+
+.vtm-trait-search-select__label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #f1dfb0;
+  font-weight: 500;
+}
+
+.vtm-trait-search-select__caret {
+  flex: 0 0 auto;
+  color: rgba(218, 179, 88, 0.9);
+  font-size: 10px;
+  opacity: 0.9;
+}
+
+.vtm-trait-search-select__panel {
+  position: absolute;
+  z-index: 100001;
+  left: 0;
+  right: 0;
+  top: calc(100% + 4px);
+  bottom: auto;
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  max-height: var(--vtm-trait-search-panel-max-height, 300px) !important;
+  box-sizing: border-box;
+  overflow: hidden;
+  padding: 8px;
+  border: 1px solid rgba(151, 31, 56, 0.95);
+  border-radius: 10px;
+  background:
+    radial-gradient(circle at top, rgba(76, 8, 24, 0.18), transparent 34%),
+    linear-gradient(180deg, rgba(20, 4, 13, 0.985), rgba(9, 2, 7, 0.992));
+  box-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.70),
+    0 0 14px rgba(135, 24, 46, 0.16);
+}
+
+.vtm-trait-search-select.opens-up .vtm-trait-search-select__panel {
+  top: auto;
+  bottom: calc(100% + 4px);
+}
+
+.vtm-trait-search-select__search {
+  width: 100%;
+  min-height: 32px;
+  margin: 0 0 8px;
+  padding: 6px 10px;
+  border: 1px solid rgba(214, 177, 96, 0.60);
+  border-radius: 8px;
+  background: rgba(7, 2, 7, 0.96);
+  color: #ead9ae;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.2;
+  box-sizing: border-box;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
+}
+
+.vtm-trait-search-select__search::placeholder {
+  color: rgba(234, 217, 174, 0.60);
+}
+
+.vtm-trait-search-select__search:focus {
+  outline: none;
+  border-color: rgba(238, 201, 117, 0.95);
+  box-shadow:
+    0 0 0 1px rgba(238, 201, 117, 0.20),
+    0 0 10px rgba(238, 201, 117, 0.10);
+}
+
+.vtm-trait-search-select__list {
+  max-height: var(--vtm-trait-search-list-max-height, 245px) !important;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.vtm-trait-search-select__group {
+  margin: 10px 0 4px;
+  padding: 0 2px;
+  border: 0;
+  background: transparent;
+  color: #d8b25f;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.vtm-trait-search-select__option {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 5px 8px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: #f0e0b8;
+  font-family: inherit;
+  font-size: 15px;
+  line-height: 1.25;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: none;
+  box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.vtm-trait-search-select__option:hover {
+  background: rgba(120, 19, 44, 0.24);
+  border-color: rgba(195, 148, 74, 0.30);
+  color: #fff0c8;
+}
+
+.vtm-trait-search-select__option.is-selected {
+  background: linear-gradient(180deg, rgba(123, 23, 49, 0.88), rgba(96, 16, 39, 0.82));
+  border-color: rgba(197, 149, 74, 0.45);
+  color: #fff0c8;
+}
+
+.vtm-trait-search-select__empty {
+  padding: 8px 6px;
+  color: rgba(234, 217, 174, 0.66);
+  font-style: italic;
+}
+
+/* Keep sheet containers from clipping open dropdowns. */
+.vtm-sheet,
+.vtm-sheet .window-content,
+.vtm-sheet .sheet-body,
+.vtm-sheet .tab,
+.vtm-sheet .vtm-roll-panel,
+.vtm-sheet .vtm-roll-section,
+.vtm-sheet .vtm-profile-grid {
+  overflow: visible !important;
+}
+
+/* === Final global roll searchable select fix: dialogs and sheet === */
+
+/* Native select must never be visible next to the custom searchable control. */
+.vtm-trait-search-select__native {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  position: absolute !important;
+  width: 0 !important;
+  height: 0 !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  opacity: 0 !important;
+}
+
+/* Closed searchable select should look like a normal sheet input, not a red action button. */
+.vtm-trait-search-select__button {
+  width: 100%;
   min-height: 32px;
   height: 32px;
   padding: 5px 10px;
@@ -1091,85 +1069,180 @@
   font-weight: 500;
   line-height: 1.2;
   text-align: left;
+  cursor: pointer;
   box-shadow:
     inset 0 0 8px rgba(0, 0, 0, 0.72),
     0 0 0 1px rgba(255, 255, 255, 0.015);
 }
 
-.vtm-sheet .vtm-trait-search-select__button:hover,
-.vtm-sheet .vtm-search-select__button:hover,
-.vtm-sheet .vtm-dialog-search-select__button:hover,
-.vtm-sheet .searchable-select__button:hover {
+.vtm-trait-search-select__button:hover {
   border-color: rgba(190, 56, 82, 0.95);
-  background:
-    linear-gradient(180deg, rgba(15, 4, 10, 0.99), rgba(5, 1, 5, 0.99)) !important;
   color: #f6e5b8;
   box-shadow:
     inset 0 0 8px rgba(0, 0, 0, 0.78),
     0 0 8px rgba(150, 32, 58, 0.16);
 }
 
-.vtm-sheet .vtm-trait-search-select.is-open .vtm-trait-search-select__button,
-.vtm-sheet .vtm-search-select.is-open .vtm-search-select__button,
-.vtm-sheet .vtm-dialog-search-select.is-open .vtm-dialog-search-select__button,
-.vtm-sheet .searchable-select.is-open .searchable-select__button {
+.vtm-trait-search-select.is-open .vtm-trait-search-select__button {
   border-color: rgba(218, 179, 88, 0.92);
-  background:
-    linear-gradient(180deg, rgba(15, 4, 10, 0.99), rgba(5, 1, 5, 0.99)) !important;
   box-shadow:
     inset 0 0 8px rgba(0, 0, 0, 0.78),
     0 0 9px rgba(218, 179, 88, 0.16);
 }
 
-.vtm-sheet .vtm-trait-search-select__label,
-.vtm-sheet .vtm-search-select__label,
-.vtm-sheet .vtm-dialog-search-select__label,
-.vtm-sheet .searchable-select__label {
+.vtm-trait-search-select__label {
   color: #f1dfb0;
   font-weight: 500;
 }
 
-.vtm-sheet .vtm-trait-search-select__caret,
-.vtm-sheet .vtm-search-select__caret,
-.vtm-sheet .vtm-dialog-search-select__caret,
-.vtm-sheet .searchable-select__caret {
+.vtm-trait-search-select__caret {
   color: rgba(218, 179, 88, 0.9);
   font-size: 10px;
 }
 
-/* Keep actual action buttons red, but form-like searchable selects dark. */
-.vtm-sheet .vtm-roll-panel .vtm-trait-search-select__button,
-.vtm-sheet .vtm-profile-grid .vtm-trait-search-select__button,
-.vtm-sheet .vtm-profile-grid .vtm-search-select__button {
+/* Dialog layout should not stack native and custom controls visually. */
+.vtm-trait-search-select {
+  width: 100%;
+  min-width: 0;
+  position: relative;
+  overflow: visible;
+}
+
+.vtm-trait-search-select__panel {
+  z-index: 100001;
+}
+
+/* === Final dialog roll select override === */
+
+.dialog .vtm-trait-search-select,
+.vtm-revised.dialog .vtm-trait-search-select,
+.vtm-revised .dialog .vtm-trait-search-select,
+.window-app.dialog .vtm-trait-search-select {
+  width: 100%;
+  min-width: 0;
+  position: relative;
+  overflow: visible;
+}
+
+.dialog .vtm-trait-search-select__native,
+.vtm-revised.dialog .vtm-trait-search-select__native,
+.vtm-revised .dialog .vtm-trait-search-select__native,
+.window-app.dialog .vtm-trait-search-select__native {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  position: absolute !important;
+  width: 0 !important;
+  height: 0 !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  opacity: 0 !important;
+}
+
+.dialog .vtm-trait-search-select__button,
+.vtm-revised.dialog .vtm-trait-search-select__button,
+.vtm-revised .dialog .vtm-trait-search-select__button,
+.window-app.dialog .vtm-trait-search-select__button {
+  width: 100%;
+  min-height: 32px;
+  height: 32px;
+  padding: 5px 10px;
+  border: 1px solid rgba(150, 32, 58, 0.82);
+  border-radius: 7px;
   background:
     linear-gradient(180deg, rgba(12, 3, 8, 0.98), rgba(4, 1, 4, 0.98)) !important;
+  color: #f1dfb0 !important;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.2;
+  text-align: left;
+  cursor: pointer;
+  box-shadow:
+    inset 0 0 8px rgba(0, 0, 0, 0.72),
+    0 0 0 1px rgba(255, 255, 255, 0.015);
 }
 
-/* === Final polish: searchable select opens upward when there is not enough room below === */
-
-.vtm-sheet .vtm-trait-search-select {
-  position: relative;
+.dialog .vtm-trait-search-select__button:hover,
+.vtm-revised.dialog .vtm-trait-search-select__button:hover,
+.vtm-revised .dialog .vtm-trait-search-select__button:hover,
+.window-app.dialog .vtm-trait-search-select__button:hover {
+  border-color: rgba(190, 56, 82, 0.95);
+  color: #f6e5b8 !important;
+  box-shadow:
+    inset 0 0 8px rgba(0, 0, 0, 0.78),
+    0 0 8px rgba(150, 32, 58, 0.16);
 }
 
-.vtm-sheet .vtm-trait-search-select__panel {
-  top: calc(100% + 4px);
-  bottom: auto;
-  max-height: var(--vtm-trait-search-panel-max-height, 300px) !important;
-  overflow: hidden;
+.dialog .vtm-trait-search-select__label,
+.vtm-revised.dialog .vtm-trait-search-select__label,
+.vtm-revised .dialog .vtm-trait-search-select__label,
+.window-app.dialog .vtm-trait-search-select__label {
+  color: #f1dfb0 !important;
+  font-weight: 500;
 }
 
-.vtm-sheet .vtm-trait-search-select.opens-up .vtm-trait-search-select__panel {
-  top: auto;
-  bottom: calc(100% + 4px);
+.dialog .vtm-trait-search-select__caret,
+.vtm-revised.dialog .vtm-trait-search-select__caret,
+.vtm-revised .dialog .vtm-trait-search-select__caret,
+.window-app.dialog .vtm-trait-search-select__caret {
+  color: rgba(218, 179, 88, 0.9) !important;
+  font-size: 10px;
 }
 
-.vtm-sheet .vtm-trait-search-select__list {
-  max-height: var(--vtm-trait-search-list-max-height, 245px) !important;
-  overflow-y: auto;
+.dialog .vtm-trait-search-select__panel,
+.vtm-revised.dialog .vtm-trait-search-select__panel,
+.vtm-revised .dialog .vtm-trait-search-select__panel,
+.window-app.dialog .vtm-trait-search-select__panel {
+  z-index: 100001;
 }
 
-/* Do not let long option lists become a second character sheet. */
-.vtm-sheet .vtm-trait-search-select__option,
-.vtm-sheet .vtm-trait-search-select__group {
-  max-width: 100%;
+/* === Roll dialog searchable select: use sheet input style === */
+
+.vtm-roll-dialog-window .vtm-dialog-search-select {
+  width: 100%;
+  min-width: 0;
+}
+
+.vtm-roll-dialog-window .vtm-dialog-search-button {
+  width: 100%;
+  min-height: 32px;
+  height: 32px;
+  padding: 5px 10px;
+  border: 1px solid rgba(150, 32, 58, 0.82);
+  border-radius: 7px;
+  background:
+    linear-gradient(180deg, rgba(12, 3, 8, 0.98), rgba(4, 1, 4, 0.98)) !important;
+  color: #f1dfb0 !important;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.2;
+  text-align: left;
+  cursor: pointer;
+  box-shadow:
+    inset 0 0 8px rgba(0, 0, 0, 0.72),
+    0 0 0 1px rgba(255, 255, 255, 0.015);
+}
+
+.vtm-roll-dialog-window .vtm-dialog-search-button:hover,
+.vtm-roll-dialog-window .vtm-dialog-search-button.is-open {
+  border-color: rgba(218, 179, 88, 0.92);
+  color: #f6e5b8 !important;
+  box-shadow:
+    inset 0 0 8px rgba(0, 0, 0, 0.78),
+    0 0 9px rgba(218, 179, 88, 0.16);
+}
+
+.vtm-roll-dialog-window select.vtm-dialog-native-select {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  position: absolute !important;
+  width: 0 !important;
+  height: 0 !important;
+  opacity: 0 !important;
 }

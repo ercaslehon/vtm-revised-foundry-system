@@ -70,6 +70,40 @@ function sizeCatalogPickerWindow(app) {
   });
 }
 
+function isActorRollTraitSelect(select) {
+  if (!(select instanceof HTMLSelectElement)) return false;
+  if (isVtmRollWindow(select)) return true;
+  if (isActorRollTraitSelect(select)) return false;
+
+  const name = String(select.name || "").toLowerCase();
+  const rollField = String(select.dataset?.rollField || "").toLowerCase();
+
+  return Boolean(
+    select.classList.contains("vtm-trait-roll-select")
+    || select.dataset?.vtmSearchableSelect === "true"
+    || rollField === "firsttrait"
+    || rollField === "secondtrait"
+    || name === "firsttrait"
+    || name === "secondtrait"
+  );
+}
+
+function isRollTraitSelect(select) {
+  if (!(select instanceof HTMLSelectElement)) return false;
+
+  const name = String(select.name || "").toLowerCase();
+  const rollField = String(select.dataset?.rollField || "").toLowerCase();
+
+  return Boolean(
+    select.classList.contains("vtm-trait-roll-select")
+    || select.dataset?.vtmSearchableSelect === "true"
+    || name === "firsttrait"
+    || name === "secondtrait"
+    || rollField === "firsttrait"
+    || rollField === "secondtrait"
+  );
+}
+
 function shouldEnhanceSelect(select) {
   // Actor sheets must not be enhanced by dialog/catalog searchable selects.
   // This module is only for dialogs, catalog pickers and the character creation wizard.
@@ -82,7 +116,6 @@ function shouldEnhanceSelect(select) {
 
   if (SEARCHABLE_DIALOG_SELECTORS.some((selector) => select.matches(selector))) return true;
   if (select.closest(".vtm-roll-dialog, .vtm-add-blood-path-dialog, .vtm-import-dialog, .vtm-searchable-dialog")) return true;
-  if (isVtmRollWindow(select)) return true;
   if (isVtmCatalogPickerWindow(select)) return true;
 
   return false;
@@ -380,6 +413,12 @@ function themeDialog(select) {
     app?.classList.add("vtm-themed-dialog-window", "vtm-catalog-picker-dialog");
     form?.classList.add("vtm-searchable-dialog-form", "vtm-catalog-picker-form");
     sizeCatalogPickerWindow(app);
+    return;
+  }
+
+  if (isVtmRollWindow(select)) {
+    app?.classList.add("vtm-themed-dialog-window", "vtm-roll-dialog-window");
+    form?.classList.add("vtm-searchable-dialog-form", "vtm-roll-dialog-form");
     return;
   }
 
