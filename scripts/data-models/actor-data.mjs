@@ -139,6 +139,22 @@ export class VTMVampireActorData extends foundry.abstract.TypeDataModel {
         })
       }),
       health: healthSchema(),
+      automation: new fields.SchemaField({
+        bloodSpentTurn: ratingField(0, 10),
+        frenzy: new fields.BooleanField({ required: true, initial: false }),
+        rotschreck: new fields.BooleanField({ required: true, initial: false }),
+        physicalBoost: new fields.SchemaField({
+          strength: ratingField(0, 10),
+          dexterity: ratingField(0, 10),
+          stamina: ratingField(0, 10)
+        }),
+        activeEffects: new fields.ArrayField(new fields.SchemaField({
+          id: textField(), name: textField(), itemUuid: textField(), duration: textField(),
+          scope: textField("scene"), diceModifier: new fields.NumberField({ required: true, integer: true, initial: 0 }),
+          difficultyModifier: new fields.NumberField({ required: true, integer: true, initial: 0 }),
+          target: textField(), notes: textField(), createdAt: textField()
+        }))
+      }),
       creation: new fields.SchemaField({
         freebiePool: new fields.NumberField({ required: true, integer: true, min: -999, max: 999, initial: 15 })
       }),

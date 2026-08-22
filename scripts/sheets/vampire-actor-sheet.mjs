@@ -1,6 +1,7 @@
 import { rollDicePool } from "../dice/dice-pool.mjs";
 import { VTM_REVISED } from "../config.mjs";
 import { applyAutomationCost, normalizeAutomationCost } from "../utils/automation-costs.mjs";
+import { clearAutomationEffects, registerAutomationEffect } from "../utils/active-automation-effects.mjs";
 import { VTMDisciplineCard } from "../apps/discipline-card.mjs";
 import { VTMRitualCard } from "../apps/ritual-card.mjs";
 import { VTMClanCard, findClanItemForName } from "../apps/clan-card.mjs";
@@ -281,7 +282,18 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
       rollTraitOptions: this._buildRollTraitOptions(),
       rollTraitOptionGroups: this._buildRollTraitOptionGroups(),
       creation: this._buildCreationChecklist(),
-      experienceJournal: this._buildExperienceJournalContext()
+      experienceJournal: this._buildExperienceJournalContext(),
+      bloodTurn: {
+        spent: Number(actor.system?.automation?.bloodSpentTurn || 0),
+        max: Number(generationCaps.bloodPerTurn || 1),
+        remaining: Math.max(0, Number(generationCaps.bloodPerTurn || 1) - Number(actor.system?.automation?.bloodSpentTurn || 0)),
+        boosts: actor.system?.automation?.physicalBoost ?? {}
+      },
+      beastState: {
+        frenzy: Boolean(actor.system?.automation?.frenzy),
+        rotschreck: Boolean(actor.system?.automation?.rotschreck)
+      },
+      activeAutomationEffects: Array.from(actor.system?.automation?.activeEffects ?? [])
     };
   }
 
@@ -435,6 +447,62 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
         const delta = Number(button.dataset.delta || 0);
         await this.actor.changeResource(resource, delta, button.dataset.reason || "");
       });
+    });
+
+    element.querySelector(".vampire-blood-heal")?.addEventListener("click", async event => {
+      event.preventDefault();
+      await this._healWithBlood({ aggravated: false });
+    });
+
+    element.querySelector(".vampire-blood-heal-aggravated")?.addEventListener("click", async event => {
+      event.preventDefault();
+      await this._healWithBlood({ aggravated: true });
+    });
+
+    element.querySelector(".vampire-blood-boost")?.addEventListener("click", async event => {
+      event.preventDefault();
+      await this._openBloodBoostDialog();
+    });
+
+    element.querySelector(".vampire-blood-turn-reset")?.addEventListener("click", async event => {
+      event.preventDefault();
+      await this.actor.update({ "system.automation.bloodSpentTurn": 0 });
+    });
+
+    element.querySelector(".vampire-blood-boost-reset")?.addEventListener("click", async event => {
+      event.preventDefault();
+      await this.actor.update({
+        "system.automation.physicalBoost.strength": 0,
+        "system.automation.physicalBoost.dexterity": 0,
+        "system.automation.physicalBoost.stamina": 0
+      });
+    });
+
+    element.querySelectorAll(".automation-effect-clear").forEach(button => {
+      button.addEventListener("click", async event => {
+        event.preventDefault();
+        const id = button.dataset.effectId;
+        const effects = Array.from(this.actor.system?.automation?.activeEffects ?? []).filter(effect => effect.id !== id);
+        await this.actor.update({ "system.automation.activeEffects": effects });
+      });
+    });
+    element.querySelectorAll(".automation-effects-clear-scope").forEach(button => {
+      button.addEventListener("click", async event => {
+        event.preventDefault();
+        await clearAutomationEffects(this.actor, button.dataset.scope || "all");
+      });
+    });
+
+    element.querySelector(".vampire-frenzy-check")?.addEventListener("click", async event => {
+      event.preventDefault();
+      if (this.actor.system?.automation?.frenzy) await this.actor.update({ "system.automation.frenzy": false });
+      else await this._openBeastCheck("frenzy");
+    });
+
+    element.querySelector(".vampire-rotschreck-check")?.addEventListener("click", async event => {
+      event.preventDefault();
+      if (this.actor.system?.automation?.rotschreck) await this.actor.update({ "system.automation.rotschreck": false });
+      else await this._openBeastCheck("rotschreck");
     });
 
     element.querySelectorAll(".vtm-roll").forEach(button => {
@@ -1714,7 +1782,7 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
 
     const weapon = item.system?.weapon ?? {};
     const extraSuccesses = weapon.addsAttackSuccesses === false ? 0 : Math.max(0, Number(attackResult.successes || 0) - 1);
-    const strength = Number(foundry.utils.getProperty(this.actor, "system.attributes.physical.strength") || 0);
+    const strength = Number(this._resolveTraitOption("attribute.physical.strength")?.value || 0);
     const baseDamage = weapon.usesStrength ? (strength + Number(weapon.damageBonus || 0)) : Number(weapon.damageDice || 0);
     const damagePool = Math.max(1, baseDamage + extraSuccesses);
     const damageTypeLabel = this._damageTypeLabel(weapon.damageType);
@@ -2295,6 +2363,15 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
       };
     }
 
+    if (this.actor.system?.automation?.frenzy) {
+      return {
+        key: activeKey,
+        value: 0,
+        label: `${label} · штраф игнорируется в Безумии`,
+        incapacitated: false
+      };
+    }
+
     return {
       key: activeKey,
       value: Number(rawPenalty || 0),
@@ -2354,11 +2431,15 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
     const [type, group, trait] = String(key).split(".");
 
     if (type === "attribute") {
-      const value = Number(foundry.utils.getProperty(this.actor, `system.attributes.${group}.${trait}`) || 0);
+      const baseValue = Number(foundry.utils.getProperty(this.actor, `system.attributes.${group}.${trait}`) || 0);
+      const boost = group === "physical" ? Number(foundry.utils.getProperty(this.actor, `system.automation.physicalBoost.${trait}`) || 0) : 0;
+      const value = baseValue + boost;
       return {
         key,
         label: game.i18n.localize(`VTM_REVISED.Attribute.${trait}`),
-        value
+        value,
+        baseValue,
+        boost
       };
     }
 
@@ -2414,6 +2495,161 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
     }).join("");
 
     return `<select class="vtm-trait-roll-select" name="${name}" data-roll-field="${name}" data-vtm-searchable-select="true">${empty}${body}</select>`;
+  }
+
+  async _spendBloodForTurn(amount = 1, reason = "Трата крови", { countForTurn = true } = {}) {
+    const cost = Math.max(0, Number(amount || 0));
+    const blood = Number(this.actor.system?.resources?.blood?.value || 0);
+    if (blood < cost) {
+      ui.notifications?.warn?.(`${this.actor.name}: недостаточно крови (${blood}/${cost}).`);
+      return false;
+    }
+    const spent = Number(this.actor.system?.automation?.bloodSpentTurn || 0);
+    const limit = Number(this.actor.generationCaps?.bloodPerTurn || this.actor.system?.resources?.bloodPerTurn || 1);
+    if (countForTurn && spent + cost > limit) {
+      ui.notifications?.warn?.(`Лимит поколения: ${limit} пунктов крови за ход. Уже потрачено: ${spent}.`);
+      return false;
+    }
+    await this.actor.changeResource("resources.blood", -cost, reason);
+    if (countForTurn) await this.actor.update({ "system.automation.bloodSpentTurn": spent + cost });
+    return true;
+  }
+
+  async _healWithBlood({ aggravated = false } = {}) {
+    const levels = [...VTM_REVISED.healthLevels].reverse();
+    const wanted = aggravated ? 3 : [1, 2];
+    const healthKey = levels.find(key => {
+      const damage = Number(this.actor.system?.health?.[key] || 0);
+      return aggravated ? damage === wanted : wanted.includes(damage);
+    });
+    if (!healthKey) {
+      ui.notifications?.info?.(aggravated ? "Аггравированных повреждений нет." : "Ударных или летальных повреждений нет.");
+      return false;
+    }
+    const cost = aggravated ? 5 : 1;
+    const spent = await this._spendBloodForTurn(cost, aggravated ? "Лечение аггравированного повреждения" : "Лечение повреждения", { countForTurn: !aggravated });
+    if (!spent) return false;
+    await this.actor.update({ [`system.health.${healthKey}`]: 0 });
+    const label = game.i18n.localize(`VTM_REVISED.Health.${healthKey}`);
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: `<article class="vtm-chat-card"><h2><i class="fas fa-heart-pulse"></i> Лечение кровью</h2><p>${foundry.utils.escapeHTML(label)}: исцелён 1 уровень ${aggravated ? "аггравированного" : "обычного"} урона.</p><p>Потрачено крови: ${cost}.${aggravated ? " Требуется полный день отдыха." : " Требуется покой и концентрация в течение хода."}</p></article>`,
+      flags: { "vtm-revised": { type: "bloodHealing", healthKey, aggravated, cost } }
+    });
+    return true;
+  }
+
+  async _openBloodBoostDialog() {
+    const pathName = String(this.actor.system?.resources?.pathName || "Человечность").trim().toLowerCase().replaceAll("ё", "е");
+    if (pathName && pathName !== "человечность") {
+      ui.notifications?.warn?.("По основной книге усиливать Физические Атрибуты кровью могут только вампиры с Человечностью.");
+      return false;
+    }
+    const labels = { strength: "Сила", dexterity: "Ловкость", stamina: "Выносливость" };
+    const boosts = this.actor.system?.automation?.physicalBoost ?? {};
+    const cap = Number(this.actor.generationCaps?.traitMax || 5) + 1;
+    const options = Object.entries(labels).map(([key, label]) => {
+      const base = Number(this.actor.system?.attributes?.physical?.[key] || 0);
+      const boost = Number(boosts[key] || 0);
+      return `<option value="${key}"${base + boost >= cap ? " disabled" : ""}>${label}: ${base}${boost ? ` + ${boost}` : ""} / ${cap}</option>`;
+    }).join("");
+    const content = `<form class="vampire-blood-boost-dialog"><div class="form-group"><label>Физический Атрибут</label><select name="trait">${options}</select></div><p class="hint">1 пункт крови повышает выбранный Атрибут на 1 до конца сцены. Максимум — на единицу выше предела поколения.</p></form>`;
+    return new Promise(resolve => new DialogV1({
+      title: "Усиление кровью",
+      content,
+      buttons: {
+        boost: {
+          icon: '<i class="fas fa-droplet"></i>',
+          label: "Потратить 1 кровь",
+          callback: async html => {
+            const form = this._getFormElement(html);
+            const trait = String(form?.querySelector("[name='trait']")?.value || "");
+            if (!labels[trait]) return resolve(false);
+            const base = Number(this.actor.system?.attributes?.physical?.[trait] || 0);
+            const currentBoost = Number(this.actor.system?.automation?.physicalBoost?.[trait] || 0);
+            if (base + currentBoost >= cap) {
+              ui.notifications?.warn?.(`${labels[trait]} уже достигла предела ${cap}.`);
+              return resolve(false);
+            }
+            if (!await this._spendBloodForTurn(1, `Усиление кровью: ${labels[trait]}`)) return resolve(false);
+            await this.actor.update({ [`system.automation.physicalBoost.${trait}`]: currentBoost + 1 });
+            resolve(true);
+          }
+        },
+        cancel: { label: game.i18n.localize("Cancel"), callback: () => resolve(false) }
+      },
+      default: "boost",
+      close: () => resolve(false)
+    }, { width: 460 }).render(true));
+  }
+
+  async _openBeastCheck(kind = "frenzy") {
+    const isRotschreck = kind === "rotschreck";
+    if (isRotschreck && this.actor.system?.automation?.frenzy) {
+      ui.notifications?.info?.("Вампир в Безумии невосприимчив к Ротшреку.");
+      return false;
+    }
+    const frenzyOptions = [
+      [3, "Запах крови при голоде"], [4, "Вид крови / оскорбление / опасность"],
+      [6, "Физическая провокация / вкус крови"], [7, "Любимый в опасности"], [8, "Откровенное унижение"]
+    ];
+    const fearOptions = [
+      [3, "Огонёк сигареты"], [5, "Вид факела"], [6, "Пожар"],
+      [7, "Непрямой солнечный свет / персонаж загорелся"], [8, "Прямой солнечный свет"], [9, "Заперт в горящем здании"]
+    ];
+    const options = (isRotschreck ? fearOptions : frenzyOptions)
+      .map(([difficulty, label]) => `<option value="${difficulty}">${difficulty} · ${label}</option>`).join("");
+    const content = `<form class="vampire-beast-dialog">
+      <div class="form-group"><label>Провокация</label><select name="difficulty">${options}</select></div>
+      <div class="form-group"><label>Комментарий</label><input type="text" name="reason"></div>
+      <p class="hint">Для полного преодоления Зверя требуется 5 успехов. 1–4 успеха позволяют временно сдержаться.</p>
+    </form>`;
+    return new Promise(resolve => new DialogV1({
+      title: isRotschreck ? "Проверка Ротшрека" : "Проверка Безумия",
+      content,
+      buttons: {
+        roll: {
+          icon: '<i class="fas fa-dice-d10"></i>',
+          label: "Проверить",
+          callback: async html => {
+            const form = this._getFormElement(html);
+            const difficulty = Number(form?.querySelector("[name='difficulty']")?.value || 6);
+            const reason = String(form?.querySelector("[name='reason']")?.value || "").trim();
+            const virtue = isRotschreck ? "courage" : "selfControl";
+            const virtueLabel = isRotschreck ? "Мужество" : "Самоконтроль";
+            const rawPool = Math.max(0, Number(this.actor.system?.virtues?.[virtue] || 0));
+            const blood = Number(this.actor.system?.resources?.blood?.value || 0);
+            const pool = isRotschreck ? rawPool : Math.min(rawPool, blood);
+            if (pool <= 0) {
+              await this.actor.update({
+                "system.automation.frenzy": !isRotschreck,
+                "system.automation.rotschreck": isRotschreck
+              });
+              ui.notifications?.warn?.(`${virtueLabel}: запас равен 0 — Зверь немедленно берёт верх.`);
+              return resolve(false);
+            }
+            const result = await rollDicePool({ actor: this.actor, pool, basePool: rawPool, difficulty, label: `${isRotschreck ? "Ротшрек" : "Безумие"}: ${virtueLabel}`, flavor: reason });
+            const overcome = result.successes >= 5;
+            const restrained = result.successes > 0 && result.successes < 5;
+            const active = !overcome && !restrained;
+            await this.actor.update({
+              "system.automation.frenzy": isRotschreck ? false : active,
+              "system.automation.rotschreck": isRotschreck ? active : false
+            });
+            const outcome = overcome ? "Зверь полностью подавлен" : (restrained ? `Зверь временно сдержан: ${result.successes}/5` : (isRotschreck ? "Красный Ужас берёт верх" : "Начинается Безумие"));
+            await ChatMessage.create({
+              speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+              content: `<article class="vtm-chat-card"><h2><i class="fas fa-${isRotschreck ? "fire" : "teeth"}"></i> ${isRotschreck ? "Ротшрек" : "Безумие"}</h2><p><b>${outcome}</b></p><p>${virtueLabel}: ${pool} куб. · сложность ${difficulty}.${!isRotschreck && rawPool > pool ? ` Запас ограничен текущей кровью (${blood}).` : ""}</p>${reason ? `<p>${foundry.utils.escapeHTML(reason)}</p>` : ""}</article>`,
+              flags: { "vtm-revised": { type: "beastCheck", kind, active, successes: result.successes, difficulty } }
+            });
+            resolve(!active);
+          }
+        },
+        cancel: { label: game.i18n.localize("Cancel"), callback: () => resolve(false) }
+      },
+      default: "roll",
+      close: () => resolve(false)
+    }, { width: 520 }).render(true));
   }
 
   async _openRollDialog({ firstTrait = "", secondTrait = "", difficulty = 6, label = "" } = {}) {
@@ -2527,6 +2763,7 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
     }
 
     const appliedCost = await applyAutomationCost(this.actor, cost, item, { reason: cost.text || item.name });
+    const activeEffect = await registerAutomationEffect(this.actor, item);
 
     if (!hasRoll) {
       const renderTemplate = foundry.applications?.handlebars?.renderTemplate ?? globalThis.renderTemplate;
@@ -2534,6 +2771,7 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
         actor: this.actor,
         item,
         cost: appliedCost,
+        activeEffect,
         description: item.system?.description?.chat || item.system?.description?.system || item.system?.description?.value || ""
       });
       await ChatMessage.create({
@@ -2563,4 +2801,3 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
     return Math.max(1, attr + ability);
   }
 }
-

@@ -61,6 +61,12 @@ function automationSchema() {
       willpower: new fields.NumberField({ required: false, integer: true, min: 0, max: 99, initial: 0 }),
       text: textField()
     }),
+    effect: new fields.SchemaField({
+      label: textField(), duration: textField(), scope: textField("scene"), target: textField(),
+      diceModifier: new fields.NumberField({ required: true, integer: true, min: -20, max: 20, initial: 0 }),
+      difficultyModifier: new fields.NumberField({ required: true, integer: true, min: -10, max: 10, initial: 0 }),
+      notes: textField()
+    }),
     source: new fields.SchemaField({
       url: textField(),
       page: textField(),

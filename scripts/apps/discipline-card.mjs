@@ -1,6 +1,7 @@
 import { rollDicePool } from "../dice/dice-pool.mjs";
 import { VTM_REVISED } from "../config.mjs";
 import { applyAutomationCost, normalizeAutomationCost } from "../utils/automation-costs.mjs";
+import { registerAutomationEffect } from "../utils/active-automation-effects.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 const DialogV1 = foundry.appv1?.api?.Dialog ?? globalThis.Dialog;
@@ -503,11 +504,13 @@ export class VTMDisciplineCard extends HandlebarsApplicationMixin(ApplicationV2)
     }
 
     const appliedCost = await this._applyAutomationCosts(cost, item);
+    const activeEffect = await registerAutomationEffect(this.actor, item);
 
     const content = await renderTemplateCompat("systems/vtm-revised/templates/chat/item-use-card.hbs", {
       actor: this.actor,
       item,
       cost: appliedCost,
+      activeEffect,
       description: interpolateMechanics(item.system?.description?.chat || item.system?.description?.system || item.system?.description?.value || item.system?.description?.system || "", {
         actor: this.actor,
         discipline: this.discipline,

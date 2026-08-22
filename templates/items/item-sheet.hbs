@@ -141,6 +141,20 @@
         <label>{{localize "VTM_REVISED.Item.CostAmount"}} <input type="number" min="0" name="system.automation.cost.amount" value="{{system.automation.cost.amount}}"/></label>
       </div>
       <label>{{localize "VTM_REVISED.Item.CostText"}} <input name="system.automation.cost.text" value="{{system.automation.cost.text}}"/></label>
+      <div class="grid grid-2">
+        <label>Длительность эффекта <input name="system.automation.effect.duration" value="{{system.automation.effect.duration}}"/></label>
+        <label>Срок
+          <select name="system.automation.effect.scope">
+            <option value="turn" {{#if (eq system.automation.effect.scope "turn")}}selected{{/if}}>До конца хода</option>
+            <option value="scene" {{#if (eq system.automation.effect.scope "scene")}}selected{{/if}}>До конца сцены</option>
+            <option value="manual" {{#if (eq system.automation.effect.scope "manual")}}selected{{/if}}>Снять вручную</option>
+          </select>
+        </label>
+        <label>Цель эффекта <input name="system.automation.effect.target" value="{{system.automation.effect.target}}"/></label>
+        <label>Кубики <input type="number" min="-20" max="20" name="system.automation.effect.diceModifier" value="{{system.automation.effect.diceModifier}}"/></label>
+        <label>Сложность <input type="number" min="-10" max="10" name="system.automation.effect.difficultyModifier" value="{{system.automation.effect.difficultyModifier}}"/></label>
+      </div>
+      <label>Примечание эффекта <input name="system.automation.effect.notes" value="{{system.automation.effect.notes}}"/></label>
       <label>{{localize "VTM_REVISED.Item.SourceUrl"}} <input name="system.automation.source.url" value="{{system.automation.source.url}}"/></label>
     {{/if}}
 

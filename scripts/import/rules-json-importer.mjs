@@ -121,6 +121,15 @@ function buildSystemData(type, entry = {}) {
       willpower: safeNumber(entry.cost?.willpower ?? entry.costWillpower, 0),
       text: entry.cost?.text ?? entry.costText ?? ""
     },
+    effect: {
+      label: entry.automation?.effect?.label ?? "",
+      duration: entry.automation?.effect?.duration ?? entry.mechanics?.duration ?? entry.duration ?? "",
+      scope: entry.automation?.effect?.scope ?? "scene",
+      target: entry.automation?.effect?.target ?? "",
+      diceModifier: safeNumber(entry.automation?.effect?.diceModifier, 0),
+      difficultyModifier: safeNumber(entry.automation?.effect?.difficultyModifier, 0),
+      notes: entry.automation?.effect?.notes ?? ""
+    },
     source: {
       url: entry.source?.url ?? entry.sourceUrl ?? entry.audit?.sourceUrl ?? "",
       page: String(entry.source?.page ?? entry.page ?? entry.audit?.sourcePage ?? ""),

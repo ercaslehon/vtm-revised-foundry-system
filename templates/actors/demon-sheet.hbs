@@ -370,6 +370,7 @@
               </div>
               <input class="trait-value-input demon-lore-value" type="number" name="{{valuePath}}" value="{{value}}" min="0" max="5">
               <button type="button" class="demon-roll-button vtm-roll" data-trait="{{rollPath}}" data-label="{{label}}" title="Бросить {{label}}"><i class="fas fa-dice-d10"></i></button>
+              <button type="button" class="demon-invocation-open demon-mini-card-button" data-lore-key="{{key}}" data-lore-label="{{label}}" data-lore-rating="{{value}}" title="Выполнить Обращение"><i class="fas fa-wand-sparkles"></i></button>
               <input class="demon-lore-note" type="text" name="{{notePath}}" value="{{note}}" placeholder="Комментарий">
               <button type="button" class="demon-catalog-open demon-mini-card-button" data-catalog="lores" data-key="{{key}}" title="Открыть пояснение"><i class="fas fa-book-open"></i></button>
               <button type="button" class="demon-rated-feature-remove demon-mini-card-button" data-path="{{valuePath}}" title="Убрать из чарника"><i class="fas fa-trash"></i></button>
@@ -390,6 +391,18 @@
         </div>
 
         <label class="demon-apocalyptic-active"><input type="checkbox" name="system.apocalypticForm.active" {{checked system.apocalypticForm.active}}> Полная апокалиптическая форма активна</label>
+
+        {{#if highTormentFormOptions.length}}
+        <fieldset class="demon-high-torment-picker">
+          <legend>Способности высокой Муки · выбрано до {{highTormentSlots}}</legend>
+          {{#each highTormentFormOptions}}
+            <label class="demon-roll-effect-option">
+              <input type="checkbox" class="demon-high-torment-ability" value="{{key}}" {{checked checked}} {{#if disabled}}disabled{{/if}}>
+              <span><b>{{label}}</b><small>{{description}}</small></span>
+            </label>
+          {{/each}}
+        </fieldset>
+        {{/if}}
 
         <div class="demon-field demon-form-name">
           <label>{{localize "VTM_REVISED.Demon.Form.Name"}}</label>
@@ -469,6 +482,30 @@
             {{/if}}
           </article>
         </div>
+
+        <section class="demon-pacts-panel">
+          <div class="demon-section-title demon-subsection-title">
+            <span><i class="fas fa-file-signature"></i></span>
+            <h2>Договоры и Вера</h2>
+            <button type="button" class="demon-harvest-faith demon-mini-card-button" title="Провести Жатву Веры"><i class="fas fa-sun"></i></button>
+            <button type="button" class="demon-pact-add demon-mini-card-button" title="Заключить договор"><i class="fas fa-plus"></i></button>
+            <button type="button" class="demon-pacts-collect demon-mini-card-button" title="Получить предложенную Веру на рассвете"><i class="fas fa-hand-holding-heart"></i></button>
+          </div>
+          <p class="wizard-hint">Активные источники дают до {{pactDailyFaith}} Веры в день. Получение доступно один раз за календарный день.</p>
+          <div class="demon-pact-list">
+            {{#each pactEntries}}
+              <article class="demon-pact-row {{#if collectedToday}}is-collected{{/if}}">
+                <label class="demon-pact-toggle"><input type="checkbox" class="demon-pact-active" data-pact-id="{{id}}" {{checked active}}><span>{{name}}</span></label>
+                <span>Вера {{faithRating}} · демону {{offeredFaith}}/{{dailyMaximum}}</span>
+                <small>{{#if collectedToday}}Сегодня получено{{else}}{{#if active}}Ожидает рассвета{{else}}Договор неактивен{{/if}}{{/if}}</small>
+                {{#if gift}}<p><b>Дар:</b> {{gift}}</p>{{/if}}
+                {{#if terms}}<p><b>Условия:</b> {{terms}}</p>{{/if}}
+              </article>
+            {{else}}
+              <p class="demon-selected-catalog-empty">Структурированных договоров пока нет.</p>
+            {{/each}}
+          </div>
+        </section>
 
         <div class="demon-two-columns">
           <div class="demon-field">

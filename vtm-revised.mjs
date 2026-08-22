@@ -124,6 +124,20 @@ const preloadTemplates = async () => loadTemplatesCompat([
 Hooks.once("init", async () => {
   console.log("VtM Revised | Initializing system");
 
+  game.settings.register(VTM_REVISED.systemId, "automationMode", {
+    name: "Режим автоматизации листов",
+    hint: "Подсказки ничего не отмечают; с подтверждением автоматически отмечает обязательные эффекты; автоматический режим заранее отмечает все подходящие модификаторы.",
+    scope: "client",
+    config: true,
+    type: String,
+    choices: {
+      prompt: "Только подсказки",
+      guided: "С подтверждением",
+      automatic: "Автоматический"
+    },
+    default: "guided"
+  });
+
   CONFIG.VTM_REVISED = VTM_REVISED;
   registerCatalogAutoSeeder({ RulesJsonImporter });
   registerHandlebarsHelpers();

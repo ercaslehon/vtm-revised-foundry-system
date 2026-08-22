@@ -2,6 +2,7 @@ import { VTM_REVISED } from "../config.mjs";
 import { DEMON_CATALOGS } from "../data/demon/demon-catalogs.mjs";
 import { DEMON_ARCHETYPES } from "../data/demon/demon-archetypes.mjs";
 import { DEMON_APOCALYPTIC_FORMS } from "../data/demon/demon-apocalyptic-forms.mjs";
+import { DEMON_ABILITY_CATEGORIES, DEMON_ABILITY_LABELS } from "../data/demon/demon-abilities.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -22,17 +23,7 @@ const ATTRIBUTE_LABELS = {
   charisma: "Харизма", manipulation: "Манипулирование", appearance: "Внешность",
   perception: "Восприятие", intelligence: "Интеллект", wits: "Смекалка"
 };
-const ABILITY_LABELS = {
-  talents: "Таланты", skills: "Навыки", knowledges: "Познания",
-  athletics: "Атлетика", alertness: "Бдительность", brawl: "Драка", intimidation: "Запугивание",
-  expression: "Красноречие", leadership: "Лидерство", dodge: "Уклонение", streetwise: "Уличное чутьё",
-  subterfuge: "Хитрость", empathy: "Эмпатия", security: "Взлом", drive: "Вождение",
-  survival: "Выживание", performance: "Исполнение", animalken: "Обращение с животными", crafts: "Ремесло",
-  stealth: "Скрытность", firearms: "Стрельба", melee: "Фехтование", etiquette: "Этикет",
-  academics: "Гуманитарные науки", science: "Естественные науки", law: "Законы", computer: "Информатика",
-  linguistics: "Лингвистика", medicine: "Медицина", occult: "Оккультизм", politics: "Политика",
-  investigation: "Расследование", finance: "Финансы"
-};
+const ABILITY_LABELS = DEMON_ABILITY_LABELS;
 const BACKGROUND_LABELS = {
   allies: "Союзники", contacts: "Контакты", eminence: "Высокое положение", fame: "Слава",
   followers: "Последователи", influence: "Влияние", legacy: "Наследие", mentor: "Наставник",
@@ -62,7 +53,7 @@ function buildChecklist(actor) {
   const attributeRows = Object.entries(VTM_REVISED.attributeCategories).map(([key, traits]) => ({
     key, points: sum(traits.map(trait => Math.max(0, Number(foundry.utils.getProperty(actor, `system.attributes.${key}.${trait}`) || 0) - 1)))
   }));
-  const abilityRows = Object.entries(VTM_REVISED.abilityCategories).map(([key, traits]) => ({
+  const abilityRows = Object.entries(DEMON_ABILITY_CATEGORIES).map(([key, traits]) => ({
     key, points: sum(traits.map(trait => foundry.utils.getProperty(actor, `system.abilities.${key}.${trait}.value`)))
   }));
   const attributeTotals = attributeRows.map(row => row.points).sort((a, b) => b - a);
@@ -70,7 +61,7 @@ function buildChecklist(actor) {
   const attributeTargets = Object.values(rules.attributePriorityDots);
   const abilityTargets = Object.values(rules.abilityPriorityDots);
   const abilityOverCap = [];
-  for (const [group, traits] of Object.entries(VTM_REVISED.abilityCategories)) {
+  for (const [group, traits] of Object.entries(DEMON_ABILITY_CATEGORIES)) {
     for (const trait of traits) {
       const value = Number(foundry.utils.getProperty(actor, `system.abilities.${group}.${trait}.value`) || 0);
       if (value > rules.abilityCreationCap) abilityOverCap.push(`${ABILITY_LABELS[trait] || trait} ${value}`);
@@ -202,7 +193,7 @@ export class VTMDemonCharacterCreationWizard extends HandlebarsApplicationMixin(
       houses: DEMON_CATALOGS.houses, factions: DEMON_CATALOGS.factions, archetypes: DEMON_ARCHETYPES,
       initialTorment: Number(houseRule?.initialTorment || 0),
       attributeGroups: this._traitGroups(VTM_REVISED.attributeCategories, ATTRIBUTE_LABELS, "attributes", false, this.attributePriority),
-      abilityGroups: this._traitGroups(VTM_REVISED.abilityCategories, ABILITY_LABELS, "abilities", true, this.abilityPriority),
+      abilityGroups: this._traitGroups(DEMON_ABILITY_CATEGORIES, ABILITY_LABELS, "abilities", true, this.abilityPriority),
       backgrounds: Object.keys(BACKGROUND_LABELS).map(key => ({ key, label: BACKGROUND_LABELS[key], value: Number(this.actor.system?.backgrounds?.[key]?.value || 0) })),
       backgroundTotal: sum(Object.values(this.actor.system?.backgrounds ?? {}).map(value => value?.value)),
       backgroundTarget: VTM_REVISED.demonRules.characterCreation.backgroundsDots,
@@ -302,7 +293,7 @@ export class VTMDemonCharacterCreationWizard extends HandlebarsApplicationMixin(
   }
 
   async _chooseNaturalAptitude() {
-    const options = Object.entries(VTM_REVISED.abilityCategories).flatMap(([group, keys]) => keys.map(key =>
+    const options = Object.entries(DEMON_ABILITY_CATEGORIES).flatMap(([group, keys]) => keys.map(key =>
       `<option value="ability.${group}.${key}">${foundry.utils.escapeHTML(ABILITY_LABELS[key] || key)}</option>`
     )).join("");
     const content = `<form class="vtm-searchable-dialog"><label>Способность для «Природной склонности»<select name="trait" data-vtm-searchable="true">${options}</select></label></form>`;

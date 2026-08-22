@@ -4416,7 +4416,39 @@ input[readonly] {
   }
 }
 
+.vampire-blood-actions {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.35rem;
+}
 
+.vampire-blood-actions button {
+  width: 28px;
+  min-width: 28px;
+  height: 26px;
+  padding: 0;
+}
+
+.vampire-blood-actions button.is-active {
+  color: #fff0df;
+  border-color: #ed6b4f;
+  background: rgba(145, 23, 28, 0.75);
+  box-shadow: 0 0 10px rgba(220, 48, 35, 0.42);
+}
+
+.vampire-blood-turn-counter {
+  margin-right: 0.2rem;
+  color: #e5c9bb;
+  font-size: 0.76rem;
+  white-space: nowrap;
+}
+.vtm-revised .vtm-active-effects-panel { margin-bottom: 0.75rem; }
+.vtm-revised .vtm-active-effects-list { display: grid; gap: 0.35rem; margin: 0; padding: 0; list-style: none; }
+.vtm-revised .vtm-active-effects-list li { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; padding: 0.45rem 0.6rem; border: 1px solid rgba(145, 38, 55, 0.55); border-radius: 5px; }
+.vtm-revised .vtm-active-effects-list li div { display: grid; gap: 0.1rem; }
+.vtm-revised .vtm-active-effects-list li span, .vtm-revised .vtm-active-effects-list li small { opacity: 0.8; }
 /* ==========================================================================
    VTM Revised v9.5.12 Glowing Trait Pips
    Заполненные точки атрибутов и способностей светятся и мерцают по значению поля.
@@ -12996,4 +13028,81 @@ body .demon-character-wizard-search-panel .vtm-dialog-search-option.is-selected 
 .demon-vampire-layout .demon-torment-scale-grid,
 .demon-vampire-layout .demon-inline-resources {
   margin-top: 8px !important;
+}
+.demon-high-torment-picker {
+  margin: 0.75rem 0 1rem;
+  padding: 0.7rem;
+  border: 1px solid rgba(172, 64, 64, 0.5);
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(70, 10, 18, 0.32), rgba(16, 5, 8, 0.55));
+}
+
+.demon-high-torment-picker legend {
+  padding: 0 0.45rem;
+  color: #e8c4b0;
+  font-weight: 700;
+}
+
+.demon-high-torment-picker .demon-roll-effect-option {
+  margin-bottom: 0.4rem;
+}
+
+.demon-invocation-preview {
+  max-height: 360px;
+  margin-top: 0.7rem;
+  padding: 0.65rem;
+  overflow-y: auto;
+  border: 1px solid rgba(176, 132, 78, 0.38);
+  border-radius: 6px;
+  background: rgba(13, 8, 9, 0.46);
+}
+
+.demon-pacts-panel {
+  margin: 0.85rem 0;
+  padding: 0.8rem;
+  border: 1px solid rgba(164, 119, 65, 0.42);
+  border-radius: 8px;
+  background: rgba(19, 10, 8, 0.45);
+}
+
+.demon-pacts-panel .demon-section-title {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.demon-pacts-panel .demon-section-title h2 {
+  flex: 1;
+}
+
+.demon-pact-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 0.55rem;
+}
+
+.demon-pact-row {
+  padding: 0.65rem;
+  border: 1px solid rgba(177, 132, 76, 0.35);
+  border-radius: 6px;
+  background: rgba(9, 7, 7, 0.55);
+}
+
+.demon-pact-row.is-collected {
+  opacity: 0.72;
+}
+
+.demon-pact-row > span,
+.demon-pact-row > small,
+.demon-pact-row > p {
+  display: block;
+  margin: 0.2rem 0 0;
+}
+
+.demon-pact-toggle {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  color: #ead7b5;
+  font-weight: 700;
 }

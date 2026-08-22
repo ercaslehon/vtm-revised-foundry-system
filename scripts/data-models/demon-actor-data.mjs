@@ -1,3 +1,5 @@
+import { DEMON_ABILITY_CATEGORIES } from "../data/demon/demon-abilities.mjs";
+
 const fields = foundry.data.fields;
 
 function ratingField(initial = 0, max = 10) {
@@ -41,6 +43,19 @@ function experienceJournalEntryField() {
   });
 }
 
+function pactEntryField() {
+  return new fields.SchemaField({
+    id: textField(),
+    name: textField(),
+    terms: textField(),
+    gift: textField(),
+    faithRating: ratingField(1, 5),
+    offeredFaith: ratingField(1, 3),
+    active: new fields.BooleanField({ required: true, initial: true }),
+    lastCollected: textField()
+  });
+}
+
 function attributesSchema() {
   return new fields.SchemaField({
     physical: new fields.SchemaField({
@@ -62,15 +77,12 @@ function attributesSchema() {
 }
 
 function abilitiesSchema() {
-  const talentNames = ["athletics", "alertness", "brawl", "intimidation", "expression", "leadership", "dodge", "streetwise", "subterfuge", "empathy"];
-  const skillNames = ["security", "drive", "survival", "performance", "animalken", "crafts", "stealth", "firearms", "melee", "etiquette"];
-  const knowledgeNames = ["academics", "science", "law", "computer", "linguistics", "medicine", "occult", "politics", "investigation", "finance"];
   const build = names => Object.fromEntries(names.map(name => [name, namedRatingField()]));
 
   return new fields.SchemaField({
-    talents: new fields.SchemaField(build(talentNames)),
-    skills: new fields.SchemaField(build(skillNames)),
-    knowledges: new fields.SchemaField(build(knowledgeNames)),
+    talents: new fields.SchemaField(build(DEMON_ABILITY_CATEGORIES.talents)),
+    skills: new fields.SchemaField(build(DEMON_ABILITY_CATEGORIES.skills)),
+    knowledges: new fields.SchemaField(build(DEMON_ABILITY_CATEGORIES.knowledges)),
     custom: new fields.ArrayField(new fields.SchemaField({
       name: textField(),
       category: textField("custom"),
@@ -214,6 +226,7 @@ export class DemonActorData extends foundry.abstract.TypeDataModel {
 
       apocalypticForm: new fields.SchemaField({
         active: new fields.BooleanField({ required: true, initial: false }),
+        highTormentSelected: new fields.ArrayField(textField()),
         name: textField(),
         description: htmlField(),
         lowTorment: htmlField(),
@@ -223,7 +236,8 @@ export class DemonActorData extends foundry.abstract.TypeDataModel {
 
       pacts: new fields.SchemaField({
         notes: htmlField(),
-        thralls: htmlField()
+        thralls: htmlField(),
+        entries: new fields.ArrayField(pactEntryField())
       }),
 
       health: healthSchema(),
