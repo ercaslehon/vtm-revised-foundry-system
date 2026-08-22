@@ -20,6 +20,17 @@ function read(file) {
   return fs.readFileSync(path.join(root, file), "utf8");
 }
 
+function walkFiles(directory) {
+  if (!fs.existsSync(directory)) return [];
+
+  return fs.readdirSync(directory, { withFileTypes: true }).flatMap(entry => {
+    const fullPath = path.join(directory, entry.name);
+    if (entry.isDirectory()) return walkFiles(fullPath);
+    if (entry.name.includes(".before_") || entry.name.endsWith(".css")) return [];
+    return [fullPath];
+  });
+}
+
 function stripComments(css) {
   return css.replace(/\/\*[\s\S]*?\*\//g, "");
 }
@@ -80,6 +91,33 @@ const selectorCounts = new Map();
 const importantBySelector = new Map();
 const exactRuleCounts = new Map();
 const exactRuleSamples = new Map();
+
+const runtimeFiles = [
+  ...walkFiles(path.join(root, "templates")),
+  ...walkFiles(path.join(root, "scripts")),
+  ...walkFiles(path.join(root, "data")),
+  ...walkFiles(path.join(root, "lang")),
+  path.join(root, "vtm-revised.mjs"),
+  path.join(root, "system.json")
+].filter(file => fs.existsSync(file));
+
+const runtimeTokens = new Set(
+  runtimeFiles
+    .flatMap(file => fs.readFileSync(file, "utf8").match(/[A-Za-z_][A-Za-z0-9_-]*/g) ?? [])
+);
+
+const projectClassExceptions = new Set(["generation-cap-card", "morality-selected-summary"]);
+const cssClasses = new Set(
+  [...stripComments(builtCss).matchAll(/\.([A-Za-z_][A-Za-z0-9_-]*)/g)].map(match => match[1])
+);
+const unusedProjectClasses = [...cssClasses]
+  .filter(className => (
+    className.startsWith("vtm-") ||
+    className.startsWith("demon-") ||
+    projectClassExceptions.has(className)
+  ))
+  .filter(className => !runtimeTokens.has(className))
+  .sort();
 
 for (const entry of files) {
   const css = read(entry.file);
@@ -148,6 +186,7 @@ const summary = {
   cssSha256: sha(builtCss),
   totalImportant: modules.reduce((sum, item) => sum + item.important, 0),
   totalRules: modules.reduce((sum, item) => sum + item.rules, 0),
+  unusedProjectClasses,
   modules,
   topSelectors,
   importantHotspots,
@@ -218,6 +257,12 @@ ${importantRows.length ? table(["Count", "Selector"], importantRows) : "_No !imp
 These are exact selector + declaration duplicates. They are candidates for manual review, not automatic deletion.
 
 ${duplicateRows.length ? table(["Count", "Selector", "Files"], duplicateRows) : "_No exact duplicate rules found._"}
+
+## Unused project class candidates
+
+These project-specific classes occur in CSS but not in current templates, runtime code, catalogs, localization, or the system manifest. Foundry core classes are intentionally excluded. Review candidates before deletion because classes assembled dynamically may not be visible to static analysis.
+
+${unusedProjectClasses.length ? unusedProjectClasses.map(className => `- \`.${className}\``).join("\n") : "_No unused project classes found._"}
 
 ## Notes
 

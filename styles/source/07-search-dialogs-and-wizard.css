@@ -451,6 +451,83 @@
   scrollbar-color: rgba(201, 173, 102, 0.46) rgba(8, 5, 8, 0.58) !important;
 }
 
+.vtm-revised.creation-wizard .wizard-freebie-table {
+  width: 100%;
+  margin: 14px 0;
+  border-collapse: collapse;
+}
+
+.vtm-revised.creation-wizard .wizard-freebie-table th,
+.vtm-revised.creation-wizard .wizard-freebie-table td {
+  padding: 7px 8px;
+  border-bottom: 1px solid rgba(201, 173, 102, 0.22);
+  text-align: left;
+}
+
+.vtm-revised.creation-wizard .wizard-freebie-table td:last-child {
+  color: var(--vtm-gold);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.vtm-revised.creation-wizard .wizard-freebie-table tfoot th,
+.vtm-revised.creation-wizard .wizard-freebie-table tfoot td {
+  border-top: 1px solid rgba(201, 173, 102, 0.5);
+  font-weight: 700;
+}
+
+.demon-roll-dialog-window .demon-roll-effects-fieldset {
+  margin: 12px 0 0;
+  padding: 10px;
+  border: 1px solid rgba(201, 173, 102, 0.38);
+  border-radius: 8px;
+}
+
+.demon-roll-dialog-window .demon-roll-effects-fieldset legend {
+  padding: 0 6px;
+  color: #d8bf7b;
+  font-weight: 700;
+}
+
+.demon-roll-dialog-window .demon-roll-effects-list {
+  display: grid;
+  gap: 7px;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.demon-roll-dialog-window .demon-roll-effect-option {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  gap: 8px;
+  align-items: start;
+  padding: 7px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.demon-roll-dialog-window .demon-roll-effect-option input {
+  margin-top: 3px;
+}
+
+.demon-roll-dialog-window .demon-roll-effect-option strong {
+  margin-left: 6px;
+  color: #d8bf7b;
+}
+
+.demon-roll-dialog-window .demon-roll-effect-option small {
+  display: block;
+  margin-top: 3px;
+  color: rgba(255, 255, 255, 0.68);
+  line-height: 1.35;
+}
+
+.demon-roll-dialog-window .demon-roll-effects-empty {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.62);
+  font-style: italic;
+}
+
 .vtm-revised.creation-wizard .wizard-panel,
 .vtm-revised.creation-wizard .wizard-subpanel,
 .vtm-themed-wizard-window .wizard-panel,
@@ -787,27 +864,17 @@
 .vtm-sheet .window-content,
 .vtm-sheet .tab,
 .vtm-sheet .vtm-tab-panel,
-.vtm-sheet .vtm-roll-section,
 .vtm-sheet .vtm-roll-panel,
-.vtm-sheet .vtm-roll-builder,
-.vtm-sheet .vtm-roll-builder__row,
-.vtm-sheet .vtm-roll-builder__field,
-.vtm-sheet .vtm-trait-card,
-.vtm-sheet .vtm-block {
+.vtm-sheet .vtm-roll-builder {
   overflow: visible !important;
 }
 
 /* if any local field wrapper clips content */
-.vtm-sheet .vtm-trait-search-select__mount,
-.vtm-sheet .vtm-searchable-select__mount {
-  overflow: visible !important;
-}
 
 
 /* Keep actual action buttons red, but form-like searchable selects dark. */
 .vtm-sheet .vtm-roll-panel .vtm-trait-search-select__button,
-.vtm-sheet .vtm-profile-grid .vtm-trait-search-select__button,
-.vtm-sheet .vtm-profile-grid .vtm-search-select__button {
+.vtm-sheet .vtm-profile-grid .vtm-trait-search-select__button {
   background:
     linear-gradient(180deg, rgba(12, 3, 8, 0.98), rgba(4, 1, 4, 0.98)) !important;
 }
@@ -1030,7 +1097,6 @@
 .vtm-sheet .sheet-body,
 .vtm-sheet .tab,
 .vtm-sheet .vtm-roll-panel,
-.vtm-sheet .vtm-roll-section,
 .vtm-sheet .vtm-profile-grid {
   overflow: visible !important;
 }
@@ -1245,4 +1311,3280 @@
   width: 0 !important;
   height: 0 !important;
   opacity: 0 !important;
+}
+
+
+/* === Demon actor sheet: vampire-like black-indigo layout === */
+
+.demon.sheet.actor .window-content {
+  padding: 0 !important;
+  background:
+    radial-gradient(circle at 82% 0%, rgba(64, 72, 180, 0.22), transparent 30%),
+    radial-gradient(circle at 18% 6%, rgba(84, 42, 150, 0.18), transparent 34%),
+    radial-gradient(circle at 50% 100%, rgba(24, 34, 92, 0.18), transparent 42%),
+    linear-gradient(180deg, #050711 0%, #02030a 52%, #010106 100%) !important;
+}
+
+.demon-vampire-layout {
+  --demon-bg-0: #010106;
+  --demon-bg-1: #050711;
+  --demon-bg-2: #080b20;
+  --demon-panel: rgba(8, 10, 24, 0.96);
+  --demon-panel-dark: rgba(2, 3, 11, 0.99);
+  --demon-border: rgba(98, 108, 210, 0.72);
+  --demon-border-soft: rgba(76, 86, 172, 0.62);
+  --demon-text: #d9dcff;
+  --demon-text-bright: #e7e9ff;
+  --demon-muted: rgba(211, 216, 255, 0.72);
+  --demon-accent: #9ca6ff;
+  --demon-accent-soft: rgba(92, 104, 230, 0.22);
+
+  display: flex !important;
+  flex-direction: column;
+  height: 100%;
+  min-width: 1220px;
+  padding: 0 8px 10px;
+  color: var(--demon-text) !important;
+  background:
+    radial-gradient(circle at 82% 0%, rgba(64, 72, 180, 0.20), transparent 30%),
+    radial-gradient(circle at 18% 8%, rgba(84, 42, 150, 0.18), transparent 34%),
+    radial-gradient(circle at 50% 100%, rgba(18, 28, 86, 0.20), transparent 44%),
+    linear-gradient(180deg, rgba(5, 7, 17, 0.99), rgba(1, 1, 8, 1)) !important;
+}
+
+.demon-vampire-layout input,
+.demon-vampire-layout select,
+.demon-vampire-layout textarea {
+  border: 1px solid rgba(92, 104, 210, 0.84) !important;
+  border-radius: 7px !important;
+  background:
+    linear-gradient(180deg, rgba(5, 7, 20, 0.98), rgba(1, 2, 8, 0.99)) !important;
+  color: var(--demon-text-bright) !important;
+  box-shadow:
+    inset 0 0 9px rgba(0, 0, 0, 0.70),
+    0 0 0 1px rgba(205, 210, 255, 0.012) !important;
+}
+
+.demon-vampire-layout input:focus,
+.demon-vampire-layout select:focus,
+.demon-vampire-layout textarea:focus {
+  border-color: rgba(156, 166, 255, 0.96) !important;
+  box-shadow:
+    inset 0 0 9px rgba(0, 0, 0, 0.74),
+    0 0 13px rgba(92, 104, 230, 0.22) !important;
+}
+
+.demon-vampire-layout select option {
+  background: #07091a !important;
+  color: var(--demon-text-bright) !important;
+}
+
+.demon-top-shell {
+  display: grid;
+  grid-template-columns: 260px minmax(640px, 1fr);
+  gap: 10px;
+  padding: 10px 0 8px;
+}
+
+.demon-portrait-card,
+.demon-identity-panel,
+.demon-dashboard-card,
+.demon-panel,
+.demon-trait-group,
+.demon-health-card,
+.demon-lore-row,
+.demon-info-card {
+  border: 1px solid var(--demon-border) !important;
+  border-radius: 10px;
+  background:
+    radial-gradient(circle at 86% 0%, rgba(76, 84, 190, 0.17), transparent 34%),
+    radial-gradient(circle at 8% 100%, rgba(62, 34, 122, 0.14), transparent 40%),
+    linear-gradient(180deg, var(--demon-panel), var(--demon-panel-dark)) !important;
+  box-shadow:
+    inset 0 0 20px rgba(0, 0, 0, 0.54),
+    0 0 0 1px rgba(205, 210, 255, 0.018) !important;
+}
+
+.demon-portrait-card {
+  min-height: 280px;
+  padding: 10px;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  align-items: center;
+  justify-items: center;
+}
+
+.demon-portrait-frame {
+  width: 178px;
+  height: 208px;
+  padding: 6px;
+  border: 5px solid rgba(72, 80, 160, 0.92);
+  border-radius: 10px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(76, 84, 190, 0.14), transparent 45%),
+    rgba(3, 4, 14, 0.94) !important;
+  box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.7);
+}
+
+.demon-portrait-frame img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  border: 0 !important;
+  border-radius: 4px !important;
+  background: rgba(20, 24, 70, 0.35);
+  cursor: pointer;
+}
+
+.demon-portrait-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.demon-portrait-actions button,
+.demon-roll-button,
+.demon-select-with-button button,
+.resource-change,
+.vtm-roll-builder-submit {
+  border: 1px solid rgba(92, 104, 200, 0.86) !important;
+  border-radius: 7px !important;
+  background:
+    linear-gradient(180deg, rgba(34, 42, 124, 0.95), rgba(10, 14, 54, 0.98)) !important;
+  color: #dfe3ff !important;
+  cursor: pointer;
+}
+
+.demon-portrait-actions button {
+  width: 31px;
+  height: 31px;
+}
+
+.demon-identity-panel {
+  position: relative;
+  padding: 16px 18px 14px;
+}
+
+.demon-identity-panel::after {
+  content: "☉";
+  position: absolute;
+  right: 18px;
+  top: 16px;
+  width: 54px;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid rgba(132, 142, 244, 0.86);
+  background:
+    radial-gradient(circle, rgba(92, 104, 230, 0.72), rgba(28, 32, 102, 0.96)) !important;
+  color: #dfe3ff;
+  font-size: 28px;
+  box-shadow:
+    0 0 24px rgba(92, 104, 230, 0.30),
+    inset 0 0 12px rgba(255, 255, 255, 0.08);
+}
+
+.demon-title-row {
+  padding-right: 74px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid rgba(132, 142, 244, 0.44);
+}
+
+.demon-character-name-input {
+  height: 48px !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #c9cdfa !important;
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-size: 34px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em;
+  text-shadow: 0 0 12px rgba(92, 104, 230, 0.16);
+}
+
+.demon-profile-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(150px, 1fr));
+  gap: 8px 10px;
+}
+
+.demon-field {
+  display: grid;
+  gap: 3px;
+}
+
+.demon-field label,
+.demon-dashboard-card h3,
+.demon-section-title,
+.demon-section-title span,
+.demon-section-title h2,
+.demon-trait-group h3 {
+  color: #c9cdfa !important;
+}
+
+.demon-field label {
+  font-size: 11px !important;
+  font-weight: 700;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+  color: rgba(211, 216, 255, 0.72) !important;
+}
+
+.demon-select-with-button {
+  display: grid;
+  grid-template-columns: 1fr 32px;
+  gap: 6px;
+}
+
+.demon-dashboard-card {
+  min-height: 116px;
+  padding: 12px;
+}
+
+.demon-dashboard-card h3 {
+  margin: 0 0 8px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.065em;
+}
+
+.demon-dashboard-card p {
+  margin: 8px 0 0;
+  color: var(--demon-muted);
+  font-size: 12px;
+}
+
+.demon-panel {
+  padding: 12px;
+}
+
+.demon-health-panel,
+.demon-roll-panel {
+  margin-bottom: 10px;
+}
+
+.demon-health-summary {
+  margin-bottom: 8px;
+  padding: 8px 10px;
+  border: 1px solid rgba(62, 70, 150, 0.74);
+  border-radius: 7px;
+  background:
+    linear-gradient(180deg, rgba(10, 13, 42, 0.72), rgba(4, 5, 18, 0.86)) !important;
+  color: var(--demon-muted);
+}
+
+.demon-health-grid {
+  display: grid !important;
+  grid-template-columns: repeat(7, minmax(120px, 1fr)) !important;
+  gap: 8px;
+}
+
+.demon-health-card {
+  min-height: 44px;
+  display: grid !important;
+  grid-template-columns: 1fr;
+  gap: 3px;
+  padding: 8px 10px;
+  text-align: left;
+}
+
+.demon-health-label {
+  color: var(--demon-text-bright);
+  font-weight: 800;
+}
+
+.demon-health-penalty,
+.demon-health-damage {
+  color: var(--demon-muted);
+  font-size: 11px;
+}
+
+.demon-tabs {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  padding: 0 0 10px !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+
+.demon-tabs button {
+  height: 38px;
+  border: 1px solid rgba(82, 92, 190, 0.72) !important;
+  border-radius: 9px !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(76, 84, 190, 0.14), transparent 58%),
+    linear-gradient(180deg, rgba(7, 9, 22, 0.97), rgba(1, 2, 8, 0.99)) !important;
+  color: rgba(211, 216, 255, 0.78) !important;
+  font-size: 14px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.demon-tabs button.is-active {
+  border-color: rgba(156, 166, 255, 0.92) !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(92, 104, 230, 0.22), transparent 58%),
+    linear-gradient(180deg, rgba(18, 22, 70, 0.98), rgba(3, 4, 16, 0.99)) !important;
+  color: var(--demon-text-bright) !important;
+  box-shadow:
+    inset 0 0 11px rgba(0, 0, 0, 0.50),
+    0 0 12px rgba(92, 104, 230, 0.18) !important;
+}
+
+.demon-sheet-body {
+  flex: 1 1 auto;
+  padding: 0 !important;
+  overflow: auto !important;
+}
+
+.demon-tab-panel {
+  display: none !important;
+}
+
+.demon-tab-panel.is-active {
+  display: grid !important;
+  gap: 10px;
+}
+
+.demon-section-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 12px;
+}
+
+.demon-section-title::before,
+.demon-section-title::after {
+  content: "";
+  height: 1px;
+  flex: 0 0 18px;
+  background: rgba(132, 142, 244, 0.46) !important;
+}
+
+.demon-section-title::after {
+  flex: 1 1 auto;
+}
+
+.demon-section-title h2 {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  color: #c9cdfa !important;
+  font-size: 17px !important;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.075em;
+}
+
+.demon-section-title em {
+  padding: 2px 7px;
+  border: 1px solid rgba(92, 104, 190, 0.72);
+  border-radius: 999px;
+  color: rgba(211, 216, 255, 0.68);
+  font-size: 10px;
+  font-style: normal;
+}
+
+.demon-three-columns {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(260px, 1fr)) !important;
+  gap: 10px !important;
+}
+
+.demon-two-columns {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(320px, 1fr)) !important;
+  gap: 12px;
+}
+
+.demon-trait-group {
+  padding: 12px;
+}
+
+.demon-trait-group h3 {
+  margin: 0 0 9px !important;
+  text-align: center;
+  font-size: 13px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.055em;
+}
+
+.demon-trait-row {
+  display: grid !important;
+  grid-template-columns: minmax(110px, 1fr) 96px 46px 34px !important;
+  gap: 8px !important;
+  align-items: center !important;
+  min-height: 32px !important;
+  padding: 5px 0 !important;
+  border-bottom: 1px solid rgba(76, 86, 172, 0.28) !important;
+}
+
+.demon-trait-row:last-child {
+  border-bottom: 0 !important;
+}
+
+.demon-trait-row > label {
+  color: var(--demon-text-bright) !important;
+  font-size: 12px !important;
+  font-weight: 700;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.demon-trait-row input[type="number"],
+.demon-lore-value {
+  width: 46px !important;
+  height: 29px !important;
+  min-height: 29px !important;
+  text-align: center;
+  font-weight: 800;
+}
+
+.demon-roll-button {
+  width: 30px !important;
+  height: 29px !important;
+  padding: 0 !important;
+}
+
+.demon-pips {
+  display: flex !important;
+  justify-content: flex-end !important;
+  gap: 4px !important;
+}
+
+.demon-pips i {
+  width: 10px !important;
+  height: 10px !important;
+  border: 1px solid rgba(100, 112, 210, 0.82) !important;
+  border-radius: 50%;
+  background: rgba(2, 3, 12, 0.96) !important;
+}
+
+.demon-pips i.is-filled {
+  border-color: rgba(170, 178, 255, 0.96) !important;
+  background:
+    radial-gradient(circle at 34% 28%,
+      rgba(238, 240, 255, 0.98),
+      rgba(146, 156, 255, 0.94) 44%,
+      rgba(48, 58, 168, 0.96) 78%) !important;
+  box-shadow:
+    inset 0 0 2px rgba(255, 255, 255, 0.24),
+    0 0 9px rgba(120, 132, 255, 0.34) !important;
+}
+
+.demon-lore-list {
+  display: grid !important;
+  gap: 8px;
+}
+
+.demon-lore-row {
+  display: grid !important;
+  grid-template-columns: minmax(240px, 300px) 120px 48px 34px minmax(220px, 1fr) !important;
+  gap: 8px;
+  align-items: center;
+  padding: 8px;
+}
+
+.demon-archetype-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(280px, 1fr));
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.demon-info-card {
+  padding: 12px;
+}
+
+.demon-info-card h3 {
+  margin: 0;
+  color: var(--demon-text-bright);
+  font-size: 14px;
+}
+
+.demon-info-card header span {
+  display: block;
+  margin-top: 3px;
+  color: var(--demon-muted);
+  font-size: 12px;
+}
+
+.demon-info-card p {
+  color: var(--demon-muted);
+}
+
+.demon-info-mechanic {
+  color: var(--demon-text);
+  font-size: 12px;
+}
+
+.demon-vampire-layout textarea {
+  min-height: 150px !important;
+  padding: 8px 10px !important;
+}
+
+@media (max-width: 1320px) {
+  .demon-top-shell,
+  .demon-three-columns,
+  .demon-two-columns,
+  .demon-archetype-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .demon-health-grid {
+    grid-template-columns: repeat(2, minmax(160px, 1fr)) !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .demon-vampire-layout {
+    min-width: 0;
+  }
+
+  .demon-profile-grid,
+  .demon-tabs,
+  .demon-health-grid,
+  .demon-lore-row {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+
+/* === Demon sheet pass 9: compact resources, fixed health, demon dropdowns, scroll restore === */
+
+.demon.sheet.actor .window-content {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+.demon-vampire-layout {
+  height: auto !important;
+  min-height: 100%;
+  overflow: visible !important;
+  padding-bottom: 18px !important;
+}
+
+/* Верхняя сетка после удаления лишних полей */
+.demon-vampire-layout .demon-profile-grid {
+  grid-template-columns: repeat(4, minmax(150px, 1fr)) !important;
+}
+
+/* Dashboard теперь только 3 карточки */
+
+.demon-vampire-layout .demon-dashboard-card {
+  min-height: 78px !important;
+  padding: 10px 12px !important;
+}
+
+.demon-vampire-layout .demon-dashboard-card h3 {
+  margin-bottom: 8px !important;
+}
+
+.demon-vampire-layout .demon-dashboard-card p {
+  display: none !important;
+}
+
+/* Ресурсы компактнее */
+
+/* Здоровье: нормальные карточки, текст не вываливается */
+.demon-vampire-layout .demon-health-grid {
+  grid-template-columns: repeat(7, minmax(128px, 1fr)) !important;
+  align-items: stretch !important;
+}
+
+.demon-vampire-layout .demon-health-card {
+  min-height: 58px !important;
+  height: 58px !important;
+  display: grid !important;
+  grid-template-rows: auto auto 1fr;
+  align-content: start !important;
+  gap: 2px !important;
+  padding: 8px 10px !important;
+  overflow: hidden !important;
+  white-space: normal !important;
+  text-align: left !important;
+  line-height: 1.12 !important;
+}
+
+.demon-vampire-layout .demon-health-label {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  color: var(--demon-text-bright);
+  font-size: 12px !important;
+  font-weight: 800;
+  line-height: 1.12 !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.demon-vampire-layout .demon-health-penalty,
+.demon-vampire-layout .demon-health-damage {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  color: rgba(211, 216, 255, 0.70) !important;
+  font-size: 10px !important;
+  line-height: 1.1 !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.demon-vampire-layout .demon-health-damage {
+  color: rgba(231, 233, 255, 0.86) !important;
+}
+
+/* Панель броска: вернуть горизонтальный layout */
+
+/* Демонические dropdown'ы в чарнике, в том числе searchable select */
+.demon-vampire-layout select,
+.demon-vampire-layout .vtm-trait-search-select__button,
+.demon-vampire-layout .vtm-dialog-search-button {
+  min-height: 32px !important;
+  border: 1px solid rgba(92, 104, 210, 0.84) !important;
+  border-radius: 7px !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(76, 84, 190, 0.14), transparent 58%),
+    linear-gradient(180deg, rgba(5, 7, 20, 0.98), rgba(1, 2, 8, 0.99)) !important;
+  color: #e1e4ff !important;
+  font-family: inherit !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  box-shadow:
+    inset 0 0 9px rgba(0, 0, 0, 0.70),
+    0 0 0 1px rgba(205, 210, 255, 0.012) !important;
+}
+
+.demon-vampire-layout select:hover,
+.demon-vampire-layout .vtm-trait-search-select__button:hover,
+.demon-vampire-layout .vtm-trait-search-select__button.is-open,
+.demon-vampire-layout .vtm-dialog-search-button:hover,
+.demon-vampire-layout .vtm-dialog-search-button.is-open {
+  border-color: rgba(156, 166, 255, 0.96) !important;
+  color: #eef0ff !important;
+  box-shadow:
+    inset 0 0 9px rgba(0, 0, 0, 0.74),
+    0 0 13px rgba(92, 104, 230, 0.22) !important;
+}
+
+.demon-vampire-layout .vtm-trait-search-select,
+.demon-vampire-layout .vtm-dialog-search-select {
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+/* Выпадающая панель searchable-select, чтобы не была вампирско-красной */
+
+.demon-vampire-layout .vtm-trait-search-select__search,
+.demon-vampire-layout .vtm-dialog-search-input {
+  border-color: rgba(92, 104, 210, 0.84) !important;
+  background: rgba(2, 3, 12, 0.96) !important;
+  color: #e1e4ff !important;
+}
+
+.demon-vampire-layout .vtm-trait-search-select__option,
+.demon-vampire-layout .vtm-dialog-search-option {
+  color: rgba(225, 228, 255, 0.90) !important;
+}
+
+.demon-vampire-layout .vtm-trait-search-select__option:hover,
+.demon-vampire-layout .vtm-trait-search-select__option.is-active,
+.demon-vampire-layout .vtm-dialog-search-option:hover,
+.demon-vampire-layout .vtm-dialog-search-option.is-active {
+  background: rgba(92, 104, 230, 0.22) !important;
+  color: #ffffff !important;
+}
+
+/* Профильный опыт */
+.demon-profile-xp-panel {
+  margin-bottom: 12px;
+  padding: 12px;
+  border: 1px solid rgba(98, 108, 210, 0.72);
+  border-radius: 10px;
+  background:
+    radial-gradient(circle at 86% 0%, rgba(76, 84, 190, 0.14), transparent 34%),
+    linear-gradient(180deg, rgba(8, 10, 24, 0.96), rgba(2, 3, 11, 0.99));
+}
+
+.demon-profile-xp-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(120px, 1fr));
+  gap: 10px;
+}
+
+.demon-profile-xp-grid label {
+  display: grid;
+  gap: 4px;
+  color: rgba(211, 216, 255, 0.72);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.demon-subsection-title {
+  margin-bottom: 8px !important;
+}
+
+@media (max-width: 1320px) {
+
+  .demon-vampire-layout .demon-health-grid {
+    grid-template-columns: repeat(2, minmax(160px, 1fr)) !important;
+  }
+}
+
+/* === Demon sheet pass 10: stop Foundry page scroll jump === */
+
+/* Окно Foundry не должно превращаться в обычную страницу со скроллом. */
+.application.sheet.actor.demon {
+  overflow: hidden !important;
+}
+
+/* Скролл не на window-content наружу, а внутри формы/тела чарника. */
+.application.sheet.actor.demon .window-content,
+.demon.sheet.actor .window-content {
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 0 !important;
+}
+
+/* Форма занимает окно, но не раздувает весь Foundry UI. */
+.demon-vampire-layout {
+  height: 100% !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* Верхние панели фиксированы внутри чарника. */
+.demon-vampire-layout .demon-top-shell,
+.demon-vampire-layout .demon-health-panel,
+.demon-vampire-layout .demon-roll-panel,
+.demon-vampire-layout .demon-tabs {
+  flex: 0 0 auto !important;
+}
+
+/* Основной скролл живёт здесь. */
+.demon-vampire-layout .demon-sheet-body {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  padding-right: 4px !important;
+}
+
+/* На всякий случай не даём форме расползаться шире/выше окна. */
+.demon-vampire-layout * {
+  box-sizing: border-box;
+}
+
+/* Чуть компактнее верх, чтобы тело чарника получило место под скролл. */
+.demon-vampire-layout .demon-top-shell {
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+}
+
+.demon-vampire-layout .demon-health-panel,
+.demon-vampire-layout .demon-roll-panel {
+  margin-bottom: 8px !important;
+}
+
+/* === Vampire sheet fix after Demon scaffold: restore red buttons and calm dropdowns === */
+
+/* Вернуть вампирским кнопкам нормальный бордовый стиль.
+   Предыдущий demon-pass случайно зацепил .resource-change и .vtm-roll-builder-submit глобально.
+   Да, CSS опять решил захватить соседнюю провинцию. */
+.vtm-vampire-layout .resource-change,
+.vtm-vampire-layout .vtm-roll-builder-submit,
+.vtm-vampire-layout .actor-portrait-edit,
+.vtm-vampire-layout .actor-portrait-sync-token,
+.vtm-vampire-layout .actor-portrait-reset,
+.vtm-vampire-layout .archetype-card-open,
+.vtm-vampire-layout .clan-card-open,
+.vtm-vampire-layout .morality-path-card-open,
+.vtm-vampire-layout .generation-sync,
+.vtm-vampire-layout .vtm-roll {
+  border: 1px solid rgba(168, 42, 78, 0.92) !important;
+  background:
+    linear-gradient(180deg, rgba(128, 28, 58, 0.96), rgba(62, 7, 24, 0.98)) !important;
+  color: #f2dfb4 !important;
+  box-shadow:
+    inset 0 0 8px rgba(0, 0, 0, 0.44),
+    0 0 0 1px rgba(255, 255, 255, 0.02) !important;
+}
+
+.vtm-vampire-layout .resource-change:hover,
+.vtm-vampire-layout .vtm-roll-builder-submit:hover,
+.vtm-vampire-layout .actor-portrait-edit:hover,
+.vtm-vampire-layout .actor-portrait-sync-token:hover,
+.vtm-vampire-layout .actor-portrait-reset:hover,
+.vtm-vampire-layout .archetype-card-open:hover,
+.vtm-vampire-layout .clan-card-open:hover,
+.vtm-vampire-layout .morality-path-card-open:hover,
+.vtm-vampire-layout .generation-sync:hover,
+.vtm-vampire-layout .vtm-roll:hover {
+  border-color: rgba(220, 178, 92, 0.96) !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(220, 178, 92, 0.13), transparent 58%),
+    linear-gradient(180deg, rgba(150, 34, 70, 0.98), rgba(72, 8, 28, 0.99)) !important;
+  color: #fff0bd !important;
+  box-shadow:
+    inset 0 0 8px rgba(0, 0, 0, 0.48),
+    0 0 10px rgba(220, 178, 92, 0.14) !important;
+}
+
+/* Панель выпадающих списков у вампиров: темнее, без ядрёной красной заливки на каждом варианте. */
+
+/* Поиск внутри dropdown. */
+.vtm-vampire-layout .vtm-trait-search-select__search,
+.vtm-vampire-layout .vtm-dialog-search-input,
+.vtm-roll-dialog-window:not(.demon-roll-dialog-window) .vtm-trait-search-select__search,
+.vtm-roll-dialog-window:not(.demon-roll-dialog-window) .vtm-dialog-search-input {
+  border-color: rgba(150, 48, 76, 0.82) !important;
+  background:
+    linear-gradient(180deg, rgba(10, 2, 7, 0.98), rgba(3, 0, 3, 0.99)) !important;
+  color: #f1dfb0 !important;
+}
+
+/* Группы: Физические / Социальные / Ментальные. */
+.vtm-vampire-layout .vtm-trait-search-select__group,
+.vtm-vampire-layout .vtm-dialog-search-group,
+.vtm-roll-dialog-window:not(.demon-roll-dialog-window) .vtm-trait-search-select__group,
+.vtm-roll-dialog-window:not(.demon-roll-dialog-window) .vtm-dialog-search-group {
+  margin: 7px 0 4px !important;
+  padding: 3px 6px !important;
+  color: rgba(220, 184, 104, 0.92) !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.055em !important;
+  text-transform: uppercase !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+
+/* Варианты: Сила, Ловкость, Выносливость и т.д.
+   Убираем ярко-красные плашки, оставляем тёмные строки. */
+.vtm-vampire-layout .vtm-trait-search-select__option,
+.vtm-vampire-layout .vtm-dialog-search-option,
+.vtm-roll-dialog-window:not(.demon-roll-dialog-window) .vtm-trait-search-select__option,
+.vtm-roll-dialog-window:not(.demon-roll-dialog-window) .vtm-dialog-search-option {
+  margin: 2px 0 !important;
+  padding: 6px 8px !important;
+  border: 1px solid rgba(118, 32, 56, 0.34) !important;
+  border-radius: 6px !important;
+  background:
+    linear-gradient(180deg, rgba(18, 5, 10, 0.74), rgba(8, 2, 6, 0.82)) !important;
+  color: #ead8ad !important;
+  box-shadow: none !important;
+}
+
+/* Hover/active не кислотный, а аккуратный бордово-золотой. */
+.vtm-vampire-layout .vtm-trait-search-select__option:hover,
+.vtm-vampire-layout .vtm-trait-search-select__option.is-active,
+.vtm-vampire-layout .vtm-trait-search-select__option[aria-selected="true"],
+.vtm-vampire-layout .vtm-dialog-search-option:hover,
+.vtm-vampire-layout .vtm-dialog-search-option.is-active,
+.vtm-vampire-layout .vtm-dialog-search-option[aria-selected="true"],
+.vtm-roll-dialog-window:not(.demon-roll-dialog-window) .vtm-trait-search-select__option:hover,
+.vtm-roll-dialog-window:not(.demon-roll-dialog-window) .vtm-trait-search-select__option.is-active,
+.vtm-roll-dialog-window:not(.demon-roll-dialog-window) .vtm-trait-search-select__option[aria-selected="true"],
+.vtm-roll-dialog-window:not(.demon-roll-dialog-window) .vtm-dialog-search-option:hover,
+.vtm-roll-dialog-window:not(.demon-roll-dialog-window) .vtm-dialog-search-option.is-active,
+.vtm-roll-dialog-window:not(.demon-roll-dialog-window) .vtm-dialog-search-option[aria-selected="true"] {
+  border-color: rgba(202, 162, 82, 0.82) !important;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(202, 162, 82, 0.14), transparent 46%),
+    linear-gradient(180deg, rgba(42, 10, 20, 0.92), rgba(16, 3, 9, 0.96)) !important;
+  color: #fff0bd !important;
+}
+
+/* Текущий выбранный select в вампирском листе тоже не должен становиться синим. */
+.vtm-vampire-layout .vtm-trait-search-select__button,
+.vtm-vampire-layout .vtm-dialog-search-button,
+.vtm-roll-dialog-window:not(.demon-roll-dialog-window) .vtm-trait-search-select__button,
+.vtm-roll-dialog-window:not(.demon-roll-dialog-window) .vtm-dialog-search-button {
+  border-color: rgba(130, 86, 48, 0.82) !important;
+  background:
+    linear-gradient(180deg, rgba(14, 4, 9, 0.98), rgba(5, 1, 4, 0.99)) !important;
+  color: #f1dfb0 !important;
+}
+
+.vtm-vampire-layout .vtm-trait-search-select__button:hover,
+.vtm-vampire-layout .vtm-trait-search-select__button.is-open,
+.vtm-vampire-layout .vtm-dialog-search-button:hover,
+.vtm-vampire-layout .vtm-dialog-search-button.is-open,
+.vtm-roll-dialog-window:not(.demon-roll-dialog-window) .vtm-trait-search-select__button:hover,
+.vtm-roll-dialog-window:not(.demon-roll-dialog-window) .vtm-trait-search-select__button.is-open,
+.vtm-roll-dialog-window:not(.demon-roll-dialog-window) .vtm-dialog-search-button:hover,
+.vtm-roll-dialog-window:not(.demon-roll-dialog-window) .vtm-dialog-search-button.is-open {
+  border-color: rgba(202, 162, 82, 0.92) !important;
+  color: #fff0bd !important;
+}
+
+/* === Demon sheet pass 11: compact top layout, blue dropdowns, wider traits === */
+
+/* Убираем пустыню сверху */
+.demon-vampire-layout .demon-top-shell {
+  grid-template-columns: 260px minmax(720px, 1fr) !important;
+  gap: 10px !important;
+  padding-bottom: 6px !important;
+}
+
+.demon-vampire-layout .demon-identity-panel {
+  min-height: 250px !important;
+}
+
+/* Ресурсы визуально занимают пустое место под верхней анкетой */
+
+.demon-vampire-layout .demon-dashboard-card {
+  min-height: 72px !important;
+  padding: 9px 12px !important;
+}
+
+.demon-vampire-layout .demon-dashboard-card h3 {
+  margin: 0 0 6px !important;
+  font-size: 13px !important;
+}
+
+/* Здоровье и бросок поднять и сделать компактнее */
+.demon-vampire-layout .demon-health-panel,
+.demon-vampire-layout .demon-roll-panel {
+  margin-bottom: 8px !important;
+  padding: 10px 12px !important;
+}
+
+.demon-vampire-layout .demon-health-summary {
+  margin-bottom: 7px !important;
+  padding: 7px 10px !important;
+}
+
+.demon-vampire-layout .demon-health-card {
+  height: 54px !important;
+  min-height: 54px !important;
+  padding: 7px 9px !important;
+}
+
+.demon-vampire-layout .demon-roll-panel input,
+.demon-vampire-layout .demon-roll-panel select,
+.demon-vampire-layout .demon-roll-panel .vtm-trait-search-select__button {
+  min-height: 31px !important;
+}
+
+/* Блок вкладок чуть плотнее */
+.demon-vampire-layout .demon-tabs {
+  padding-bottom: 8px !important;
+}
+
+/* Атрибуты и способности шире */
+.demon-vampire-layout .demon-sheet-body {
+  padding-right: 2px !important;
+}
+
+.demon-vampire-layout .demon-panel {
+  padding: 12px 14px !important;
+}
+
+.demon-vampire-layout .demon-three-columns {
+  grid-template-columns: repeat(3, minmax(330px, 1fr)) !important;
+  gap: 12px !important;
+}
+
+.demon-vampire-layout .demon-trait-group {
+  padding: 12px 14px !important;
+}
+
+.demon-vampire-layout .demon-trait-row {
+  grid-template-columns: minmax(130px, 1fr) 108px 48px 34px !important;
+}
+
+/* Собственный синий стиль dropdown, без красного наследия вампиров */
+.demon-vampire-layout .vtm-trait-search-select__button,
+.demon-vampire-layout .vtm-dialog-search-button,
+.demon-vampire-layout select {
+  border-color: rgba(116, 145, 255, 0.82) !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(62, 92, 190, 0.22), transparent 58%),
+    linear-gradient(180deg, rgba(5, 10, 30, 0.98), rgba(1, 3, 14, 0.99)) !important;
+  color: #d8e8ff !important;
+}
+
+.demon-vampire-layout .vtm-trait-search-select__button:hover,
+.demon-vampire-layout .vtm-trait-search-select__button.is-open,
+.demon-vampire-layout .vtm-dialog-search-button:hover,
+.demon-vampire-layout .vtm-dialog-search-button.is-open,
+.demon-vampire-layout select:hover,
+.demon-vampire-layout select:focus {
+  border-color: rgba(162, 190, 255, 0.96) !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(92, 130, 255, 0.26), transparent 58%),
+    linear-gradient(180deg, rgba(10, 18, 50, 0.98), rgba(2, 5, 20, 0.99)) !important;
+  color: #edf5ff !important;
+  box-shadow:
+    inset 0 0 10px rgba(0, 0, 0, 0.72),
+    0 0 13px rgba(92, 130, 255, 0.22) !important;
+}
+
+.demon-vampire-layout .vtm-trait-search-select__search,
+.demon-vampire-layout .vtm-dialog-search-input {
+  border-color: rgba(116, 145, 255, 0.82) !important;
+  background: rgba(1, 3, 14, 0.98) !important;
+  color: #d8e8ff !important;
+}
+
+.demon-vampire-layout .vtm-trait-search-select__group,
+.demon-vampire-layout .vtm-dialog-search-group {
+  color: #88a9ff !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+
+.demon-vampire-layout .vtm-trait-search-select__option,
+.demon-vampire-layout .vtm-dialog-search-option {
+  margin: 2px 0 !important;
+  padding: 6px 8px !important;
+  border: 1px solid rgba(116, 145, 255, 0.26) !important;
+  border-radius: 6px !important;
+  background:
+    linear-gradient(180deg, rgba(6, 11, 32, 0.78), rgba(2, 4, 16, 0.88)) !important;
+  color: #d8e8ff !important;
+  box-shadow: none !important;
+}
+
+.demon-vampire-layout .vtm-trait-search-select__option:hover,
+.demon-vampire-layout .vtm-trait-search-select__option.is-active,
+.demon-vampire-layout .vtm-trait-search-select__option[aria-selected="true"],
+.demon-vampire-layout .vtm-dialog-search-option:hover,
+.demon-vampire-layout .vtm-dialog-search-option.is-active,
+.demon-vampire-layout .vtm-dialog-search-option[aria-selected="true"] {
+  border-color: rgba(162, 190, 255, 0.86) !important;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(162, 190, 255, 0.20), transparent 46%),
+    linear-gradient(180deg, rgba(24, 38, 86, 0.96), rgba(8, 14, 42, 0.98)) !important;
+  color: #ffffff !important;
+}
+
+/* Скролл остается внутри чарника */
+.application.sheet.actor.demon,
+.application.sheet.actor.demon .window-content,
+.demon.sheet.actor .window-content {
+  overflow: hidden !important;
+}
+
+.demon-vampire-layout {
+  height: 100% !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+.demon-vampire-layout .demon-sheet-body {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+/* На широком экране не даем layout схлопываться */
+@media (min-width: 1321px) {
+  .demon-vampire-layout .demon-three-columns {
+    grid-template-columns: repeat(3, minmax(330px, 1fr)) !important;
+  }
+}
+
+@media (max-width: 1320px) {
+
+  .demon-vampire-layout .demon-three-columns {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* === Demon sheet pass 12: real inline resources, lifted panels, true blue dropdowns === */
+
+/* Верхняя панель: ресурсы теперь внутри правой карточки, а не отдельной полосой ниже */
+.demon-vampire-layout .demon-top-shell {
+  grid-template-columns: 260px minmax(760px, 1fr) !important;
+  gap: 10px !important;
+  padding-bottom: 8px !important;
+}
+
+.demon-vampire-layout .demon-identity-panel {
+  min-height: 280px !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.demon-vampire-layout .demon-profile-grid {
+  flex: 0 0 auto !important;
+  grid-template-columns: repeat(4, minmax(150px, 1fr)) !important;
+}
+
+/* Новый блок ресурсов в пустоте шапки */
+.demon-vampire-layout .demon-inline-resources {
+  flex: 1 1 auto !important;
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(180px, 1fr)) !important;
+  gap: 10px !important;
+  align-items: end !important;
+  margin-top: 10px !important;
+}
+
+.demon-vampire-layout .demon-inline-resources .demon-dashboard-card {
+  min-height: 72px !important;
+  height: 72px !important;
+  padding: 7px 10px !important;
+  display: grid !important;
+  align-content: center !important;
+}
+
+.demon-vampire-layout .demon-inline-resources .demon-dashboard-card h3 {
+  margin: 0 0 8px !important;
+  font-size: 13px !important;
+  color: #cbd8ff !important;
+}
+
+.demon-vampire-layout .demon-inline-resources .demon-dashboard-card p {
+  display: none !important;
+}
+
+/* Если старый dashboard вдруг остался, прячем. Он больше не нужен. */
+
+/* Здоровье и бросок поднялись автоматически, теперь делаем компактнее */
+.demon-vampire-layout .demon-health-panel,
+.demon-vampire-layout .demon-roll-panel {
+  margin-bottom: 8px !important;
+  padding: 10px 12px !important;
+}
+
+.demon-vampire-layout .demon-section-title {
+  margin-bottom: 9px !important;
+}
+
+.demon-vampire-layout .demon-health-summary {
+  margin-bottom: 7px !important;
+  padding: 7px 10px !important;
+}
+
+.demon-vampire-layout .demon-health-grid {
+  grid-template-columns: repeat(7, minmax(126px, 1fr)) !important;
+  gap: 8px !important;
+}
+
+.demon-vampire-layout .demon-health-card {
+  height: 52px !important;
+  min-height: 52px !important;
+  padding: 7px 9px !important;
+  overflow: hidden !important;
+}
+
+.demon-vampire-layout .demon-health-label {
+  font-size: 12px !important;
+  line-height: 1.1 !important;
+}
+
+.demon-vampire-layout .demon-health-penalty,
+.demon-vampire-layout .demon-health-damage {
+  font-size: 10px !important;
+  line-height: 1.05 !important;
+}
+
+/* Бросок обратно в одну строку */
+
+/* Блок атрибутов шире */
+.demon-vampire-layout .demon-sheet-body {
+  padding-right: 2px !important;
+}
+
+.demon-vampire-layout .demon-panel {
+  padding: 12px 14px !important;
+}
+
+.demon-vampire-layout .demon-three-columns {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+}
+
+.demon-vampire-layout .demon-trait-group {
+  padding: 12px 14px !important;
+}
+
+.demon-vampire-layout .demon-trait-row {
+  grid-template-columns: minmax(132px, 1fr) 112px 48px 34px !important;
+}
+
+/* Демонический dropdown: именно синий, без красной подложки */
+.application.sheet.actor.demon .vtm-trait-search-select__button,
+.application.sheet.actor.demon .vtm-dialog-search-button,
+.application.sheet.actor.demon select,
+.demon-vampire-layout .vtm-trait-search-select__button,
+.demon-vampire-layout .vtm-dialog-search-button,
+.demon-vampire-layout select {
+  border-color: rgba(120, 155, 255, 0.86) !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(65, 105, 220, 0.24), transparent 58%),
+    linear-gradient(180deg, rgba(5, 11, 34, 0.99), rgba(1, 3, 15, 1)) !important;
+  color: #d8e8ff !important;
+  box-shadow:
+    inset 0 0 10px rgba(0, 0, 0, 0.72),
+    0 0 0 1px rgba(180, 205, 255, 0.018) !important;
+}
+
+/* Важно: часть dropdown может быть не внутри .demon-vampire-layout, но внутри окна application.sheet.actor.demon */
+.application.sheet.actor.demon [class*="search-select"][class*="dropdown"],
+.application.sheet.actor.demon [class*="search-select"][class*="menu"],
+.demon-vampire-layout [class*="search-select"][class*="dropdown"],
+.demon-vampire-layout [class*="search-select"][class*="menu"] {
+  border: 1px solid rgba(120, 155, 255, 0.92) !important;
+  border-radius: 8px !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(65, 105, 220, 0.22), transparent 42%),
+    linear-gradient(180deg, rgba(4, 9, 30, 0.99), rgba(1, 2, 11, 1)) !important;
+  color: #d8e8ff !important;
+  box-shadow:
+    0 16px 30px rgba(0, 0, 0, 0.58),
+    0 0 18px rgba(92, 130, 255, 0.18) !important;
+}
+
+/* Поле поиска внутри dropdown */
+.application.sheet.actor.demon .vtm-trait-search-select__search,
+.application.sheet.actor.demon .vtm-dialog-search-input,
+.application.sheet.actor.demon [class*="search"][class*="input"],
+.demon-vampire-layout .vtm-trait-search-select__search,
+.demon-vampire-layout .vtm-dialog-search-input,
+.demon-vampire-layout [class*="search"][class*="input"] {
+  border-color: rgba(120, 155, 255, 0.86) !important;
+  background:
+    linear-gradient(180deg, rgba(3, 7, 24, 0.99), rgba(1, 2, 10, 1)) !important;
+  color: #d8e8ff !important;
+}
+
+/* Заголовки групп */
+.application.sheet.actor.demon .vtm-trait-search-select__group,
+.application.sheet.actor.demon .vtm-dialog-search-group,
+.application.sheet.actor.demon [class*="search"][class*="group"],
+.demon-vampire-layout .vtm-trait-search-select__group,
+.demon-vampire-layout .vtm-dialog-search-group,
+.demon-vampire-layout [class*="search"][class*="group"] {
+  color: #8fb3ff !important;
+  background: transparent !important;
+  border: 0 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.055em !important;
+  font-weight: 800 !important;
+}
+
+/* Варианты списка: убиваем красную плашку */
+.application.sheet.actor.demon .vtm-trait-search-select__option,
+.application.sheet.actor.demon .vtm-dialog-search-option,
+.application.sheet.actor.demon [role="option"],
+.application.sheet.actor.demon [class*="search"][class*="option"],
+.demon-vampire-layout .vtm-trait-search-select__option,
+.demon-vampire-layout .vtm-dialog-search-option,
+.demon-vampire-layout [role="option"],
+.demon-vampire-layout [class*="search"][class*="option"] {
+  margin: 2px 0 !important;
+  padding: 6px 8px !important;
+  border: 1px solid rgba(120, 155, 255, 0.28) !important;
+  border-radius: 6px !important;
+  background:
+    linear-gradient(180deg, rgba(6, 12, 38, 0.84), rgba(2, 4, 18, 0.94)) !important;
+  color: #d8e8ff !important;
+  box-shadow: none !important;
+}
+
+/* Hover / active / selected */
+.application.sheet.actor.demon .vtm-trait-search-select__option:hover,
+.application.sheet.actor.demon .vtm-trait-search-select__option.is-active,
+.application.sheet.actor.demon .vtm-trait-search-select__option[aria-selected="true"],
+.application.sheet.actor.demon .vtm-dialog-search-option:hover,
+.application.sheet.actor.demon .vtm-dialog-search-option.is-active,
+.application.sheet.actor.demon .vtm-dialog-search-option[aria-selected="true"],
+.application.sheet.actor.demon [role="option"]:hover,
+.application.sheet.actor.demon [role="option"].is-active,
+.application.sheet.actor.demon [role="option"][aria-selected="true"],
+.demon-vampire-layout .vtm-trait-search-select__option:hover,
+.demon-vampire-layout .vtm-trait-search-select__option.is-active,
+.demon-vampire-layout .vtm-trait-search-select__option[aria-selected="true"],
+.demon-vampire-layout .vtm-dialog-search-option:hover,
+.demon-vampire-layout .vtm-dialog-search-option.is-active,
+.demon-vampire-layout .vtm-dialog-search-option[aria-selected="true"],
+.demon-vampire-layout [role="option"]:hover,
+.demon-vampire-layout [role="option"].is-active,
+.demon-vampire-layout [role="option"][aria-selected="true"] {
+  border-color: rgba(170, 205, 255, 0.90) !important;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(170, 205, 255, 0.22), transparent 46%),
+    linear-gradient(180deg, rgba(24, 48, 112, 0.98), rgba(8, 16, 52, 0.99)) !important;
+  color: #ffffff !important;
+}
+
+/* Скролл внутри листа, не на всей сцене */
+.application.sheet.actor.demon,
+.application.sheet.actor.demon .window-content,
+.demon.sheet.actor .window-content {
+  overflow: hidden !important;
+}
+
+.demon-vampire-layout {
+  height: 100% !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+.demon-vampire-layout .demon-sheet-body {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+/* Адаптив */
+@media (max-width: 1320px) {
+  .demon-vampire-layout .demon-inline-resources {
+    grid-template-columns: 1fr !important;
+  }
+
+  .demon-vampire-layout .demon-health-grid {
+    grid-template-columns: repeat(2, minmax(160px, 1fr)) !important;
+  }
+}
+
+/* === Demon sheet pass 13: force dropdown parent background blue, scoped to demon only === */
+
+/* Корневой dropdown и все его внутренние контейнеры.
+   Важно: scope только через .application.sheet.actor.demon и .demon-vampire-layout,
+   чтобы вампирский чарник не поймал синюю заразу. */
+.application.sheet.actor.demon .vtm-trait-search-select__list,
+.application.sheet.actor.demon .vtm-trait-search-select__list *,
+.application.sheet.actor.demon .vtm-dialog-search-options,
+.application.sheet.actor.demon .vtm-dialog-search-options *,
+.demon-vampire-layout .vtm-trait-search-select__list,
+.demon-vampire-layout .vtm-trait-search-select__list *,
+.demon-vampire-layout .vtm-dialog-search-options,
+.demon-vampire-layout .vtm-dialog-search-options * {
+  scrollbar-color: rgba(110, 140, 255, 0.80) rgba(2, 4, 18, 0.98) !important;
+}
+
+/* Сам фон выпадающего меню и внутренних списков */
+.application.sheet.actor.demon .vtm-trait-search-select__list,
+.application.sheet.actor.demon .vtm-dialog-search-options,
+.demon-vampire-layout .vtm-trait-search-select__list,
+.demon-vampire-layout .vtm-dialog-search-options {
+  border-color: rgba(120, 155, 255, 0.92) !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(56, 86, 190, 0.20), transparent 42%),
+    linear-gradient(180deg, rgba(4, 8, 28, 0.99), rgba(1, 2, 11, 1)) !important;
+  color: #d8e8ff !important;
+}
+
+/* Убить красный фон на любых div/li/button внутри dropdown, кроме input поиска */
+
+/* Заголовки групп */
+.application.sheet.actor.demon .vtm-trait-search-select__group,
+.application.sheet.actor.demon .vtm-dialog-search-group,
+.application.sheet.actor.demon [class*="search-select"][class*="group"],
+.application.sheet.actor.demon [class*="search"][class*="group"],
+.demon-vampire-layout .vtm-trait-search-select__group,
+.demon-vampire-layout .vtm-dialog-search-group,
+.demon-vampire-layout [class*="search-select"][class*="group"],
+.demon-vampire-layout [class*="search"][class*="group"] {
+  color: #8fb3ff !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  border: 0 !important;
+  text-shadow: 0 0 8px rgba(100, 140, 255, 0.18) !important;
+}
+
+/* Пункты списка: обычное состояние */
+.application.sheet.actor.demon .vtm-trait-search-select__option,
+.application.sheet.actor.demon .vtm-dialog-search-option,
+.application.sheet.actor.demon [role="option"],
+.application.sheet.actor.demon [class*="search-select"][class*="option"],
+.application.sheet.actor.demon [class*="search"][class*="option"],
+.demon-vampire-layout .vtm-trait-search-select__option,
+.demon-vampire-layout .vtm-dialog-search-option,
+.demon-vampire-layout [role="option"],
+.demon-vampire-layout [class*="search-select"][class*="option"],
+.demon-vampire-layout [class*="search"][class*="option"] {
+  border: 1px solid rgba(120, 155, 255, 0.30) !important;
+  border-radius: 6px !important;
+  background:
+    linear-gradient(180deg, rgba(6, 12, 38, 0.86), rgba(2, 4, 18, 0.96)) !important;
+  background-color: rgba(4, 8, 28, 0.96) !important;
+  color: #d8e8ff !important;
+}
+
+/* Пункты списка: hover / active / selected */
+.application.sheet.actor.demon .vtm-trait-search-select__option:hover,
+.application.sheet.actor.demon .vtm-trait-search-select__option.is-active,
+.application.sheet.actor.demon .vtm-trait-search-select__option[aria-selected="true"],
+.application.sheet.actor.demon .vtm-trait-search-select__option[aria-current="true"],
+.application.sheet.actor.demon .vtm-dialog-search-option:hover,
+.application.sheet.actor.demon .vtm-dialog-search-option.is-active,
+.application.sheet.actor.demon .vtm-dialog-search-option[aria-selected="true"],
+.application.sheet.actor.demon [role="option"]:hover,
+.application.sheet.actor.demon [role="option"].is-active,
+.application.sheet.actor.demon [role="option"][aria-selected="true"],
+.demon-vampire-layout .vtm-trait-search-select__option:hover,
+.demon-vampire-layout .vtm-trait-search-select__option.is-active,
+.demon-vampire-layout .vtm-trait-search-select__option[aria-selected="true"],
+.demon-vampire-layout .vtm-trait-search-select__option[aria-current="true"],
+.demon-vampire-layout .vtm-dialog-search-option:hover,
+.demon-vampire-layout .vtm-dialog-search-option.is-active,
+.demon-vampire-layout .vtm-dialog-search-option[aria-selected="true"],
+.demon-vampire-layout [role="option"]:hover,
+.demon-vampire-layout [role="option"].is-active,
+.demon-vampire-layout [role="option"][aria-selected="true"] {
+  border-color: rgba(170, 205, 255, 0.92) !important;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(170, 205, 255, 0.22), transparent 46%),
+    linear-gradient(180deg, rgba(24, 48, 112, 0.98), rgba(8, 16, 52, 0.99)) !important;
+  background-color: rgba(18, 36, 92, 0.98) !important;
+  color: #ffffff !important;
+}
+
+/* Поиск */
+.application.sheet.actor.demon .vtm-trait-search-select__search,
+.application.sheet.actor.demon .vtm-dialog-search-input,
+.demon-vampire-layout .vtm-trait-search-select__search,
+.demon-vampire-layout .vtm-dialog-search-input {
+  border-color: rgba(135, 165, 255, 0.90) !important;
+  background:
+    linear-gradient(180deg, rgba(3, 7, 24, 1), rgba(1, 2, 10, 1)) !important;
+  background-color: rgba(2, 5, 18, 1) !important;
+  color: #d8e8ff !important;
+}
+
+/* Webkit scroll внутри dropdown */
+
+/* === Demon sheet pass 13: force dropdown parent background blue, scoped to demon only === */
+
+/* Корневой dropdown и все его внутренние контейнеры.
+   Важно: scope только через .application.sheet.actor.demon и .demon-vampire-layout,
+   чтобы вампирский чарник не поймал синюю заразу. */
+.application.sheet.actor.demon .vtm-trait-search-select__list,
+.application.sheet.actor.demon .vtm-trait-search-select__list *,
+.application.sheet.actor.demon .vtm-dialog-search-options,
+.application.sheet.actor.demon .vtm-dialog-search-options *,
+.demon-vampire-layout .vtm-trait-search-select__list,
+.demon-vampire-layout .vtm-trait-search-select__list *,
+.demon-vampire-layout .vtm-dialog-search-options,
+.demon-vampire-layout .vtm-dialog-search-options * {
+  scrollbar-color: rgba(110, 140, 255, 0.80) rgba(2, 4, 18, 0.98) !important;
+}
+
+/* Сам фон выпадающего меню и внутренних списков */
+.application.sheet.actor.demon .vtm-trait-search-select__list,
+.application.sheet.actor.demon .vtm-dialog-search-options,
+.demon-vampire-layout .vtm-trait-search-select__list,
+.demon-vampire-layout .vtm-dialog-search-options {
+  border-color: rgba(120, 155, 255, 0.92) !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(56, 86, 190, 0.20), transparent 42%),
+    linear-gradient(180deg, rgba(4, 8, 28, 0.99), rgba(1, 2, 11, 1)) !important;
+  color: #d8e8ff !important;
+}
+
+/* Убить красный фон на любых div/li/button внутри dropdown, кроме input поиска */
+
+/* Заголовки групп */
+.application.sheet.actor.demon .vtm-trait-search-select__group,
+.application.sheet.actor.demon .vtm-dialog-search-group,
+.application.sheet.actor.demon [class*="search-select"][class*="group"],
+.application.sheet.actor.demon [class*="search"][class*="group"],
+.demon-vampire-layout .vtm-trait-search-select__group,
+.demon-vampire-layout .vtm-dialog-search-group,
+.demon-vampire-layout [class*="search-select"][class*="group"],
+.demon-vampire-layout [class*="search"][class*="group"] {
+  color: #8fb3ff !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  border: 0 !important;
+  text-shadow: 0 0 8px rgba(100, 140, 255, 0.18) !important;
+}
+
+/* Пункты списка: обычное состояние */
+.application.sheet.actor.demon .vtm-trait-search-select__option,
+.application.sheet.actor.demon .vtm-dialog-search-option,
+.application.sheet.actor.demon [role="option"],
+.application.sheet.actor.demon [class*="search-select"][class*="option"],
+.application.sheet.actor.demon [class*="search"][class*="option"],
+.demon-vampire-layout .vtm-trait-search-select__option,
+.demon-vampire-layout .vtm-dialog-search-option,
+.demon-vampire-layout [role="option"],
+.demon-vampire-layout [class*="search-select"][class*="option"],
+.demon-vampire-layout [class*="search"][class*="option"] {
+  border: 1px solid rgba(120, 155, 255, 0.30) !important;
+  border-radius: 6px !important;
+  background:
+    linear-gradient(180deg, rgba(6, 12, 38, 0.86), rgba(2, 4, 18, 0.96)) !important;
+  background-color: rgba(4, 8, 28, 0.96) !important;
+  color: #d8e8ff !important;
+}
+
+/* Пункты списка: hover / active / selected */
+.application.sheet.actor.demon .vtm-trait-search-select__option:hover,
+.application.sheet.actor.demon .vtm-trait-search-select__option.is-active,
+.application.sheet.actor.demon .vtm-trait-search-select__option[aria-selected="true"],
+.application.sheet.actor.demon .vtm-trait-search-select__option[aria-current="true"],
+.application.sheet.actor.demon .vtm-dialog-search-option:hover,
+.application.sheet.actor.demon .vtm-dialog-search-option.is-active,
+.application.sheet.actor.demon .vtm-dialog-search-option[aria-selected="true"],
+.application.sheet.actor.demon [role="option"]:hover,
+.application.sheet.actor.demon [role="option"].is-active,
+.application.sheet.actor.demon [role="option"][aria-selected="true"],
+.demon-vampire-layout .vtm-trait-search-select__option:hover,
+.demon-vampire-layout .vtm-trait-search-select__option.is-active,
+.demon-vampire-layout .vtm-trait-search-select__option[aria-selected="true"],
+.demon-vampire-layout .vtm-trait-search-select__option[aria-current="true"],
+.demon-vampire-layout .vtm-dialog-search-option:hover,
+.demon-vampire-layout .vtm-dialog-search-option.is-active,
+.demon-vampire-layout .vtm-dialog-search-option[aria-selected="true"],
+.demon-vampire-layout [role="option"]:hover,
+.demon-vampire-layout [role="option"].is-active,
+.demon-vampire-layout [role="option"][aria-selected="true"] {
+  border-color: rgba(170, 205, 255, 0.92) !important;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(170, 205, 255, 0.22), transparent 46%),
+    linear-gradient(180deg, rgba(24, 48, 112, 0.98), rgba(8, 16, 52, 0.99)) !important;
+  background-color: rgba(18, 36, 92, 0.98) !important;
+  color: #ffffff !important;
+}
+
+/* Поиск */
+.application.sheet.actor.demon .vtm-trait-search-select__search,
+.application.sheet.actor.demon .vtm-dialog-search-input,
+.demon-vampire-layout .vtm-trait-search-select__search,
+.demon-vampire-layout .vtm-dialog-search-input {
+  border-color: rgba(135, 165, 255, 0.90) !important;
+  background:
+    linear-gradient(180deg, rgba(3, 7, 24, 1), rgba(1, 2, 10, 1)) !important;
+  background-color: rgba(2, 5, 18, 1) !important;
+  color: #d8e8ff !important;
+}
+
+/* Webkit scroll внутри dropdown */
+
+/* === Demon sheet pass 14: blue searchable-select panel, scoped to demon only === */
+
+/* Реальный красный фон сидит на __panel, а не на list/options. Спасибо, CSS, очень смешно. */
+.application.sheet.actor.demon .vtm-trait-search-select__panel,
+.demon-vampire-layout .vtm-trait-search-select__panel {
+  border: 1px solid rgba(120, 155, 255, 0.92) !important;
+  border-radius: 8px !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(56, 86, 190, 0.22), transparent 42%),
+    linear-gradient(180deg, rgba(4, 8, 28, 0.99), rgba(1, 2, 11, 1)) !important;
+  background-color: rgba(2, 4, 18, 1) !important;
+  color: #d8e8ff !important;
+  box-shadow:
+    0 16px 30px rgba(0, 0, 0, 0.58),
+    0 0 18px rgba(92, 130, 255, 0.18) !important;
+}
+
+/* Если у панели есть вложенная декоративная подложка, тоже душим её синим. */
+.application.sheet.actor.demon .vtm-trait-search-select__panel::before,
+.application.sheet.actor.demon .vtm-trait-search-select__panel::after,
+.demon-vampire-layout .vtm-trait-search-select__panel::before,
+.demon-vampire-layout .vtm-trait-search-select__panel::after {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(56, 86, 190, 0.18), transparent 42%),
+    linear-gradient(180deg, rgba(4, 8, 28, 0.99), rgba(1, 2, 11, 1)) !important;
+  background-color: rgba(2, 4, 18, 1) !important;
+}
+
+/* Внутренний список без красной подложки. */
+.application.sheet.actor.demon .vtm-trait-search-select__list,
+.demon-vampire-layout .vtm-trait-search-select__list {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(56, 86, 190, 0.16), transparent 42%),
+    linear-gradient(180deg, rgba(3, 7, 24, 0.98), rgba(1, 2, 10, 1)) !important;
+  background-color: rgba(2, 4, 18, 1) !important;
+}
+
+/* Выбранный пункт: у него класс is-selected, не только is-active. */
+.application.sheet.actor.demon .vtm-trait-search-select__option.is-selected,
+.demon-vampire-layout .vtm-trait-search-select__option.is-selected {
+  border-color: rgba(170, 205, 255, 0.90) !important;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(170, 205, 255, 0.22), transparent 46%),
+    linear-gradient(180deg, rgba(24, 48, 112, 0.98), rgba(8, 16, 52, 0.99)) !important;
+  background-color: rgba(18, 36, 92, 0.98) !important;
+  color: #ffffff !important;
+}
+
+/* На всякий случай: все прямые дети панели не должны наследовать бордовую заливку. */
+.application.sheet.actor.demon .vtm-trait-search-select__panel > *,
+.demon-vampire-layout .vtm-trait-search-select__panel > * {
+  border-color: rgba(120, 155, 255, 0.80) !important;
+}
+
+/* === Demon sheet pass 15: rules core, virtues, backgrounds === */
+
+.demon-vampire-layout .demon-tabs {
+  grid-template-columns: repeat(5, 1fr) !important;
+}
+
+.demon-vampire-layout .demon-virtue-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border: 1px solid rgba(120, 155, 255, 0.34);
+  border-radius: 9px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(90, 120, 255, 0.13), transparent 42%),
+    linear-gradient(180deg, rgba(6, 10, 34, 0.86), rgba(2, 3, 14, 0.96));
+  color: var(--demon-text);
+}
+
+.demon-vampire-layout .demon-virtue-summary strong {
+  color: var(--demon-text-bright);
+}
+
+.demon-vampire-layout .demon-virtue-summary span {
+  display: inline-grid;
+  place-items: center;
+  min-width: 34px;
+  height: 28px;
+  margin-left: 8px;
+  border: 1px solid rgba(150, 180, 255, 0.52);
+  border-radius: 7px;
+  color: #eff5ff;
+  font-weight: 900;
+  background: rgba(18, 34, 86, 0.78);
+}
+
+.demon-vampire-layout .demon-sync-willpower {
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid rgba(135, 165, 255, 0.78) !important;
+  border-radius: 8px !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(98, 135, 255, 0.24), transparent 56%),
+    linear-gradient(180deg, rgba(12, 22, 62, 0.96), rgba(3, 6, 24, 0.99)) !important;
+  color: #d8e8ff !important;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.demon-vampire-layout .demon-virtue-card p {
+  min-height: 42px;
+  margin: 0 0 10px;
+  color: var(--demon-muted);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.demon-vampire-layout .demon-background-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 7px;
+}
+
+.demon-vampire-layout .demon-background-row {
+  display: grid;
+  grid-template-columns: minmax(180px, 260px) 112px 48px minmax(180px, 1fr) repeat(3, 34px);
+  gap: 8px;
+  align-items: center;
+  padding: 8px 9px;
+  border: 1px solid rgba(90, 110, 210, 0.28);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(7, 10, 31, 0.78), rgba(2, 3, 13, 0.92));
+}
+
+.demon-vampire-layout .demon-lores-panel .demon-lore-row {
+  grid-template-columns: minmax(210px, 290px) 112px 48px 34px minmax(180px, 1fr) repeat(2, 34px) !important;
+}
+
+.demon-vampire-layout .demon-rated-feature-add {
+  margin-left: auto !important;
+}
+
+.demon-vampire-layout .demon-background-row label {
+  display: block;
+  color: var(--demon-text-bright);
+  font-weight: 800;
+}
+
+.demon-vampire-layout .demon-background-row small {
+  display: block;
+  margin-top: 2px;
+  color: var(--demon-muted);
+  font-size: 11px;
+  line-height: 1.25;
+}
+
+.demon-vampire-layout .demon-background-row input[type="text"] {
+  min-height: 30px !important;
+}
+
+@media (max-width: 1320px) {
+  .demon-vampire-layout .demon-tabs,
+  .demon-vampire-layout .demon-virtues-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .demon-vampire-layout .demon-background-row {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* === Demon sheet pass 16: compact resource cards, no creation rules card, readable archetypes === */
+
+/* На всякий случай, если старый блок правил создания вдруг пережил хирургическое вмешательство. */
+
+/* Ресурсы: строка 1 = название + 3/10, строка 2 = точки */
+.demon-vampire-layout .demon-inline-resources {
+  align-items: end !important;
+}
+
+.demon-vampire-layout .demon-resource-card {
+  min-height: 72px !important;
+  height: 72px !important;
+  padding: 7px 10px !important;
+  display: grid !important;
+  grid-template-rows: auto auto !important;
+  gap: 5px !important;
+  align-content: center !important;
+}
+
+.demon-vampire-layout .demon-resource-card-top {
+  display: grid !important;
+  grid-template-columns: minmax(90px, 1fr) auto !important;
+  gap: 10px !important;
+  align-items: center !important;
+}
+
+.demon-vampire-layout .demon-resource-card h3 {
+  margin: 0 !important;
+  color: #cbd8ff !important;
+  font-size: 13px !important;
+  letter-spacing: 0.075em !important;
+  text-transform: uppercase !important;
+}
+
+.demon-vampire-layout .demon-resource-counter {
+  display: grid !important;
+  grid-template-columns: 54px 14px 54px !important;
+  gap: 6px !important;
+  align-items: center !important;
+}
+
+.demon-vampire-layout .demon-resource-counter input {
+  height: 26px !important;
+  min-height: 26px !important;
+  padding: 0 6px !important;
+  text-align: center !important;
+  font-weight: 900 !important;
+}
+
+.demon-vampire-layout .demon-resource-counter span {
+  color: #d8e8ff !important;
+  font-weight: 900 !important;
+  text-align: center !important;
+}
+
+.demon-vampire-layout .demon-resource-pips {
+  display: grid !important;
+  grid-template-columns: repeat(10, 11px) !important;
+  gap: 5px !important;
+  align-items: center !important;
+  justify-content: start !important;
+}
+
+.demon-vampire-layout .demon-resource-pips i {
+  width: 10px !important;
+  height: 10px !important;
+  border: 1px solid rgba(135, 165, 255, 0.78) !important;
+  border-radius: 50% !important;
+  background: rgba(2, 4, 18, 0.96) !important;
+  box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.68) !important;
+}
+
+.demon-vampire-layout .demon-resource-pips i.is-filled {
+  border-color: rgba(190, 210, 255, 0.98) !important;
+  background:
+    radial-gradient(circle at 34% 28%,
+      rgba(255, 255, 255, 0.98),
+      rgba(150, 176, 255, 0.96) 42%,
+      rgba(50, 76, 190, 0.96) 78%) !important;
+  box-shadow:
+    inset 0 0 2px rgba(255, 255, 255, 0.34),
+    0 0 8px rgba(120, 155, 255, 0.32) !important;
+}
+
+/* Описания Натуры и Маски прямо на листе */
+.demon-vampire-layout .demon-archetype-inline-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(260px, 1fr)) !important;
+  gap: 10px !important;
+  margin-top: 12px !important;
+}
+
+.demon-vampire-layout .demon-archetype-inline-card {
+  min-height: 86px !important;
+  padding: 9px 11px !important;
+  border: 1px solid rgba(120, 155, 255, 0.34) !important;
+  border-radius: 9px !important;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(90, 120, 255, 0.13), transparent 42%),
+    linear-gradient(180deg, rgba(6, 10, 34, 0.78), rgba(2, 3, 14, 0.92)) !important;
+}
+
+.demon-vampire-layout .demon-archetype-inline-card h4 {
+  margin: 0 0 5px !important;
+  color: #eef4ff !important;
+  font-size: 12px !important;
+  letter-spacing: 0.055em !important;
+  text-transform: uppercase !important;
+}
+
+.demon-vampire-layout .demon-archetype-inline-card p {
+  margin: 0 0 5px !important;
+  color: rgba(216, 232, 255, 0.86) !important;
+  font-size: 12px !important;
+  line-height: 1.28 !important;
+}
+
+.demon-vampire-layout .demon-archetype-inline-card em {
+  display: block !important;
+  color: rgba(150, 180, 255, 0.86) !important;
+  font-size: 11px !important;
+  line-height: 1.25 !important;
+}
+
+/* Кнопка книжки у Натуры/Маски должна быть читаемой и не теряться. */
+.demon-vampire-layout .archetype-card-open {
+  border-color: rgba(150, 180, 255, 0.74) !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(120, 155, 255, 0.24), transparent 56%),
+    linear-gradient(180deg, rgba(18, 34, 86, 0.96), rgba(4, 8, 30, 0.99)) !important;
+  color: #eaf2ff !important;
+}
+
+@media (max-width: 1320px) {
+  .demon-vampire-layout .demon-archetype-inline-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .demon-vampire-layout .demon-resource-card {
+    height: auto !important;
+  }
+}
+
+/* === Demon sheet pass 17: Demon roll dialog, blue not vampire-red === */
+
+.demon-roll-dialog-window {
+  --demon-dialog-bg: #030615;
+  --demon-dialog-panel: #070c25;
+  --demon-dialog-border: rgba(125, 158, 255, 0.74);
+  --demon-dialog-text: #d8e8ff;
+  --demon-dialog-bright: #f0f6ff;
+  --demon-dialog-muted: rgba(190, 210, 255, 0.72);
+}
+
+.demon-roll-dialog-window .window-header {
+  border-bottom: 1px solid rgba(125, 158, 255, 0.35) !important;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(90, 120, 255, 0.16), transparent 42%),
+    linear-gradient(180deg, rgba(8, 12, 34, 0.98), rgba(2, 3, 12, 0.99)) !important;
+  color: var(--demon-dialog-bright) !important;
+}
+
+.demon-roll-dialog-window .window-content {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(70, 96, 210, 0.14), transparent 38%),
+    linear-gradient(180deg, rgba(5, 8, 26, 0.99), rgba(1, 2, 9, 1)) !important;
+  color: var(--demon-dialog-text) !important;
+}
+
+.demon-roll-dialog-window .demon-roll-dialog {
+  display: grid !important;
+  gap: 12px !important;
+  padding: 8px !important;
+}
+
+.demon-roll-dialog-window .form-group,
+.demon-roll-dialog-window label {
+  color: var(--demon-dialog-muted) !important;
+}
+
+.demon-roll-dialog-window label {
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.045em !important;
+  text-transform: uppercase !important;
+}
+
+.demon-roll-dialog-window input,
+.demon-roll-dialog-window select,
+.demon-roll-dialog-window .vtm-trait-search-select__button,
+.demon-roll-dialog-window .vtm-dialog-search-button {
+  min-height: 34px !important;
+  border: 1px solid rgba(125, 158, 255, 0.82) !important;
+  border-radius: 8px !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(65, 105, 220, 0.22), transparent 58%),
+    linear-gradient(180deg, rgba(5, 11, 34, 0.99), rgba(1, 3, 15, 1)) !important;
+  color: var(--demon-dialog-text) !important;
+  box-shadow:
+    inset 0 0 10px rgba(0, 0, 0, 0.72),
+    0 0 0 1px rgba(180, 205, 255, 0.02) !important;
+}
+
+.demon-roll-dialog-window input:focus,
+.demon-roll-dialog-window select:focus,
+.demon-roll-dialog-window .vtm-trait-search-select__button:hover,
+.demon-roll-dialog-window .vtm-trait-search-select__button.is-open,
+.demon-roll-dialog-window .vtm-dialog-search-button:hover,
+.demon-roll-dialog-window .vtm-dialog-search-button.is-open {
+  border-color: rgba(176, 205, 255, 0.96) !important;
+  color: #ffffff !important;
+  box-shadow:
+    inset 0 0 10px rgba(0, 0, 0, 0.72),
+    0 0 14px rgba(100, 140, 255, 0.24) !important;
+}
+
+.demon-roll-dialog-window .dialog-buttons {
+  display: flex !important;
+  gap: 10px !important;
+  padding: 0 8px 8px !important;
+}
+
+.demon-roll-dialog-window .dialog-buttons button,
+.demon-roll-dialog-window button.dialog-button,
+.demon-roll-dialog-window button[type="submit"],
+.demon-roll-dialog-window button[type="button"] {
+  min-height: 38px !important;
+  border: 1px solid rgba(125, 158, 255, 0.82) !important;
+  border-radius: 9px !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(120, 155, 255, 0.25), transparent 58%),
+    linear-gradient(180deg, rgba(18, 34, 86, 0.98), rgba(4, 8, 30, 0.99)) !important;
+  color: #eaf2ff !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.78) !important;
+  box-shadow:
+    inset 0 0 8px rgba(0, 0, 0, 0.56),
+    0 0 12px rgba(95, 130, 255, 0.16) !important;
+}
+
+.demon-roll-dialog-window .dialog-buttons button:hover,
+.demon-roll-dialog-window button.dialog-button:hover {
+  border-color: rgba(190, 215, 255, 0.98) !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(170, 205, 255, 0.28), transparent 58%),
+    linear-gradient(180deg, rgba(28, 52, 125, 0.99), rgba(6, 12, 42, 1)) !important;
+  color: #ffffff !important;
+}
+
+.demon-roll-dialog-window .vtm-trait-search-select__panel {
+  border: 1px solid rgba(125, 158, 255, 0.92) !important;
+  border-radius: 8px !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(56, 86, 190, 0.22), transparent 42%),
+    linear-gradient(180deg, rgba(4, 8, 28, 0.99), rgba(1, 2, 11, 1)) !important;
+  color: #d8e8ff !important;
+  box-shadow:
+    0 16px 30px rgba(0, 0, 0, 0.58),
+    0 0 18px rgba(92, 130, 255, 0.18) !important;
+}
+
+.demon-roll-dialog-window .vtm-trait-search-select__search,
+.demon-roll-dialog-window .vtm-dialog-search-input {
+  border-color: rgba(135, 165, 255, 0.90) !important;
+  background: rgba(2, 5, 18, 1) !important;
+  color: #d8e8ff !important;
+}
+
+.demon-roll-dialog-window .vtm-trait-search-select__group,
+.demon-roll-dialog-window .vtm-dialog-search-group {
+  color: #8fb3ff !important;
+  background: transparent !important;
+  border: 0 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.055em !important;
+  font-weight: 800 !important;
+}
+
+.demon-roll-dialog-window .vtm-trait-search-select__option,
+.demon-roll-dialog-window .vtm-dialog-search-option,
+.demon-roll-dialog-window [role="option"] {
+  margin: 2px 0 !important;
+  padding: 6px 8px !important;
+  border: 1px solid rgba(120, 155, 255, 0.30) !important;
+  border-radius: 6px !important;
+  background:
+    linear-gradient(180deg, rgba(6, 12, 38, 0.86), rgba(2, 4, 18, 0.96)) !important;
+  color: #d8e8ff !important;
+}
+
+.demon-roll-dialog-window .vtm-trait-search-select__option:hover,
+.demon-roll-dialog-window .vtm-trait-search-select__option.is-active,
+.demon-roll-dialog-window .vtm-trait-search-select__option.is-selected,
+.demon-roll-dialog-window .vtm-trait-search-select__option[aria-selected="true"],
+.demon-roll-dialog-window .vtm-dialog-search-option:hover,
+.demon-roll-dialog-window .vtm-dialog-search-option.is-active,
+.demon-roll-dialog-window .vtm-dialog-search-option.is-selected,
+.demon-roll-dialog-window .vtm-dialog-search-option[aria-selected="true"],
+.demon-roll-dialog-window [role="option"]:hover,
+.demon-roll-dialog-window [role="option"].is-active,
+.demon-roll-dialog-window [role="option"].is-selected,
+.demon-roll-dialog-window [role="option"][aria-selected="true"] {
+  border-color: rgba(170, 205, 255, 0.92) !important;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(170, 205, 255, 0.22), transparent 46%),
+    linear-gradient(180deg, rgba(24, 48, 112, 0.98), rgba(8, 16, 52, 0.99)) !important;
+  color: #ffffff !important;
+}
+
+/* === Demon sheet pass 20: safe native roll selects only === */
+
+.demon-vampire-layout .demon-roll-panel select.demon-roll-native-select,
+.demon-roll-dialog-window select.demon-roll-native-select {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 100% !important;
+  height: 36px !important;
+  min-height: 36px !important;
+  padding: 0 34px 0 12px !important;
+  border: 1px solid rgba(125, 158, 255, 0.88) !important;
+  border-radius: 8px !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(65, 105, 220, 0.24), transparent 58%),
+    linear-gradient(180deg, rgba(8, 16, 48, 0.99), rgba(2, 4, 18, 1)) !important;
+  color: #d8e8ff !important;
+  font-weight: 800 !important;
+  text-transform: none !important;
+  box-shadow:
+    inset 0 0 10px rgba(0, 0, 0, 0.72),
+    0 0 12px rgba(90, 130, 255, 0.14) !important;
+}
+
+.demon-vampire-layout .demon-roll-panel select.demon-roll-native-select:hover,
+.demon-vampire-layout .demon-roll-panel select.demon-roll-native-select:focus,
+.demon-roll-dialog-window select.demon-roll-native-select:hover,
+.demon-roll-dialog-window select.demon-roll-native-select:focus {
+  border-color: rgba(180, 210, 255, 0.98) !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(120, 155, 255, 0.26), transparent 58%),
+    linear-gradient(180deg, rgba(16, 32, 88, 0.99), rgba(4, 8, 30, 1)) !important;
+  color: #ffffff !important;
+  outline: none !important;
+}
+
+.demon-vampire-layout .demon-roll-panel select.demon-roll-native-select option,
+.demon-vampire-layout .demon-roll-panel select.demon-roll-native-select optgroup,
+.demon-roll-dialog-window select.demon-roll-native-select option,
+.demon-roll-dialog-window select.demon-roll-native-select optgroup {
+  background: #05091e !important;
+  color: #d8e8ff !important;
+}
+
+/* Если searchable-обёртка осталась от старого DOM, она не должна рисовать второй select в бросках. */
+.demon-vampire-layout .demon-roll-panel .vtm-trait-search-select__button,
+.demon-roll-dialog-window .vtm-trait-search-select__button {
+  display: none !important;
+}
+
+/* === Demon sheet pass 21: restore visible roll controls === */
+
+.demon-vampire-layout .demon-roll-panel .demon-roll-native-select,
+.demon-roll-dialog-window .demon-roll-native-select {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: static !important;
+  width: 100% !important;
+  height: 36px !important;
+  min-height: 36px !important;
+  padding: 0 34px 0 12px !important;
+  border: 1px solid rgba(125, 158, 255, 0.88) !important;
+  border-radius: 8px !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(65, 105, 220, 0.24), transparent 58%),
+    linear-gradient(180deg, rgba(8, 16, 48, 0.99), rgba(2, 4, 18, 1)) !important;
+  color: #d8e8ff !important;
+  font-weight: 800 !important;
+  text-transform: none !important;
+  box-shadow:
+    inset 0 0 10px rgba(0, 0, 0, 0.72),
+    0 0 12px rgba(90, 130, 255, 0.14) !important;
+}
+
+.demon-vampire-layout .demon-roll-panel .demon-roll-native-select:hover,
+.demon-vampire-layout .demon-roll-panel .demon-roll-native-select:focus,
+.demon-roll-dialog-window .demon-roll-native-select:hover,
+.demon-roll-dialog-window .demon-roll-native-select:focus {
+  border-color: rgba(180, 210, 255, 0.98) !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(120, 155, 255, 0.26), transparent 58%),
+    linear-gradient(180deg, rgba(16, 32, 88, 0.99), rgba(4, 8, 30, 1)) !important;
+  color: #ffffff !important;
+  outline: none !important;
+}
+
+.demon-vampire-layout .demon-roll-panel .demon-roll-native-select option,
+.demon-vampire-layout .demon-roll-panel .demon-roll-native-select optgroup,
+.demon-roll-dialog-window .demon-roll-native-select option,
+.demon-roll-dialog-window .demon-roll-native-select optgroup {
+  background: #05091e !important;
+  color: #d8e8ff !important;
+}
+
+/* Старые searchable-обёртки внутри блока броска не должны занимать место, если остались из кеша. */
+.demon-vampire-layout .demon-roll-panel .vtm-trait-search-select,
+.demon-vampire-layout .demon-roll-panel .vtm-dialog-search-select {
+  display: none !important;
+}
+
+/* === Demon sheet pass 23: clean native roll panel, kill old hidden select rules === */
+
+.demon-vampire-layout .demon-roll-panel .demon-roll-native-field > span {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  color: rgba(205, 218, 255, 0.92) !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.035em !important;
+  text-transform: uppercase !important;
+}
+
+.demon-vampire-layout .demon-roll-panel select.demon-roll-native-select,
+.demon-vampire-layout .demon-roll-panel select[name="firstTrait"],
+.demon-vampire-layout .demon-roll-panel select[name="secondTrait"],
+.demon-vampire-layout .demon-roll-panel input[name="difficulty"],
+.demon-vampire-layout .demon-roll-panel input[name="rollLabel"] {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: static !important;
+  appearance: auto !important;
+  width: 100% !important;
+  height: 36px !important;
+  min-height: 36px !important;
+  max-height: 36px !important;
+  padding: 0 10px !important;
+  margin: 0 !important;
+  border: 1px solid rgba(125, 158, 255, 0.88) !important;
+  border-radius: 8px !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(65, 105, 220, 0.24), transparent 58%),
+    linear-gradient(180deg, rgba(8, 16, 48, 0.99), rgba(2, 4, 18, 1)) !important;
+  color: #d8e8ff !important;
+  font-weight: 800 !important;
+  box-shadow:
+    inset 0 0 10px rgba(0, 0, 0, 0.72),
+    0 0 12px rgba(90, 130, 255, 0.14) !important;
+}
+
+.demon-vampire-layout .demon-roll-panel select.demon-roll-native-select option,
+.demon-vampire-layout .demon-roll-panel select.demon-roll-native-select optgroup {
+  background: #05091e !important;
+  color: #d8e8ff !important;
+}
+
+.demon-vampire-layout .demon-roll-panel .demon-roll-native-submit {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  width: 100% !important;
+  height: 36px !important;
+  min-height: 36px !important;
+  margin: 0 !important;
+  border: 1px solid rgba(125, 158, 255, 0.88) !important;
+  border-radius: 8px !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(120, 155, 255, 0.25), transparent 58%),
+    linear-gradient(180deg, rgba(18, 34, 86, 0.98), rgba(4, 8, 30, 0.99)) !important;
+  color: #eaf2ff !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+}
+
+/* Старые обёртки searchable внутри броска, если остались в DOM, не должны занимать место. */
+.demon-vampire-layout .demon-roll-panel .vtm-trait-search-select,
+.demon-vampire-layout .demon-roll-panel .vtm-dialog-search-select,
+.demon-vampire-layout .demon-roll-panel .vtm-trait-search-select__button,
+.demon-vampire-layout .demon-roll-panel .vtm-dialog-search-button {
+  display: none !important;
+}
+
+@media (max-width: 1320px) {
+  .demon-vampire-layout .demon-roll-panel .demon-roll-native-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* === Demon sheet pass 24: roll selects are protected from searchable enhancer === */
+
+.demon-vampire-layout .demon-roll-panel label.demon-roll-native-field > select.demon-roll-native-select,
+.demon-vampire-layout .demon-roll-panel select[name="firstTrait"],
+.demon-vampire-layout .demon-roll-panel select[name="secondTrait"] {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: static !important;
+  pointer-events: auto !important;
+  appearance: auto !important;
+  width: 100% !important;
+  height: 36px !important;
+  min-height: 36px !important;
+  max-height: 36px !important;
+  padding: 0 10px !important;
+  margin: 0 !important;
+  border: 1px solid rgba(125, 158, 255, 0.88) !important;
+  border-radius: 8px !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(65, 105, 220, 0.24), transparent 58%),
+    linear-gradient(180deg, rgba(8, 16, 48, 0.99), rgba(2, 4, 18, 1)) !important;
+  color: #d8e8ff !important;
+  font-weight: 800 !important;
+}
+
+/* Если enhancer всё-таки успел завернуть select в старом DOM, показываем родной select и прячем только кнопку-обманку. */
+.demon-vampire-layout .demon-roll-panel .vtm-trait-search-select:has(select[name="firstTrait"]),
+.demon-vampire-layout .demon-roll-panel .vtm-trait-search-select:has(select[name="secondTrait"]),
+.demon-vampire-layout .demon-roll-panel .vtm-dialog-search-select:has(select[name="firstTrait"]),
+.demon-vampire-layout .demon-roll-panel .vtm-dialog-search-select:has(select[name="secondTrait"]) {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.demon-vampire-layout .demon-roll-panel .vtm-trait-search-select:has(select[name="firstTrait"]) .vtm-trait-search-select__button,
+.demon-vampire-layout .demon-roll-panel .vtm-trait-search-select:has(select[name="secondTrait"]) .vtm-trait-search-select__button,
+.demon-vampire-layout .demon-roll-panel .vtm-dialog-search-select:has(select[name="firstTrait"]) .vtm-dialog-search-button,
+.demon-vampire-layout .demon-roll-panel .vtm-dialog-search-select:has(select[name="secondTrait"]) .vtm-dialog-search-button {
+  display: none !important;
+}
+
+.demon-vampire-layout .demon-roll-panel select[name="firstTrait"] option,
+.demon-vampire-layout .demon-roll-panel select[name="secondTrait"] option,
+.demon-vampire-layout .demon-roll-panel select[name="firstTrait"] optgroup,
+.demon-vampire-layout .demon-roll-panel select[name="secondTrait"] optgroup {
+  background: #05091e !important;
+  color: #d8e8ff !important;
+}
+
+/* === Demon sheet pass 26: JS-restored roll panel, no searchable ghosts === */
+
+.demon-vampire-layout .demon-roll-panel .demon-roll-native-wrap {
+  display: block !important;
+  width: 100% !important;
+}
+
+.demon-vampire-layout .demon-roll-panel .demon-roll-native-grid {
+  display: grid !important;
+  grid-template-columns: minmax(260px, 1fr) minmax(260px, 1fr) 86px minmax(220px, 1fr) 128px !important;
+  gap: 8px !important;
+  align-items: end !important;
+  width: 100% !important;
+}
+
+.demon-vampire-layout .demon-roll-panel .demon-roll-native-field {
+  display: grid !important;
+  grid-template-rows: auto 36px !important;
+  gap: 5px !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.demon-vampire-layout .demon-roll-panel .demon-roll-native-field > span {
+  display: block !important;
+  color: rgba(205, 218, 255, 0.92) !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.035em !important;
+  text-transform: uppercase !important;
+}
+
+.demon-vampire-layout .demon-roll-panel .demon-roll-native-grid select,
+.demon-vampire-layout .demon-roll-panel .demon-roll-native-grid input {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: static !important;
+  pointer-events: auto !important;
+  appearance: auto !important;
+  width: 100% !important;
+  height: 36px !important;
+  min-height: 36px !important;
+  max-height: 36px !important;
+  padding: 0 10px !important;
+  margin: 0 !important;
+  border: 1px solid rgba(125, 158, 255, 0.88) !important;
+  border-radius: 8px !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(65, 105, 220, 0.24), transparent 58%),
+    linear-gradient(180deg, rgba(8, 16, 48, 0.99), rgba(2, 4, 18, 1)) !important;
+  color: #d8e8ff !important;
+  font-weight: 800 !important;
+  box-shadow:
+    inset 0 0 10px rgba(0, 0, 0, 0.72),
+    0 0 12px rgba(90, 130, 255, 0.14) !important;
+}
+
+.demon-vampire-layout .demon-roll-panel .demon-roll-native-grid select option,
+.demon-vampire-layout .demon-roll-panel .demon-roll-native-grid select optgroup {
+  background: #05091e !important;
+  color: #d8e8ff !important;
+}
+
+.demon-vampire-layout .demon-roll-panel .demon-roll-native-submit {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  width: 100% !important;
+  height: 36px !important;
+  min-height: 36px !important;
+  margin: 0 !important;
+  border: 1px solid rgba(125, 158, 255, 0.88) !important;
+  border-radius: 8px !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(120, 155, 255, 0.25), transparent 58%),
+    linear-gradient(180deg, rgba(18, 34, 86, 0.98), rgba(4, 8, 30, 0.99)) !important;
+  color: #eaf2ff !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+}
+
+/* Если старые searchable-обёртки всё ещё где-то остались, они не должны лезть в новый JS-restored блок. */
+.demon-vampire-layout .demon-roll-panel .vtm-trait-search-select,
+.demon-vampire-layout .demon-roll-panel .vtm-dialog-search-select,
+.demon-vampire-layout .demon-roll-panel .vtm-trait-search-select__button,
+.demon-vampire-layout .demon-roll-panel .vtm-dialog-search-button {
+  display: none !important;
+}
+
+@media (max-width: 1320px) {
+  .demon-vampire-layout .demon-roll-panel .demon-roll-native-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* === Demon sheet pass 27: shimmering blue pips === */
+
+/* Мерцают только заполненные точки демона. Вампиров не трогаем, пусть дальше страдают бордово. */
+.demon-vampire-layout .demon-pips i.is-filled,
+.demon-vampire-layout .demon-resource-pips i.is-filled {
+  position: relative !important;
+  overflow: visible !important;
+  isolation: isolate !important;
+  animation: demon-pip-shimmer 2.8s ease-in-out infinite !important;
+  background:
+    radial-gradient(circle at 32% 28%,
+      rgba(255, 255, 255, 0.98) 0%,
+      rgba(190, 212, 255, 0.96) 18%,
+      rgba(116, 145, 255, 0.94) 48%,
+      rgba(42, 68, 188, 0.96) 78%,
+      rgba(12, 22, 82, 0.98) 100%) !important;
+  box-shadow:
+    inset 0 0 2px rgba(255, 255, 255, 0.58),
+    0 0 5px rgba(124, 158, 255, 0.42),
+    0 0 11px rgba(82, 116, 255, 0.22) !important;
+}
+
+/* Мягкая аура вокруг заполненной точки */
+.demon-vampire-layout .demon-pips i.is-filled::after,
+.demon-vampire-layout .demon-resource-pips i.is-filled::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: -5px !important;
+  z-index: -1 !important;
+  border-radius: 999px !important;
+  pointer-events: none !important;
+  background:
+    radial-gradient(circle,
+      rgba(150, 180, 255, 0.42) 0%,
+      rgba(90, 130, 255, 0.18) 42%,
+      transparent 72%) !important;
+  opacity: 0.42 !important;
+  animation: demon-pip-aura 2.8s ease-in-out infinite !important;
+}
+
+/* Маленькая искра, чтобы точка не просто светилась, а жила */
+.demon-vampire-layout .demon-pips i.is-filled::before,
+.demon-vampire-layout .demon-resource-pips i.is-filled::before {
+  content: "" !important;
+  position: absolute !important;
+  top: 1px !important;
+  left: 2px !important;
+  width: 3px !important;
+  height: 3px !important;
+  border-radius: 999px !important;
+  pointer-events: none !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  box-shadow:
+    0 0 4px rgba(255, 255, 255, 0.76),
+    0 0 8px rgba(170, 205, 255, 0.44) !important;
+  opacity: 0.72 !important;
+  animation: demon-pip-spark 3.4s ease-in-out infinite !important;
+}
+
+/* Небольшая рассинхронизация, чтобы точки не мигали как гирлянда из ларька */
+.demon-vampire-layout .demon-pips i.is-filled:nth-child(2),
+.demon-vampire-layout .demon-resource-pips i.is-filled:nth-child(2) {
+  animation-delay: -0.35s !important;
+}
+
+.demon-vampire-layout .demon-pips i.is-filled:nth-child(3),
+.demon-vampire-layout .demon-resource-pips i.is-filled:nth-child(3) {
+  animation-delay: -0.7s !important;
+}
+
+.demon-vampire-layout .demon-pips i.is-filled:nth-child(4),
+.demon-vampire-layout .demon-resource-pips i.is-filled:nth-child(4) {
+  animation-delay: -1.05s !important;
+}
+
+.demon-vampire-layout .demon-pips i.is-filled:nth-child(5),
+.demon-vampire-layout .demon-resource-pips i.is-filled:nth-child(5) {
+  animation-delay: -1.4s !important;
+}
+
+.demon-vampire-layout .demon-pips i.is-filled:nth-child(6),
+.demon-vampire-layout .demon-resource-pips i.is-filled:nth-child(6) {
+  animation-delay: -1.75s !important;
+}
+
+.demon-vampire-layout .demon-pips i.is-filled:nth-child(7),
+.demon-vampire-layout .demon-resource-pips i.is-filled:nth-child(7) {
+  animation-delay: -2.1s !important;
+}
+
+.demon-vampire-layout .demon-pips i.is-filled:nth-child(8),
+.demon-vampire-layout .demon-resource-pips i.is-filled:nth-child(8) {
+  animation-delay: -2.45s !important;
+}
+
+.demon-vampire-layout .demon-pips i.is-filled:nth-child(9),
+.demon-vampire-layout .demon-resource-pips i.is-filled:nth-child(9) {
+  animation-delay: -2.8s !important;
+}
+
+.demon-vampire-layout .demon-pips i.is-filled:nth-child(10),
+.demon-vampire-layout .demon-resource-pips i.is-filled:nth-child(10) {
+  animation-delay: -3.15s !important;
+}
+
+@keyframes demon-pip-shimmer {
+  0%, 100% {
+    transform: scale(1);
+    filter: brightness(1) saturate(1);
+    box-shadow:
+      inset 0 0 2px rgba(255, 255, 255, 0.48),
+      0 0 5px rgba(124, 158, 255, 0.36),
+      0 0 10px rgba(82, 116, 255, 0.18);
+  }
+
+  38% {
+    transform: scale(1.08);
+    filter: brightness(1.28) saturate(1.16);
+    box-shadow:
+      inset 0 0 3px rgba(255, 255, 255, 0.72),
+      0 0 8px rgba(155, 188, 255, 0.60),
+      0 0 16px rgba(90, 132, 255, 0.36),
+      0 0 24px rgba(52, 88, 220, 0.18);
+  }
+
+  58% {
+    transform: scale(1.02);
+    filter: brightness(1.12) saturate(1.08);
+    box-shadow:
+      inset 0 0 2px rgba(255, 255, 255, 0.56),
+      0 0 6px rgba(140, 172, 255, 0.44),
+      0 0 13px rgba(82, 116, 255, 0.24);
+  }
+}
+
+@keyframes demon-pip-aura {
+  0%, 100% {
+    opacity: 0.24;
+    transform: scale(0.92);
+  }
+
+  42% {
+    opacity: 0.62;
+    transform: scale(1.18);
+  }
+
+  64% {
+    opacity: 0.38;
+    transform: scale(1.04);
+  }
+}
+
+@keyframes demon-pip-spark {
+  0%, 100% {
+    opacity: 0.42;
+    transform: translate(0, 0) scale(0.86);
+  }
+
+  45% {
+    opacity: 1;
+    transform: translate(1px, -1px) scale(1.12);
+  }
+
+  70% {
+    opacity: 0.62;
+    transform: translate(0, 0) scale(0.94);
+  }
+}
+
+/* Если у пользователя/браузера включено снижение анимаций, не устраиваем дискотеку в Бездне. */
+@media (prefers-reduced-motion: reduce) {
+  .demon-vampire-layout .demon-pips i.is-filled,
+  .demon-vampire-layout .demon-resource-pips i.is-filled,
+  .demon-vampire-layout .demon-pips i.is-filled::before,
+  .demon-vampire-layout .demon-pips i.is-filled::after,
+  .demon-vampire-layout .demon-resource-pips i.is-filled::before,
+  .demon-vampire-layout .demon-resource-pips i.is-filled::after {
+    animation: none !important;
+  }
+}
+
+/* === Demon sheet pass 28 safe: injected catalogs and reference cards === */
+
+.demon-vampire-layout .demon-field-card-button,
+.demon-vampire-layout .demon-mini-card-button {
+  display: inline-grid !important;
+  place-items: center !important;
+  width: 34px !important;
+  height: 34px !important;
+  min-width: 34px !important;
+  margin-left: 0 !important;
+  border: 1px solid rgba(150, 180, 255, 0.78) !important;
+  border-radius: 8px !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(120, 155, 255, 0.24), transparent 56%),
+    linear-gradient(180deg, rgba(18, 34, 86, 0.96), rgba(4, 8, 30, 0.99)) !important;
+  color: #eaf2ff !important;
+}
+
+.demon-vampire-layout .demon-mini-card-button {
+  width: 30px !important;
+  height: 30px !important;
+  min-width: 30px !important;
+}
+
+.demon-vampire-layout .demon-field-card-button:hover,
+.demon-vampire-layout .demon-mini-card-button:hover {
+  border-color: rgba(210, 226, 255, 0.98) !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 12px rgba(120, 155, 255, 0.22) !important;
+}
+
+.demon-vampire-layout .demon-catalog-panels {
+  display: grid !important;
+  gap: 12px !important;
+  margin-top: 12px !important;
+}
+
+.demon-vampire-layout .demon-catalog-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(280px, 1fr)) !important;
+  gap: 8px !important;
+}
+
+.demon-vampire-layout .demon-catalog-row {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 42px 34px !important;
+  gap: 8px !important;
+  align-items: center !important;
+  padding: 9px 10px !important;
+  border: 1px solid rgba(95, 120, 220, 0.30) !important;
+  border-radius: 9px !important;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(90, 120, 255, 0.10), transparent 38%),
+    linear-gradient(180deg, rgba(6, 10, 34, 0.78), rgba(2, 3, 14, 0.92)) !important;
+}
+
+.demon-vampire-layout .demon-catalog-row h3 {
+  margin: 0 0 4px !important;
+  color: #eef4ff !important;
+  font-size: 13px !important;
+}
+
+.demon-vampire-layout .demon-catalog-row p {
+  margin: 0 !important;
+  color: rgba(216, 232, 255, 0.76) !important;
+  font-size: 12px !important;
+  line-height: 1.28 !important;
+}
+
+.demon-vampire-layout .demon-catalog-row strong {
+  display: inline-grid !important;
+  place-items: center !important;
+  height: 28px !important;
+  border: 1px solid rgba(135, 165, 255, 0.52) !important;
+  border-radius: 7px !important;
+  color: #f0f6ff !important;
+  background: rgba(18, 34, 86, 0.78) !important;
+}
+
+.demon-vampire-layout .demon-selected-catalog-list {
+  display: grid !important;
+  gap: 6px !important;
+}
+
+.demon-vampire-layout .demon-selected-catalog-row {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 30px 30px !important;
+  gap: 7px !important;
+  align-items: center !important;
+  min-height: 38px !important;
+  padding: 4px 6px 4px 10px !important;
+  border: 1px solid rgba(112, 145, 230, 0.28) !important;
+  border-radius: 8px !important;
+  background: rgba(7, 12, 30, 0.78) !important;
+  color: #e2eaff !important;
+}
+
+.demon-vampire-layout .demon-selected-catalog-row > span {
+  overflow: hidden;
+  font-weight: 700 !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.demon-vampire-layout .demon-selected-catalog-empty {
+  margin: 0 !important;
+  padding: 9px 10px !important;
+  border: 1px dashed rgba(112, 145, 230, 0.24) !important;
+  border-radius: 8px !important;
+  color: var(--demon-muted) !important;
+}
+
+.demon-vampire-layout .demon-catalog-panels .demon-section-title .demon-catalog-add {
+  flex: 0 0 30px !important;
+  margin-left: auto !important;
+}
+
+.demon-reference-dialog-window .window-content {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(70, 96, 210, 0.14), transparent 38%),
+    linear-gradient(180deg, rgba(5, 8, 26, 0.99), rgba(1, 2, 9, 1)) !important;
+  color: #d8e8ff !important;
+}
+
+.demon-reference-card {
+  display: grid !important;
+  gap: 12px !important;
+  padding: 8px !important;
+}
+
+.demon-reference-card header {
+  border-bottom: 1px solid rgba(125, 158, 255, 0.28) !important;
+  padding-bottom: 8px !important;
+}
+
+.demon-reference-card h2 {
+  margin: 0 !important;
+  color: #f0f6ff !important;
+  font-size: 22px !important;
+}
+
+.demon-reference-card h3 {
+  margin: 0 0 6px !important;
+  color: #cbd8ff !important;
+  font-size: 14px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.055em !important;
+}
+
+.demon-reference-card p {
+  margin: 0 !important;
+  color: rgba(216, 232, 255, 0.86) !important;
+  line-height: 1.45 !important;
+}
+
+.demon-reference-card em {
+  display: block !important;
+  margin-top: 4px !important;
+  color: rgba(150, 180, 255, 0.86) !important;
+}
+
+.demon-reference-tags {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+}
+
+.demon-reference-tags span,
+.demon-reference-cost {
+  display: inline-grid !important;
+  place-items: center !important;
+  min-height: 24px !important;
+  padding: 2px 8px !important;
+  border: 1px solid rgba(125, 158, 255, 0.38) !important;
+  border-radius: 999px !important;
+  color: #d8e8ff !important;
+  background: rgba(18, 34, 86, 0.62) !important;
+  font-size: 12px !important;
+}
+
+@media (max-width: 1320px) {
+  .demon-vampire-layout .demon-catalog-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* === Demon sheet readability pass: calm contrast and clearer hierarchy === */
+
+.demon-vampire-layout {
+  --demon-panel: rgba(10, 13, 29, 0.97);
+  --demon-panel-dark: rgba(4, 6, 16, 0.99);
+  --demon-border: rgba(112, 127, 196, 0.58);
+  --demon-border-soft: rgba(91, 105, 171, 0.42);
+  --demon-text: #d8def2;
+  --demon-text-bright: #f1f4ff;
+  --demon-muted: #aeb8d6;
+  --demon-accent: #a8b9ff;
+
+  gap: 0 !important;
+  padding: 0 12px 12px !important;
+  background:
+    radial-gradient(circle at 78% -10%, rgba(73, 92, 174, 0.14), transparent 34%),
+    linear-gradient(180deg, #080b16 0%, #03050c 100%) !important;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.demon-vampire-layout .demon-portrait-card,
+.demon-vampire-layout .demon-identity-panel,
+.demon-vampire-layout .demon-dashboard-card,
+.demon-vampire-layout .demon-panel,
+.demon-vampire-layout .demon-trait-group,
+.demon-vampire-layout .demon-lore-row,
+.demon-vampire-layout .demon-info-card {
+  border-color: var(--demon-border) !important;
+  background:
+    linear-gradient(180deg, var(--demon-panel), var(--demon-panel-dark)) !important;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22) !important;
+}
+
+.demon-vampire-layout .demon-top-shell {
+  grid-template-columns: 220px minmax(0, 1fr) !important;
+  gap: 12px !important;
+  padding: 12px 0 10px !important;
+}
+
+.demon-vampire-layout .demon-portrait-card {
+  min-height: 0 !important;
+  padding: 12px !important;
+}
+
+.demon-vampire-layout .demon-portrait-frame {
+  width: 172px !important;
+  height: 206px !important;
+  border-width: 2px !important;
+  border-color: rgba(132, 151, 224, 0.62) !important;
+  box-shadow: inset 0 0 16px rgba(0, 0, 0, 0.48) !important;
+}
+
+.demon-vampire-layout .demon-identity-panel {
+  min-height: 0 !important;
+  padding: 14px 16px !important;
+}
+
+.demon-vampire-layout .demon-identity-panel::after {
+  width: 42px !important;
+  height: 42px !important;
+  right: 16px !important;
+  top: 14px !important;
+  border-color: rgba(154, 174, 244, 0.58) !important;
+  background: rgba(24, 32, 74, 0.92) !important;
+  font-size: 21px !important;
+  box-shadow: none !important;
+}
+
+.demon-vampire-layout .demon-title-row {
+  padding-right: 58px !important;
+  margin-bottom: 12px !important;
+  border-color: rgba(132, 151, 224, 0.30) !important;
+}
+
+.demon-vampire-layout .demon-character-name-input {
+  height: 42px !important;
+  color: var(--demon-text-bright) !important;
+  font-size: 28px !important;
+  letter-spacing: 0.035em !important;
+  text-shadow: none !important;
+}
+
+.demon-vampire-layout .demon-profile-grid {
+  grid-template-columns: repeat(4, minmax(130px, 1fr)) !important;
+  gap: 9px 12px !important;
+}
+
+.demon-vampire-layout .demon-field {
+  gap: 5px !important;
+  min-width: 0;
+}
+
+.demon-vampire-layout .demon-field label,
+.demon-vampire-layout .demon-roll-native-field > span {
+  color: var(--demon-muted) !important;
+  font-size: 10px !important;
+  letter-spacing: 0.08em !important;
+}
+
+.demon-vampire-layout input,
+.demon-vampire-layout select,
+.demon-vampire-layout textarea,
+.demon-vampire-layout .vtm-trait-search-select__button {
+  min-height: 34px !important;
+  border-color: rgba(112, 137, 215, 0.56) !important;
+  background: #080c1c !important;
+  color: var(--demon-text-bright) !important;
+  box-shadow: none !important;
+}
+
+.demon-vampire-layout input:hover,
+.demon-vampire-layout select:hover,
+.demon-vampire-layout textarea:hover,
+.demon-vampire-layout input:focus,
+.demon-vampire-layout select:focus,
+.demon-vampire-layout textarea:focus {
+  border-color: rgba(168, 190, 255, 0.88) !important;
+  background: #0b1128 !important;
+  box-shadow: 0 0 0 2px rgba(112, 145, 230, 0.14) !important;
+}
+
+.demon-vampire-layout .demon-archetype-inline-grid {
+  gap: 10px !important;
+  margin-top: 12px !important;
+}
+
+.demon-vampire-layout .demon-archetype-inline-card {
+  min-height: 0 !important;
+  padding: 10px 12px !important;
+  border-color: rgba(112, 137, 215, 0.36) !important;
+  background: rgba(12, 17, 38, 0.72) !important;
+  box-shadow: none !important;
+}
+
+.demon-vampire-layout .demon-archetype-inline-card p,
+.demon-vampire-layout .demon-archetype-inline-card em {
+  color: var(--demon-muted) !important;
+  line-height: 1.4 !important;
+}
+
+.demon-vampire-layout .demon-inline-resources {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+  margin-top: 12px !important;
+}
+
+.demon-vampire-layout .demon-inline-resources .demon-resource-card {
+  height: auto !important;
+  min-height: 78px !important;
+  padding: 10px 12px !important;
+  border-color: rgba(112, 137, 215, 0.42) !important;
+  box-shadow: none !important;
+}
+
+.demon-vampire-layout .demon-resource-card-top {
+  gap: 10px !important;
+  margin-bottom: 8px !important;
+}
+
+.demon-vampire-layout .demon-resource-counter input {
+  min-height: 28px !important;
+}
+
+.demon-vampire-layout .demon-health-panel,
+.demon-vampire-layout .demon-roll-panel {
+  padding: 10px 12px !important;
+}
+
+.demon-vampire-layout .demon-section-title h2 {
+  color: var(--demon-text-bright) !important;
+  font-size: 15px !important;
+  letter-spacing: 0.06em !important;
+}
+
+.demon-vampire-layout .demon-health-summary {
+  color: var(--demon-text) !important;
+  background: rgba(9, 13, 29, 0.78) !important;
+}
+
+.demon-vampire-layout .demon-health-card {
+  border-color: rgba(112, 127, 196, 0.44) !important;
+  box-shadow: none !important;
+}
+
+.demon-vampire-layout .demon-tabs {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 6px !important;
+}
+
+.demon-vampire-layout .demon-tabs button {
+  height: 36px !important;
+  border-color: rgba(112, 127, 196, 0.38) !important;
+  background: #070a15 !important;
+  color: var(--demon-muted) !important;
+  font-size: 12px !important;
+  letter-spacing: 0.035em;
+  box-shadow: none !important;
+}
+
+.demon-vampire-layout .demon-tabs button:hover {
+  border-color: rgba(145, 166, 235, 0.70) !important;
+  color: var(--demon-text-bright) !important;
+}
+
+.demon-vampire-layout .demon-tabs button.is-active {
+  border-color: rgba(168, 190, 255, 0.82) !important;
+  background: #111a3a !important;
+  color: #ffffff !important;
+  box-shadow: inset 0 -2px 0 var(--demon-accent) !important;
+}
+
+.demon-vampire-layout .demon-sheet-body {
+  scrollbar-color: rgba(118, 142, 218, 0.62) rgba(3, 5, 12, 0.66);
+  scrollbar-width: thin;
+}
+
+.demon-vampire-layout .demon-trait-row {
+  min-height: 36px !important;
+  border-color: rgba(91, 105, 171, 0.20) !important;
+}
+
+.demon-vampire-layout .demon-trait-row > label {
+  color: var(--demon-text) !important;
+  font-weight: 600 !important;
+}
+
+@media (max-width: 1180px) {
+  .demon-vampire-layout {
+    min-width: 0 !important;
+  }
+
+  .demon-vampire-layout .demon-top-shell {
+    grid-template-columns: 190px minmax(0, 1fr) !important;
+  }
+
+  .demon-vampire-layout .demon-profile-grid {
+    grid-template-columns: repeat(2, minmax(150px, 1fr)) !important;
+  }
+
+  .demon-vampire-layout .demon-health-grid {
+    grid-template-columns: repeat(4, minmax(110px, 1fr)) !important;
+  }
+}
+
+@media (max-width: 820px) {
+  .demon-vampire-layout .demon-top-shell,
+  .demon-vampire-layout .demon-profile-grid,
+  .demon-vampire-layout .demon-archetype-inline-grid,
+  .demon-vampire-layout .demon-inline-resources {
+    grid-template-columns: 1fr !important;
+  }
+
+  .demon-vampire-layout .demon-portrait-card {
+    display: none !important;
+  }
+
+  .demon-vampire-layout .demon-tabs {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .demon-vampire-layout .demon-health-grid {
+    grid-template-columns: repeat(2, minmax(110px, 1fr)) !important;
+  }
+}
+
+/* Demon reference dialogs only: keep vampire cards and dialogs untouched. */
+.demon-reference-dialog-window .dialog-buttons {
+  gap: 8px !important;
+  padding-top: 10px !important;
+  border-top: 1px solid rgba(112, 145, 230, 0.38) !important;
+}
+
+.demon-reference-dialog-window .dialog-buttons button,
+.demon-reference-dialog-window button[data-button="close"] {
+  min-height: 34px !important;
+  border: 1px solid rgba(125, 158, 255, 0.72) !important;
+  border-radius: 8px !important;
+  background:
+    linear-gradient(180deg, rgba(25, 43, 96, 0.98), rgba(7, 13, 42, 0.99)) !important;
+  color: #e8f0ff !important;
+  font-weight: 700 !important;
+  box-shadow: none !important;
+}
+
+.demon-reference-dialog-window .dialog-buttons button:hover,
+.demon-reference-dialog-window .dialog-buttons button:focus,
+.demon-reference-dialog-window button[data-button="close"]:hover,
+.demon-reference-dialog-window button[data-button="close"]:focus {
+  border-color: rgba(180, 202, 255, 0.96) !important;
+  background:
+    linear-gradient(180deg, rgba(38, 62, 132, 0.99), rgba(10, 20, 60, 1)) !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 0 2px rgba(112, 145, 230, 0.16) !important;
+}
+
+.demon-reference-dialog-window .demon-reference-card header,
+.demon-reference-dialog-window .demon-reference-card section,
+.demon-reference-dialog-window .demon-reference-card h2,
+.demon-reference-dialog-window .demon-reference-card h3,
+.demon-reference-dialog-window .demon-reference-card hr {
+  border-color: rgba(112, 145, 230, 0.36) !important;
+}
+
+.demon-reference-dialog-window .demon-reference-card section {
+  padding-top: 10px !important;
+  border-top: 1px solid rgba(112, 145, 230, 0.24) !important;
+}
+
+.demon-reference-dialog-window .demon-reference-card section:first-of-type {
+  padding-top: 0 !important;
+  border-top: 0 !important;
+}
+
+.demon-reference-dialog-window .demon-reference-card h2,
+.demon-reference-dialog-window .demon-reference-card h3 {
+  border-bottom-color: rgba(112, 145, 230, 0.32) !important;
+  color: #dce7ff !important;
+  text-shadow: none !important;
+}
+
+/* Demon advantages only: compact virtue cards and controls. */
+.demon-vampire-layout .demon-virtues-grid .demon-virtue-card {
+  padding: 8px 10px !important;
+}
+
+.demon-vampire-layout .demon-virtues-grid .demon-virtue-card h3 {
+  margin-bottom: 4px !important;
+}
+
+.demon-vampire-layout .demon-virtues-grid .demon-virtue-card p {
+  min-height: 0 !important;
+  margin: 0 0 5px !important;
+  font-size: 11px !important;
+  line-height: 1.25 !important;
+}
+
+.demon-vampire-layout .demon-virtues-grid .demon-virtue-row {
+  min-height: 28px !important;
+  padding: 2px 0 !important;
+}
+
+.demon-vampire-layout .demon-virtues-grid .demon-virtue-row input[type="number"],
+.demon-vampire-layout .demon-virtues-grid .demon-virtue-row button {
+  height: 27px !important;
+  min-height: 27px !important;
+}
+
+/* Demon parity components: item lists, weapons, XP and creation audit. */
+.demon-vampire-layout .demon-resource-counter {
+  grid-template-columns: 28px 46px 10px 46px 28px !important;
+  gap: 4px !important;
+}
+
+.demon-vampire-layout .demon-resource-counter .resource-change {
+  width: 28px !important;
+  height: 28px !important;
+  min-height: 28px !important;
+  padding: 0 !important;
+}
+
+.demon-vampire-layout .weapons-panel h2,
+.demon-vampire-layout .vtm-experience-journal-panel h2 {
+  color: #dce7ff !important;
+  border-color: rgba(112, 145, 230, 0.30) !important;
+}
+
+.demon-vampire-layout .items-list,
+.demon-vampire-layout .items-list .item-row,
+.demon-vampire-layout .weapon-list .weapon-row {
+  border-color: rgba(112, 137, 215, 0.28) !important;
+  background: rgba(5, 9, 23, 0.76) !important;
+  color: #d8def2 !important;
+}
+
+.demon-vampire-layout .items-list button,
+.demon-vampire-layout .weapons-panel button,
+.demon-vampire-layout .vtm-experience-journal-panel button,
+.demon-vampire-layout .demon-creation-wizard-open {
+  border-color: rgba(125, 158, 255, 0.62) !important;
+  background: linear-gradient(180deg, rgba(25, 43, 96, 0.96), rgba(7, 13, 42, 0.99)) !important;
+  color: #e8f0ff !important;
+}
+
+.demon-vampire-layout .vtm-experience-journal-panel,
+.demon-vampire-layout .weapons-panel {
+  border-color: var(--demon-border) !important;
+  background: linear-gradient(180deg, var(--demon-panel), var(--demon-panel-dark)) !important;
+  color: var(--demon-text) !important;
+}
+
+.demon-vampire-layout .experience-journal-table th,
+.demon-vampire-layout .experience-journal-table td {
+  border-color: rgba(112, 137, 215, 0.26) !important;
+  color: var(--demon-text) !important;
+  background: rgba(5, 9, 23, 0.72) !important;
+}
+
+/* Shared Vampire components receive Demon colors only inside the Demon sheet. */
+.demon-vampire-layout .weapons-panel .section-header-row,
+.demon-vampire-layout .vtm-experience-journal-panel .section-header-row {
+  border-color: rgba(112, 145, 230, 0.34) !important;
+  background: transparent !important;
+}
+
+.demon-vampire-layout .weapon-meta,
+.demon-vampire-layout .items-list .item-name,
+.demon-vampire-layout .items-list .item-rating,
+.demon-vampire-layout .vtm-experience-journal-panel label,
+.demon-vampire-layout .vtm-experience-journal-panel small {
+  color: #b9c7eb !important;
+}
+
+.demon-vampire-layout .experience-summary-grid article {
+  border-color: rgba(112, 145, 230, 0.38) !important;
+  background: rgba(7, 12, 30, 0.86) !important;
+  box-shadow: inset 0 0 14px rgba(50, 76, 160, 0.14) !important;
+}
+
+.demon-vampire-layout .experience-summary-grid span,
+.demon-vampire-layout .experience-summary-grid strong {
+  color: #dce7ff !important;
+}
+
+.demon-vampire-layout .experience-journal-table-wrap {
+  border-color: rgba(112, 145, 230, 0.30) !important;
+  background: rgba(3, 6, 17, 0.72) !important;
+}
+
+.demon-vampire-layout .experience-journal-table th {
+  background: rgba(8, 14, 36, 0.98) !important;
+}
+
+.demon-vampire-layout .experience-delta.is-positive {
+  color: #bcd0ff !important;
+  text-shadow: 0 0 6px rgba(78, 112, 220, 0.32) !important;
+}
+
+.demon-vampire-layout .experience-delta.is-negative {
+  color: #a9bfff !important;
+}
+
+/* Final Demon-only cleanup for shared Vampire weapon and experience widgets. */
+.demon-vampire-layout .weapons-panel,
+.demon-vampire-layout .weapons-panel .section-header-row,
+.demon-vampire-layout .weapons-panel .items-list,
+.demon-vampire-layout .weapons-panel .weapon-row,
+.demon-vampire-layout .vtm-experience-journal-panel,
+.demon-vampire-layout .vtm-experience-journal-panel .section-header-row,
+.demon-vampire-layout .vtm-experience-journal-panel .experience-summary-grid article,
+.demon-vampire-layout .vtm-experience-journal-panel .experience-journal-table-wrap,
+.demon-vampire-layout .vtm-experience-journal-panel .experience-journal-table th,
+.demon-vampire-layout .vtm-experience-journal-panel .experience-journal-table td {
+  border-color: rgba(112, 145, 230, 0.38) !important;
+  background-color: rgba(5, 9, 23, 0.88) !important;
+  background-image: none !important;
+  color: #dce7ff !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+.demon-vampire-layout .weapons-panel h2,
+.demon-vampire-layout .weapons-panel .item-name,
+.demon-vampire-layout .weapons-panel .weapon-meta,
+.demon-vampire-layout .vtm-experience-journal-panel h2,
+.demon-vampire-layout .vtm-experience-journal-panel span,
+.demon-vampire-layout .vtm-experience-journal-panel strong,
+.demon-vampire-layout .vtm-experience-journal-panel label,
+.demon-vampire-layout .vtm-experience-journal-panel small {
+  color: #dce7ff !important;
+  border-color: rgba(112, 145, 230, 0.32) !important;
+  text-shadow: none !important;
+}
+
+.demon-vampire-layout .weapons-panel button,
+.demon-vampire-layout .vtm-experience-journal-panel button {
+  border-color: rgba(125, 158, 255, 0.66) !important;
+  background: linear-gradient(180deg, rgba(25, 43, 96, 0.98), rgba(7, 13, 42, 0.99)) !important;
+  color: #eef4ff !important;
+  box-shadow: none !important;
+}
+
+.chat-message .message-content .vtm-chat-card.demon-chat-card,
+.message-content .vtm-chat-card.demon-chat-card,
+.vtm-chat-card.demon-chat-card {
+  border-color: rgba(112, 145, 230, 0.72) !important;
+  background: linear-gradient(180deg, rgba(12, 20, 50, 0.98), rgba(3, 7, 22, 0.99)) !important;
+  color: #dce7ff !important;
+  box-shadow: inset 0 0 16px rgba(54, 80, 170, 0.16) !important;
+}
+
+.vtm-chat-card.demon-chat-card h3,
+.vtm-chat-card.demon-chat-card strong,
+.vtm-chat-card.demon-chat-card .result,
+.vtm-chat-card.demon-chat-card .die,
+.vtm-chat-card.demon-chat-card .roll-component {
+  border-color: rgba(112, 145, 230, 0.52) !important;
+  background-color: rgba(8, 15, 39, 0.78) !important;
+  color: #dce7ff !important;
+  text-shadow: none !important;
+}
+
+.demon-creation-dialog-window .window-content {
+  background: linear-gradient(180deg, #080d21, #02040e) !important;
+  color: #dce7ff !important;
+}
+
+.demon-creation-dialog {
+  display: grid !important;
+  gap: 14px !important;
+}
+
+.demon-creation-priorities {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+}
+
+.demon-creation-priorities label {
+  display: grid !important;
+  gap: 5px !important;
+}
+
+.demon-creation-checks {
+  display: grid !important;
+  gap: 6px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+
+.demon-creation-checks li {
+  padding: 8px 10px !important;
+  border: 1px solid rgba(112, 137, 215, 0.30) !important;
+  border-radius: 7px !important;
+  background: rgba(7, 12, 30, 0.86) !important;
+}
+
+.demon-creation-checks .is-ok { color: #bfe8cf !important; }
+.demon-creation-checks .is-warning { color: #ffd9a3 !important; }
+
+@media (max-width: 900px) {
+  .demon-creation-priorities {
+    grid-template-columns: 1fr !important;
+  }
 }

@@ -247,6 +247,7 @@ function openSearchPanel(select, button) {
 
   const panel = document.createElement("div");
   panel.className = "vtm-dialog-search-panel";
+  if (select.closest(".demon-character-wizard-form")) panel.classList.add("demon-character-wizard-search-panel");
   panel.innerHTML = `
     <input class="vtm-dialog-search-input" type="search" placeholder="Поиск..." autocomplete="off">
     <div class="vtm-dialog-search-options"></div>

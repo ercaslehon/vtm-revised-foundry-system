@@ -1,19 +1,20 @@
 {
-  "generatedAt": "2026-06-10T15:59:29.705Z",
+  "generatedAt": "2026-08-21T19:53:29.187Z",
   "sourceModules": 9,
-  "cssBytes": 233364,
-  "cssLines": 8421,
-  "cssSha256": "c1e9a03c1e9dc0a164553baee1c2a512f4021a649a3e34a803ec8620dd9be756",
-  "totalImportant": 1945,
-  "totalRules": 1001,
+  "cssBytes": 347327,
+  "cssLines": 11850,
+  "cssSha256": "f408c736a5eb2de92e25303ce997ef6e2c779b92d34956dc57fc77b094b6f1d7",
+  "totalImportant": 2990,
+  "totalRules": 1292,
+  "unusedProjectClasses": [],
   "modules": [
     {
       "file": "styles/source/01-foundation-and-legacy-apps.css",
       "title": "Foundation, legacy base styles, cards, wizard, morality, early app styles",
-      "bytes": 28638,
-      "lines": 1445,
-      "rules": 236,
-      "uniqueSelectors": 219,
+      "bytes": 28124,
+      "lines": 1419,
+      "rules": 233,
+      "uniqueSelectors": 216,
       "important": 1,
       "media": 7,
       "keyframes": 0
@@ -21,11 +22,11 @@
     {
       "file": "styles/source/02-vampire-sheet-layout-history.css",
       "title": "Vampire sheet layout history from v9.5.2 to v9.5.10",
-      "bytes": 79871,
-      "lines": 3181,
-      "rules": 391,
-      "uniqueSelectors": 265,
-      "important": 606,
+      "bytes": 76117,
+      "lines": 3002,
+      "rules": 365,
+      "uniqueSelectors": 240,
+      "important": 588,
       "media": 19,
       "keyframes": 0
     },
@@ -54,10 +55,10 @@
     {
       "file": "styles/source/05-release-hotfixes-and-item-directory.css",
       "title": "Release hotfixes and item directory import button layout",
-      "bytes": 12305,
-      "lines": 509,
-      "rules": 48,
-      "uniqueSelectors": 38,
+      "bytes": 11891,
+      "lines": 491,
+      "rules": 46,
+      "uniqueSelectors": 36,
       "important": 50,
       "media": 0,
       "keyframes": 1
@@ -76,13 +77,13 @@
     {
       "file": "styles/source/07-search-dialogs-and-wizard.css",
       "title": "Searchable dialogs and character creation wizard select polish",
-      "bytes": 25630,
-      "lines": 729,
-      "rules": 46,
-      "uniqueSelectors": 43,
-      "important": 309,
-      "media": 1,
-      "keyframes": 0
+      "bytes": 144275,
+      "lines": 4381,
+      "rules": 368,
+      "uniqueSelectors": 295,
+      "important": 1372,
+      "media": 16,
+      "keyframes": 3
     },
     {
       "file": "styles/source/08-merit-flaw-and-catalog-pickers.css",
@@ -113,8 +114,24 @@
       "count": 9
     },
     {
+      "selector": "0%, 100%",
+      "count": 9
+    },
+    {
+      "selector": ".demon-vampire-layout",
+      "count": 8
+    },
+    {
       "selector": ".vtm-revised .vtm-clan-icon",
       "count": 7
+    },
+    {
+      "selector": ".demon-vampire-layout .demon-health-grid",
+      "count": 6
+    },
+    {
+      "selector": ".demon-vampire-layout .demon-sheet-body",
+      "count": 6
     },
     {
       "selector": ".vtm-revised.sheet .blood-magic-section .item-row[data-item-type=\"disciplinePath\"], .vtm-revised.sheet .blood-magic-section .item-row[data-item-type=\"ritual\"]",
@@ -122,10 +139,6 @@
     },
     {
       "selector": ".vtm-revised.sheet .vtm-tracker-health .health-check-grid",
-      "count": 6
-    },
-    {
-      "selector": "0%, 100%",
       "count": 6
     },
     {
@@ -163,6 +176,30 @@
     {
       "selector": "50%",
       "count": 5
+    },
+    {
+      "selector": ".demon-vampire-layout .demon-health-card",
+      "count": 4
+    },
+    {
+      "selector": ".demon-vampire-layout .demon-health-panel, .demon-vampire-layout .demon-roll-panel",
+      "count": 4
+    },
+    {
+      "selector": ".demon-vampire-layout .demon-inline-resources",
+      "count": 4
+    },
+    {
+      "selector": ".demon-vampire-layout .demon-profile-grid",
+      "count": 4
+    },
+    {
+      "selector": ".demon-vampire-layout .demon-tabs",
+      "count": 4
+    },
+    {
+      "selector": ".demon-vampire-layout .demon-three-columns",
+      "count": 4
     },
     {
       "selector": ".trait-columns",
@@ -209,63 +246,27 @@
       "count": 4
     },
     {
+      "selector": ".advantage-grid",
+      "count": 3
+    },
+    {
       "selector": ".blood-magic-rituals-panel",
       "count": 3
     },
     {
-      "selector": ".generation-cap-values",
+      "selector": ".demon-vampire-layout .demon-archetype-inline-grid",
       "count": 3
     },
     {
-      "selector": ".item-name",
+      "selector": ".demon-vampire-layout .demon-health-summary",
       "count": 3
     },
     {
-      "selector": ".item-rating",
+      "selector": ".demon-vampire-layout .demon-identity-panel",
       "count": 3
     },
     {
-      "selector": ".item-row",
-      "count": 3
-    },
-    {
-      "selector": ".items-list",
-      "count": 3
-    },
-    {
-      "selector": ".text-blocks label",
-      "count": 3
-    },
-    {
-      "selector": ".trait-cap-note",
-      "count": 3
-    },
-    {
-      "selector": ".trait-row",
-      "count": 3
-    },
-    {
-      "selector": ".vtm-catalog-picker-dialog .vtm-catalog-preview",
-      "count": 3
-    },
-    {
-      "selector": ".vtm-catalog-picker-dialog .vtm-dialog-search-select",
-      "count": 3
-    },
-    {
-      "selector": ".vtm-chat-card",
-      "count": 3
-    },
-    {
-      "selector": ".vtm-chat-card h3",
-      "count": 3
-    },
-    {
-      "selector": ".vtm-command-strip .vtm-roll-builder-grid",
-      "count": 3
-    },
-    {
-      "selector": ".vtm-main-grid",
+      "selector": ".demon-vampire-layout .demon-roll-panel .demon-roll-native-grid",
       "count": 3
     }
   ],
@@ -275,12 +276,24 @@
       "count": 9
     },
     {
+      "selector": ".demon-vampire-layout",
+      "count": 7
+    },
+    {
+      "selector": ".demon-vampire-layout .demon-health-grid",
+      "count": 6
+    },
+    {
       "selector": ".vtm-revised.sheet .blood-magic-section .item-row[data-item-type=\"disciplinePath\"], .vtm-revised.sheet .blood-magic-section .item-row[data-item-type=\"ritual\"]",
       "count": 6
     },
     {
       "selector": ".vtm-revised.sheet .vtm-tracker-health .health-check-grid",
       "count": 6
+    },
+    {
+      "selector": ".demon-vampire-layout .demon-sheet-body",
+      "count": 5
     },
     {
       "selector": ".vtm-catalog-picker-dialog .form-group",
@@ -305,6 +318,30 @@
     {
       "selector": ".vtm-revised.sheet .vtm-tracker-health",
       "count": 5
+    },
+    {
+      "selector": ".demon-vampire-layout .demon-health-card",
+      "count": 4
+    },
+    {
+      "selector": ".demon-vampire-layout .demon-health-panel, .demon-vampire-layout .demon-roll-panel",
+      "count": 4
+    },
+    {
+      "selector": ".demon-vampire-layout .demon-inline-resources",
+      "count": 4
+    },
+    {
+      "selector": ".demon-vampire-layout .demon-profile-grid",
+      "count": 4
+    },
+    {
+      "selector": ".demon-vampire-layout .demon-tabs",
+      "count": 4
+    },
+    {
+      "selector": ".demon-vampire-layout .demon-three-columns",
+      "count": 4
     },
     {
       "selector": ".vtm-catalog-picker-dialog",
@@ -347,6 +384,26 @@
       "count": 4
     },
     {
+      "selector": ".demon-vampire-layout .demon-archetype-inline-grid",
+      "count": 3
+    },
+    {
+      "selector": ".demon-vampire-layout .demon-health-summary",
+      "count": 3
+    },
+    {
+      "selector": ".demon-vampire-layout .demon-identity-panel",
+      "count": 3
+    },
+    {
+      "selector": ".demon-vampire-layout .demon-roll-panel .demon-roll-native-grid",
+      "count": 3
+    },
+    {
+      "selector": ".demon-vampire-layout .demon-trait-row",
+      "count": 3
+    },
+    {
       "selector": ".vtm-catalog-picker-dialog .vtm-catalog-preview",
       "count": 3
     },
@@ -373,62 +430,6 @@
     {
       "selector": ".vtm-revised.sheet .vtm-discipline-list-only .item-row",
       "count": 3
-    },
-    {
-      "selector": ".vtm-revised.sheet .vtm-disciplines-panel .item-row[data-item-type=\"discipline\"]",
-      "count": 3
-    },
-    {
-      "selector": ".vtm-revised.sheet .vtm-health-scroll-block .health-info",
-      "count": 3
-    },
-    {
-      "selector": ".vtm-revised.sheet .vtm-health-scroll-block .health-row:hover",
-      "count": 3
-    },
-    {
-      "selector": ".vtm-revised.sheet .vtm-health-scroll-block .health-row.is-checked",
-      "count": 3
-    },
-    {
-      "selector": ".vtm-revised.sheet .vtm-section-tabs",
-      "count": 3
-    },
-    {
-      "selector": ".vtm-revised.sheet .vtm-sheet-body",
-      "count": 3
-    },
-    {
-      "selector": ".vtm-revised.sheet .vtm-tab-panel",
-      "count": 3
-    },
-    {
-      "selector": ".vtm-revised.sheet .vtm-vampire-shell",
-      "count": 3
-    },
-    {
-      "selector": ".vtm-catalog-picker-dialog .dialog-content, .vtm-catalog-picker-dialog .vtm-catalog-picker-form, .vtm-catalog-picker-dialog form",
-      "count": 2
-    },
-    {
-      "selector": ".vtm-catalog-picker-dialog .form-group label",
-      "count": 2
-    },
-    {
-      "selector": ".vtm-catalog-picker-dialog .vtm-catalog-preview-empty",
-      "count": 2
-    },
-    {
-      "selector": ".vtm-catalog-picker-dialog .vtm-catalog-preview-meta",
-      "count": 2
-    },
-    {
-      "selector": ".vtm-catalog-picker-dialog .vtm-catalog-preview-section",
-      "count": 2
-    },
-    {
-      "selector": ".vtm-catalog-picker-dialog .vtm-catalog-preview-section h4",
-      "count": 2
     }
   ],
   "exactDuplicates": [
@@ -449,7 +450,7 @@
     },
     {
       "count": 2,
-      "selector": ".vtm-main-left, .vtm-main-right",
+      "selector": ".vtm-main-left",
       "files": [
         "styles/source/02-vampire-sheet-layout-history.css"
       ]
@@ -540,6 +541,83 @@
     },
     {
       "count": 2,
+      "selector": ".vtm-trait-search-select__native",
+      "files": [
+        "styles/source/07-search-dialogs-and-wizard.css"
+      ]
+    },
+    {
+      "count": 2,
+      "selector": ".demon-vampire-layout .demon-health-grid",
+      "files": [
+        "styles/source/07-search-dialogs-and-wizard.css"
+      ]
+    },
+    {
+      "count": 2,
+      "selector": ".demon-vampire-layout .demon-health-panel, .demon-vampire-layout .demon-roll-panel",
+      "files": [
+        "styles/source/07-search-dialogs-and-wizard.css"
+      ]
+    },
+    {
+      "count": 2,
+      "selector": ".demon-vampire-layout .demon-health-summary",
+      "files": [
+        "styles/source/07-search-dialogs-and-wizard.css"
+      ]
+    },
+    {
+      "count": 2,
+      "selector": ".demon-vampire-layout .demon-sheet-body",
+      "files": [
+        "styles/source/07-search-dialogs-and-wizard.css"
+      ]
+    },
+    {
+      "count": 2,
+      "selector": ".demon-vampire-layout .demon-panel",
+      "files": [
+        "styles/source/07-search-dialogs-and-wizard.css"
+      ]
+    },
+    {
+      "count": 2,
+      "selector": ".demon-vampire-layout .demon-trait-group",
+      "files": [
+        "styles/source/07-search-dialogs-and-wizard.css"
+      ]
+    },
+    {
+      "count": 2,
+      "selector": ".demon-vampire-layout",
+      "files": [
+        "styles/source/07-search-dialogs-and-wizard.css"
+      ]
+    },
+    {
+      "count": 2,
+      "selector": ".demon-vampire-layout .demon-sheet-body",
+      "files": [
+        "styles/source/07-search-dialogs-and-wizard.css"
+      ]
+    },
+    {
+      "count": 2,
+      "selector": ".demon-vampire-layout .demon-roll-panel .demon-roll-native-submit",
+      "files": [
+        "styles/source/07-search-dialogs-and-wizard.css"
+      ]
+    },
+    {
+      "count": 2,
+      "selector": ".demon-vampire-layout .demon-roll-panel .demon-roll-native-grid",
+      "files": [
+        "styles/source/07-search-dialogs-and-wizard.css"
+      ]
+    },
+    {
+      "count": 2,
       "selector": ".vtm-catalog-picker-dialog .vtm-dialog-search-select",
       "files": [
         "styles/source/08-merit-flaw-and-catalog-pickers.css"
@@ -564,83 +642,6 @@
       "selector": ".vtm-catalog-picker-dialog .vtm-catalog-preview-section",
       "files": [
         "styles/source/08-merit-flaw-and-catalog-pickers.css"
-      ]
-    },
-    {
-      "count": 2,
-      "selector": ".vtm-catalog-picker-dialog .vtm-catalog-preview-section:first-of-type",
-      "files": [
-        "styles/source/08-merit-flaw-and-catalog-pickers.css"
-      ]
-    },
-    {
-      "count": 2,
-      "selector": ".vtm-catalog-picker-dialog .vtm-catalog-preview-section h4",
-      "files": [
-        "styles/source/08-merit-flaw-and-catalog-pickers.css"
-      ]
-    },
-    {
-      "count": 2,
-      "selector": ".vtm-catalog-picker-dialog .vtm-catalog-preview-section p, .vtm-catalog-picker-dialog .vtm-catalog-preview-section div",
-      "files": [
-        "styles/source/08-merit-flaw-and-catalog-pickers.css"
-      ]
-    },
-    {
-      "count": 2,
-      "selector": ".vtm-catalog-picker-dialog .vtm-catalog-preview-empty",
-      "files": [
-        "styles/source/08-merit-flaw-and-catalog-pickers.css"
-      ]
-    },
-    {
-      "count": 2,
-      "selector": ".vtm-revised .health-grid.health-check-grid",
-      "files": [
-        "styles/source/09-health-damage-state-overrides.css"
-      ]
-    },
-    {
-      "count": 2,
-      "selector": ".vtm-revised .health-row",
-      "files": [
-        "styles/source/09-health-damage-state-overrides.css"
-      ]
-    },
-    {
-      "count": 2,
-      "selector": ".vtm-revised .health-row:hover",
-      "files": [
-        "styles/source/09-health-damage-state-overrides.css"
-      ]
-    },
-    {
-      "count": 2,
-      "selector": ".vtm-revised .health-row:focus-visible",
-      "files": [
-        "styles/source/09-health-damage-state-overrides.css"
-      ]
-    },
-    {
-      "count": 2,
-      "selector": ".vtm-revised .health-row[data-damage-state=\"0\"]",
-      "files": [
-        "styles/source/09-health-damage-state-overrides.css"
-      ]
-    },
-    {
-      "count": 2,
-      "selector": ".vtm-revised .health-row[data-damage-state=\"1\"]",
-      "files": [
-        "styles/source/09-health-damage-state-overrides.css"
-      ]
-    },
-    {
-      "count": 2,
-      "selector": ".vtm-revised .health-row[data-damage-state=\"2\"]",
-      "files": [
-        "styles/source/09-health-damage-state-overrides.css"
       ]
     }
   ]

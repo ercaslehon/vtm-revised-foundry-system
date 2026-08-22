@@ -125,6 +125,11 @@
         "styles/source/68-strong-health-damage-background-tint-override.css",
         "styles/source/69-strong-health-damage-background-tint-override.css"
       ]
+    },
+    {
+      "file": "styles/source/10-demon-final-overrides.css",
+      "title": "Final Demon-only isolation for shared weapon, experience and chat components",
+      "sourceFiles": []
     }
   ]
 }

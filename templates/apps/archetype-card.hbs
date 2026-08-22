@@ -6,8 +6,8 @@
 
   <section class="vtm-archetype-card-body">
     <article class="vtm-card-section">
-      <h2>Литературно</h2>
-      <blockquote>{{archetype.motto}}</blockquote>
+      <h2>Описание</h2>
+      {{#if archetype.motto}}<blockquote>{{archetype.motto}}</blockquote>{{/if}}
       <p>{{archetype.summary}}</p>
     </article>
 
@@ -15,12 +15,24 @@
       <h2>Механика</h2>
       {{#if isNature}}
         <p><strong>{{localize "VTM_REVISED.Archetype.WillpowerRegain"}}:</strong> {{archetype.regain}}</p>
-        <p>Натура описывает подлинный внутренний импульс персонажа. Когда персонаж действует в соответствии с ней достаточно ярко и значимо для сцены, Рассказчик может разрешить восстановить Силу Воли.</p>
+        {{#if isDemon}}
+          <p>Натура описывает истинную личность персонажа и определяет указанное условие восстановления Силы Воли.</p>
+        {{else}}
+          <p>Натура описывает подлинный внутренний импульс персонажа. Когда персонаж действует в соответствии с ней достаточно ярко и значимо для сцены, Рассказчик может разрешить восстановить Силу Воли.</p>
+        {{/if}}
         <button type="button" class="archetype-card-restore-willpower"><i class="fas fa-plus"></i> {{localize "VTM_REVISED.Archetype.RestoreWillpower"}}</button>
       {{else}}
         <p><strong>{{localize "VTM_REVISED.Archetype.DemeanorMechanicTitle"}}:</strong> {{localize "VTM_REVISED.Archetype.DemeanorMechanic"}}</p>
-        <p>Маска показывает публичный образ персонажа: то, что он демонстрирует людям, котерии и обществу Сородичей. Она полезна для отыгрыша, обмана и социальных сцен, но сама по себе не восстанавливает Силу Воли.</p>
+        {{#if isDemon}}
+          <p>Маска показывает личность, которую персонаж демонстрирует окружающим, и сама по себе не восстанавливает Силу Воли.</p>
+        {{else}}
+          <p>Маска показывает публичный образ персонажа: то, что он демонстрирует людям, котерии и обществу Сородичей. Она полезна для отыгрыша, обмана и социальных сцен, но сама по себе не восстанавливает Силу Воли.</p>
+        {{/if}}
       {{/if}}
     </article>
+
+    {{#if archetype.sourceUrl}}
+      <footer class="demon-reference-source"><a href="{{archetype.sourceUrl}}" target="_blank" rel="noopener">Источник: wod.su</a></footer>
+    {{/if}}
   </section>
 </div>

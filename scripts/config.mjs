@@ -1,4 +1,6 @@
+import { DEMON_RULES } from "./data/demon/demon-rules.mjs";
 export const VTM_REVISED = {
+  demonRules: DEMON_RULES,
   systemId: "vtm-revised",
   attributeCategories: {
     physical: ["strength", "dexterity", "stamina"],

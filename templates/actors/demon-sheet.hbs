@@ -1,0 +1,517 @@
+<form class="demon-sheet demon-vampire-layout {{cssClass}}" autocomplete="off">
+  <section class="demon-top-shell">
+    <aside class="demon-portrait-card">
+      <div class="demon-portrait-frame">
+        <img class="actor-portrait-view" src="{{system.profile.avatar}}" alt="{{actor.name}}" tabindex="0">
+      </div>
+
+      <div class="demon-portrait-actions">
+        <button type="button" class="actor-portrait-edit" title="Выбрать портрет"><i class="fas fa-image"></i></button>
+        <button type="button" class="actor-portrait-sync-token" title="Синхронизировать токен"><i class="fas fa-user-tag"></i></button>
+        <button type="button" class="actor-portrait-reset" title="Сбросить портрет"><i class="fas fa-rotate-left"></i></button>
+      </div>
+    </aside>
+
+    <section class="demon-identity-panel">
+      <div class="demon-title-row">
+        <input class="demon-character-name-input" type="text" name="name" value="{{actor.name}}" placeholder="Имя персонажа">
+      </div>
+
+      <div class="demon-profile-grid">
+        <div class="demon-field demon-field-with-button">
+          <label>{{localize "VTM_REVISED.Demon.Profile.House"}}</label>
+          <div class="demon-select-with-button demon-catalog-select-row">
+            <select name="system.profile.house">
+              <option value="">{{localize "VTM_REVISED.Demon.Empty.Masculine"}}</option>
+              {{#each houses}}
+                <option value="{{key}}" {{#if (eq ../system.profile.house key)}}selected{{/if}}>{{label}}</option>
+              {{/each}}
+            </select>
+          </div>
+        </div>
+
+        <div class="demon-field demon-field-with-button">
+          <label>{{localize "VTM_REVISED.Demon.Profile.Faction"}}</label>
+          <div class="demon-select-with-button demon-catalog-select-row">
+            <select name="system.profile.faction">
+              <option value="">{{localize "VTM_REVISED.Demon.Empty.Feminine"}}</option>
+              {{#each factions}}
+                <option value="{{key}}" {{#if (eq ../system.profile.faction key)}}selected{{/if}}>{{label}}</option>
+              {{/each}}
+            </select>
+          </div>
+        </div>
+
+        <div class="demon-field demon-field-with-button">
+          <label>{{localize "VTM_REVISED.Profile.Nature"}}</label>
+          <div class="demon-select-with-button">
+            <select class="archetype-select" name="system.profile.nature">
+              <option value="">{{localize "VTM_REVISED.Demon.Empty.Feminine"}}</option>
+              {{#each archetypeOptions}}
+                <option value="{{name}}" {{#if (eq ../system.profile.nature name)}}selected{{/if}}>{{name}}</option>
+              {{/each}}
+            </select>
+            <button type="button" class="archetype-card-open" data-kind="nature" title="Открыть карточку Натуры"><i class="fas fa-book-open"></i></button>
+          </div>
+        </div>
+
+        <div class="demon-field demon-field-with-button">
+          <label>{{localize "VTM_REVISED.Profile.Demeanor"}}</label>
+          <div class="demon-select-with-button">
+            <select class="archetype-select" name="system.profile.demeanor">
+              <option value="">{{localize "VTM_REVISED.Demon.Empty.Feminine"}}</option>
+              {{#each archetypeOptions}}
+                <option value="{{name}}" {{#if (eq ../system.profile.demeanor name)}}selected{{/if}}>{{name}}</option>
+              {{/each}}
+            </select>
+            <button type="button" class="archetype-card-open" data-kind="demeanor" title="Открыть карточку Маски"><i class="fas fa-book-open"></i></button>
+          </div>
+        </div>
+
+        <div class="demon-field">
+          <label>{{localize "VTM_REVISED.Demon.Profile.HostName"}}</label>
+          <input type="text" name="system.profile.hostName" value="{{system.profile.hostName}}">
+        </div>
+
+
+        <div class="demon-field">
+          <label>{{localize "VTM_REVISED.Demon.Profile.TrueName"}}</label>
+          <input type="text" name="system.profile.trueName" value="{{system.profile.trueName}}">
+        </div>
+
+        <div class="demon-field">
+          <label>{{localize "VTM_REVISED.Profile.Age"}}</label>
+          <input type="text" name="system.profile.age" value="{{system.profile.age}}">
+        </div>
+
+        <div class="demon-field">
+          <label>{{localize "VTM_REVISED.Demon.Profile.Sex"}}</label>
+          <input type="text" name="system.profile.sex" value="{{system.profile.sex}}">
+        </div>
+
+      </div>
+
+      <div class="demon-torment-scale-grid">
+        {{#each tormentScales}}
+          <article class="demon-dashboard-card demon-resource-card demon-torment-scale demon-torment-scale--{{key}}">
+            <div class="demon-resource-card-top">
+              <h3>{{label}}</h3>
+              <div class="demon-resource-counter">
+                <button type="button" class="resource-path-change" data-resource-path="{{valuePath}}" data-delta="-1" aria-label="Уменьшить">−</button>
+                <input type="number" name="{{valuePath}}" value="{{value}}" min="0" max="10">
+                <span>/</span>
+                <span class="demon-resource-fixed-max">10</span>
+                <button type="button" class="resource-path-change" data-resource-path="{{valuePath}}" data-delta="1" aria-label="Увеличить">+</button>
+              </div>
+            </div>
+            <div class="demon-resource-pips" title="{{label}}: {{value}}/10">
+              {{#each pips}}
+                <i class="{{#if (lte this ../value)}}is-filled{{/if}}"></i>
+              {{/each}}
+            </div>
+          </article>
+        {{/each}}
+      </div>
+
+      <div class="demon-inline-resources">
+        {{#each resourceCards}}
+          <article class="demon-dashboard-card demon-resource-card demon-resource-card--{{key}}">
+            <div class="demon-resource-card-top">
+              <h3>{{label}}</h3>
+
+              <div class="demon-resource-counter">
+                <button type="button" class="resource-change" data-resource="resources.{{key}}" data-delta="-1" aria-label="{{localize 'VTM_REVISED.Demon.Resource.Decrease'}}">−</button>
+                <input type="number" name="{{valuePath}}" value="{{value}}" min="0" max="{{max}}">
+                <span>/</span>
+                <input type="number" name="{{maxPath}}" value="{{max}}" min="0">
+                <button type="button" class="resource-change" data-resource="resources.{{key}}" data-delta="1" aria-label="{{localize 'VTM_REVISED.Demon.Resource.Increase'}}">+</button>
+              </div>
+            </div>
+
+            <div class="demon-resource-pips" title="{{label}}: {{value}}/{{max}}">
+              {{#each pips}}
+                <i class="{{#if (lte this ../value)}}is-filled{{/if}}"></i>
+              {{/each}}
+            </div>
+          </article>
+        {{/each}}
+      </div>
+    </section>
+  </section>
+
+  <section class="demon-sheet-body">
+  <section class="demon-panel demon-health-panel">
+    <div class="demon-section-title">
+      <span><i class="fas fa-heart"></i></span>
+      <h2>{{localize "VTM_REVISED.Demon.Section.Health"}}</h2>
+    </div>
+
+    <div class="demon-health-summary">{{activeHealthPenalty.summary}}</div>
+
+    <div class="demon-health-grid">
+      {{#each healthRows}}
+        <button type="button" class="health-row demon-health-card demon-health-card--{{damageType}}" data-health="{{key}}" style="{{damageStyle}}" title="{{damageTitle}}">
+          <span class="demon-health-label">{{label}}</span>
+          <span class="demon-health-penalty">{{penaltyLabel}}</span>
+          {{#if showDamageLabel}}<span class="demon-health-damage">{{damageLabel}}</span>{{/if}}
+        </button>
+      {{/each}}
+    </div>
+  </section>
+
+  <section class="demon-panel demon-roll-panel vtm-roll-builder">
+    <div class="demon-section-title">
+      <span><i class="fas fa-dice-d10"></i></span>
+      <h2>{{localize "VTM_REVISED.Demon.Section.Roll"}}</h2>
+    </div>
+
+    <div class="demon-roll-native-grid">
+      <label class="demon-roll-native-field">
+        <span>{{localize "VTM_REVISED.Roll.FirstTrait"}}</span>
+        <select name="firstTrait" class="demon-roll-native-select" data-roll-field="firstTrait" data-vtm-searchable-select="true">
+          {{#each rollTraitOptionGroups}}
+            <optgroup label="{{label}}">
+              {{#each options}}
+                <option value="{{key}}">{{display}}</option>
+              {{/each}}
+            </optgroup>
+          {{/each}}
+        </select>
+      </label>
+
+      <label class="demon-roll-native-field">
+        <span>{{localize "VTM_REVISED.Roll.SecondTrait"}}</span>
+        <select name="secondTrait" class="demon-roll-native-select" data-roll-field="secondTrait" data-vtm-searchable-select="true">
+          <option value="">{{localize "VTM_REVISED.Roll.NoSecondTrait"}}</option>
+          {{#each rollTraitOptionGroups}}
+            <optgroup label="{{label}}">
+              {{#each options}}
+                <option value="{{key}}">{{display}}</option>
+              {{/each}}
+            </optgroup>
+          {{/each}}
+        </select>
+      </label>
+
+      <label class="demon-roll-native-field demon-roll-difficulty-field">
+        <span>{{localize "VTM_REVISED.Roll.Difficulty"}}</span>
+        <input type="number" name="difficulty" data-roll-field="difficulty" value="6" min="2" max="10">
+      </label>
+
+      <label class="demon-roll-native-field">
+        <span>{{localize "VTM_REVISED.Roll.Label"}}</span>
+        <input type="text" name="rollLabel" data-roll-field="label" placeholder="Например: Сила + Атлетика">
+      </label>
+
+      <button type="button" class="vtm-roll-builder-submit demon-roll-native-submit">
+        <i class="fas fa-dice-d10"></i>
+        {{localize "VTM_REVISED.Roll.RollButton"}}
+      </button>
+    </div>
+  </section>
+
+  <nav class="demon-tabs">
+    <button type="button" data-demon-tab="main" class="{{#if (eq activeSheetTab 'main')}}is-active{{/if}}">{{localize "VTM_REVISED.Demon.Tab.Main"}}</button>
+    <button type="button" data-demon-tab="advantages" class="{{#if (eq activeSheetTab 'advantages')}}is-active{{/if}}">{{localize "VTM_REVISED.Demon.Tab.Advantages"}}</button>
+    <button type="button" data-demon-tab="form" class="{{#if (eq activeSheetTab 'form')}}is-active{{/if}}">{{localize "VTM_REVISED.Demon.Tab.Form"}}</button>
+    <button type="button" data-demon-tab="profile" class="{{#if (eq activeSheetTab 'profile')}}is-active{{/if}}">{{localize "VTM_REVISED.Demon.Tab.Profile"}}</button>
+  </nav>
+
+    <div class="demon-tab-panel is-active" data-demon-tab-panel="main">
+      <section class="demon-panel">
+        <div class="demon-section-title">
+          <span><i class="fas fa-dungeon"></i></span>
+          <h2>{{localize "VTM_REVISED.Demon.Section.Attributes"}}</h2>
+          <em>Макс. рейтинг {{system.resources.traitMax}}</em>
+        </div>
+
+        <div class="demon-three-columns">
+          {{#each attributeGroupsView}}
+            <div class="demon-trait-group">
+              <h3>{{label}}</h3>
+
+              {{#each rows}}
+                <div class="demon-trait-row">
+                  <label>{{label}}</label>
+                  <div class="demon-pips">
+                    {{#each ../../traitPips}}
+                      <i class="{{#if (lte this ../value)}}is-filled{{/if}}"></i>
+                    {{/each}}
+                  </div>
+                  <input class="trait-value-input" type="number" name="{{valuePath}}" value="{{value}}" min="0" max="10">
+                  <button type="button" class="demon-roll-button vtm-roll" data-trait="{{rollPath}}" data-label="{{label}}" title="Бросить {{label}}">
+                    <i class="fas fa-dice-d10"></i>
+                  </button>
+                </div>
+              {{/each}}
+            </div>
+          {{/each}}
+        </div>
+      </section>
+
+      <section class="demon-panel">
+        <div class="demon-section-title">
+          <span><i class="fas fa-screwdriver-wrench"></i></span>
+          <h2>{{localize "VTM_REVISED.Demon.Section.Abilities"}}</h2>
+          <em>Макс. рейтинг {{system.resources.traitMax}}</em>
+        </div>
+
+        <div class="demon-three-columns">
+          {{#each abilityGroupsView}}
+            <div class="demon-trait-group">
+              <h3>{{label}}</h3>
+
+              {{#each rows}}
+                <div class="demon-trait-row demon-ability-row">
+                  <label>{{label}}</label>
+                  <div class="demon-pips">
+                    {{#each ../../traitPips}}
+                      <i class="{{#if (lte this ../value)}}is-filled{{/if}}"></i>
+                    {{/each}}
+                  </div>
+                  <input class="trait-value-input" type="number" name="{{valuePath}}" value="{{value}}" min="0" max="10">
+                  <button type="button" class="demon-roll-button vtm-roll" data-trait="{{rollPath}}" data-label="{{label}}" title="Бросить {{label}}">
+                    <i class="fas fa-dice-d10"></i>
+                  </button>
+                </div>
+              {{/each}}
+            </div>
+          {{/each}}
+        </div>
+      </section>
+    </div>
+
+
+    <div class="demon-tab-panel" data-demon-tab-panel="advantages">
+
+      <section class="demon-panel">
+        <div class="demon-section-title">
+          <span><i class="fas fa-hand-holding-heart"></i></span>
+          <h2>{{localize "VTM_REVISED.Demon.Section.Virtues"}}</h2>
+          <em>{{localize "VTM_REVISED.Demon.Virtues.Note"}}</em>
+        </div>
+
+        <div class="demon-virtue-summary">
+          <div>
+            <strong>{{localize "VTM_REVISED.Demon.Virtues.WillpowerCalculation"}}</strong>
+            <span>{{suggestedWillpower}}</span>
+          </div>
+          <button type="button" class="demon-sync-willpower">{{localize "VTM_REVISED.Demon.Virtues.SyncWillpower"}}</button>
+          <button type="button" class="demon-creation-wizard-open"><i class="fas fa-list-check"></i> {{localize "VTM_REVISED.Demon.Creation.Open"}}</button>
+        </div>
+
+        <div class="demon-three-columns demon-virtues-grid">
+          {{#each virtueRows}}
+            <div class="demon-trait-group demon-virtue-card">
+              <h3>{{label}}</h3>
+              <p>{{hint}}</p>
+              <div class="demon-trait-row demon-virtue-row">
+                <label>{{label}}</label>
+                <div class="demon-pips">
+                  {{#each ../../lorePips}}
+                    <i class="{{#if (lte this ../value)}}is-filled{{/if}}"></i>
+                  {{/each}}
+                </div>
+                <input class="trait-value-input" type="number" name="{{valuePath}}" value="{{value}}" min="0" max="5">
+                <button type="button" class="vtm-roll demon-virtue-roll" data-first-trait="{{rollPath}}" title="Бросить {{label}}"><i class="fas fa-dice-d10"></i></button>
+              </div>
+            </div>
+          {{/each}}
+        </div>
+      </section>
+
+      <section class="demon-panel">
+        <div class="demon-section-title">
+          <span><i class="fas fa-briefcase"></i></span>
+          <h2>{{localize "VTM_REVISED.Demon.Section.Backgrounds"}}</h2>
+          <em>{{localize "VTM_REVISED.Demon.Backgrounds.Starting"}}</em>
+          <button type="button" class="demon-rated-feature-add demon-mini-card-button" data-catalog="backgrounds" title="Добавить Дополнение"><i class="fas fa-plus"></i></button>
+        </div>
+
+        <div class="demon-background-grid">
+          {{#each backgroundRows}}
+            {{#if value}}
+            <div class="demon-background-row">
+              <div>
+                <label>{{label}}</label>
+                <small>{{hint}}</small>
+                <input type="hidden" name="{{labelPath}}" value="{{label}}">
+              </div>
+              <div class="demon-pips">
+                {{#each ../lorePips}}
+                  <i class="{{#if (lte this ../value)}}is-filled{{/if}}"></i>
+                {{/each}}
+              </div>
+              <input class="trait-value-input" type="number" name="{{valuePath}}" value="{{value}}" min="0" max="5">
+              <input type="text" name="{{specializationPath}}" value="{{specialization}}" placeholder="детали / имя / сфера">
+              <button type="button" class="vtm-roll" data-first-trait="{{rollPath}}" title="Бросить {{label}}"><i class="fas fa-dice-d10"></i></button>
+              <button type="button" class="demon-catalog-open demon-mini-card-button" data-catalog="backgrounds" data-key="{{key}}" title="Открыть пояснение"><i class="fas fa-book-open"></i></button>
+              <button type="button" class="demon-rated-feature-remove demon-mini-card-button" data-path="{{valuePath}}" title="Убрать из чарника"><i class="fas fa-trash"></i></button>
+            </div>
+            {{/if}}
+          {{/each}}
+        </div>
+      </section>
+
+      <section class="demon-panel demon-lores-panel">
+        <div class="demon-section-title">
+          <span><i class="fas fa-star"></i></span>
+          <h2>{{localize "VTM_REVISED.Demon.Section.Lores"}}</h2>
+          <button type="button" class="demon-rated-feature-add demon-mini-card-button" data-catalog="lores" title="Добавить Знание"><i class="fas fa-plus"></i></button>
+        </div>
+
+        <div class="demon-lore-list">
+          {{#each loreRows}}
+            {{#if value}}
+            <div class="demon-lore-row">
+              <input class="demon-lore-name" type="text" name="{{labelPath}}" value="{{label}}">
+              <div class="demon-pips">
+                {{#each ../lorePips}}<i class="{{#if (lte this ../value)}}is-filled{{/if}}"></i>{{/each}}
+              </div>
+              <input class="trait-value-input demon-lore-value" type="number" name="{{valuePath}}" value="{{value}}" min="0" max="5">
+              <button type="button" class="demon-roll-button vtm-roll" data-trait="{{rollPath}}" data-label="{{label}}" title="Бросить {{label}}"><i class="fas fa-dice-d10"></i></button>
+              <input class="demon-lore-note" type="text" name="{{notePath}}" value="{{note}}" placeholder="Комментарий">
+              <button type="button" class="demon-catalog-open demon-mini-card-button" data-catalog="lores" data-key="{{key}}" title="Открыть пояснение"><i class="fas fa-book-open"></i></button>
+              <button type="button" class="demon-rated-feature-remove demon-mini-card-button" data-path="{{valuePath}}" title="Убрать из чарника"><i class="fas fa-trash"></i></button>
+            </div>
+            {{/if}}
+          {{/each}}
+        </div>
+      </section>
+
+      {{> "systems/vtm-revised/templates/actors/parts/weapons.hbs"}}
+    </div>
+
+    <div class="demon-tab-panel" data-demon-tab-panel="form">
+      <section class="demon-panel">
+        <div class="demon-section-title">
+          <span><i class="fas fa-circle-dot"></i></span>
+          <h2>{{localize "VTM_REVISED.Demon.Section.Form"}}</h2>
+        </div>
+
+        <label class="demon-apocalyptic-active"><input type="checkbox" name="system.apocalypticForm.active" {{checked system.apocalypticForm.active}}> Полная апокалиптическая форма активна</label>
+
+        <div class="demon-field demon-form-name">
+          <label>{{localize "VTM_REVISED.Demon.Form.Name"}}</label>
+          <input type="text" name="system.apocalypticForm.name" value="{{system.apocalypticForm.name}}">
+        </div>
+
+        <div class="demon-two-columns">
+          <div class="demon-field">
+            <label>{{localize "VTM_REVISED.Demon.Form.Description"}}</label>
+            <textarea name="system.apocalypticForm.description">{{system.apocalypticForm.description}}</textarea>
+          </div>
+
+          <div class="demon-field">
+            <label>{{localize "VTM_REVISED.Demon.Form.Mechanics"}}</label>
+            <textarea name="system.apocalypticForm.mechanics">{{system.apocalypticForm.mechanics}}</textarea>
+          </div>
+
+          <div class="demon-field">
+            <label>{{localize "VTM_REVISED.Demon.Form.LowTorment"}}</label>
+            <textarea name="system.apocalypticForm.lowTorment">{{system.apocalypticForm.lowTorment}}</textarea>
+          </div>
+
+          <div class="demon-field">
+            <label>{{localize "VTM_REVISED.Demon.Form.HighTorment"}}</label>
+            <textarea name="system.apocalypticForm.highTorment">{{system.apocalypticForm.highTorment}}</textarea>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="demon-tab-panel" data-demon-tab-panel="profile">
+      <section class="demon-panel">
+        <div class="demon-section-title">
+          <span><i class="fas fa-user"></i></span>
+          <h2>{{localize "VTM_REVISED.Demon.Section.Profile"}}</h2>
+        </div>
+
+        <div class="demon-profile-xp-panel">
+          <div class="demon-section-title demon-subsection-title">
+            <span><i class="fas fa-ankh"></i></span>
+            <h2>{{localize "VTM_REVISED.Demon.Section.Experience"}}</h2>
+          </div>
+
+          <div class="demon-profile-xp-grid">
+            <label>Доступно<input type="number" name="system.resources.experience.available" value="{{system.resources.experience.available}}" min="0"></label>
+            <label>Всего<input type="number" name="system.resources.experience.total" value="{{system.resources.experience.total}}" min="0"></label>
+            <label>Потрачено<input type="number" name="system.resources.experience.spent" value="{{system.resources.experience.spent}}" min="0"></label>
+          </div>
+        </div>
+
+        {{> "systems/vtm-revised/templates/actors/parts/experience-journal.hbs"}}
+
+        <div class="demon-archetype-grid">
+          <article class="demon-info-card">
+            <header>
+              <h3>Натура: {{#if selectedNature}}{{selectedNature.name}}{{else}}Не выбрана{{/if}}</h3>
+              {{#if selectedNature}}<span>{{selectedNature.motto}}</span>{{/if}}
+            </header>
+            {{#if selectedNature}}
+              <p>{{selectedNature.summary}}</p>
+              <div class="demon-info-mechanic"><strong>{{localize "VTM_REVISED.Demon.Archetype.Regain"}}</strong> {{selectedNature.regain}}</div>
+            {{else}}
+              <p>{{localize "VTM_REVISED.Demon.Archetype.SelectNature"}}</p>
+            {{/if}}
+          </article>
+
+          <article class="demon-info-card">
+            <header>
+              <h3>Маска: {{#if selectedDemeanor}}{{selectedDemeanor.name}}{{else}}Не выбрана{{/if}}</h3>
+              {{#if selectedDemeanor}}<span>{{selectedDemeanor.motto}}</span>{{/if}}
+            </header>
+            {{#if selectedDemeanor}}
+              <p>{{selectedDemeanor.summary}}</p>
+              <div class="demon-info-mechanic"><strong>{{localize "VTM_REVISED.Demon.Archetype.Role"}}</strong> {{localize "VTM_REVISED.Demon.Archetype.RoleText"}}</div>
+            {{else}}
+              <p>{{localize "VTM_REVISED.Demon.Archetype.SelectDemeanor"}}</p>
+            {{/if}}
+          </article>
+        </div>
+
+        <div class="demon-two-columns">
+          <div class="demon-field">
+            <label>{{localize "VTM_REVISED.Profile.Appearance"}}</label>
+            <textarea name="system.profile.appearance">{{system.profile.appearance}}</textarea>
+          </div>
+
+          <div class="demon-field">
+            <label>{{localize "VTM_REVISED.Demon.Profile.HostHistory"}}</label>
+            <textarea name="system.profile.hostHistory">{{system.profile.hostHistory}}</textarea>
+          </div>
+
+          <div class="demon-field">
+            <label>{{localize "VTM_REVISED.Demon.Profile.CelestialHistory"}}</label>
+            <textarea name="system.profile.celestialHistory">{{system.profile.celestialHistory}}</textarea>
+          </div>
+
+          <div class="demon-field">
+            <label>{{localize "VTM_REVISED.Profile.Goals"}}</label>
+            <textarea name="system.profile.goals">{{system.profile.goals}}</textarea>
+          </div>
+
+          <div class="demon-field">
+            <label>{{localize "VTM_REVISED.Demon.Profile.Pacts"}}</label>
+            <textarea name="system.pacts.notes">{{system.pacts.notes}}</textarea>
+          </div>
+
+          <div class="demon-field">
+            <label>{{localize "VTM_REVISED.Profile.AlliesContacts"}}</label>
+            <textarea name="system.profile.alliesContacts">{{system.profile.alliesContacts}}</textarea>
+          </div>
+
+          <div class="demon-field">
+            <label>{{localize "VTM_REVISED.Profile.Possessions"}}</label>
+            <textarea name="system.profile.possessions">{{system.profile.possessions}}</textarea>
+          </div>
+
+          <div class="demon-field">
+            <label>{{localize "VTM_REVISED.Demon.Profile.Other"}}</label>
+            <textarea name="system.profile.notes">{{system.profile.notes}}</textarea>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+</form>

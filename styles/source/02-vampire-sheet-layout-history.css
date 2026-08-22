@@ -188,19 +188,6 @@
 }
 
 /* Header */
-.vtm-sheet .vtm-hero-header {
-  flex: 0 0 auto;
-  align-items: stretch;
-  gap: 16px;
-  margin: 0;
-  padding: 16px;
-  border: 1px solid rgba(115, 35, 58, 0.72);
-  border-radius: 20px;
-  background:
-    radial-gradient(circle at 92% 16%, rgba(201, 170, 97, 0.12), transparent 26%),
-    linear-gradient(145deg, rgba(17, 8, 13, 0.98), rgba(38, 12, 22, 0.84));
-  box-shadow: var(--vtm-shadow), var(--vtm-inset);
-}
 
 .vtm-sheet .vtm-portrait-card {
   flex: 0 0 134px;
@@ -285,21 +272,6 @@
   gap: 10px;
 }
 
-.vtm-field-card,
-.vtm-lore-card {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  min-width: 0;
-  padding: 9px;
-  border: 1px solid rgba(115, 35, 58, 0.56);
-  border-radius: 13px;
-  background:
-    linear-gradient(180deg, rgba(7, 5, 8, 0.62), rgba(31, 11, 19, 0.48));
-}
-
-.vtm-field-card > span,
-.vtm-lore-card > span,
 .vtm-command-strip label > span {
   color: var(--vtm-muted);
 }
@@ -426,28 +398,11 @@
   align-items: start;
 }
 
-.vtm-main-left,
-.vtm-main-right {
+.vtm-main-left {
   min-width: 0;
 }
 
 /* Trackers */
-.vtm-tracker-panel,
-.vtm-health-panel {
-  margin-top: 12px;
-}
-
-.vtm-generation-banner {
-  display: grid;
-  grid-template-columns: minmax(170px, 1.1fr) minmax(260px, 2fr) auto;
-  gap: 12px;
-  align-items: center;
-  margin-bottom: 12px;
-  padding: 11px 12px;
-  border: 1px solid rgba(201, 170, 97, 0.22);
-  border-radius: 15px;
-  background: rgba(7, 5, 8, 0.64);
-}
 
 .vtm-generation-title {
   display: flex;
@@ -474,35 +429,6 @@
   color: var(--vtm-muted);
 }
 
-.vtm-resource-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(170px, 1fr));
-  gap: 11px;
-}
-
-.vtm-resource-card {
-  min-height: 128px;
-  padding: 12px;
-  border: 1px solid rgba(115, 35, 58, 0.62);
-  border-radius: 15px;
-  background:
-    radial-gradient(circle at 82% 13%, rgba(158, 32, 57, 0.18), transparent 35%),
-    linear-gradient(180deg, rgba(12, 7, 10, 0.95), rgba(35, 12, 20, 0.82));
-  box-shadow: inset 0 0 22px rgba(0, 0, 0, 0.38);
-}
-
-.vtm-resource-card h3 {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0 0 10px;
-  font-size: 12px;
-}
-
-.vtm-resource-card h3 i {
-  color: var(--vtm-blood-light);
-}
-
 .resource-controls {
   display: flex;
   align-items: center;
@@ -524,38 +450,6 @@
   width: 29px;
   height: 29px;
   padding: 0;
-}
-
-.vtm-resource-subfield {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  margin-top: 10px;
-}
-
-.vtm-xp-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-
-.vtm-xp-grid label {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.vtm-xp-available {
-  margin: 8px 0 0;
-  color: var(--vtm-muted);
-}
-
-.vtm-xp-available strong {
-  color: var(--vtm-gold-bright);
-}
-
-.vtm-health-panel {
-  border-color: rgba(158, 32, 57, 0.46);
 }
 
 .health-active-penalty {
@@ -908,7 +802,6 @@
     grid-template-columns: 1fr;
   }
 
-  .vtm-resource-grid,
   .advantage-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -919,9 +812,6 @@
 }
 
 @media (max-width: 920px) {
-  .vtm-sheet .vtm-hero-header {
-    flex-direction: column;
-  }
 
   .vtm-sheet .vtm-portrait-card {
     width: 134px;
@@ -941,7 +831,6 @@
 @media (max-width: 720px) {
   .vtm-identity-grid,
   .vtm-lore-grid,
-  .vtm-resource-grid,
   .advantage-grid,
   .health-check-grid,
   .trait-columns,
@@ -1291,34 +1180,6 @@
   min-height: 27px;
 }
 
-.vtm-xp-compact {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6px;
-}
-
-.vtm-xp-compact label {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  font-size: 9px;
-}
-
-.vtm-xp-compact input {
-  height: 27px;
-  min-height: 27px;
-}
-
-.vtm-xp-available {
-  margin: 6px 0 0;
-  color: var(--vtm-muted);
-  font-size: 11px;
-}
-
-.vtm-xp-available strong {
-  color: var(--vtm-gold);
-}
-
 .vtm-tracker-health {
   min-width: 0;
 }
@@ -1515,8 +1376,7 @@
   align-items: start;
 }
 
-.vtm-main-left,
-.vtm-main-right {
+.vtm-main-left {
   min-width: 0;
 }
 
@@ -1986,19 +1846,6 @@
   height: 26px !important;
 }
 
-.vtm-revised.sheet .vtm-health-boxes {
-  display: grid !important;
-  grid-template-columns: repeat(7, minmax(28px, 1fr)) !important;
-  gap: 4px !important;
-}
-
-.vtm-revised.sheet .vtm-health-box {
-  min-width: 0 !important;
-  padding: 4px 2px !important;
-  border-radius: 6px !important;
-  text-align: center !important;
-}
-
 .vtm-revised.sheet .vtm-generation-strip {
   display: grid !important;
   grid-template-columns: minmax(160px, 1.2fr) minmax(320px, 2fr) auto !important;
@@ -2073,8 +1920,7 @@
   align-items: start !important;
 }
 
-.vtm-revised.sheet .vtm-main-left,
-.vtm-revised.sheet .vtm-main-right {
+.vtm-revised.sheet .vtm-main-left {
   min-width: 0 !important;
 }
 
@@ -2302,12 +2148,6 @@
   gap: 10px !important;
 }
 
-.vtm-revised.sheet .vtm-powers-two-col {
-  display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
-  gap: 10px !important;
-}
-
 .vtm-revised.sheet .vtm-disciplines-panel,
 .vtm-revised.sheet .vtm-social-assets-panel {
   margin-bottom: 10px !important;
@@ -2365,16 +2205,14 @@
 }
 
 @media (max-width: 1180px) {
-  .vtm-revised.sheet .vtm-profile-advantage-grid,
-  .vtm-revised.sheet .vtm-powers-two-col {
+  .vtm-revised.sheet .vtm-profile-advantage-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
 }
 
 @media (max-width: 760px) {
   .vtm-revised.sheet .vtm-section-tabs,
-  .vtm-revised.sheet .vtm-profile-advantage-grid,
-  .vtm-revised.sheet .vtm-powers-two-col {
+  .vtm-revised.sheet .vtm-profile-advantage-grid {
     grid-template-columns: 1fr !important;
   }
 }
@@ -3056,23 +2894,6 @@
 
 .vtm-revised.sheet .vtm-header-trackers .vtm-mini-field input,
 .vtm-revised.sheet .vtm-header-trackers .vtm-mini-field select {
-  min-height: 27px !important;
-  height: 27px !important;
-}
-
-.vtm-revised.sheet .vtm-header-trackers .vtm-xp-compact {
-  display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
-  gap: 6px !important;
-}
-
-.vtm-revised.sheet .vtm-header-trackers .vtm-xp-compact label {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 3px !important;
-}
-
-.vtm-revised.sheet .vtm-header-trackers .vtm-xp-compact input {
   min-height: 27px !important;
   height: 27px !important;
 }

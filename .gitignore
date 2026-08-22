@@ -86,3 +86,9 @@ remove-release-tool-restore-readme.ps1
 /remove-*.ps1
 /README.ru*.md
 /vtm-revised.css
+
+# Local Demon: The Fallen rulebook sources, do not commit
+/tools/demon/rules-source/
+
+# Local snapshots created during iterative UI work
+*.before_*

@@ -1,4 +1,4 @@
-<div class="vtm-chat-card roll-card">
+<div class="vtm-chat-card roll-card {{#if (eq actor.type "demon")}}demon-chat-card{{/if}}">
   <h3>{{label}}</h3>
   {{#if actor}}<p><strong>{{actor.name}}</strong></p>{{/if}}
   {{#if flavor}}<p>{{flavor}}</p>{{/if}}

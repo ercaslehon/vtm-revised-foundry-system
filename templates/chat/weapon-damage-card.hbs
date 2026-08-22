@@ -1,4 +1,4 @@
-<div class="vtm-chat-card weapon-damage-card">
+<div class="vtm-chat-card weapon-damage-card {{#if (eq actor.type "demon")}}demon-chat-card{{/if}}">
   <h3>{{localize "VTM_REVISED.Weapon.DamageSummary"}}: {{item.name}}</h3>
   {{#if actor}}<p><strong>{{actor.name}}</strong></p>{{/if}}
   <p>{{localize "VTM_REVISED.Weapon.AttackSuccesses"}}: {{attackSuccesses}}</p>

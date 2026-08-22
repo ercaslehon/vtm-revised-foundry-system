@@ -1,0 +1,940 @@
+/* Final Demon-only theme isolation. Keep every selector rooted in Demon UI. */
+.demon-vampire-layout .weapons-panel,
+.demon-vampire-layout .vtm-experience-journal-panel {
+  --vtm-bg: #020817;
+  --vtm-bg-soft: #040c22;
+  --vtm-bg-red: #061333;
+  --vtm-panel: #040c22;
+  --vtm-panel-red: #07183d;
+  --vtm-border: #536fbd;
+  --vtm-border-soft: rgba(112, 145, 230, 0.5);
+  --vtm-border-hot: rgba(153, 181, 255, 0.8);
+  --vtm-blood: #809bea;
+  --vtm-blood-light: #b4c8ff;
+  --vtm-blood-dark: #172c69;
+  --vtm-gold: #c2d2ff;
+  --vtm-gold-bright: #edf3ff;
+  --vtm-gold-soft: rgba(168, 193, 255, 0.38);
+  --vtm-gold-dim: rgba(168, 193, 255, 0.2);
+  --vtm-text: #e4ecff;
+  --vtm-muted: #b4c1e2;
+  --vtm-dim: #8496c5;
+  color-scheme: dark;
+}
+
+.demon-vampire-layout .weapons-panel::before,
+.demon-vampire-layout .vtm-experience-journal-panel::before {
+  border-color: rgba(112, 145, 230, 0.22) !important;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(92, 124, 220, 0.10), transparent 27%),
+    radial-gradient(circle at 100% 100%, rgba(45, 70, 155, 0.12), transparent 32%) !important;
+  box-shadow: none !important;
+}
+
+.demon-vampire-layout .weapons-panel h2::before,
+.demon-vampire-layout .vtm-experience-journal-panel h2::before {
+  background: linear-gradient(90deg, transparent, rgba(145, 174, 255, 0.72)) !important;
+}
+
+.demon-vampire-layout .weapons-panel h2::after,
+.demon-vampire-layout .vtm-experience-journal-panel h2::after {
+  background: linear-gradient(90deg, rgba(145, 174, 255, 0.52), transparent) !important;
+}
+
+.demon-vampire-layout .weapons-panel,
+.demon-vampire-layout .weapons-panel .section-header-row,
+.demon-vampire-layout .weapons-panel .items-list,
+.demon-vampire-layout .weapons-panel .item-row,
+.demon-vampire-layout .weapons-panel .empty,
+.demon-vampire-layout .vtm-experience-journal-panel,
+.demon-vampire-layout .vtm-experience-journal-panel .section-header-row,
+.demon-vampire-layout .vtm-experience-journal-panel .experience-summary-grid article,
+.demon-vampire-layout .vtm-experience-journal-panel .experience-journal-table-wrap,
+.demon-vampire-layout .vtm-experience-journal-panel .experience-journal-table,
+.demon-vampire-layout .vtm-experience-journal-panel .experience-journal-table tr,
+.demon-vampire-layout .vtm-experience-journal-panel .experience-journal-table th,
+.demon-vampire-layout .vtm-experience-journal-panel .experience-journal-table td,
+.demon-vampire-layout .vtm-experience-journal-panel .empty {
+  border-color: rgba(112, 145, 230, 0.42) !important;
+  background: rgba(2, 9, 25, 0.94) !important;
+  color: #dce7ff !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+.demon-vampire-layout .weapons-panel .item-row:hover,
+.demon-vampire-layout .vtm-experience-journal-panel .experience-journal-table tr:hover td {
+  border-color: rgba(144, 172, 255, 0.58) !important;
+  background: rgba(15, 25, 61, 0.92) !important;
+}
+
+.demon-vampire-layout .weapons-panel h2,
+.demon-vampire-layout .weapons-panel h2::before,
+.demon-vampire-layout .weapons-panel h2::after,
+.demon-vampire-layout .weapons-panel .item-name,
+.demon-vampire-layout .weapons-panel .weapon-meta,
+.demon-vampire-layout .weapons-panel .empty,
+.demon-vampire-layout .vtm-experience-journal-panel h2,
+.demon-vampire-layout .vtm-experience-journal-panel h2::before,
+.demon-vampire-layout .vtm-experience-journal-panel h2::after,
+.demon-vampire-layout .vtm-experience-journal-panel p,
+.demon-vampire-layout .vtm-experience-journal-panel span,
+.demon-vampire-layout .vtm-experience-journal-panel strong,
+.demon-vampire-layout .vtm-experience-journal-panel small,
+.demon-vampire-layout .vtm-experience-journal-panel label {
+  border-color: rgba(112, 145, 230, 0.34) !important;
+  color: #dce7ff !important;
+  background-color: transparent !important;
+  text-shadow: none !important;
+}
+
+.demon-vampire-layout .vtm-experience-journal-panel input,
+.demon-vampire-layout .vtm-experience-journal-panel select,
+.demon-vampire-layout .vtm-experience-journal-panel textarea {
+  border: 1px solid rgba(112, 145, 230, 0.54) !important;
+  background: #020a20 !important;
+  color: #eef4ff !important;
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.48) !important;
+}
+
+.demon-vampire-layout .vtm-experience-journal-panel input:hover,
+.demon-vampire-layout .vtm-experience-journal-panel select:hover,
+.demon-vampire-layout .vtm-experience-journal-panel textarea:hover,
+.demon-vampire-layout .vtm-experience-journal-panel input:focus,
+.demon-vampire-layout .vtm-experience-journal-panel select:focus,
+.demon-vampire-layout .vtm-experience-journal-panel textarea:focus {
+  border-color: rgba(162, 190, 255, 0.88) !important;
+  outline: 0 !important;
+  background: #03102d !important;
+  color: #fff !important;
+  box-shadow: 0 0 0 2px rgba(86, 124, 226, 0.18), inset 0 0 8px rgba(0, 0, 0, 0.5) !important;
+}
+
+.demon-vampire-layout .vtm-experience-journal-panel input:-webkit-autofill,
+.demon-vampire-layout .vtm-experience-journal-panel textarea:-webkit-autofill,
+.demon-vampire-layout .vtm-experience-journal-panel select:-webkit-autofill {
+  -webkit-text-fill-color: #eef4ff !important;
+  -webkit-box-shadow: 0 0 0 1000px #020a20 inset !important;
+  caret-color: #eef4ff !important;
+}
+
+.demon-vampire-layout .vtm-experience-journal-panel select option {
+  background: #020a20 !important;
+  color: #eef4ff !important;
+}
+
+.demon-vampire-layout .vtm-experience-journal-panel .experience-journal-form {
+  border: 1px solid rgba(112, 145, 230, 0.32) !important;
+  border-radius: 10px !important;
+  padding: 10px !important;
+  background: #020919 !important;
+  box-shadow: none !important;
+}
+
+.demon-vampire-layout .vtm-experience-journal-panel .experience-journal-add,
+.demon-vampire-layout .vtm-experience-journal-panel .experience-journal-recalc,
+.demon-vampire-layout .vtm-experience-journal-panel .experience-entry-delete {
+  --button-background-color: #101e4b;
+  --button-border-color: rgba(125, 158, 255, 0.76);
+  --button-text-color: #eef4ff;
+  appearance: none !important;
+  border: 1px solid rgba(125, 158, 255, 0.76) !important;
+  outline: 0 !important;
+  background-color: #101e4b !important;
+  background-image: linear-gradient(180deg, #203875, #08112f) !important;
+  color: #eef4ff !important;
+  box-shadow: none !important;
+  filter: none !important;
+  text-shadow: none !important;
+}
+
+.demon-vampire-layout .vtm-experience-journal-panel .experience-journal-add::before,
+.demon-vampire-layout .vtm-experience-journal-panel .experience-journal-add::after,
+.demon-vampire-layout .vtm-experience-journal-panel .experience-journal-recalc::before,
+.demon-vampire-layout .vtm-experience-journal-panel .experience-journal-recalc::after,
+.demon-vampire-layout .vtm-experience-journal-panel .experience-entry-delete::before,
+.demon-vampire-layout .vtm-experience-journal-panel .experience-entry-delete::after {
+  border-color: rgba(125, 158, 255, 0.5) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.demon-vampire-layout .vtm-experience-journal-panel .experience-journal-add:hover,
+.demon-vampire-layout .vtm-experience-journal-panel .experience-journal-add:focus,
+.demon-vampire-layout .vtm-experience-journal-panel .experience-journal-recalc:hover,
+.demon-vampire-layout .vtm-experience-journal-panel .experience-journal-recalc:focus,
+.demon-vampire-layout .vtm-experience-journal-panel .experience-entry-delete:hover,
+.demon-vampire-layout .vtm-experience-journal-panel .experience-entry-delete:focus {
+  border-color: #b5ccff !important;
+  outline: 0 !important;
+  background-color: #182d69 !important;
+  background-image: linear-gradient(180deg, #31509d, #0b1945) !important;
+  color: #fff !important;
+  box-shadow: 0 0 0 2px rgba(112, 145, 230, 0.18) !important;
+  filter: none !important;
+}
+
+.demon-vampire-layout .weapons-panel button,
+.demon-vampire-layout .vtm-experience-journal-panel button {
+  border: 1px solid rgba(125, 158, 255, 0.7) !important;
+  background: linear-gradient(180deg, #192b60, #070d2a) !important;
+  color: #eef4ff !important;
+  box-shadow: none !important;
+}
+
+.demon-vampire-layout .weapons-panel button:hover,
+.demon-vampire-layout .weapons-panel button:focus,
+.demon-vampire-layout .vtm-experience-journal-panel button:hover,
+.demon-vampire-layout .vtm-experience-journal-panel button:focus {
+  border-color: rgba(181, 204, 255, 0.94) !important;
+  background: linear-gradient(180deg, #263e84, #0a143c) !important;
+  color: #fff !important;
+}
+
+.chat-message .message-content .vtm-chat-card.demon-chat-card,
+.message-content .vtm-chat-card.demon-chat-card,
+.vtm-chat-card.demon-chat-card,
+.vtm-chat-card.demon-chat-card h3,
+.vtm-chat-card.demon-chat-card .die,
+.vtm-chat-card.demon-chat-card .roll-component,
+.vtm-chat-card.demon-chat-card .result {
+  border-color: rgba(112, 145, 230, 0.64) !important;
+  background: rgba(7, 13, 34, 0.96) !important;
+  color: #dce7ff !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+.vtm-chat-card.demon-chat-card .botch {
+  color: #aebfff !important;
+}
+
+/* Demon navigation focus ring and Virtue roll buttons. */
+.demon-vampire-layout .demon-tabs button:focus,
+.demon-vampire-layout .demon-tabs button:focus-visible,
+.demon-vampire-layout .demon-tabs button:active,
+.demon-vampire-layout .demon-tabs button.is-active:focus,
+.demon-vampire-layout .demon-tabs button.is-active:focus-visible {
+  border-color: #a8beff !important;
+  outline: none !important;
+  outline-offset: 0 !important;
+  box-shadow: inset 0 -2px 0 #91adff !important;
+  filter: none !important;
+}
+
+.demon-vampire-layout .demon-tabs button::before,
+.demon-vampire-layout .demon-tabs button::after,
+.demon-vampire-layout .demon-tabs button:focus::before,
+.demon-vampire-layout .demon-tabs button:focus::after {
+  border-color: rgba(151, 181, 255, 0.5) !important;
+  box-shadow: none !important;
+}
+
+.demon-vampire-layout .demon-virtues-grid .demon-virtue-row .vtm-roll,
+.demon-vampire-layout .demon-virtues-grid .demon-virtue-row .demon-roll-button {
+  --button-background-color: #101e4b;
+  --button-border-color: rgba(125, 158, 255, 0.76);
+  border: 1px solid rgba(125, 158, 255, 0.76) !important;
+  outline: 0 !important;
+  background: linear-gradient(180deg, #203875, #08112f) !important;
+  color: #eef4ff !important;
+  box-shadow: none !important;
+  filter: none !important;
+  text-shadow: none !important;
+}
+
+.demon-vampire-layout .demon-virtues-grid .demon-virtue-row .vtm-roll i,
+.demon-vampire-layout .demon-virtues-grid .demon-virtue-row .demon-roll-button i {
+  color: #dce7ff !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+.demon-vampire-layout .demon-virtues-grid .demon-virtue-row .vtm-roll:hover,
+.demon-vampire-layout .demon-virtues-grid .demon-virtue-row .vtm-roll:focus,
+.demon-vampire-layout .demon-virtues-grid .demon-virtue-row .demon-roll-button:hover,
+.demon-vampire-layout .demon-virtues-grid .demon-virtue-row .demon-roll-button:focus {
+  border-color: #b5ccff !important;
+  outline: 0 !important;
+  background: linear-gradient(180deg, #31509d, #0b1945) !important;
+  color: #fff !important;
+  box-shadow: 0 0 0 2px rgba(112, 145, 230, 0.18) !important;
+}
+
+form.demon-sheet.demon-vampire-layout .demon-virtues-grid button.demon-virtue-roll,
+form.demon-sheet.demon-vampire-layout .demon-virtues-grid button.demon-virtue-roll:hover,
+form.demon-sheet.demon-vampire-layout .demon-virtues-grid button.demon-virtue-roll:focus,
+form.demon-sheet.demon-vampire-layout .demon-virtues-grid button.demon-virtue-roll:active {
+  --button-background-color: #0b1a45 !important;
+  --button-border-color: #789cff !important;
+  --button-hover-background-color: #162f73 !important;
+  --button-focus-outline-color: transparent !important;
+  appearance: none !important;
+  border: 1px solid #789cff !important;
+  outline: none !important;
+  background: #0b1a45 !important;
+  background-color: #0b1a45 !important;
+  background-image: none !important;
+  color: #eaf1ff !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+form.demon-sheet.demon-vampire-layout .demon-virtues-grid button.demon-virtue-roll i,
+form.demon-sheet.demon-vampire-layout .demon-virtues-grid button.demon-virtue-roll svg,
+form.demon-sheet.demon-vampire-layout .demon-virtues-grid button.demon-virtue-roll path {
+  color: #eaf1ff !important;
+  fill: currentColor !important;
+  stroke: currentColor !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+form.demon-sheet.demon-vampire-layout .demon-virtues-grid .demon-pips i {
+  border-color: rgba(119, 151, 244, 0.72) !important;
+  background: #050d25 !important;
+  box-shadow: none !important;
+}
+
+form.demon-sheet.demon-vampire-layout .demon-virtues-grid .demon-pips i.is-filled,
+form.demon-sheet.demon-vampire-layout .demon-virtues-grid .demon-pips i.is-filled::before,
+form.demon-sheet.demon-vampire-layout .demon-virtues-grid .demon-pips i.is-filled::after {
+  border-color: #a9c0ff !important;
+  background: #7698f2 !important;
+  background-image: none !important;
+  box-shadow: 0 0 6px rgba(100, 139, 244, 0.52) !important;
+}
+
+/* Demon add/picker dialogs: readable native select and separated actions. */
+.demon-reference-dialog-window .window-content,
+.demon-creation-dialog-window .window-content {
+  background: linear-gradient(180deg, #071027, #020714) !important;
+  color: #dce7ff !important;
+}
+
+.demon-reference-dialog-window .demon-feature-picker {
+  display: grid !important;
+  gap: 10px !important;
+  margin: 0 !important;
+  padding: 14px !important;
+  border: 1px solid rgba(112, 145, 230, 0.38) !important;
+  border-radius: 10px !important;
+  background: #030b20 !important;
+  box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.34) !important;
+}
+
+.demon-reference-dialog-window .demon-feature-picker-row {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 42px !important;
+  gap: 10px !important;
+  align-items: stretch !important;
+}
+
+.demon-reference-dialog-window .demon-feature-picker select {
+  --input-background-color: #06122f;
+  --input-border-color: rgba(124, 158, 255, 0.72);
+  --input-text-color: #edf3ff;
+  width: 100% !important;
+  appearance: none !important;
+  min-height: 42px !important;
+  padding: 0 38px 0 12px !important;
+  border: 1px solid rgba(124, 158, 255, 0.72) !important;
+  border-radius: 8px !important;
+  outline: none !important;
+  background-color: #06122f !important;
+  background-image:
+    linear-gradient(45deg, transparent 50%, #b8cbff 50%),
+    linear-gradient(135deg, #b8cbff 50%, transparent 50%),
+    linear-gradient(180deg, #0c2050, #050d24) !important;
+  background-position:
+    calc(100% - 17px) 18px,
+    calc(100% - 11px) 18px,
+    0 0 !important;
+  background-size: 6px 6px, 6px 6px, 100% 100% !important;
+  background-repeat: no-repeat !important;
+  color: #edf3ff !important;
+  font-size: 14px !important;
+  font-weight: 650 !important;
+  line-height: 1.2 !important;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.44) !important;
+  color-scheme: dark;
+  cursor: pointer !important;
+}
+
+.demon-reference-dialog-window .demon-feature-picker select:hover,
+.demon-reference-dialog-window .demon-feature-picker select:focus {
+  border-color: #b2c8ff !important;
+  outline: none !important;
+  background-color: #0a1940 !important;
+  box-shadow: 0 0 0 2px rgba(103, 143, 246, 0.2), inset 0 0 10px rgba(0, 0, 0, 0.42) !important;
+}
+
+.demon-reference-dialog-window .demon-feature-picker select option {
+  background: #06122f !important;
+  color: #edf3ff !important;
+  padding: 8px !important;
+}
+
+.demon-reference-dialog-window .demon-feature-picker-book {
+  width: 42px !important;
+  min-width: 42px !important;
+  min-height: 42px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 1px solid #91adff !important;
+  border-radius: 8px !important;
+  background: linear-gradient(180deg, #29478e, #0a173e) !important;
+  color: #f2f6ff !important;
+  box-shadow: none !important;
+}
+
+.demon-reference-dialog-window .demon-feature-picker-book:hover,
+.demon-reference-dialog-window .demon-feature-picker-book:focus {
+  border-color: #d0ddff !important;
+  outline: none !important;
+  background: linear-gradient(180deg, #4568bd, #12275f) !important;
+  color: #fff !important;
+  box-shadow: 0 0 0 2px rgba(103, 143, 246, 0.2) !important;
+}
+
+.demon-reference-dialog-window:has(.demon-feature-picker) .dialog-buttons {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  margin-top: 12px !important;
+  padding-top: 12px !important;
+  border-top: 1px solid rgba(112, 145, 230, 0.34) !important;
+}
+
+.demon-reference-dialog-window:has(.demon-feature-picker) .dialog-buttons button {
+  width: 100% !important;
+  min-height: 38px !important;
+  margin: 0 !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+}
+
+.demon-reference-dialog-window:has(.demon-feature-picker) .dialog-buttons button[data-button="add"],
+.demon-reference-dialog-window:has(.demon-feature-picker) .dialog-buttons button.default {
+  border-color: #9ab7ff !important;
+  background: linear-gradient(180deg, #31509d, #0b1945) !important;
+  color: #fff !important;
+}
+
+.demon-reference-dialog-window:has(.demon-feature-picker) .dialog-buttons button[data-button="cancel"] {
+  border-color: rgba(116, 137, 196, 0.58) !important;
+  background: linear-gradient(180deg, #161d34, #080c18) !important;
+  color: #bdc8e3 !important;
+}
+
+.demon-reference-dialog-window:has(.demon-feature-picker) .dialog-buttons button[data-button="add"]:hover,
+.demon-reference-dialog-window:has(.demon-feature-picker) .dialog-buttons button.default:hover {
+  border-color: #d0ddff !important;
+  background: linear-gradient(180deg, #4568bd, #12275f) !important;
+}
+
+.demon-reference-dialog-window:has(.demon-feature-picker) .dialog-buttons button[data-button="cancel"]:hover {
+  border-color: rgba(164, 184, 235, 0.78) !important;
+  background: linear-gradient(180deg, #252e4a, #0d1323) !important;
+  color: #edf3ff !important;
+}
+
+.demon-reference-dialog-window .demon-reference-source {
+  margin-top: 12px !important;
+  padding-top: 10px !important;
+  border-top: 1px solid rgba(112, 145, 230, 0.3) !important;
+}
+
+.demon-reference-dialog-window .demon-reference-source a {
+  color: #aec4ff !important;
+  text-decoration: none !important;
+}
+
+.demon-reference-dialog-window .demon-reference-source a:hover {
+  color: #fff !important;
+  text-decoration: underline !important;
+}
+
+.demon-reference-dialog-window .demon-reference-powers ol {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.demon-reference-dialog-window .demon-reference-powers li {
+  padding: 0.4rem 0.55rem;
+  border: 1px solid rgba(88, 156, 210, 0.28);
+  border-radius: 4px;
+  background: rgba(16, 37, 58, 0.42);
+}
+
+.demon-reference-dialog-window .demon-reference-powers li strong {
+  margin-right: 0.4rem;
+  color: #65b8ec;
+  letter-spacing: 0.08em;
+}
+
+.demon-reference-dialog-window .demon-reference-power-title {
+  font-size: 1.02rem;
+  font-weight: 700;
+}
+
+.demon-reference-dialog-window .demon-reference-powers li p {
+  margin: 0.4rem 0 0;
+  line-height: 1.35;
+}
+
+.demon-reference-dialog-window .demon-reference-powers .demon-reference-torment {
+  padding-top: 0.4rem;
+  border-top: 1px solid rgba(88, 156, 210, 0.2);
+  color: #c6d7e6;
+}
+
+/* Demon creation wizard: blue Demon sheet theme and compact reference controls. */
+.vtm-revised.demon-creation-wizard,
+.demon-creation-wizard .window-content,
+.demon-creation-wizard .application-content {
+  --demon-wizard-bg: #030716;
+  --demon-wizard-panel: #08112b;
+  --demon-wizard-panel-light: #101f49;
+  --demon-wizard-border: rgba(112, 145, 230, 0.48);
+  --demon-wizard-text: #dce7ff;
+  background: radial-gradient(circle at 50% 0, rgba(38, 68, 145, 0.34), transparent 42%), linear-gradient(180deg, #080d21, #02040e) !important;
+  color: var(--demon-wizard-text) !important;
+}
+
+.demon-creation-wizard .vtm-wizard-sidebar,
+.demon-creation-wizard .wizard-panel,
+.demon-creation-wizard .wizard-subpanel {
+  border-color: var(--demon-wizard-border) !important;
+  background: linear-gradient(180deg, rgba(16, 31, 73, 0.96), rgba(4, 9, 27, 0.98)) !important;
+  color: var(--demon-wizard-text) !important;
+  box-shadow: inset 0 0 20px rgba(56, 86, 180, 0.11) !important;
+}
+
+.demon-creation-wizard h1,
+.demon-creation-wizard h2,
+.demon-creation-wizard h3,
+.demon-creation-wizard label,
+.demon-creation-wizard .wizard-hint {
+  color: var(--demon-wizard-text) !important;
+  border-color: rgba(112, 145, 230, 0.32) !important;
+  text-shadow: none !important;
+}
+
+.demon-creation-wizard input,
+.demon-creation-wizard select,
+.demon-creation-wizard textarea {
+  border: 1px solid rgba(112, 145, 230, 0.52) !important;
+  background: rgba(3, 7, 20, 0.94) !important;
+  color: #eef4ff !important;
+}
+
+.demon-creation-wizard button,
+.demon-creation-wizard .vtm-wizard-steps button {
+  border-color: rgba(125, 158, 255, 0.62) !important;
+  background: linear-gradient(180deg, rgba(25, 43, 96, 0.98), rgba(7, 13, 42, 0.99)) !important;
+  color: #e8f0ff !important;
+  box-shadow: none !important;
+}
+
+.demon-creation-wizard button:hover,
+.demon-creation-wizard .vtm-wizard-steps button.active {
+  border-color: #c5d5ff !important;
+  background: linear-gradient(180deg, #365bb2, #10265f) !important;
+  color: #fff !important;
+}
+
+.demon-wizard-identity-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.demon-wizard-identity-column {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  align-content: start;
+  gap: 14px !important;
+}
+
+.demon-wizard-identity-column > label {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 6px !important;
+}
+
+.demon-wizard-select-book,
+.demon-wizard-rated-row {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 38px !important;
+  align-items: center;
+  gap: 7px !important;
+}
+
+.demon-wizard-rated-row > label {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 58px !important;
+  align-items: center;
+  gap: 8px;
+}
+
+.demon-wizard-reference,
+.demon-wizard-add-lore,
+.demon-wizard-add-feature,
+.demon-wizard-remove-lore,
+.demon-wizard-remove-feature {
+  width: 36px !important;
+  min-width: 36px !important;
+  height: 32px !important;
+  min-height: 32px !important;
+  padding: 0 !important;
+}
+
+.demon-creation-wizard .wizard-item-list li {
+  grid-template-columns: 36px minmax(0, 1fr) auto 36px !important;
+}
+
+.demon-creation-wizard .demon-wizard-feature-cost {
+  width: 64px !important;
+}
+
+@media (max-width: 900px) {
+  .demon-wizard-identity-grid { grid-template-columns: 1fr; }
+}
+
+/* Hard isolation: the form marker is unique to the Demon wizard. These rules
+   intentionally outrank the shared red Vampire wizard theme without changing it. */
+.application.vtm-themed-wizard-window:has(.demon-character-wizard-form),
+.application:has(> .window-content .demon-character-wizard-form) {
+  --vtm-bg: #030716 !important;
+  --vtm-panel: rgba(8, 17, 43, 0.97) !important;
+  --vtm-panel-red: rgba(16, 31, 73, 0.96) !important;
+  --vtm-border: #557bd8 !important;
+  --vtm-border-soft: rgba(112, 145, 230, 0.56) !important;
+  --vtm-gold: #cfe0ff !important;
+  --vtm-gold-soft: rgba(143, 174, 255, 0.38) !important;
+  --vtm-blood: #315dbb !important;
+  --vtm-blood-2: #668ee7 !important;
+  --vtm-text: #e5edff !important;
+  --vtm-muted: #afc0e8 !important;
+}
+
+.application:has(.demon-character-wizard-form) > .window-content,
+.application:has(.demon-character-wizard-form) .application-content {
+  background: radial-gradient(circle at 18% 4%, rgba(55, 91, 190, 0.34), transparent 30%), radial-gradient(circle at 90% 18%, rgba(130, 164, 255, 0.12), transparent 28%), linear-gradient(135deg, #030716, #0a1637 50%, #02040e) !important;
+  color: #e5edff !important;
+}
+
+.demon-character-wizard-form .vtm-wizard-sidebar {
+  border-color: rgba(112, 145, 230, 0.62) !important;
+  background: radial-gradient(circle at 0 0, rgba(61, 101, 211, 0.20), transparent 40%), linear-gradient(180deg, #071027, #0c193a) !important;
+}
+
+.demon-character-wizard-form .wizard-panel,
+.demon-character-wizard-form .wizard-subpanel,
+.demon-character-wizard-form .vtm-wizard-checklist-mini {
+  border-color: rgba(112, 145, 230, 0.52) !important;
+  background: radial-gradient(circle at 100% 0, rgba(62, 101, 207, 0.16), transparent 36%), linear-gradient(145deg, rgba(11, 24, 59, 0.98), rgba(3, 8, 25, 0.98)) !important;
+  color: #e5edff !important;
+  box-shadow: inset 0 0 24px rgba(50, 83, 178, 0.15) !important;
+}
+
+.demon-character-wizard-form .vtm-wizard-steps button,
+.demon-character-wizard-form button,
+.demon-character-wizard-form .vtm-dialog-search-button {
+  border-color: rgba(125, 158, 255, 0.72) !important;
+  background: linear-gradient(180deg, #203d86, #09183f) !important;
+  color: #edf3ff !important;
+  text-shadow: none !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08) !important;
+}
+
+.demon-character-wizard-form .vtm-wizard-steps button.active,
+.demon-character-wizard-form button:hover,
+.demon-character-wizard-form .vtm-dialog-search-button:hover {
+  border-color: #d2dfff !important;
+  background: radial-gradient(circle at 0 50%, rgba(117, 154, 255, 0.24), transparent 48%), linear-gradient(180deg, #4168bd, #102963) !important;
+  color: #fff !important;
+  filter: none !important;
+}
+
+.demon-character-wizard-form .vtm-wizard-steps button span {
+  border-color: rgba(145, 175, 255, 0.42) !important;
+  background: rgba(112, 145, 230, 0.18) !important;
+  color: #d7e4ff !important;
+}
+
+.demon-character-wizard-form input,
+.demon-character-wizard-form textarea,
+.demon-character-wizard-form select,
+.demon-character-wizard-form .vtm-dialog-search-button {
+  border-color: rgba(112, 145, 230, 0.74) !important;
+  background-color: rgba(2, 7, 22, 0.94) !important;
+  color: #edf3ff !important;
+  box-shadow: inset 0 0 12px rgba(32, 58, 132, 0.24) !important;
+}
+
+.demon-character-wizard-form .wizard-dot-row,
+.demon-character-wizard-form .wizard-item-list li {
+  border-color: rgba(112, 145, 230, 0.40) !important;
+  background: rgba(5, 13, 36, 0.72) !important;
+}
+
+.demon-character-wizard-form .vtm-wizard-footer {
+  border-color: rgba(112, 145, 230, 0.62) !important;
+  background: linear-gradient(180deg, #071027, #030817) !important;
+}
+
+/* Final specificity guard against the shared Vampire `.creation-wizard` theme. */
+.vtm-revised.creation-wizard:has(.demon-character-wizard-form) {
+  --vtm-bg: #030716 !important;
+  --vtm-panel: #08112b !important;
+  --vtm-panel-red: #101f49 !important;
+  --vtm-border: #6f91e6 !important;
+  --vtm-border-soft: rgba(112, 145, 230, 0.62) !important;
+  --vtm-gold: #d5e2ff !important;
+  --vtm-gold-soft: rgba(145, 175, 255, 0.42) !important;
+  --vtm-blood: #315dbb !important;
+  --vtm-blood-2: #668ee7 !important;
+  --vtm-text: #e5edff !important;
+  --vtm-muted: #afc0e8 !important;
+  background: #030716 !important;
+  color: #e5edff !important;
+}
+
+.vtm-revised.creation-wizard:has(.demon-character-wizard-form) .window-content,
+.vtm-revised.creation-wizard:has(.demon-character-wizard-form) .application-content {
+  background: radial-gradient(circle at 18% 4%, rgba(55, 91, 190, 0.36), transparent 30%), linear-gradient(135deg, #030716, #0b183b 50%, #02040e) !important;
+  color: #e5edff !important;
+}
+
+.vtm-revised.creation-wizard:has(.demon-character-wizard-form) .vtm-wizard-sidebar {
+  border-color: rgba(112, 145, 230, 0.68) !important;
+  background: radial-gradient(circle at 0 0, rgba(61, 101, 211, 0.22), transparent 40%), linear-gradient(180deg, #071027, #0c193a) !important;
+}
+
+.vtm-revised.creation-wizard:has(.demon-character-wizard-form) .wizard-panel,
+.vtm-revised.creation-wizard:has(.demon-character-wizard-form) .wizard-subpanel,
+.vtm-revised.creation-wizard:has(.demon-character-wizard-form) .vtm-wizard-checklist-mini {
+  border-color: rgba(112, 145, 230, 0.58) !important;
+  background: radial-gradient(circle at 100% 0, rgba(62, 101, 207, 0.18), transparent 36%), linear-gradient(145deg, #0b183b, #030819) !important;
+  color: #e5edff !important;
+  box-shadow: inset 0 0 24px rgba(50, 83, 178, 0.17) !important;
+}
+
+.vtm-revised.creation-wizard:has(.demon-character-wizard-form) button,
+.vtm-revised.creation-wizard:has(.demon-character-wizard-form) .vtm-wizard-steps button,
+.vtm-revised.creation-wizard:has(.demon-character-wizard-form) .vtm-dialog-search-button {
+  border-color: rgba(125, 158, 255, 0.78) !important;
+  background: linear-gradient(180deg, #294b9c, #0a1a45) !important;
+  color: #edf3ff !important;
+  text-shadow: none !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.09) !important;
+  filter: none !important;
+}
+
+.vtm-revised.creation-wizard:has(.demon-character-wizard-form) button:hover,
+.vtm-revised.creation-wizard:has(.demon-character-wizard-form) .vtm-wizard-steps button.active {
+  border-color: #d7e3ff !important;
+  background: linear-gradient(180deg, #5278cf, #173473) !important;
+  color: #fff !important;
+}
+
+.vtm-revised.creation-wizard:has(.demon-character-wizard-form) input,
+.vtm-revised.creation-wizard:has(.demon-character-wizard-form) textarea,
+.vtm-revised.creation-wizard:has(.demon-character-wizard-form) select,
+.vtm-revised.creation-wizard:has(.demon-character-wizard-form) .vtm-dialog-search-button {
+  border-color: rgba(112, 145, 230, 0.78) !important;
+  background-color: #03091d !important;
+  color: #edf3ff !important;
+  box-shadow: inset 0 0 12px rgba(32, 58, 132, 0.28) !important;
+}
+
+.vtm-revised.creation-wizard:has(.demon-character-wizard-form) .wizard-dot-row,
+.vtm-revised.creation-wizard:has(.demon-character-wizard-form) .wizard-item-list li {
+  border-color: rgba(112, 145, 230, 0.46) !important;
+  background: #07102a !important;
+}
+
+.vtm-revised.creation-wizard:has(.demon-character-wizard-form) .vtm-wizard-footer {
+  border-color: rgba(112, 145, 230, 0.68) !important;
+  background: linear-gradient(180deg, #071027, #030817) !important;
+}
+
+/* Search panels are appended to document.body, so they need their own marker. */
+body .vtm-dialog-search-panel.demon-character-wizard-search-panel {
+  --vtm-text: #e5edff !important;
+  --vtm-muted: #afc0e8 !important;
+  --vtm-gold: #d5e2ff !important;
+  border: 1px solid rgba(125, 158, 255, 0.82) !important;
+  background: radial-gradient(circle at 100% 0, rgba(62, 101, 207, 0.22), transparent 38%), linear-gradient(180deg, #0b183b, #030819) !important;
+  color: #e5edff !important;
+  box-shadow: 0 18px 44px rgba(0,0,0,0.62), inset 0 0 20px rgba(50,83,178,0.18) !important;
+}
+
+body .demon-character-wizard-search-panel .vtm-dialog-search-input {
+  border-color: rgba(125, 158, 255, 0.72) !important;
+  background: #020719 !important;
+  color: #edf3ff !important;
+}
+
+body .demon-character-wizard-search-panel .vtm-dialog-search-group {
+  color: #cbdcff !important;
+}
+
+body .demon-character-wizard-search-panel .vtm-dialog-search-option {
+  border-color: transparent !important;
+  background: transparent !important;
+  color: #e5edff !important;
+}
+
+body .demon-character-wizard-search-panel .vtm-dialog-search-option:hover,
+body .demon-character-wizard-search-panel .vtm-dialog-search-option:focus,
+body .demon-character-wizard-search-panel .vtm-dialog-search-option.is-selected {
+  border-color: rgba(145, 175, 255, 0.66) !important;
+  background: radial-gradient(circle at 0 50%, rgba(104, 144, 244, 0.25), transparent 48%), #10285e !important;
+  color: #fff !important;
+}
+
+.demon-character-wizard-form .demon-wizard-recommended-lore {
+  display: inline-grid !important;
+  width: 36px !important;
+  place-items: center !important;
+  color: #9fbbff !important;
+}
+
+.demon-character-wizard-form .demon-wizard-biographies textarea {
+  display: block !important;
+  width: 100% !important;
+  min-height: 390px !important;
+  resize: vertical !important;
+  line-height: 1.45 !important;
+  text-transform: none !important;
+}
+
+.demon-character-wizard-form .demon-wizard-apocalyptic-form > label {
+  display: grid !important;
+  gap: 6px !important;
+  margin-bottom: 14px !important;
+}
+
+.demon-character-wizard-form .demon-wizard-apocalyptic-form textarea {
+  display: block !important;
+  width: 100% !important;
+  min-height: 170px !important;
+  margin-bottom: 14px !important;
+  resize: vertical !important;
+  line-height: 1.45 !important;
+  text-transform: none !important;
+}
+.demon-creation-wizard .demon-wizard-primary-lore,
+.demon-creation-wizard .demon-wizard-form-source {
+  display: flex;
+  align-items: end;
+  gap: 10px;
+  margin: 0 0 14px;
+  padding: 12px;
+  border: 1px solid rgba(72, 179, 255, 0.4);
+  border-radius: 8px;
+  background: rgba(4, 30, 55, 0.7);
+}
+
+.demon-creation-wizard .demon-wizard-primary-lore label { flex: 1; }
+.demon-creation-wizard .demon-wizard-primary-lore p { flex-basis: 100%; margin: 0; }
+.demon-creation-wizard .demon-wizard-primary-lore { flex-wrap: wrap; }
+.demon-creation-wizard .demon-wizard-form-source { justify-content: space-between; align-items: center; }
+/* Roll trait selects are enhanced into searchable controls.  Older safety
+   rules hide both halves of the enhanced control, so restore the visible
+   wrapper/button while keeping only the native select hidden. */
+.application.sheet.actor.demon .demon-roll-panel .vtm-trait-search-select,
+.demon-vampire-layout .demon-roll-panel .vtm-trait-search-select {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+.application.sheet.actor.demon .demon-roll-panel .vtm-trait-search-select__button,
+.demon-vampire-layout .demon-roll-panel .vtm-trait-search-select__button {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 100% !important;
+  min-height: 36px !important;
+}
+
+.application.sheet.actor.demon .demon-roll-panel select.vtm-trait-search-select__native,
+.demon-vampire-layout .demon-roll-panel select.vtm-trait-search-select__native {
+  display: none !important;
+  visibility: hidden !important;
+  position: absolute !important;
+}
+
+/* While a searchable roll select is open, its owning character sheet is
+   raised above other Foundry windows.  Overflow is relaxed only for that
+   short-lived state, keeping the dropdown anchored to the moving sheet. */
+.vtm-search-select-window-raised,
+.vtm-search-select-window-raised .window-content,
+.vtm-search-select-window-raised .demon-sheet,
+.vtm-search-select-window-raised .demon-sheet-body,
+.vtm-search-select-window-raised .demon-roll-panel {
+  overflow: visible !important;
+}
+
+.vtm-search-select-window-raised .vtm-trait-search-select.is-open,
+.vtm-search-select-window-raised .vtm-trait-search-select__panel {
+  z-index: 2147483001 !important;
+}
+.demon-vampire-layout .demon-torment-scale-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+  margin-top: 12px !important;
+}
+
+.demon-vampire-layout .demon-inline-resources {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+.demon-vampire-layout .demon-torment-scale {
+  min-height: 86px !important;
+  padding: 12px !important;
+  border: 1px solid rgba(112, 137, 215, 0.46) !important;
+  border-radius: 9px !important;
+  background: rgba(12, 17, 38, 0.82) !important;
+}
+
+.demon-vampire-layout .demon-torment-scale .demon-resource-fixed-max {
+  min-width: 26px !important;
+  color: #d8e8ff !important;
+  text-align: center !important;
+  font-weight: 800 !important;
+}
+
+@media (max-width: 1320px) {
+  .demon-vampire-layout .demon-torment-scale-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+.demon-vampire-layout .demon-identity-panel {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+}
+
+.demon-vampire-layout .demon-title-row {
+  margin-bottom: 8px !important;
+}
+
+.demon-vampire-layout .demon-profile-grid {
+  gap: 7px 12px !important;
+}
+
+.demon-vampire-layout .demon-torment-scale-grid,
+.demon-vampire-layout .demon-inline-resources {
+  margin-top: 8px !important;
+}

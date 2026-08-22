@@ -108,7 +108,26 @@ function closeOpenTraitSearchSelects(except = null) {
 
     const button = wrapper.querySelector(".vtm-trait-search-select__button");
     if (button) button.setAttribute("aria-expanded", "false");
+    restoreOwningWindow(wrapper);
   });
+}
+
+function raiseOwningWindow(wrapper) {
+  const windowElement = wrapper.closest(".application.sheet.actor, .window-app.sheet.actor, .application, .window-app");
+  if (!windowElement || windowElement.classList.contains("vtm-search-select-window-raised")) return;
+  windowElement.dataset.vtmSearchSelectPreviousZ = windowElement.style.zIndex || "";
+  windowElement.classList.add("vtm-search-select-window-raised");
+  windowElement.style.setProperty("z-index", "2147483000", "important");
+}
+
+function restoreOwningWindow(wrapper) {
+  const windowElement = wrapper.closest(".application.sheet.actor, .window-app.sheet.actor, .application, .window-app");
+  if (!windowElement?.classList.contains("vtm-search-select-window-raised")) return;
+  const previous = windowElement.dataset.vtmSearchSelectPreviousZ || "";
+  windowElement.style.removeProperty("z-index");
+  if (previous) windowElement.style.zIndex = previous;
+  delete windowElement.dataset.vtmSearchSelectPreviousZ;
+  windowElement.classList.remove("vtm-search-select-window-raised");
 }
 
 function getOptionRows(select) {
@@ -161,11 +180,12 @@ function shouldEnhanceTraitSelect(select) {
   const rollField = String(select.dataset?.rollField || "").toLowerCase();
   const explicit = select.dataset?.vtmSearchableSelect === "true";
 
+  if (explicit) return true;
+
   return Boolean(
     (hasGroups || hasEnoughOptions)
     && (
-      explicit
-      || rollField.includes("trait")
+      rollField.includes("trait")
       || name === "firsttrait"
       || name === "secondtrait"
       || name.includes("trait")
@@ -255,6 +275,7 @@ function enhanceTraitSelect(select) {
     panel.hidden = true;
     wrapper.classList.remove("is-open", "opens-up");
     button.setAttribute("aria-expanded", "false");
+    restoreOwningWindow(wrapper);
   };
 
   const renderList = query => {
@@ -317,6 +338,7 @@ function enhanceTraitSelect(select) {
     closeOpenTraitSearchSelects(wrapper);
     panel.hidden = false;
     wrapper.classList.add("is-open");
+    raiseOwningWindow(wrapper);
     button.setAttribute("aria-expanded", "true");
     search.value = "";
     renderList("");
@@ -380,5 +402,3 @@ export function enhanceActorRollSearchSelects(root = document) {
 Hooks.on("renderActorSheet", (_app, html) => {
   enhanceActorRollSearchSelects(html);
 });
-
-

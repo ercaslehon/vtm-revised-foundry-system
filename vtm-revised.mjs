@@ -4,6 +4,7 @@ import { VTM_REVISED } from "./scripts/config.mjs";
 import { VTMActor } from "./scripts/documents/vtm-actor.mjs";
 import { VTMItem } from "./scripts/documents/vtm-item.mjs";
 import { VTMVampireActorData, VTMNpcActorData } from "./scripts/data-models/actor-data.mjs";
+import { DemonActorData } from "./scripts/data-models/demon-actor-data.mjs";
 import {
   VTMDisciplineItemData,
   VTMDisciplinePowerItemData,
@@ -17,6 +18,7 @@ import {
   VTMMoralityPathItemData
 } from "./scripts/data-models/item-data.mjs";
 import { VTMVampireActorSheet } from "./scripts/sheets/vampire-actor-sheet.mjs";
+import { DemonActorSheet } from "./scripts/sheets/demon-actor-sheet.mjs";
 import { VTMItemSheet } from "./scripts/sheets/item-sheet.mjs";
 import { VTMDisciplineCard } from "./scripts/apps/discipline-card.mjs";
 import { VTMRitualCard } from "./scripts/apps/ritual-card.mjs";
@@ -25,6 +27,7 @@ import { VTMMeritFlawCard } from "./scripts/apps/merit-flaw-card.mjs";
 import { VTMArchetypeCard, findArchetypeForName } from "./scripts/apps/archetype-card.mjs";
 import { VTMMoralityPathCard, findMoralityPathItemForName } from "./scripts/apps/morality-path-card.mjs";
 import { VTMCharacterCreationWizard } from "./scripts/apps/character-creation-wizard.mjs";
+import { VTMDemonCharacterCreationWizard } from "./scripts/apps/demon-character-creation-wizard.mjs";
 import { rollDicePool } from "./scripts/dice/dice-pool.mjs";
 import { TrechkalovJsonImporter } from "./scripts/import/trechkalov-json-importer.mjs";
 import { RulesJsonImporter } from "./scripts/import/rules-json-importer.mjs";
@@ -49,7 +52,7 @@ const DocumentSheetConfig = foundry.applications?.apps?.DocumentSheetConfig;
 
 
 function registerSheets() {
-  const actorTypes = ["vampire", "npc"];
+  const vampireActorTypes = ["vampire", "npc"];
   const itemTypes = VTM_REVISED.itemTypes;
 
   if (!DocumentSheetConfig) {
@@ -64,9 +67,15 @@ function registerSheets() {
   }
 
   DocumentSheetConfig.registerSheet(Actor, VTM_REVISED.systemId, VTMVampireActorSheet, {
-    types: actorTypes,
+    types: vampireActorTypes,
     makeDefault: true,
     label: "VTM_REVISED.Sheet.Vampire"
+  });
+
+  DocumentSheetConfig.registerSheet(Actor, VTM_REVISED.systemId, DemonActorSheet, {
+    types: ["demon"],
+    makeDefault: true,
+    label: "DEMON.Sheet.Demon"
   });
 
   try {
@@ -86,6 +95,7 @@ function registerSheets() {
 const preloadTemplates = async () => loadTemplatesCompat([
   "systems/vtm-revised/templates/actors/vampire-sheet.hbs",
   "systems/vtm-revised/templates/actors/vampire-sheet-v2.hbs",
+  "systems/vtm-revised/templates/actors/demon-sheet.hbs",
   "systems/vtm-revised/templates/actors/parts/profile.hbs",
   "systems/vtm-revised/templates/actors/parts/attributes.hbs",
   "systems/vtm-revised/templates/actors/parts/abilities.hbs",
@@ -106,6 +116,7 @@ const preloadTemplates = async () => loadTemplatesCompat([
   "systems/vtm-revised/templates/apps/archetype-card.hbs",
   "systems/vtm-revised/templates/apps/morality-path-card.hbs",
   "systems/vtm-revised/templates/apps/character-creation-wizard.hbs",
+  "systems/vtm-revised/templates/apps/demon-character-creation-wizard.hbs",
   "systems/vtm-revised/templates/chat/item-use-card.hbs",
   "systems/vtm-revised/templates/chat/weapon-damage-card.hbs"
 ]);
@@ -123,6 +134,7 @@ Hooks.once("init", async () => {
 
   CONFIG.Actor.dataModels.vampire = VTMVampireActorData;
   CONFIG.Actor.dataModels.npc = VTMNpcActorData;
+  CONFIG.Actor.dataModels.demon = DemonActorData;
 
   CONFIG.Item.dataModels.discipline = VTMDisciplineItemData;
   CONFIG.Item.dataModels.disciplinePower = VTMDisciplinePowerItemData;
@@ -146,6 +158,10 @@ Hooks.once("init", async () => {
     npc: {
       bar: ["resources.blood", "resources.willpower", "resources.humanity"],
       value: ["resources.bloodPerTurn"]
+    },
+    demon: {
+      bar: ["resources.faith", "resources.willpower", "resources.torment"],
+      value: []
     }
   };
 
@@ -321,7 +337,9 @@ async function openActorSheet(actorOrRef, forceNew = false) {
     console.warn("VtM Revised | actor.sheet.render failed, using direct ActorSheetV2 fallback", err);
   }
 
-  const sheet = new VTMVampireActorSheet({ document: actor });
+  const sheet = actor.type === "demon"
+    ? new DemonActorSheet({ document: actor })
+    : new VTMVampireActorSheet({ document: actor });
   return renderApplicationCompat(sheet);
 }
 
@@ -397,7 +415,8 @@ async function openCharacterCreationWizard(actorOrRef) {
     ui.notifications?.warn?.("VtM Revised | Actor not found for character creation wizard");
     return null;
   }
-  return new VTMCharacterCreationWizard({ actor }).render({ force: true });
+  const WizardClass = actor.type === "demon" ? VTMDemonCharacterCreationWizard : VTMCharacterCreationWizard;
+  return new WizardClass({ actor }).render({ force: true });
 }
 
 async function syncActorRitualsFromCatalog(actorOrRef) {
@@ -468,7 +487,7 @@ async function debugActorSheet(actorOrRef) {
 
 
 function shouldOpenCreationWizardForNewActor(actor, options = {}, userId = null) {
-  if (!actor || actor.type !== "vampire") return false;
+  if (!actor || !["vampire", "demon"].includes(actor.type)) return false;
   if (userId && game.user?.id !== userId) return false;
   if (options?.vtmRevised?.suppressCreationWizard) return false;
   if (options?.["vtm-revised"]?.suppressCreationWizard) return false;

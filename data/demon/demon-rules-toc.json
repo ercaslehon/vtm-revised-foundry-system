@@ -1,0 +1,2486 @@
+[
+  {
+    "id": "section-0001",
+    "level": 1,
+    "title": "Демоны: Падшие - основная книга",
+    "offset": 434
+  },
+  {
+    "id": "section-0002",
+    "level": 1,
+    "title": "Перед выходом на сцену",
+    "offset": 2885
+  },
+  {
+    "id": "section-0003",
+    "level": 3,
+    "title": "* * *",
+    "offset": 7394
+  },
+  {
+    "id": "section-0004",
+    "level": 3,
+    "title": "* * *",
+    "offset": 9978
+  },
+  {
+    "id": "section-0005",
+    "level": 3,
+    "title": "* * *",
+    "offset": 11591
+  },
+  {
+    "id": "section-0006",
+    "level": 3,
+    "title": "* * *",
+    "offset": 14219
+  },
+  {
+    "id": "section-0007",
+    "level": 3,
+    "title": "* * *",
+    "offset": 15049
+  },
+  {
+    "id": "section-0008",
+    "level": 1,
+    "title": "Введение",
+    "offset": 23433
+  },
+  {
+    "id": "section-0009",
+    "level": 2,
+    "title": "Рассказ",
+    "offset": 25060
+  },
+  {
+    "id": "section-0010",
+    "level": 2,
+    "title": "Игроки и рассказчики",
+    "offset": 26474
+  },
+  {
+    "id": "section-0011",
+    "level": 1,
+    "title": "Что это за место?",
+    "offset": 31884
+  },
+  {
+    "id": "section-0012",
+    "level": 2,
+    "title": "Готик-панк",
+    "offset": 32944
+  },
+  {
+    "id": "section-0013",
+    "level": 2,
+    "title": "Словарь",
+    "offset": 35746
+  },
+  {
+    "id": "section-0014",
+    "level": 2,
+    "title": "Как пользоваться книгой",
+    "offset": 41333
+  },
+  {
+    "id": "section-0015",
+    "level": 2,
+    "title": "Ролевая игра",
+    "offset": 44253
+  },
+  {
+    "id": "section-0016",
+    "level": 2,
+    "title": "Безопасность",
+    "offset": 45579
+  },
+  {
+    "id": "section-0017",
+    "level": 1,
+    "title": "Источники",
+    "offset": 49001
+  },
+  {
+    "id": "section-0018",
+    "level": 1,
+    "title": "Глава 1. В начале",
+    "offset": 56356
+  },
+  {
+    "id": "section-0019",
+    "level": 2,
+    "title": "Откровения",
+    "offset": 61379
+  },
+  {
+    "id": "section-0020",
+    "level": 2,
+    "title": "Сделка с Дьяволом",
+    "offset": 71411
+  },
+  {
+    "id": "section-0021",
+    "level": 1,
+    "title": "Начало всего",
+    "offset": 81043
+  },
+  {
+    "id": "section-0022",
+    "level": 2,
+    "title": "Дома Творения",
+    "offset": 84256
+  },
+  {
+    "id": "section-0023",
+    "level": 2,
+    "title": "Рай",
+    "offset": 97508
+  },
+  {
+    "id": "section-0024",
+    "level": 2,
+    "title": "Запретный плод",
+    "offset": 103089
+  },
+  {
+    "id": "section-0025",
+    "level": 2,
+    "title": "Великий спор",
+    "offset": 111009
+  },
+  {
+    "id": "section-0026",
+    "level": 2,
+    "title": "Денница",
+    "offset": 130470
+  },
+  {
+    "id": "section-0027",
+    "level": 2,
+    "title": "Падение",
+    "offset": 139557
+  },
+  {
+    "id": "section-0028",
+    "level": 2,
+    "title": "Преступление по страсти",
+    "offset": 148310
+  },
+  {
+    "id": "section-0029",
+    "level": 2,
+    "title": "Век Гнева",
+    "offset": 155807
+  },
+  {
+    "id": "section-0030",
+    "level": 2,
+    "title": "Схватка ангелов",
+    "offset": 160193
+  },
+  {
+    "id": "section-0031",
+    "level": 2,
+    "title": "Первый удар",
+    "offset": 163737
+  },
+  {
+    "id": "section-0032",
+    "level": 2,
+    "title": "Авель",
+    "offset": 167911
+  },
+  {
+    "id": "section-0033",
+    "level": 2,
+    "title": "Божья кара",
+    "offset": 168966
+  },
+  {
+    "id": "section-0034",
+    "level": 2,
+    "title": "Отвергнутые",
+    "offset": 174614
+  },
+  {
+    "id": "section-0035",
+    "level": 2,
+    "title": "Гнев Божий",
+    "offset": 175500
+  },
+  {
+    "id": "section-0036",
+    "level": 2,
+    "title": "Небесный Огонь",
+    "offset": 177417
+  },
+  {
+    "id": "section-0037",
+    "level": 1,
+    "title": "Глава 2. Лучше царствовать в Аду",
+    "offset": 187982
+  },
+  {
+    "id": "section-0038",
+    "level": 2,
+    "title": "Чтобы помнить",
+    "offset": 188797
+  },
+  {
+    "id": "section-0039",
+    "level": 3,
+    "title": "Первые дни",
+    "offset": 189694
+  },
+  {
+    "id": "section-0040",
+    "level": 3,
+    "title": "Адам и Ева",
+    "offset": 190913
+  },
+  {
+    "id": "section-0041",
+    "level": 3,
+    "title": "Грядущая буря",
+    "offset": 193067
+  },
+  {
+    "id": "section-0042",
+    "level": 3,
+    "title": "Бесконечная ночь",
+    "offset": 193752
+  },
+  {
+    "id": "section-0043",
+    "level": 3,
+    "title": "Суд на рассвете",
+    "offset": 194670
+  },
+  {
+    "id": "section-0044",
+    "level": 2,
+    "title": "Свободные",
+    "offset": 195712
+  },
+  {
+    "id": "section-0045",
+    "level": 3,
+    "title": "Суд",
+    "offset": 196233
+  },
+  {
+    "id": "section-0046",
+    "level": 3,
+    "title": "Новый порядок",
+    "offset": 198026
+  },
+  {
+    "id": "section-0047",
+    "level": 3,
+    "title": "Кровавый Легион",
+    "offset": 198613
+  },
+  {
+    "id": "section-0048",
+    "level": 3,
+    "title": "Эбеновый Легион",
+    "offset": 200285
+  },
+  {
+    "id": "section-0049",
+    "level": 3,
+    "title": "Железный Легион",
+    "offset": 202016
+  },
+  {
+    "id": "section-0050",
+    "level": 3,
+    "title": "Серебряный Легион",
+    "offset": 203163
+  },
+  {
+    "id": "section-0051",
+    "level": 3,
+    "title": "Алебастровый Легион",
+    "offset": 204566
+  },
+  {
+    "id": "section-0052",
+    "level": 3,
+    "title": "Указы и запреты",
+    "offset": 206106
+  },
+  {
+    "id": "section-0053",
+    "level": 3,
+    "title": "Второй спор",
+    "offset": 207066
+  },
+  {
+    "id": "section-0054",
+    "level": 2,
+    "title": "Век чудес",
+    "offset": 208070
+  },
+  {
+    "id": "section-0055",
+    "level": 3,
+    "title": "Бастионы и соборы",
+    "offset": 208900
+  },
+  {
+    "id": "section-0056",
+    "level": 3,
+    "title": "Генхинном",
+    "offset": 210364
+  },
+  {
+    "id": "section-0057",
+    "level": 2,
+    "title": "Высокие Города",
+    "offset": 212632
+  },
+  {
+    "id": "section-0058",
+    "level": 3,
+    "title": "Тихая война",
+    "offset": 215742
+  },
+  {
+    "id": "section-0059",
+    "level": 3,
+    "title": "Потерянный Рай",
+    "offset": 217757
+  },
+  {
+    "id": "section-0060",
+    "level": 3,
+    "title": "Об Адаме и Еве",
+    "offset": 218689
+  },
+  {
+    "id": "section-0061",
+    "level": 3,
+    "title": "Кровь Эдема",
+    "offset": 220074
+  },
+  {
+    "id": "section-0062",
+    "level": 3,
+    "title": "Третий смертный",
+    "offset": 221407
+  },
+  {
+    "id": "section-0063",
+    "level": 2,
+    "title": "Обещание Тени",
+    "offset": 224910
+  },
+  {
+    "id": "section-0064",
+    "level": 3,
+    "title": "Выпущенная Тьма",
+    "offset": 225674
+  },
+  {
+    "id": "section-0065",
+    "level": 3,
+    "title": "Осада Сагана",
+    "offset": 226533
+  },
+  {
+    "id": "section-0066",
+    "level": 3,
+    "title": "Раскол в рядах",
+    "offset": 229598
+  },
+  {
+    "id": "section-0067",
+    "level": 2,
+    "title": "Время Жестокостей",
+    "offset": 234468
+  },
+  {
+    "id": "section-0068",
+    "level": 3,
+    "title": "Время ненависти",
+    "offset": 235437
+  },
+  {
+    "id": "section-0069",
+    "level": 3,
+    "title": "Цитадель Ненависти",
+    "offset": 237097
+  },
+  {
+    "id": "section-0070",
+    "level": 3,
+    "title": "Малимы",
+    "offset": 237798
+  },
+  {
+    "id": "section-0071",
+    "level": 2,
+    "title": "Время непослушания",
+    "offset": 238551
+  },
+  {
+    "id": "section-0072",
+    "level": 2,
+    "title": "Долгий Поход",
+    "offset": 239865
+  },
+  {
+    "id": "section-0073",
+    "level": 2,
+    "title": "Время Вавилона",
+    "offset": 242093
+  },
+  {
+    "id": "section-0074",
+    "level": 2,
+    "title": "Великий Эксперимент",
+    "offset": 243828
+  },
+  {
+    "id": "section-0075",
+    "level": 2,
+    "title": "Наблюдатели",
+    "offset": 244717
+  },
+  {
+    "id": "section-0076",
+    "level": 3,
+    "title": "Предательство",
+    "offset": 247103
+  },
+  {
+    "id": "section-0077",
+    "level": 2,
+    "title": "Рождение нефилим 3",
+    "offset": 248482
+  },
+  {
+    "id": "section-0078",
+    "level": 2,
+    "title": "Рассеяние",
+    "offset": 249496
+  },
+  {
+    "id": "section-0079",
+    "level": 3,
+    "title": "Фальшивые языки",
+    "offset": 250653
+  },
+  {
+    "id": "section-0080",
+    "level": 3,
+    "title": "Коллапс",
+    "offset": 251931
+  },
+  {
+    "id": "section-0081",
+    "level": 2,
+    "title": "Приход конца",
+    "offset": 252453
+  },
+  {
+    "id": "section-0082",
+    "level": 1,
+    "title": "Глава 3. Апокалипсис сегодня",
+    "offset": 258762
+  },
+  {
+    "id": "section-0083",
+    "level": 1,
+    "title": "В заключении",
+    "offset": 259622
+  },
+  {
+    "id": "section-0084",
+    "level": 1,
+    "title": "Бесконечная Тьма",
+    "offset": 261248
+  },
+  {
+    "id": "section-0085",
+    "level": 1,
+    "title": "Загадка Денницы",
+    "offset": 263024
+  },
+  {
+    "id": "section-0086",
+    "level": 2,
+    "title": "Отсутствующий",
+    "offset": 264369
+  },
+  {
+    "id": "section-0087",
+    "level": 1,
+    "title": "Группировки",
+    "offset": 266940
+  },
+  {
+    "id": "section-0088",
+    "level": 1,
+    "title": "Помнить",
+    "offset": 271775
+  },
+  {
+    "id": "section-0089",
+    "level": 1,
+    "title": "Путь вниз",
+    "offset": 273329
+  },
+  {
+    "id": "section-0090",
+    "level": 1,
+    "title": "Боль",
+    "offset": 276563
+  },
+  {
+    "id": "section-0091",
+    "level": 1,
+    "title": "Игры во власть",
+    "offset": 278555
+  },
+  {
+    "id": "section-0092",
+    "level": 1,
+    "title": "Горький вкус свободы",
+    "offset": 280124
+  },
+  {
+    "id": "section-0093",
+    "level": 1,
+    "title": "Вихрь",
+    "offset": 283197
+  },
+  {
+    "id": "section-0094",
+    "level": 1,
+    "title": "Исход",
+    "offset": 285006
+  },
+  {
+    "id": "section-0095",
+    "level": 1,
+    "title": "Поиск",
+    "offset": 287885
+  },
+  {
+    "id": "section-0096",
+    "level": 1,
+    "title": "Притяжение Бездны",
+    "offset": 290061
+  },
+  {
+    "id": "section-0097",
+    "level": 1,
+    "title": "Возрождение",
+    "offset": 291714
+  },
+  {
+    "id": "section-0098",
+    "level": 1,
+    "title": "Соединенные",
+    "offset": 294544
+  },
+  {
+    "id": "section-0099",
+    "level": 1,
+    "title": "Реальность",
+    "offset": 296024
+  },
+  {
+    "id": "section-0100",
+    "level": 1,
+    "title": "Рука Смерти",
+    "offset": 299956
+  },
+  {
+    "id": "section-0101",
+    "level": 1,
+    "title": "Жизнь",
+    "offset": 302443
+  },
+  {
+    "id": "section-0102",
+    "level": 1,
+    "title": "Города",
+    "offset": 304105
+  },
+  {
+    "id": "section-0103",
+    "level": 1,
+    "title": "Отношения",
+    "offset": 305396
+  },
+  {
+    "id": "section-0104",
+    "level": 1,
+    "title": "Насилие",
+    "offset": 307560
+  },
+  {
+    "id": "section-0105",
+    "level": 1,
+    "title": "Власть",
+    "offset": 309374
+  },
+  {
+    "id": "section-0106",
+    "level": 1,
+    "title": "Люди",
+    "offset": 311373
+  },
+  {
+    "id": "section-0107",
+    "level": 1,
+    "title": "Недостойные",
+    "offset": 315469
+  },
+  {
+    "id": "section-0108",
+    "level": 1,
+    "title": "Смерть",
+    "offset": 316730
+  },
+  {
+    "id": "section-0109",
+    "level": 1,
+    "title": "Религия",
+    "offset": 319305
+  },
+  {
+    "id": "section-0110",
+    "level": 1,
+    "title": "Будущее",
+    "offset": 324441
+  },
+  {
+    "id": "section-0111",
+    "level": 1,
+    "title": "Привязанные к Земле",
+    "offset": 327273
+  },
+  {
+    "id": "section-0112",
+    "level": 1,
+    "title": "Искушение",
+    "offset": 335266
+  },
+  {
+    "id": "section-0113",
+    "level": 2,
+    "title": "Наказание",
+    "offset": 339436
+  },
+  {
+    "id": "section-0114",
+    "level": 1,
+    "title": "Решения",
+    "offset": 339722
+  },
+  {
+    "id": "section-0115",
+    "level": 1,
+    "title": "Глава 4. Легионы проклятых",
+    "offset": 347700
+  },
+  {
+    "id": "section-0116",
+    "level": 1,
+    "title": "Пирамидальная схема",
+    "offset": 348469
+  },
+  {
+    "id": "section-0117",
+    "level": 1,
+    "title": "Одержимость",
+    "offset": 350245
+  },
+  {
+    "id": "section-0118",
+    "level": 2,
+    "title": "Свежее мясо",
+    "offset": 352697
+  },
+  {
+    "id": "section-0119",
+    "level": 2,
+    "title": "Без души",
+    "offset": 354097
+  },
+  {
+    "id": "section-0120",
+    "level": 2,
+    "title": "Безумие",
+    "offset": 356136
+  },
+  {
+    "id": "section-0121",
+    "level": 2,
+    "title": "Свободная воля",
+    "offset": 357161
+  },
+  {
+    "id": "section-0122",
+    "level": 1,
+    "title": "След веры",
+    "offset": 359251
+  },
+  {
+    "id": "section-0123",
+    "level": 2,
+    "title": "Жатва Веры",
+    "offset": 360853
+  },
+  {
+    "id": "section-0124",
+    "level": 2,
+    "title": "Договор",
+    "offset": 365859
+  },
+  {
+    "id": "section-0125",
+    "level": 2,
+    "title": "Друзья и соседи",
+    "offset": 369189
+  },
+  {
+    "id": "section-0126",
+    "level": 2,
+    "title": "Лица в толпе",
+    "offset": 376245
+  },
+  {
+    "id": "section-0127",
+    "level": 2,
+    "title": "Маленькие радости Веры",
+    "offset": 378387
+  },
+  {
+    "id": "section-0128",
+    "level": 1,
+    "title": "Уровни благодати",
+    "offset": 380726
+  },
+  {
+    "id": "section-0129",
+    "level": 2,
+    "title": "Истоки Муки",
+    "offset": 381889
+  },
+  {
+    "id": "section-0130",
+    "level": 2,
+    "title": "Рисунок души",
+    "offset": 384323
+  },
+  {
+    "id": "section-0131",
+    "level": 1,
+    "title": "Уловки зверя",
+    "offset": 389640
+  },
+  {
+    "id": "section-0132",
+    "level": 2,
+    "title": "Экзорцизм",
+    "offset": 389832
+  },
+  {
+    "id": "section-0133",
+    "level": 2,
+    "title": "Вызов",
+    "offset": 391301
+  },
+  {
+    "id": "section-0134",
+    "level": 2,
+    "title": "Последний большой секрет",
+    "offset": 395112
+  },
+  {
+    "id": "section-0135",
+    "level": 2,
+    "title": "Игра силы",
+    "offset": 398238
+  },
+  {
+    "id": "section-0136",
+    "level": 1,
+    "title": "Глава 5. Дома Тьмы",
+    "offset": 413765
+  },
+  {
+    "id": "section-0137",
+    "level": 1,
+    "title": "Себетту",
+    "offset": 414353
+  },
+  {
+    "id": "section-0138",
+    "level": 2,
+    "title": "Разделенная преданность",
+    "offset": 416035
+  },
+  {
+    "id": "section-0139",
+    "level": 1,
+    "title": "Осквернители",
+    "offset": 417234
+  },
+  {
+    "id": "section-0140",
+    "level": 1,
+    "title": "Стереотипы",
+    "offset": 425219
+  },
+  {
+    "id": "section-0141",
+    "level": 1,
+    "title": "Дьяволы",
+    "offset": 426890
+  },
+  {
+    "id": "section-0142",
+    "level": 1,
+    "title": "Стереотипы",
+    "offset": 434914
+  },
+  {
+    "id": "section-0143",
+    "level": 1,
+    "title": "Пожиратели",
+    "offset": 436768
+  },
+  {
+    "id": "section-0144",
+    "level": 1,
+    "title": "Стереотипы",
+    "offset": 444736
+  },
+  {
+    "id": "section-0145",
+    "level": 1,
+    "title": "Изверги",
+    "offset": 446307
+  },
+  {
+    "id": "section-0146",
+    "level": 1,
+    "title": "Стереотипы",
+    "offset": 454454
+  },
+  {
+    "id": "section-0147",
+    "level": 1,
+    "title": "Преступники",
+    "offset": 456133
+  },
+  {
+    "id": "section-0148",
+    "level": 1,
+    "title": "Стереотипы",
+    "offset": 465025
+  },
+  {
+    "id": "section-0149",
+    "level": 1,
+    "title": "Кнуты",
+    "offset": 466427
+  },
+  {
+    "id": "section-0150",
+    "level": 1,
+    "title": "Стереотипы",
+    "offset": 474194
+  },
+  {
+    "id": "section-0151",
+    "level": 1,
+    "title": "Убийцы",
+    "offset": 476234
+  },
+  {
+    "id": "section-0152",
+    "level": 1,
+    "title": "Стереотипы",
+    "offset": 483936
+  },
+  {
+    "id": "section-0153",
+    "level": 1,
+    "title": "Группировки",
+    "offset": 485540
+  },
+  {
+    "id": "section-0154",
+    "level": 1,
+    "title": "Фаустианцы",
+    "offset": 485606
+  },
+  {
+    "id": "section-0155",
+    "level": 1,
+    "title": "Скрытные (Криптики)",
+    "offset": 492385
+  },
+  {
+    "id": "section-0156",
+    "level": 1,
+    "title": "Люцифериане",
+    "offset": 499268
+  },
+  {
+    "id": "section-0157",
+    "level": 1,
+    "title": "Жаждущие",
+    "offset": 506839
+  },
+  {
+    "id": "section-0158",
+    "level": 1,
+    "title": "Миротворцы",
+    "offset": 513136
+  },
+  {
+    "id": "section-0159",
+    "level": 1,
+    "title": "Глава 6. Отпечатки в глине",
+    "offset": 523283
+  },
+  {
+    "id": "section-0160",
+    "level": 1,
+    "title": "Характеристики (Traits)",
+    "offset": 524983
+  },
+  {
+    "id": "section-0161",
+    "level": 1,
+    "title": "Общие характеристики и термины",
+    "offset": 526345
+  },
+  {
+    "id": "section-0162",
+    "level": 1,
+    "title": "Начало",
+    "offset": 530130
+  },
+  {
+    "id": "section-0163",
+    "level": 2,
+    "title": "Рассказчик и создание персонажа",
+    "offset": 533333
+  },
+  {
+    "id": "section-0164",
+    "level": 2,
+    "title": "Персонаж – процесс создания",
+    "offset": 535529
+  },
+  {
+    "id": "section-0165",
+    "level": 2,
+    "title": "Примеры концепций",
+    "offset": 536760
+  },
+  {
+    "id": "section-0166",
+    "level": 1,
+    "title": "Дома",
+    "offset": 538336
+  },
+  {
+    "id": "section-0167",
+    "level": 1,
+    "title": "Архетипы",
+    "offset": 539170
+  },
+  {
+    "id": "section-0168",
+    "level": 1,
+    "title": "Небесные Силы",
+    "offset": 541961
+  },
+  {
+    "id": "section-0169",
+    "level": 1,
+    "title": "Дополнения",
+    "offset": 544458
+  },
+  {
+    "id": "section-0170",
+    "level": 2,
+    "title": "Дополнительные баллы",
+    "offset": 545617
+  },
+  {
+    "id": "section-0171",
+    "level": 1,
+    "title": "Шаг 1: Концепция персонажа",
+    "offset": 546542
+  },
+  {
+    "id": "section-0172",
+    "level": 2,
+    "title": "Концепция",
+    "offset": 547165
+  },
+  {
+    "id": "section-0173",
+    "level": 1,
+    "title": "Дом",
+    "offset": 549332
+  },
+  {
+    "id": "section-0174",
+    "level": 2,
+    "title": "Группировка",
+    "offset": 550118
+  },
+  {
+    "id": "section-0175",
+    "level": 1,
+    "title": "Характер и Маска (Архетипы)",
+    "offset": 551130
+  },
+  {
+    "id": "section-0176",
+    "level": 1,
+    "title": "Шаг 2: Выбор Атрибутов",
+    "offset": 553413
+  },
+  {
+    "id": "section-0177",
+    "level": 1,
+    "title": "Шаг 3: Выбор Способностей",
+    "offset": 554855
+  },
+  {
+    "id": "section-0178",
+    "level": 1,
+    "title": "Шаг 4: Выбор Преимуществ",
+    "offset": 556133
+  },
+  {
+    "id": "section-0179",
+    "level": 3,
+    "title": "Дополнения",
+    "offset": 556510
+  },
+  {
+    "id": "section-0180",
+    "level": 3,
+    "title": "Знания",
+    "offset": 556979
+  },
+  {
+    "id": "section-0181",
+    "level": 3,
+    "title": "Добродетели",
+    "offset": 557649
+  },
+  {
+    "id": "section-0182",
+    "level": 1,
+    "title": "Шаг 5: Заключительные штрихи",
+    "offset": 558862
+  },
+  {
+    "id": "section-0183",
+    "level": 3,
+    "title": "Вера",
+    "offset": 559132
+  },
+  {
+    "id": "section-0184",
+    "level": 3,
+    "title": "Мука",
+    "offset": 559688
+  },
+  {
+    "id": "section-0185",
+    "level": 3,
+    "title": "Сила воли",
+    "offset": 560447
+  },
+  {
+    "id": "section-0186",
+    "level": 3,
+    "title": "Дополнительные баллы",
+    "offset": 560786
+  },
+  {
+    "id": "section-0187",
+    "level": 3,
+    "title": "Искра жизни",
+    "offset": 561284
+  },
+  {
+    "id": "section-0188",
+    "level": 1,
+    "title": "Введение",
+    "offset": 563812
+  },
+  {
+    "id": "section-0189",
+    "level": 1,
+    "title": "Вопросы и ответы",
+    "offset": 568355
+  },
+  {
+    "id": "section-0190",
+    "level": 2,
+    "title": "Пример создания персонажа",
+    "offset": 574634
+  },
+  {
+    "id": "section-0191",
+    "level": 2,
+    "title": "Создание Небесных Имен",
+    "offset": 585001
+  },
+  {
+    "id": "section-0192",
+    "level": 1,
+    "title": "Архетипы: Характеры и Маски",
+    "offset": 586071
+  },
+  {
+    "id": "section-0193",
+    "level": 4,
+    "title": "Боец",
+    "offset": 587985
+  },
+  {
+    "id": "section-0194",
+    "level": 4,
+    "title": "Бонвиван",
+    "offset": 588448
+  },
+  {
+    "id": "section-0195",
+    "level": 4,
+    "title": "Браво",
+    "offset": 589054
+  },
+  {
+    "id": "section-0196",
+    "level": 4,
+    "title": "Ворчун",
+    "offset": 589602
+  },
+  {
+    "id": "section-0197",
+    "level": 4,
+    "title": "Диктатор",
+    "offset": 590140
+  },
+  {
+    "id": "section-0198",
+    "level": 4,
+    "title": "Зодчий",
+    "offset": 590704
+  },
+  {
+    "id": "section-0199",
+    "level": 4,
+    "title": "Игрок",
+    "offset": 591173
+  },
+  {
+    "id": "section-0200",
+    "level": 4,
+    "title": "Консерватор",
+    "offset": 591645
+  },
+  {
+    "id": "section-0201",
+    "level": 4,
+    "title": "Конформист",
+    "offset": 592176
+  },
+  {
+    "id": "section-0202",
+    "level": 4,
+    "title": "Ловкач",
+    "offset": 592664
+  },
+  {
+    "id": "section-0203",
+    "level": 4,
+    "title": "Мазохист",
+    "offset": 593166
+  },
+  {
+    "id": "section-0204",
+    "level": 4,
+    "title": "Мученик",
+    "offset": 593875
+  },
+  {
+    "id": "section-0205",
+    "level": 4,
+    "title": "Мятежник",
+    "offset": 594443
+  },
+  {
+    "id": "section-0206",
+    "level": 4,
+    "title": "Начальник",
+    "offset": 594863
+  },
+  {
+    "id": "section-0207",
+    "level": 4,
+    "title": "Норовистая лошадка",
+    "offset": 595417
+  },
+  {
+    "id": "section-0208",
+    "level": 4,
+    "title": "Нянюшка",
+    "offset": 596004
+  },
+  {
+    "id": "section-0209",
+    "level": 4,
+    "title": "Одержимый",
+    "offset": 596558
+  },
+  {
+    "id": "section-0210",
+    "level": 4,
+    "title": "Одиночка",
+    "offset": 597269
+  },
+  {
+    "id": "section-0211",
+    "level": 4,
+    "title": "Отщепенец",
+    "offset": 597828
+  },
+  {
+    "id": "section-0212",
+    "level": 4,
+    "title": "Педагог",
+    "offset": 598413
+  },
+  {
+    "id": "section-0213",
+    "level": 4,
+    "title": "Перфекционист",
+    "offset": 598931
+  },
+  {
+    "id": "section-0214",
+    "level": 4,
+    "title": "Раскаявшийся",
+    "offset": 599444
+  },
+  {
+    "id": "section-0215",
+    "level": 4,
+    "title": "Ребенок",
+    "offset": 599991
+  },
+  {
+    "id": "section-0216",
+    "level": 4,
+    "title": "Сорвиголова",
+    "offset": 600747
+  },
+  {
+    "id": "section-0217",
+    "level": 4,
+    "title": "Стоик",
+    "offset": 601350
+  },
+  {
+    "id": "section-0218",
+    "level": 4,
+    "title": "Судья",
+    "offset": 601746
+  },
+  {
+    "id": "section-0219",
+    "level": 4,
+    "title": "Трикстер",
+    "offset": 602230
+  },
+  {
+    "id": "section-0220",
+    "level": 4,
+    "title": "Фанатик",
+    "offset": 602826
+  },
+  {
+    "id": "section-0221",
+    "level": 4,
+    "title": "Фантазер",
+    "offset": 603446
+  },
+  {
+    "id": "section-0222",
+    "level": 4,
+    "title": "Чудовище",
+    "offset": 604100
+  },
+  {
+    "id": "section-0223",
+    "level": 4,
+    "title": "Щеголь",
+    "offset": 604600
+  },
+  {
+    "id": "section-0224",
+    "level": 2,
+    "title": "Специализация",
+    "offset": 605150
+  },
+  {
+    "id": "section-0225",
+    "level": 1,
+    "title": "Атрибуты",
+    "offset": 606609
+  },
+  {
+    "id": "section-0226",
+    "level": 2,
+    "title": "Физические атрибуты",
+    "offset": 607053
+  },
+  {
+    "id": "section-0227",
+    "level": 1,
+    "title": "Социальные атрибуты",
+    "offset": 613841
+  },
+  {
+    "id": "section-0228",
+    "level": 1,
+    "title": "Ментальные атрибуты",
+    "offset": 622413
+  },
+  {
+    "id": "section-0229",
+    "level": 1,
+    "title": "Способности",
+    "offset": 630374
+  },
+  {
+    "id": "section-0230",
+    "level": 4,
+    "title": "Таланты",
+    "offset": 631314
+  },
+  {
+    "id": "section-0231",
+    "level": 1,
+    "title": "Навыки",
+    "offset": 657604
+  },
+  {
+    "id": "section-0232",
+    "level": 1,
+    "title": "Познания",
+    "offset": 683145
+  },
+  {
+    "id": "section-0233",
+    "level": 1,
+    "title": "Дополнения",
+    "offset": 710425
+  },
+  {
+    "id": "section-0234",
+    "level": 1,
+    "title": "Союзники",
+    "offset": 711578
+  },
+  {
+    "id": "section-0235",
+    "level": 1,
+    "title": "Контакты",
+    "offset": 714114
+  },
+  {
+    "id": "section-0236",
+    "level": 1,
+    "title": "Высокое положение",
+    "offset": 717361
+  },
+  {
+    "id": "section-0237",
+    "level": 1,
+    "title": "Слава",
+    "offset": 719988
+  },
+  {
+    "id": "section-0238",
+    "level": 1,
+    "title": "Последователи",
+    "offset": 722727
+  },
+  {
+    "id": "section-0239",
+    "level": 1,
+    "title": "Влияние",
+    "offset": 725193
+  },
+  {
+    "id": "section-0240",
+    "level": 1,
+    "title": "Наследие",
+    "offset": 727554
+  },
+  {
+    "id": "section-0241",
+    "level": 1,
+    "title": "Наставник",
+    "offset": 730526
+  },
+  {
+    "id": "section-0242",
+    "level": 1,
+    "title": "Договоры",
+    "offset": 733011
+  },
+  {
+    "id": "section-0243",
+    "level": 1,
+    "title": "Совершенство",
+    "offset": 734803
+  },
+  {
+    "id": "section-0244",
+    "level": 1,
+    "title": "Ресурсы",
+    "offset": 736954
+  },
+  {
+    "id": "section-0245",
+    "level": 1,
+    "title": "Добродетели",
+    "offset": 740398
+  },
+  {
+    "id": "section-0246",
+    "level": 1,
+    "title": "Вера",
+    "offset": 744777
+  },
+  {
+    "id": "section-0247",
+    "level": 2,
+    "title": "Расходование Веры",
+    "offset": 745627
+  },
+  {
+    "id": "section-0248",
+    "level": 2,
+    "title": "Проявление",
+    "offset": 746622
+  },
+  {
+    "id": "section-0249",
+    "level": 2,
+    "title": "Иерархия грехов",
+    "offset": 747483
+  },
+  {
+    "id": "section-0250",
+    "level": 1,
+    "title": "Получение Веры",
+    "offset": 749463
+  },
+  {
+    "id": "section-0251",
+    "level": 2,
+    "title": "Жатва",
+    "offset": 749885
+  },
+  {
+    "id": "section-0252",
+    "level": 2,
+    "title": "Договоры",
+    "offset": 750896
+  },
+  {
+    "id": "section-0253",
+    "level": 1,
+    "title": "Мука",
+    "offset": 752735
+  },
+  {
+    "id": "section-0254",
+    "level": 1,
+    "title": "Сила воли",
+    "offset": 761773
+  },
+  {
+    "id": "section-0255",
+    "level": 1,
+    "title": "Расходование Силы воли",
+    "offset": 763685
+  },
+  {
+    "id": "section-0256",
+    "level": 4,
+    "title": "Получение Силы воли",
+    "offset": 765084
+  },
+  {
+    "id": "section-0257",
+    "level": 1,
+    "title": "Здоровье",
+    "offset": 767148
+  },
+  {
+    "id": "section-0258",
+    "level": 4,
+    "title": "Исцеление Верой",
+    "offset": 769515
+  },
+  {
+    "id": "section-0259",
+    "level": 4,
+    "title": "Демоны и смерть",
+    "offset": 770029
+  },
+  {
+    "id": "section-0260",
+    "level": 1,
+    "title": "Опыт",
+    "offset": 771383
+  },
+  {
+    "id": "section-0261",
+    "level": 2,
+    "title": "Баллы опыта",
+    "offset": 772749
+  },
+  {
+    "id": "section-0262",
+    "level": 4,
+    "title": "Конец главы",
+    "offset": 775626
+  },
+  {
+    "id": "section-0263",
+    "level": 4,
+    "title": "Конец истории",
+    "offset": 776687
+  },
+  {
+    "id": "section-0264",
+    "level": 1,
+    "title": "Глава 7. Глаза огня",
+    "offset": 784305
+  },
+  {
+    "id": "section-0265",
+    "level": 1,
+    "title": "Власти и Князья",
+    "offset": 785082
+  },
+  {
+    "id": "section-0266",
+    "level": 1,
+    "title": "Нарушенные клятвы",
+    "offset": 786778
+  },
+  {
+    "id": "section-0267",
+    "level": 4,
+    "title": "Увядшая слава",
+    "offset": 788247
+  },
+  {
+    "id": "section-0268",
+    "level": 4,
+    "title": "Инфернальная мощь",
+    "offset": 790630
+  },
+  {
+    "id": "section-0269",
+    "level": 1,
+    "title": "Врожденные способности",
+    "offset": 799619
+  },
+  {
+    "id": "section-0270",
+    "level": 1,
+    "title": "Общие Знания",
+    "offset": 808564
+  },
+  {
+    "id": "section-0271",
+    "level": 4,
+    "title": "Знание Основания",
+    "offset": 809108
+  },
+  {
+    "id": "section-0272",
+    "level": 4,
+    "title": "Знание Человечества",
+    "offset": 815405
+  },
+  {
+    "id": "section-0273",
+    "level": 1,
+    "title": "Дьяволы (Намару)",
+    "offset": 821498
+  },
+  {
+    "id": "section-0274",
+    "level": 4,
+    "title": "Знание Небожителей",
+    "offset": 822337
+  },
+  {
+    "id": "section-0275",
+    "level": 4,
+    "title": "Знание Пламени",
+    "offset": 832987
+  },
+  {
+    "id": "section-0276",
+    "level": 4,
+    "title": "Знание Сияния",
+    "offset": 844072
+  },
+  {
+    "id": "section-0277",
+    "level": 1,
+    "title": "Кнуты (Ашару)",
+    "offset": 855223
+  },
+  {
+    "id": "section-0278",
+    "level": 4,
+    "title": "Знание Пробуждения",
+    "offset": 856164
+  },
+  {
+    "id": "section-0279",
+    "level": 4,
+    "title": "Знание Небесного Свода",
+    "offset": 867229
+  },
+  {
+    "id": "section-0280",
+    "level": 4,
+    "title": "Знание Ветра",
+    "offset": 877045
+  },
+  {
+    "id": "section-0281",
+    "level": 1,
+    "title": "Преступники (Аннунаки 7 )",
+    "offset": 887547
+  },
+  {
+    "id": "section-0282",
+    "level": 4,
+    "title": "Знание Земли",
+    "offset": 889025
+  },
+  {
+    "id": "section-0283",
+    "level": 4,
+    "title": "Знание Путей",
+    "offset": 898971
+  },
+  {
+    "id": "section-0284",
+    "level": 4,
+    "title": "Знание Кузнечного Дела",
+    "offset": 909773
+  },
+  {
+    "id": "section-0285",
+    "level": 1,
+    "title": "Изверги (Неберу)",
+    "offset": 921863
+  },
+  {
+    "id": "section-0286",
+    "level": 4,
+    "title": "Знание Узоров",
+    "offset": 923102
+  },
+  {
+    "id": "section-0287",
+    "level": 4,
+    "title": "Знание Порталов",
+    "offset": 934519
+  },
+  {
+    "id": "section-0288",
+    "level": 4,
+    "title": "Знание Света",
+    "offset": 944027
+  },
+  {
+    "id": "section-0289",
+    "level": 1,
+    "title": "Осквернители (Ламмасу 20 )",
+    "offset": 954273
+  },
+  {
+    "id": "section-0290",
+    "level": 4,
+    "title": "Знание Желания",
+    "offset": 955246
+  },
+  {
+    "id": "section-0291",
+    "level": 4,
+    "title": "Знание Бурь",
+    "offset": 965737
+  },
+  {
+    "id": "section-0292",
+    "level": 4,
+    "title": "Знание Метаморфоз",
+    "offset": 975176
+  },
+  {
+    "id": "section-0293",
+    "level": 1,
+    "title": "Пожиратели (Рабису)",
+    "offset": 985239
+  },
+  {
+    "id": "section-0294",
+    "level": 4,
+    "title": "Знание Зверей",
+    "offset": 985933
+  },
+  {
+    "id": "section-0295",
+    "level": 4,
+    "title": "Знание Дикой природы",
+    "offset": 996260
+  },
+  {
+    "id": "section-0296",
+    "level": 4,
+    "title": "Знание Плоти",
+    "offset": 1006261
+  },
+  {
+    "id": "section-0297",
+    "level": 1,
+    "title": "Убийцы (Халаку)",
+    "offset": 1015795
+  },
+  {
+    "id": "section-0298",
+    "level": 4,
+    "title": "Знание Смерти",
+    "offset": 1017189
+  },
+  {
+    "id": "section-0299",
+    "level": 4,
+    "title": "Знание Душ",
+    "offset": 1028391
+  },
+  {
+    "id": "section-0300",
+    "level": 4,
+    "title": "Знание Сфер",
+    "offset": 1040609
+  },
+  {
+    "id": "section-0301",
+    "level": 1,
+    "title": "Глава 8. Правила",
+    "offset": 1068671
+  },
+  {
+    "id": "section-0302",
+    "level": 1,
+    "title": "Основные правила",
+    "offset": 1070821
+  },
+  {
+    "id": "section-0303",
+    "level": 2,
+    "title": "Время",
+    "offset": 1070849
+  },
+  {
+    "id": "section-0304",
+    "level": 2,
+    "title": "Простые действия",
+    "offset": 1074723
+  },
+  {
+    "id": "section-0305",
+    "level": 1,
+    "title": "Сложность",
+    "offset": 1080149
+  },
+  {
+    "id": "section-0306",
+    "level": 1,
+    "title": "Успешные и неудачные броски, провалы",
+    "offset": 1082701
+  },
+  {
+    "id": "section-0307",
+    "level": 1,
+    "title": "Составные действия",
+    "offset": 1089813
+  },
+  {
+    "id": "section-0308",
+    "level": 2,
+    "title": "Золотое правило",
+    "offset": 1094641
+  },
+  {
+    "id": "section-0309",
+    "level": 2,
+    "title": "Разновидности действий",
+    "offset": 1095518
+  },
+  {
+    "id": "section-0310",
+    "level": 1,
+    "title": "Примеры бросков",
+    "offset": 1097275
+  },
+  {
+    "id": "section-0311",
+    "level": 1,
+    "title": "Принятая терминология",
+    "offset": 1102321
+  },
+  {
+    "id": "section-0312",
+    "level": 1,
+    "title": "Глава 9. Система",
+    "offset": 1113485
+  },
+  {
+    "id": "section-0313",
+    "level": 1,
+    "title": "Системы действий",
+    "offset": 1115182
+  },
+  {
+    "id": "section-0314",
+    "level": 1,
+    "title": "Автоматические действия",
+    "offset": 1117354
+  },
+  {
+    "id": "section-0315",
+    "level": 1,
+    "title": "Физические действия",
+    "offset": 1120386
+  },
+  {
+    "id": "section-0316",
+    "level": 2,
+    "title": "Проявления Силы",
+    "offset": 1128637
+  },
+  {
+    "id": "section-0317",
+    "level": 1,
+    "title": "Социальные действия",
+    "offset": 1137542
+  },
+  {
+    "id": "section-0318",
+    "level": 1,
+    "title": "Интеллектуальные действия",
+    "offset": 1145543
+  },
+  {
+    "id": "section-0319",
+    "level": 1,
+    "title": "Боевые системы",
+    "offset": 1150819
+  },
+  {
+    "id": "section-0320",
+    "level": 2,
+    "title": "Описание места действия",
+    "offset": 1152768
+  },
+  {
+    "id": "section-0321",
+    "level": 2,
+    "title": "Виды сражений",
+    "offset": 1153735
+  },
+  {
+    "id": "section-0322",
+    "level": 4,
+    "title": "Ходы в бою",
+    "offset": 1154664
+  },
+  {
+    "id": "section-0323",
+    "level": 2,
+    "title": "Краткое описание системы боя",
+    "offset": 1161220
+  },
+  {
+    "id": "section-0324",
+    "level": 1,
+    "title": "Типы повреждений",
+    "offset": 1162698
+  },
+  {
+    "id": "section-0325",
+    "level": 1,
+    "title": "Поглощение",
+    "offset": 1164888
+  },
+  {
+    "id": "section-0326",
+    "level": 2,
+    "title": "Броня",
+    "offset": 1165922
+  },
+  {
+    "id": "section-0327",
+    "level": 1,
+    "title": "Маневры в бою",
+    "offset": 1166974
+  },
+  {
+    "id": "section-0328",
+    "level": 2,
+    "title": "Термины, используемые при описании маневров",
+    "offset": 1176092
+  },
+  {
+    "id": "section-0329",
+    "level": 1,
+    "title": "Маневры в ближнем бою",
+    "offset": 1177356
+  },
+  {
+    "id": "section-0330",
+    "level": 1,
+    "title": "Маневры в бою на дистанции",
+    "offset": 1183983
+  },
+  {
+    "id": "section-0331",
+    "level": 1,
+    "title": "Возможные сложности",
+    "offset": 1191782
+  },
+  {
+    "id": "section-0332",
+    "level": 2,
+    "title": "Холодное оружие",
+    "offset": 1193864
+  },
+  {
+    "id": "section-0333",
+    "level": 2,
+    "title": "Броня",
+    "offset": 1195081
+  },
+  {
+    "id": "section-0334",
+    "level": 2,
+    "title": "Маневры в ближнем бою",
+    "offset": 1196380
+  },
+  {
+    "id": "section-0335",
+    "level": 2,
+    "title": "Маневры в бою на дистанции",
+    "offset": 1199178
+  },
+  {
+    "id": "section-0336",
+    "level": 2,
+    "title": "Огнестрельное оружие",
+    "offset": 1200659
+  },
+  {
+    "id": "section-0337",
+    "level": 2,
+    "title": "Здоровье",
+    "offset": 1205308
+  },
+  {
+    "id": "section-0338",
+    "level": 2,
+    "title": "Таблица здоровья",
+    "offset": 1206000
+  },
+  {
+    "id": "section-0339",
+    "level": 2,
+    "title": "Недееспособность",
+    "offset": 1209763
+  },
+  {
+    "id": "section-0340",
+    "level": 4,
+    "title": "Виды повреждений",
+    "offset": 1210685
+  },
+  {
+    "id": "section-0341",
+    "level": 3,
+    "title": "Время излечения поверхностных повреждений",
+    "offset": 1221587
+  },
+  {
+    "id": "section-0342",
+    "level": 3,
+    "title": "Время излечения летальных повреждений",
+    "offset": 1222677
+  },
+  {
+    "id": "section-0343",
+    "level": 2,
+    "title": "Дополнительное правило: Крупные сражения",
+    "offset": 1225150
+  },
+  {
+    "id": "section-0344",
+    "level": 1,
+    "title": "Состояние Благодати",
+    "offset": 1226050
+  },
+  {
+    "id": "section-0345",
+    "level": 1,
+    "title": "Вера",
+    "offset": 1226939
+  },
+  {
+    "id": "section-0346",
+    "level": 2,
+    "title": "Жатва Веры",
+    "offset": 1228236
+  },
+  {
+    "id": "section-0347",
+    "level": 2,
+    "title": "Предложенная Вера",
+    "offset": 1233868
+  },
+  {
+    "id": "section-0348",
+    "level": 2,
+    "title": "Перебор",
+    "offset": 1238401
+  },
+  {
+    "id": "section-0349",
+    "level": 1,
+    "title": "Взаимодействие с людьми",
+    "offset": 1242405
+  },
+  {
+    "id": "section-0350",
+    "level": 2,
+    "title": "Наделение слуг силой",
+    "offset": 1243119
+  },
+  {
+    "id": "section-0351",
+    "level": 2,
+    "title": "Потенциал Веры",
+    "offset": 1244266
+  },
+  {
+    "id": "section-0352",
+    "level": 2,
+    "title": "Призыв Божественных сил",
+    "offset": 1251610
+  },
+  {
+    "id": "section-0353",
+    "level": 1,
+    "title": "Проявление",
+    "offset": 1253934
+  },
+  {
+    "id": "section-0354",
+    "level": 1,
+    "title": "Вера как оружие",
+    "offset": 1257877
+  },
+  {
+    "id": "section-0355",
+    "level": 2,
+    "title": "Освященная земля",
+    "offset": 1258443
+  },
+  {
+    "id": "section-0356",
+    "level": 2,
+    "title": "Благословленные и освященные предметы",
+    "offset": 1260342
+  },
+  {
+    "id": "section-0357",
+    "level": 2,
+    "title": "Молитвы",
+    "offset": 1262096
+  },
+  {
+    "id": "section-0358",
+    "level": 1,
+    "title": "Взаимодействие с проклятыми",
+    "offset": 1264795
+  },
+  {
+    "id": "section-0359",
+    "level": 2,
+    "title": "Вызов и подчинение",
+    "offset": 1271482
+  },
+  {
+    "id": "section-0360",
+    "level": 2,
+    "title": "Смертные заклинатели",
+    "offset": 1278974
+  },
+  {
+    "id": "section-0361",
+    "level": 1,
+    "title": "Жизнь и Смерть",
+    "offset": 1281320
+  },
+  {
+    "id": "section-0362",
+    "level": 4,
+    "title": "Новый носитель",
+    "offset": 1281716
+  },
+  {
+    "id": "section-0363",
+    "level": 4,
+    "title": "Формы бытия",
+    "offset": 1292907
+  },
+  {
+    "id": "section-0364",
+    "level": 1,
+    "title": "Глава 10. История",
+    "offset": 1321922
+  },
+  {
+    "id": "section-0365",
+    "level": 1,
+    "title": "Начало",
+    "offset": 1326725
+  },
+  {
+    "id": "section-0366",
+    "level": 2,
+    "title": "Ограничения, налагаемые смертными телами",
+    "offset": 1333041
+  },
+  {
+    "id": "section-0367",
+    "level": 1,
+    "title": "Мир Тьмы",
+    "offset": 1334656
+  },
+  {
+    "id": "section-0368",
+    "level": 1,
+    "title": "Стили игры",
+    "offset": 1340824
+  },
+  {
+    "id": "section-0369",
+    "level": 1,
+    "title": "Создание хроник",
+    "offset": 1344272
+  },
+  {
+    "id": "section-0370",
+    "level": 1,
+    "title": "Дьявол кроется в деталях",
+    "offset": 1354313
+  },
+  {
+    "id": "section-0371",
+    "level": 2,
+    "title": "В огне",
+    "offset": 1363842
+  },
+  {
+    "id": "section-0372",
+    "level": 2,
+    "title": "Обращения и история",
+    "offset": 1370799
+  },
+  {
+    "id": "section-0373",
+    "level": 1,
+    "title": "Создание историй",
+    "offset": 1372939
+  },
+  {
+    "id": "section-0374",
+    "level": 1,
+    "title": "Примеры историй",
+    "offset": 1387249
+  },
+  {
+    "id": "section-0375",
+    "level": 1,
+    "title": "Введение новых персонажей",
+    "offset": 1392860
+  },
+  {
+    "id": "section-0376",
+    "level": 1,
+    "title": "Как рассказать историю",
+    "offset": 1394868
+  },
+  {
+    "id": "section-0377",
+    "level": 1,
+    "title": "Заповеди",
+    "offset": 1396637
+  },
+  {
+    "id": "section-0378",
+    "level": 1,
+    "title": "Глава 11. Противники",
+    "offset": 1405114
+  },
+  {
+    "id": "section-0379",
+    "level": 1,
+    "title": "Чудовищные демоны",
+    "offset": 1406561
+  },
+  {
+    "id": "section-0380",
+    "level": 2,
+    "title": "Дьяволы",
+    "offset": 1407270
+  },
+  {
+    "id": "section-0381",
+    "level": 4,
+    "title": "Уильям Зобель",
+    "offset": 1410863
+  },
+  {
+    "id": "section-0382",
+    "level": 1,
+    "title": "Кнуты",
+    "offset": 1411660
+  },
+  {
+    "id": "section-0383",
+    "level": 4,
+    "title": "Роберт Лау",
+    "offset": 1414406
+  },
+  {
+    "id": "section-0384",
+    "level": 1,
+    "title": "Преступники",
+    "offset": 1415117
+  },
+  {
+    "id": "section-0385",
+    "level": 4,
+    "title": "Крис Свенсон",
+    "offset": 1418604
+  },
+  {
+    "id": "section-0386",
+    "level": 1,
+    "title": "Изверги",
+    "offset": 1419476
+  },
+  {
+    "id": "section-0387",
+    "level": 4,
+    "title": "Джо Восс",
+    "offset": 1422487
+  },
+  {
+    "id": "section-0388",
+    "level": 1,
+    "title": "Осквернители",
+    "offset": 1423319
+  },
+  {
+    "id": "section-0389",
+    "level": 4,
+    "title": "Хелен Тисдейл",
+    "offset": 1426968
+  },
+  {
+    "id": "section-0390",
+    "level": 1,
+    "title": "Пожиратели",
+    "offset": 1427881
+  },
+  {
+    "id": "section-0391",
+    "level": 4,
+    "title": "Типтакци",
+    "offset": 1430734
+  },
+  {
+    "id": "section-0392",
+    "level": 1,
+    "title": "Убийцы",
+    "offset": 1431436
+  },
+  {
+    "id": "section-0393",
+    "level": 4,
+    "title": "Апил-Син",
+    "offset": 1434295
+  },
+  {
+    "id": "section-0394",
+    "level": 1,
+    "title": "Экзорцисты",
+    "offset": 1435101
+  },
+  {
+    "id": "section-0395",
+    "level": 4,
+    "title": "Дэвид Линн Карпентер",
+    "offset": 1440916
+  },
+  {
+    "id": "section-0396",
+    "level": 1,
+    "title": "Меч Гавриила",
+    "offset": 1441472
+  },
+  {
+    "id": "section-0397",
+    "level": 1,
+    "title": "Истинно верующие",
+    "offset": 1447294
+  },
+  {
+    "id": "section-0398",
+    "level": 4,
+    "title": "Преподобный Брайан Стюард",
+    "offset": 1454213
+  },
+  {
+    "id": "section-0399",
+    "level": 1,
+    "title": "Воры из Тьмы",
+    "offset": 1454952
+  },
+  {
+    "id": "section-0400",
+    "level": 4,
+    "title": "Уильям Эмерсон (Первый Наставник общества Ловцов Звезд)",
+    "offset": 1460025
+  },
+  {
+    "id": "section-0401",
+    "level": 1,
+    "title": "Слуги Привязанных к Земле",
+    "offset": 1460837
+  },
+  {
+    "id": "section-0402",
+    "level": 2,
+    "title": "Убийца",
+    "offset": 1462131
+  },
+  {
+    "id": "section-0403",
+    "level": 4,
+    "title": "Лео Дашхилл",
+    "offset": 1466912
+  },
+  {
+    "id": "section-0404",
+    "level": 1,
+    "title": "Идеалист",
+    "offset": 1467853
+  },
+  {
+    "id": "section-0405",
+    "level": 4,
+    "title": "Клод Бренниган",
+    "offset": 1473509
+  },
+  {
+    "id": "section-0406",
+    "level": 1,
+    "title": "Оккультист",
+    "offset": 1474535
+  },
+  {
+    "id": "section-0407",
+    "level": 4,
+    "title": "Отец Шон Риордан",
+    "offset": 1478664
+  },
+  {
+    "id": "section-0408",
+    "level": 1,
+    "title": "Серый кардинал",
+    "offset": 1479621
+  },
+  {
+    "id": "section-0409",
+    "level": 4,
+    "title": "Советник Ирен Сандлер",
+    "offset": 1483558
+  },
+  {
+    "id": "section-0410",
+    "level": 1,
+    "title": "Разрушитель",
+    "offset": 1484381
+  },
+  {
+    "id": "section-0411",
+    "level": 4,
+    "title": "Келли Финнеган",
+    "offset": 1489222
+  },
+  {
+    "id": "section-0412",
+    "level": 1,
+    "title": "Охотничьи отряды",
+    "offset": 1490114
+  },
+  {
+    "id": "section-0413",
+    "level": 1,
+    "title": "Лист персонажа",
+    "offset": 1495673
+  },
+  {
+    "id": "section-0414",
+    "level": 1,
+    "title": "Аннотация",
+    "offset": 1496226
+  }
+]

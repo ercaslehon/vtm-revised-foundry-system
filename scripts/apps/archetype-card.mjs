@@ -10,11 +10,11 @@ function normalizeName(value = "") {
     .replace(/[\s_\-]+/g, " ");
 }
 
-export function findArchetypeForName(value = "") {
+export function findArchetypeForName(value = "", archetypes = VTM_REVISED.archetypeOptions ?? []) {
   const raw = String(value ?? "").trim();
   if (!raw) return null;
   const normalized = normalizeName(raw);
-  return (VTM_REVISED.archetypeOptions ?? []).find(archetype => {
+  return archetypes.find(archetype => {
     const names = [archetype.name, archetype.slug, ...(archetype.aliases ?? [])].filter(Boolean);
     return names.some(name => normalizeName(name) === normalized);
   }) ?? null;
@@ -69,7 +69,8 @@ export class VTMArchetypeCard extends HandlebarsApplicationMixin(ApplicationV2) 
         regain: game.i18n.localize("VTM_REVISED.Archetype.CustomRegain")
       },
       isCustom: custom,
-      isNature: this.kind !== "demeanor"
+      isNature: this.kind !== "demeanor",
+      isDemon: this.actor?.type === "demon"
     };
   }
 

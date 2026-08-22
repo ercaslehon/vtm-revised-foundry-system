@@ -638,33 +638,11 @@
   align-items: center;
 }
 
-.generation-cap-card {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  padding: 0.65rem 0.8rem;
-  margin: 0.5rem 0 0.75rem;
-  border: 1px solid rgba(184, 150, 62, 0.45);
-  border-radius: 8px;
-  background: rgba(184, 150, 62, 0.08);
-}
-
-.generation-cap-card > div:first-child {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-}
-
 .generation-cap-values {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
   color: var(--vtm-muted, #cbbfb4);
-}
-
-.generation-cap-card button {
-  white-space: nowrap;
 }
 
 .trait-cap-note {
@@ -1395,10 +1373,6 @@ input[readonly] {
 .morality-picker-row button,
 .vtm-morality-card-root button {
   cursor: pointer;
-}
-.morality-selected-summary {
-  margin: 0.25rem 0 0;
-  font-size: 0.82rem;
 }
 .vtm-morality-card-root {
   height: 100%;
