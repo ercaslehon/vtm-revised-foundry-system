@@ -2,13 +2,16 @@
   <section class="demon-top-shell">
     <aside class="demon-portrait-card">
       <div class="demon-portrait-frame">
-        <img class="actor-portrait-view" src="{{system.profile.avatar}}" alt="{{actor.name}}" tabindex="0">
+        <img class="actor-portrait-view" src="{{demonPortrait.image}}" alt="{{actor.name}} · {{demonPortrait.label}}" title="Открыть: {{demonPortrait.label}}" tabindex="0">
+        <button type="button" class="demon-portrait-cycle demon-portrait-previous" data-delta="-1" title="Предыдущий облик"><i class="fas fa-chevron-left"></i></button>
+        <button type="button" class="demon-portrait-cycle demon-portrait-next" data-delta="1" title="Следующий облик"><i class="fas fa-chevron-right"></i></button>
+        <span class="demon-portrait-mode-label">{{demonPortrait.label}}</span>
       </div>
 
       <div class="demon-portrait-actions">
-        <button type="button" class="actor-portrait-edit" title="Выбрать портрет"><i class="fas fa-image"></i></button>
-        <button type="button" class="actor-portrait-sync-token" title="Синхронизировать токен"><i class="fas fa-user-tag"></i></button>
-        <button type="button" class="actor-portrait-reset" title="Сбросить портрет"><i class="fas fa-rotate-left"></i></button>
+        <button type="button" class="actor-portrait-edit" title="Загрузить: {{demonPortrait.label}}"><i class="fas fa-image"></i></button>
+        <button type="button" class="actor-portrait-sync-token" title="Поставить текущий облик на токен"><i class="fas fa-user-tag"></i></button>
+        <button type="button" class="actor-portrait-reset" title="Сбросить: {{demonPortrait.label}}"><i class="fas fa-rotate-left"></i></button>
       </div>
     </aside>
 
@@ -251,6 +254,7 @@
                   <button type="button" class="demon-roll-button vtm-roll" data-trait="{{rollPath}}" data-label="{{label}}" title="Бросить {{label}}">
                     <i class="fas fa-dice-d10"></i>
                   </button>
+                  <button type="button" class="trait-reference-open demon-mini-card-button" data-trait-kind="attribute" data-trait-key="{{key}}" data-trait-label="{{label}}" title="Когда применять"><i class="fas fa-book-open"></i></button>
                 </div>
               {{/each}}
             </div>
@@ -282,6 +286,7 @@
                   <button type="button" class="demon-roll-button vtm-roll" data-trait="{{rollPath}}" data-label="{{label}}" title="Бросить {{label}}">
                     <i class="fas fa-dice-d10"></i>
                   </button>
+                  <button type="button" class="trait-reference-open demon-mini-card-button" data-trait-kind="ability" data-trait-key="{{key}}" data-trait-label="{{label}}" title="Когда применять"><i class="fas fa-book-open"></i></button>
                 </div>
               {{/each}}
             </div>
@@ -412,6 +417,21 @@
           {{#if activeFormView.healthBoxes.length}}<div class="demon-form-health-boxes"><b>Дополнительное здоровье</b>{{#each activeFormView.healthBoxes}}<button type="button" class="demon-form-health-box damage-{{damage}}" data-form-health-index="{{index}}" title="Дополнительный уровень: нажми для смены типа урона"><i class="fas fa-square"></i></button>{{/each}}</div>{{/if}}
           <div class="demon-active-form-abilities">
             {{#each activeFormView.abilities}}<article class="{{#if high}}is-high-torment{{/if}}"><div><b>{{label}}</b><small>{{description}}</small></div>{{#if actionable}}<button type="button" class="demon-form-special-attack" data-tier="{{tier}}" data-index="{{index}}" title="Применить особую атаку"><i class="fas fa-burst"></i></button>{{/if}}</article>{{/each}}
+          </div>
+        </section>
+        {{/if}}
+
+        {{#if activeInvocationEffects.length}}
+        <section class="demon-active-invocations">
+          <header><h3><i class="fas fa-wand-sparkles"></i> Активные эффекты Воззваний</h3></header>
+          <div class="demon-active-invocation-list">
+            {{#each activeInvocationEffects}}
+              <article>
+                <img src="{{img}}" alt="">
+                <div><b>{{name}}</b>{{#if duration}}<span>{{duration}}</span>{{/if}}{{#if description}}<small>{{description}}</small>{{/if}}</div>
+                <button type="button" class="demon-invocation-effect-remove" data-effect-id="{{id}}" title="Снять эффект"><i class="fas fa-xmark"></i></button>
+              </article>
+            {{/each}}
           </div>
         </section>
         {{/if}}

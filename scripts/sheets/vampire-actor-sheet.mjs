@@ -1,17 +1,20 @@
 import { rollDicePool } from "../dice/dice-pool.mjs";
 import { VTM_REVISED } from "../config.mjs";
 import { applyAutomationCost, normalizeAutomationCost } from "../utils/automation-costs.mjs";
-import { clearAutomationEffects, registerAutomationEffect } from "../utils/active-automation-effects.mjs";
+import { activeAutomationEffects, activeAutomationRollModifier, clearAutomationEffects, registerAutomationEffect } from "../utils/active-automation-effects.mjs";
 import { VTM_STATUS_EFFECTS, actorHasStatus, clearVtmStatuses, statusRollModifier } from "../combat/status-effects.mjs";
 import { multipleActionPenalty, netAttackSuccesses as calculateNetAttackSuccesses } from "../combat/combat-math.mjs";
 import { VTMDisciplineCard } from "../apps/discipline-card.mjs";
 import { VTMRitualCard } from "../apps/ritual-card.mjs";
 import { VTMClanCard, findClanItemForName } from "../apps/clan-card.mjs";
 import { VTMMeritFlawCard } from "../apps/merit-flaw-card.mjs";
+import { getVampireRollEffects } from "../data/vampire/vampire-roll-effects.mjs";
 import { VTMArchetypeCard, findArchetypeForName } from "../apps/archetype-card.mjs";
 import { VTMMoralityPathCard, findMoralityPathItemForName } from "../apps/morality-path-card.mjs";
 import { VTMCharacterCreationWizard } from "../apps/character-creation-wizard.mjs";
 import { enhanceActorRollSearchSelects } from "../ui/actor-roll-search-select.mjs";
+import { advancementCost } from "../utils/advancement-costs.mjs";
+import { activateTraitReferenceButtons } from "../data/trait-reference.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const ActorSheetV2 = foundry.applications.sheets.ActorSheetV2;
@@ -300,7 +303,7 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
       },
       armor: actor.system?.automation?.armor ?? {},
       combatStatuses: VTM_STATUS_EFFECTS.map(status => ({ ...status, active: actorHasStatus(actor, status.id) })),
-      activeAutomationEffects: Array.from(actor.system?.automation?.activeEffects ?? [])
+      activeAutomationEffects: activeAutomationEffects(actor)
     };
   }
 
@@ -346,6 +349,7 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
     super._onRender(context, options);
     const element = this.element;
     if (!element) return;
+    activateTraitReferenceButtons(element);
     enhanceActorRollSearchSelects(element);
 
     // v10.0.1 sheet size guard.
@@ -511,8 +515,12 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
       button.addEventListener("click", async event => {
         event.preventDefault();
         const id = button.dataset.effectId;
-        const effects = Array.from(this.actor.system?.automation?.activeEffects ?? []).filter(effect => effect.id !== id);
-        await this.actor.update({ "system.automation.activeEffects": effects });
+        const embedded = this.actor.effects?.get?.(id);
+        if (embedded) await this.actor.deleteEmbeddedDocuments("ActiveEffect", [id]);
+        else {
+          const effects = Array.from(this.actor.system?.automation?.activeEffects ?? []).filter(effect => effect.id !== id);
+          await this.actor.update({ "system.automation.activeEffects": effects });
+        }
       });
     });
     element.querySelectorAll(".automation-effects-clear-scope").forEach(button => {
@@ -554,7 +562,12 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
     const rollBuilder = element.querySelector(".vtm-roll-builder");
     rollBuilder?.querySelector(".vtm-roll-builder-submit")?.addEventListener("click", async event => {
       event.preventDefault();
-      await this._rollFromForm(rollBuilder);
+      await this._openRollDialog({
+        firstTrait: rollBuilder.querySelector("[data-roll-field='firstTrait']")?.value || "",
+        secondTrait: rollBuilder.querySelector("[data-roll-field='secondTrait']")?.value || "",
+        difficulty: Number(rollBuilder.querySelector("[data-roll-field='difficulty']")?.value || 6),
+        label: rollBuilder.querySelector("[data-roll-field='label']")?.value || ""
+      });
     });
 
     element.querySelectorAll(".generation-sync").forEach(button => {
@@ -689,6 +702,11 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
         await this._recalculateExperienceFromJournal();
       });
     });
+    element.querySelector(".vampire-advancement-open")?.addEventListener("click", async event => { event.preventDefault(); await this._openAdvancementDialog(); });
+    element.querySelectorAll(".experience-entry-undo").forEach(button => button.addEventListener("click", async event => {
+      event.preventDefault();
+      await this._undoExperiencePurchase(button.dataset.entryId || "");
+    }));
 
     element.querySelectorAll(".item-create").forEach(button => {
       button.addEventListener("click", async event => {
@@ -858,13 +876,14 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
           ...entry,
           id: entry.id || String(index),
           type: entry.type || (delta < 0 ? "spend" : "award"),
-          typeLabel: this._experienceTypeLabel(entry.type || (delta < 0 ? "spend" : "award")),
+          typeLabel: entry.reversedAt ? "Отменено" : this._experienceTypeLabel(entry.type || (delta < 0 ? "spend" : "award")),
           dateLabel: this._formatExperienceDate(entry.createdAt),
-          signedDelta: delta > 0 ? `+${delta}` : String(delta),
-          positive: delta >= 0,
+          signedDelta: entry.reversedAt ? "0" : (delta > 0 ? `+${delta}` : String(delta)),
+          positive: entry.reversedAt || delta >= 0,
           reason,
           target: String(entry.target || "").trim(),
-          userName: String(entry.userName || "").trim()
+          userName: String(entry.userName || "").trim(),
+          canUndo: Boolean(entry.purchase && !entry.reversedAt)
         };
       })
       .sort((a, b) => String(b.createdAt || "").localeCompare(String(a.createdAt || "")));
@@ -951,6 +970,10 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
     const journal = this._experienceJournalEntries();
     const entry = journal.find(item => String(item.id) === String(entryId));
     if (!entry) return null;
+    if (entry.reversedAt) {
+      await this.actor.update({ "system.resources.experience.journal": journal.filter(item => String(item.id) !== String(entryId)) });
+      return entry;
+    }
 
     const type = entry.type || (Number(entry.delta || 0) < 0 ? "spend" : "award");
     const amount = Math.abs(Number(entry.amount ?? entry.delta ?? 0));
@@ -970,8 +993,35 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
     return entry;
   }
 
+  async _undoExperiencePurchase(entryId = "") {
+    const journal = this._experienceJournalEntries();
+    const entry = journal.find(item => String(item.id) === String(entryId));
+    if (!entry?.purchase || entry.reversedAt || !entry.target) return false;
+    const [uuid, nestedPath] = String(entry.target).split("#");
+    const document = nestedPath ? await fromUuid(uuid) : this.actor;
+    const path = nestedPath || String(entry.target).replace(/^system\./, "system.");
+    if (!document) return false;
+    const before = JSON.parse(entry.beforeJson || "null");
+    const after = JSON.parse(entry.afterJson || "null");
+    const createdDocument = nestedPath === "@created";
+    const current = createdDocument ? { name: document.name, rating: Number(document.system?.rating || 0) } : foundry.utils.getProperty(document, path);
+    if (JSON.stringify(current) !== JSON.stringify(after)) {
+      ui.notifications?.warn?.("Покупку нельзя откатить: значение уже изменилось после неё.");
+      return false;
+    }
+    const confirmed = await new Promise(resolve => new DialogV1({ title: "Откатить развитие", content: `<p>Вернуть <b>${Math.abs(Number(entry.amount || entry.delta || 0))} опыта</b> и восстановить прежнее значение?</p>`, buttons: { undo: { label: "Откатить", callback: () => resolve(true) }, cancel: { label: game.i18n.localize("Cancel"), callback: () => resolve(false) } }, default: "cancel", close: () => resolve(false) }, { width: 440 }).render(true));
+    if (!confirmed) return false;
+    const reversedAt = new Date().toISOString();
+    const nextJournal = journal.map(item => String(item.id) === String(entryId) ? { ...item, reversedAt } : item);
+    const xp = this.actor.system?.resources?.experience ?? {};
+    if (createdDocument) { await this.actor.deleteEmbeddedDocuments("Item", [document.id]); await this.actor.update({ "system.resources.experience.journal": nextJournal, "system.resources.experience.available": Number(xp.available || 0) + Math.abs(Number(entry.amount || 0)), "system.resources.experience.spent": Math.max(0, Number(xp.spent || 0) - Math.abs(Number(entry.amount || 0))) }); }
+    else if (document === this.actor) await this.actor.update({ [path]: before, "system.resources.experience.journal": nextJournal, "system.resources.experience.available": Number(xp.available || 0) + Math.abs(Number(entry.amount || 0)), "system.resources.experience.spent": Math.max(0, Number(xp.spent || 0) - Math.abs(Number(entry.amount || 0))) });
+    else { await document.update({ [path]: before }); await this.actor.update({ "system.resources.experience.journal": nextJournal, "system.resources.experience.available": Number(xp.available || 0) + Math.abs(Number(entry.amount || 0)), "system.resources.experience.spent": Math.max(0, Number(xp.spent || 0) - Math.abs(Number(entry.amount || 0))) }); }
+    return true;
+  }
+
   async _recalculateExperienceFromJournal() {
-    const entries = this._experienceJournalEntries();
+    const entries = this._experienceJournalEntries().filter(entry => !entry.reversedAt);
     const total = entries
       .filter(entry => entry.type === "award")
       .reduce((sum, entry) => sum + Math.abs(Number(entry.amount ?? entry.delta ?? 0)), 0);
@@ -992,6 +1042,73 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
 
     ui.notifications?.info?.(game.i18n.localize("VTM_REVISED.Experience.Recalculated"));
     return { total, spent, available };
+  }
+
+  async _openAdvancementDialog() {
+    const system = this.actor.system ?? {};
+    const purchases = [];
+    const add = (group, label, document, path, current, cost, next = Number(current) + 1) => {
+      if (Number.isFinite(cost) && cost > 0) purchases.push({ group, label, document, path, current: Number(current), next, cost, target: document === this.actor ? path : `${document.uuid}#${path}` });
+    };
+    const traitMax = Math.max(5, Number(this.actor.generationCaps?.traitMax || 5));
+    for (const [group, keys] of Object.entries(VTM_REVISED.attributeCategories)) for (const key of keys) {
+      const current = Number(system.attributes?.[group]?.[key] || 1);
+      if (current < traitMax) add("Атрибуты", game.i18n.localize(`VTM_REVISED.Attribute.${key}`), this.actor, `system.attributes.${group}.${key}`, current, advancementCost("attribute", current));
+    }
+    for (const [group, keys] of Object.entries(VTM_REVISED.abilityCategories)) for (const key of keys) {
+      const current = Number(system.abilities?.[group]?.[key]?.value || 0);
+      if (current < traitMax) add("Способности", game.i18n.localize(`VTM_REVISED.Ability.${key}`), this.actor, `system.abilities.${group}.${key}.value`, current, advancementCost("ability", current));
+    }
+    const clan = findClanItemForName(system.profile?.clan);
+    const clanDisciplines = new Set(Array.from(clan?.system?.disciplines ?? []).map(entry => this._normalizeName(typeof entry === "string" ? entry : entry.name)));
+    for (const item of Array.from(this.actor.items ?? []).filter(item => item.type === "discipline")) {
+      const current = Number(item.system?.rating || 0);
+      if (current >= traitMax) continue;
+      const inClan = clanDisciplines.has(this._normalizeName(item.name));
+      add("Дисциплины", item.name, item, "system.rating", current, advancementCost("vampireDiscipline", current, { inClan }));
+    }
+    const knownDisciplines = new Set(Array.from(this.actor.items ?? []).filter(item => item.type === "discipline").map(item => this._normalizeName(item.name)));
+    for (const source of Array.from(game.items ?? []).filter(item => item.type === "discipline" && !knownDisciplines.has(this._normalizeName(item.name)))) {
+      purchases.push({ group: "Новые дисциплины", label: source.name, sourceItem: source, current: 0, next: 1, cost: 10, target: "" });
+    }
+    for (const item of Array.from(this.actor.items ?? []).filter(item => item.type === "background")) {
+      const current = Number(item.system?.rating || 0);
+      if (current < traitMax) add("Дополнения", item.name, item, "system.rating", current, advancementCost("background", current));
+    }
+    for (const key of ["conscience", "selfControl", "courage"]) {
+      const current = Number(system.virtues?.[key] || 1);
+      if (current < 5) add("Добродетели", game.i18n.localize(`VTM_REVISED.Virtue.${key === "selfControl" ? "SelfControl" : key[0].toUpperCase() + key.slice(1)}`), this.actor, `system.virtues.${key}`, current, advancementCost("virtue", current));
+    }
+    const humanity = Number(system.resources?.humanity?.value || 0);
+    if (humanity < 10) add("Ресурсы", system.resources?.pathName || "Человечность", this.actor, "system.resources.humanity.value", humanity, advancementCost("morality", humanity));
+    const willpower = Number(system.resources?.willpower?.max || 0);
+    if (willpower < 10) add("Ресурсы", "Сила Воли", this.actor, "system.resources.willpower.max", willpower, advancementCost("willpower", willpower));
+    purchases.forEach((entry, index) => { entry.index = index; });
+    const grouped = purchases.reduce((map, entry) => (map.set(entry.group, [...(map.get(entry.group) || []), entry]), map), new Map());
+    const options = [...grouped.entries()].map(([group, entries]) => `<optgroup label="${foundry.utils.escapeHTML(group)}">${entries.map(entry => `<option value="${entry.index}">${foundry.utils.escapeHTML(entry.label)} · ${entry.current} → ${entry.next} · ${entry.cost} опыта</option>`).join("")}</optgroup>`).join("");
+    const content = `<form class="vtm-advancement-dialog"><p>Доступно опыта: <b>${Number(system.resources?.experience?.available || 0)}</b></p><label>Развитие<select name="purchase" data-vtm-searchable="true">${options}</select></label><label><span><input type="checkbox" name="storytellerApproved"> Покупка согласована с Рассказчиком</span></label><p class="hint">Стоимость проверяется повторно непосредственно перед покупкой. Покупку можно безопасно откатить из журнала, пока значение не изменилось снова.</p></form>`;
+    return new Promise(resolve => new DialogV1({ title: "Развитие персонажа", content, buttons: { buy: { label: "Купить", callback: async html => {
+      const selected = purchases[Number(this._getFormElement(html)?.querySelector("[name='purchase']")?.value)];
+      if (!selected) return resolve(false);
+      if (!this._getFormElement(html)?.querySelector("[name='storytellerApproved']")?.checked) { ui.notifications?.warn?.("Подтверди согласование покупки с Рассказчиком."); return resolve(false); }
+      const live = selected.sourceItem ? !Array.from(this.actor.items ?? []).some(item => item.type === "discipline" && this._normalizeName(item.name) === this._normalizeName(selected.label)) : foundry.utils.getProperty(selected.document, selected.path);
+      if ((selected.sourceItem && !live) || (!selected.sourceItem && JSON.stringify(live) !== JSON.stringify(selected.current))) { ui.notifications?.warn?.("Значение изменилось после открытия окна. Открой развитие заново."); return resolve(false); }
+      const xp = this.actor.system?.resources?.experience ?? {};
+      const available = Number(xp.available || 0);
+      if (available < selected.cost) { ui.notifications?.warn?.(`Недостаточно опыта: ${available}/${selected.cost}.`); return resolve(false); }
+      let created = null;
+      if (selected.sourceItem) {
+        const sourceData = selected.sourceItem.toObject(); delete sourceData._id; foundry.utils.setProperty(sourceData, "system.rating", 1);
+        [created] = await this.actor.createEmbeddedDocuments("Item", [sourceData]);
+        selected.target = `${created.uuid}#@created`;
+      }
+      const entry = { id: this._newExperienceEntryId(), type: "spend", amount: selected.cost, delta: -selected.cost, reason: `Развитие: ${selected.label} ${selected.current} → ${selected.next}`, target: selected.target, beforeJson: JSON.stringify(selected.sourceItem ? null : selected.current), afterJson: JSON.stringify(selected.sourceItem ? { name: created.name, rating: 1 } : selected.next), purchase: true, reversedAt: "", createdAt: new Date().toISOString(), userId: game.user?.id || "", userName: game.user?.name || "" };
+      if (selected.sourceItem) await this.actor.update({ "system.resources.experience.available": available - selected.cost, "system.resources.experience.spent": Number(xp.spent || 0) + selected.cost, "system.resources.experience.journal": [...this._experienceJournalEntries(), entry] });
+      else if (selected.document === this.actor) await this.actor.update({ [selected.path]: selected.next, "system.resources.experience.available": available - selected.cost, "system.resources.experience.spent": Number(xp.spent || 0) + selected.cost, "system.resources.experience.journal": [...this._experienceJournalEntries(), entry] });
+      else { await selected.document.update({ [selected.path]: selected.next }); await this.actor.update({ "system.resources.experience.available": available - selected.cost, "system.resources.experience.spent": Number(xp.spent || 0) + selected.cost, "system.resources.experience.journal": [...this._experienceJournalEntries(), entry] }); }
+      await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this.actor }), content: `<article class="vtm-chat-card"><h2>Развитие персонажа</h2><p><b>${foundry.utils.escapeHTML(selected.label)}</b>: ${selected.current} → ${selected.next}</p><p>Потрачено опыта: ${selected.cost}</p></article>` });
+      resolve(true);
+    } }, cancel: { label: game.i18n.localize("Cancel"), callback: () => resolve(false) } }, default: "buy", close: () => resolve(false), render: html => enhanceActorRollSearchSelects(html?.[0] ?? html) }, { width: 620, classes: ["vtm-advancement-dialog-window"] }).render(true));
   }
 
 
@@ -1834,17 +1951,18 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
     const basePool = Math.max(1, components.reduce((total, component) => total + Number(component.value || 0), 0));
     const armorPenalty = this._armorDexterityPenalty(this.actor);
     const statusModifier = statusRollModifier(this.actor, { physical: true });
+    const activeModifier = activeAutomationRollModifier(this.actor, [options.firstTrait, options.secondTrait]);
     const multiplePenalty = await this._consumeMultipleAction();
-    const attackPool = Math.max(1, basePool + healthPenalty.value - armorPenalty + statusModifier.dice - multiplePenalty);
+    const attackPool = Math.max(1, basePool + healthPenalty.value - armorPenalty + statusModifier.dice + activeModifier.dice - multiplePenalty);
     const attackResult = await rollDicePool({
       actor: this.actor,
       pool: attackPool,
       basePool,
       healthPenalty: healthPenalty.value,
       healthPenaltyLabel: healthPenalty.label,
-      difficulty: Number(options.difficulty || 6),
+      difficulty: Math.max(2, Math.min(10, Number(options.difficulty || 6) + activeModifier.difficulty)),
       label: game.i18n.format("VTM_REVISED.Weapon.AttackLabel", { name: item.name }),
-      components: [...components, ...(armorPenalty ? [{ label: "Штраф брони", value: -armorPenalty }] : []), ...(statusModifier.dice ? [{ label: statusModifier.label, value: statusModifier.dice }] : []), ...(multiplePenalty ? [{ label: "Множественные действия", value: -multiplePenalty }] : [])]
+      components: [...components, ...(armorPenalty ? [{ label: "Штраф брони", value: -armorPenalty }] : []), ...(statusModifier.dice ? [{ label: statusModifier.label, value: statusModifier.dice }] : []), ...activeModifier.effects.map(effect => ({ label: effect.name, value: Number(effect.diceModifier || effect.difficultyModifier || 0) })), ...(multiplePenalty ? [{ label: "Множественные действия", value: -multiplePenalty }] : [])]
     });
 
     const defenseResult = options.targetActor && options.defenseType
@@ -1954,11 +2072,13 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
     const basePool = Math.max(1, dexterity + abilityValue);
     const armorPenalty = this._armorDexterityPenalty(actor);
     const statusModifier = statusRollModifier(actor, { physical: true });
+    const activeModifier = activeAutomationRollModifier(actor, ["attribute.physical.dexterity", `ability.${ability}`]);
     return rollDicePool({
-      actor, pool: Math.max(1, basePool + health.value - armorPenalty + statusModifier.dice), basePool,
-      healthPenalty: health.value, healthPenaltyLabel: health.label, difficulty: 6,
+      actor, pool: Math.max(1, basePool + health.value - armorPenalty + statusModifier.dice + activeModifier.dice), basePool,
+      healthPenalty: health.value, healthPenaltyLabel: health.label,
       label: `${labels[type] || labels.dodge}: ${actor.name}`,
-      components: [{ label: "Ловкость", value: dexterity }, { label: labels[type] || labels.dodge, value: abilityValue }, ...(armorPenalty ? [{ label: "Штраф брони", value: -armorPenalty }] : []), ...(statusModifier.dice ? [{ label: statusModifier.label, value: statusModifier.dice }] : [])]
+      difficulty: Math.max(2, Math.min(10, 6 + activeModifier.difficulty)),
+      components: [{ label: "Ловкость", value: dexterity }, { label: labels[type] || labels.dodge, value: abilityValue }, ...(armorPenalty ? [{ label: "Штраф брони", value: -armorPenalty }] : []), ...(statusModifier.dice ? [{ label: statusModifier.label, value: statusModifier.dice }] : []), ...activeModifier.effects.map(effect => ({ label: effect.name, value: Number(effect.diceModifier || effect.difficultyModifier || 0) }))]
     });
   }
 
@@ -2847,6 +2967,10 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
           <label>${game.i18n.localize("VTM_REVISED.Roll.Label")}</label>
           <input type="text" name="label" value="${foundry.utils.escapeHTML(label || game.i18n.localize("VTM_REVISED.Roll.Label"))}"/>
         </div>
+        <fieldset class="vtm-roll-effects-fieldset">
+          <legend>Учесть достоинства и недостатки</legend>
+          <div class="vtm-roll-effects-list">${this._buildVampireRollEffectsHtml(firstTrait, secondTrait)}</div>
+        </fieldset>
       </form>`;
 
     return new Promise(resolve => {
@@ -2868,9 +2992,28 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
           }
         },
         default: "roll",
-        close: () => resolve(false)
-      }, { width: 460 }).render(true);
+        close: () => resolve(false),
+        render: html => {
+          const root = html?.[0] ?? html;
+          if (!root) return;
+          const refresh = () => {
+            const list = root.querySelector(".vtm-roll-effects-list");
+            if (list) list.innerHTML = this._buildVampireRollEffectsHtml(root.querySelector("[name='firstTrait']")?.value || "", root.querySelector("[name='secondTrait']")?.value || "");
+          };
+          root.querySelectorAll("[name='firstTrait'], [name='secondTrait']").forEach(select => select.addEventListener("change", refresh));
+        }
+      }, { width: 560, classes: ["vtm-roll-dialog-window", "vampire-roll-dialog-window"] }).render(true);
     });
+  }
+
+  _buildVampireRollEffectsHtml(firstTrait = "", secondTrait = "") {
+    const effects = getVampireRollEffects(this.actor, [firstTrait, secondTrait]);
+    if (!effects.length) return '<p class="vtm-roll-effects-empty">Для выбранного броска подходящих достоинств или недостатков нет.</p>';
+    const escape = value => foundry.utils.escapeHTML(String(value ?? ""));
+    return effects.map(effect => {
+      const modifiers = [effect.dice ? `${effect.dice > 0 ? "+" : ""}${effect.dice} куб.` : "", effect.difficulty ? `${effect.difficulty > 0 ? "+" : ""}${effect.difficulty} к сложности` : ""].filter(Boolean).join(", ");
+      return `<label class="vtm-roll-effect-option"><input type="checkbox" name="rollEffect" value="${escape(`${effect.type}:${effect.key}`)}" data-dice="${Number(effect.dice || 0)}" data-difficulty="${Number(effect.difficulty || 0)}" data-label="${escape(effect.label)}"${effect.automatic ? " checked" : ""}><span><b>${escape(effect.label)}</b>${modifiers ? ` <strong>${escape(modifiers)}</strong>` : ""}<small>${escape(effect.note)}</small></span></label>`;
+    }).join("");
   }
 
   _getFormElement(htmlOrElement) {
@@ -2887,7 +3030,7 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
 
     const firstTraitKey = form.querySelector("[name='firstTrait'], [data-roll-field='firstTrait']")?.value ?? "";
     const secondTraitKey = form.querySelector("[name='secondTrait'], [data-roll-field='secondTrait']")?.value ?? "";
-    const difficulty = Number(form.querySelector("[name='difficulty'], [data-roll-field='difficulty']")?.value || 6);
+    const baseDifficulty = Number(form.querySelector("[name='difficulty'], [data-roll-field='difficulty']")?.value || 6);
     const customLabel = form.querySelector("[name='label'], [data-roll-field='label']")?.value?.trim() ?? "";
 
     const first = this._resolveTraitOption(firstTraitKey);
@@ -2913,19 +3056,23 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
     const armorPenalty = usesDexterity ? this._armorDexterityPenalty(this.actor) : 0;
     const isPhysical = [firstTraitKey, secondTraitKey].some(key => key.startsWith("attribute.physical.") || /\.(brawl|athletics|dodge|melee|firearms)$/.test(key));
     const statusModifier = statusRollModifier(this.actor, { physical: isPhysical });
+    const activeModifier = activeAutomationRollModifier(this.actor, [firstTraitKey, secondTraitKey]);
+    const selectedEffects = [...form.querySelectorAll("[name='rollEffect']:checked")].map(input => ({ label: input.dataset.label || "Модификатор", dice: Number(input.dataset.dice || 0), difficulty: Number(input.dataset.difficulty || 0) }));
+    const meritDice = selectedEffects.reduce((total, effect) => total + effect.dice, 0);
+    const meritDifficulty = selectedEffects.reduce((total, effect) => total + effect.difficulty, 0);
     const multiplePenalty = await this._consumeMultipleAction();
     const automaticSuccesses = usesStrength ? this._disciplineRating(this.actor, ["Могущество", "Potence"]) : 0;
 
     return rollDicePool({
       actor: this.actor,
-      pool: Math.max(1, pool - armorPenalty + statusModifier.dice - multiplePenalty),
+      pool: Math.max(1, pool - armorPenalty + statusModifier.dice + activeModifier.dice + meritDice - multiplePenalty),
       basePool,
       healthPenalty: healthPenalty.value,
       healthPenaltyLabel: healthPenalty.label,
       automaticSuccesses,
-      difficulty,
+      difficulty: Math.max(2, Math.min(10, baseDifficulty + activeModifier.difficulty + meritDifficulty)),
       label,
-      components: [...components, ...(armorPenalty ? [{ label: "Штраф брони", value: -armorPenalty }] : []), ...(statusModifier.dice ? [{ label: statusModifier.label, value: statusModifier.dice }] : []), ...(multiplePenalty ? [{ label: "Множественные действия", value: -multiplePenalty }] : [])]
+      components: [...components, ...(armorPenalty ? [{ label: "Штраф брони", value: -armorPenalty }] : []), ...(statusModifier.dice ? [{ label: statusModifier.label, value: statusModifier.dice }] : []), ...activeModifier.effects.map(effect => ({ label: effect.name, value: [effect.diceModifier ? `${Number(effect.diceModifier) > 0 ? "+" : ""}${effect.diceModifier} куб.` : "", effect.difficultyModifier ? `${Number(effect.difficultyModifier) > 0 ? "+" : ""}${effect.difficultyModifier} сл.` : ""].filter(Boolean).join(", ") })), ...selectedEffects.map(effect => ({ label: effect.label, value: [effect.dice ? `${effect.dice > 0 ? "+" : ""}${effect.dice} куб.` : "", effect.difficulty ? `${effect.difficulty > 0 ? "+" : ""}${effect.difficulty} сл.` : "", !effect.dice && !effect.difficulty ? "напоминание" : ""].filter(Boolean).join(", ") })), ...(multiplePenalty ? [{ label: "Множественные действия", value: -multiplePenalty }] : [])]
     });
   }
 

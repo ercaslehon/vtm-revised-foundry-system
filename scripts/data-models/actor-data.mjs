@@ -35,6 +35,10 @@ function experienceJournalEntryField() {
     delta: new fields.NumberField({ required: true, integer: true, min: -999, max: 999, initial: 0 }),
     reason: textField(),
     target: textField(),
+    beforeJson: textField(),
+    afterJson: textField(),
+    purchase: new fields.BooleanField({ required: true, initial: false }),
+    reversedAt: textField(),
     createdAt: textField(),
     userId: textField(),
     userName: textField()

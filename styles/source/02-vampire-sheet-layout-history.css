@@ -2998,33 +2998,109 @@
   }
 }
 
-.vampire-blood-actions {
+.vampire-blood-summary {
   display: flex;
-  gap: 0.25rem;
   align-items: center;
-  justify-content: center;
-  margin-top: 0.35rem;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 9px;
+  padding: 6px 8px;
+  border: 1px solid rgba(201, 173, 102, 0.18);
+  border-radius: 8px;
+  background: rgba(5, 3, 6, 0.48);
+  color: #d9c9c3;
+  font-size: 11px;
 }
 
-.vampire-blood-actions button {
-  width: 28px;
-  min-width: 28px;
-  height: 26px;
-  padding: 0;
+.vampire-blood-summary span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.vampire-blood-actions button.is-active {
+.vampire-blood-summary strong {
+  color: var(--vtm-gold-bright, #e6cf91);
+  font-size: 13px;
+}
+
+.vtm-revised.sheet .vampire-action-drawer {
+  grid-column: 1 / -1;
+  overflow: hidden;
+  border: 1px solid rgba(112, 35, 56, 0.48);
+  border-radius: 11px;
+  background: linear-gradient(180deg, rgba(18, 7, 12, 0.94), rgba(7, 4, 7, 0.96));
+}
+
+.vtm-revised.sheet .vampire-action-drawer summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 36px;
+  padding: 7px 11px;
+  color: var(--vtm-gold-bright, #e6cf91);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+
+.vtm-revised.sheet .vampire-action-drawer summary::-webkit-details-marker { display: none; }
+.vtm-revised.sheet .vampire-action-drawer summary > span { display: inline-flex; align-items: center; gap: 7px; }
+.vtm-revised.sheet .vampire-action-drawer-status { color: var(--vtm-muted, #b8aaa9); font-size: 11px; font-weight: 500; }
+.vtm-revised.sheet .vampire-action-drawer-status strong { color: #ead39b; }
+.vtm-revised.sheet .vampire-action-drawer summary .fa-chevron-down { transition: transform 140ms ease; }
+.vtm-revised.sheet .vampire-action-drawer[open] summary .fa-chevron-down { transform: rotate(180deg); }
+
+.vtm-revised.sheet .vampire-action-groups {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr 1.15fr;
+  gap: 8px;
+  padding: 0 9px 9px;
+}
+
+.vtm-revised.sheet .vampire-action-group {
+  padding: 8px;
+  border: 1px solid rgba(112, 35, 56, 0.30);
+  border-radius: 8px;
+  background: rgba(3, 2, 4, 0.42);
+}
+
+.vtm-revised.sheet .vampire-action-group h4 {
+  margin: 0 0 7px;
+  color: #d4bbb8;
+  font-size: 10px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.vtm-revised.sheet .vampire-action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.vtm-revised.sheet .vampire-action-buttons button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: auto;
+  min-width: 0;
+  min-height: 29px;
+  padding: 4px 8px;
+  border-radius: 7px;
+  font-size: 11px;
+}
+
+.vampire-action-buttons button.is-active {
   color: #fff0df;
   border-color: #ed6b4f;
   background: rgba(145, 23, 28, 0.75);
   box-shadow: 0 0 10px rgba(220, 48, 35, 0.42);
 }
 
-.vampire-blood-turn-counter {
-  margin-right: 0.2rem;
-  color: #e5c9bb;
-  font-size: 0.76rem;
-  white-space: nowrap;
+@media (max-width: 1100px) {
+  .vtm-revised.sheet .vampire-action-groups { grid-template-columns: 1fr; }
 }
 .vtm-revised .vtm-active-effects-panel { margin-bottom: 0.75rem; }
 .vtm-revised .vtm-active-effects-list { display: grid; gap: 0.35rem; margin: 0; padding: 0; list-style: none; }
@@ -3038,3 +3114,18 @@
 .vtm-revised .vtm-status-toggle.is-active { color: #fff; border-color: #d34b63; background: rgba(138, 17, 43, 0.78); box-shadow: 0 0 8px rgba(205, 35, 70, 0.4); }
 .vtm-revised .vtm-combat-maneuvers { display: flex; flex-wrap: wrap; gap: 0.35rem; margin: 0.35rem 0 0.6rem; }
 .vtm-revised .vtm-combat-maneuvers button { width: auto; }
+.vtm-revised .vampire-advancement-open {
+  margin: 8px 0 14px;
+}
+.vtm-advancement-dialog-window .window-content {
+  background: linear-gradient(180deg, #18070b, #080205) !important;
+  color: #eadde0 !important;
+}
+.vtm-advancement-dialog-window .vtm-advancement-dialog { display: grid; gap: 12px; }
+.vtm-advancement-dialog-window .vtm-advancement-dialog label { display: grid; gap: 6px; }
+.vtm-advancement-dialog-window .vtm-advancement-dialog select {
+  min-height: 38px;
+  border-color: rgba(155, 62, 78, 0.72) !important;
+  background: #120408 !important;
+  color: #f6e9ec !important;
+}

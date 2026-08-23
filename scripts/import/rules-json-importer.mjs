@@ -268,6 +268,11 @@ function buildSystemData(type, entry = {}) {
       amount: safeNumber(entry.effect?.amount ?? entry.effectAmount, 0),
       difficultyModifier: safeNumber(entry.effect?.difficultyModifier ?? entry.difficultyModifier, 0),
       diceModifier: safeNumber(entry.effect?.diceModifier ?? entry.diceModifier, 0),
+      appliesToRoll: Boolean(entry.effect?.appliesToRoll),
+      automatic: Boolean(entry.effect?.automatic),
+      conditional: entry.effect?.conditional !== false,
+      matchAll: Boolean(entry.effect?.matchAll),
+      selectors: Array.isArray(entry.effect?.selectors) ? entry.effect.selectors.map(String).filter(Boolean) : [],
       notes: html(entry.effect?.notes ?? entry.effectNotes ?? entry.effect ?? "")
     },
     rawText: entry.rawText ?? entry.name ?? "",

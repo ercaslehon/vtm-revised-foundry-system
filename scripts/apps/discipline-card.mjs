@@ -1,7 +1,7 @@
 import { rollDicePool } from "../dice/dice-pool.mjs";
 import { VTM_REVISED } from "../config.mjs";
 import { applyAutomationCost, normalizeAutomationCost } from "../utils/automation-costs.mjs";
-import { registerAutomationEffect } from "../utils/active-automation-effects.mjs";
+import { activeAutomationRollModifier, registerAutomationEffect } from "../utils/active-automation-effects.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 const DialogV1 = foundry.appv1?.api?.Dialog ?? globalThis.Dialog;
@@ -467,7 +467,8 @@ export class VTMDisciplineCard extends HandlebarsApplicationMixin(ApplicationV2)
     }
 
     const label = customLabel || components.map(component => component.label).join(" + ");
-    const pool = Math.max(1, basePool + healthPenalty.value);
+    const activeModifier = activeAutomationRollModifier(this.actor, [firstTraitKey, secondTraitKey]);
+    const pool = Math.max(1, basePool + healthPenalty.value + activeModifier.dice);
 
     await rollDicePool({
       actor: this.actor,
@@ -475,9 +476,9 @@ export class VTMDisciplineCard extends HandlebarsApplicationMixin(ApplicationV2)
       basePool,
       healthPenalty: healthPenalty.value,
       healthPenaltyLabel: healthPenalty.label,
-      difficulty,
+      difficulty: Math.max(2, Math.min(10, difficulty + activeModifier.difficulty)),
       label,
-      components
+      components: [...components, ...activeModifier.effects.map(effect => ({ label: effect.name, value: Number(effect.diceModifier || effect.difficultyModifier || 0) }))]
     });
   }
 

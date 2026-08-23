@@ -1,3 +1,5 @@
+import { clearAutomationEffects } from "../utils/active-automation-effects.mjs";
+
 export const VTM_STATUS_EFFECTS = [
   { id: "vtm-stunned", name: "Оглушён", icon: "icons/svg/daze.svg", scope: "turn", scopeLabel: "до конца хода", description: "Штраф −2 кубика ко всем действиям.", dice: -2, physicalOnly: false },
   { id: "vtm-prone", name: "Сбит с ног", icon: "icons/svg/falling.svg", scope: "turn", scopeLabel: "до конца хода", description: "Штраф −2 кубика к физическим действиям.", dice: -2, physicalOnly: true },
@@ -41,6 +43,7 @@ Hooks.on("updateCombat", async (combat, changed) => {
   const previous = combat.previous?.combatant?.actor;
   if (!previous) return;
   await clearVtmStatuses(previous, "turn");
+  await clearAutomationEffects(previous, "turn");
   const update = previous.type === "demon"
     ? { "system.automation.formExtraActionsTurn": 0 }
     : { "system.automation.bloodSpentTurn": 0, "system.automation.celerityActionsTurn": 0 };

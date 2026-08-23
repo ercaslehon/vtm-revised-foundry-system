@@ -74,6 +74,7 @@
             </td>
             <td>{{entry.userName}}</td>
             <td>
+              {{#if entry.canUndo}}<button type="button" class="experience-entry-undo" data-entry-id="{{entry.id}}" title="Откатить покупку и вернуть опыт"><i class="fas fa-rotate-left"></i></button>{{/if}}
               <button type="button" class="experience-entry-delete" data-entry-id="{{entry.id}}" title="{{localize "VTM_REVISED.Experience.DeleteEntry"}}">
                 <i class="fas fa-trash"></i>
               </button>

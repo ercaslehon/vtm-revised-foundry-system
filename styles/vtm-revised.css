@@ -4416,33 +4416,109 @@ input[readonly] {
   }
 }
 
-.vampire-blood-actions {
+.vampire-blood-summary {
   display: flex;
-  gap: 0.25rem;
   align-items: center;
-  justify-content: center;
-  margin-top: 0.35rem;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 9px;
+  padding: 6px 8px;
+  border: 1px solid rgba(201, 173, 102, 0.18);
+  border-radius: 8px;
+  background: rgba(5, 3, 6, 0.48);
+  color: #d9c9c3;
+  font-size: 11px;
 }
 
-.vampire-blood-actions button {
-  width: 28px;
-  min-width: 28px;
-  height: 26px;
-  padding: 0;
+.vampire-blood-summary span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.vampire-blood-actions button.is-active {
+.vampire-blood-summary strong {
+  color: var(--vtm-gold-bright, #e6cf91);
+  font-size: 13px;
+}
+
+.vtm-revised.sheet .vampire-action-drawer {
+  grid-column: 1 / -1;
+  overflow: hidden;
+  border: 1px solid rgba(112, 35, 56, 0.48);
+  border-radius: 11px;
+  background: linear-gradient(180deg, rgba(18, 7, 12, 0.94), rgba(7, 4, 7, 0.96));
+}
+
+.vtm-revised.sheet .vampire-action-drawer summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 36px;
+  padding: 7px 11px;
+  color: var(--vtm-gold-bright, #e6cf91);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+
+.vtm-revised.sheet .vampire-action-drawer summary::-webkit-details-marker { display: none; }
+.vtm-revised.sheet .vampire-action-drawer summary > span { display: inline-flex; align-items: center; gap: 7px; }
+.vtm-revised.sheet .vampire-action-drawer-status { color: var(--vtm-muted, #b8aaa9); font-size: 11px; font-weight: 500; }
+.vtm-revised.sheet .vampire-action-drawer-status strong { color: #ead39b; }
+.vtm-revised.sheet .vampire-action-drawer summary .fa-chevron-down { transition: transform 140ms ease; }
+.vtm-revised.sheet .vampire-action-drawer[open] summary .fa-chevron-down { transform: rotate(180deg); }
+
+.vtm-revised.sheet .vampire-action-groups {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr 1.15fr;
+  gap: 8px;
+  padding: 0 9px 9px;
+}
+
+.vtm-revised.sheet .vampire-action-group {
+  padding: 8px;
+  border: 1px solid rgba(112, 35, 56, 0.30);
+  border-radius: 8px;
+  background: rgba(3, 2, 4, 0.42);
+}
+
+.vtm-revised.sheet .vampire-action-group h4 {
+  margin: 0 0 7px;
+  color: #d4bbb8;
+  font-size: 10px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.vtm-revised.sheet .vampire-action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.vtm-revised.sheet .vampire-action-buttons button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: auto;
+  min-width: 0;
+  min-height: 29px;
+  padding: 4px 8px;
+  border-radius: 7px;
+  font-size: 11px;
+}
+
+.vampire-action-buttons button.is-active {
   color: #fff0df;
   border-color: #ed6b4f;
   background: rgba(145, 23, 28, 0.75);
   box-shadow: 0 0 10px rgba(220, 48, 35, 0.42);
 }
 
-.vampire-blood-turn-counter {
-  margin-right: 0.2rem;
-  color: #e5c9bb;
-  font-size: 0.76rem;
-  white-space: nowrap;
+@media (max-width: 1100px) {
+  .vtm-revised.sheet .vampire-action-groups { grid-template-columns: 1fr; }
 }
 .vtm-revised .vtm-active-effects-panel { margin-bottom: 0.75rem; }
 .vtm-revised .vtm-active-effects-list { display: grid; gap: 0.35rem; margin: 0; padding: 0; list-style: none; }
@@ -4456,6 +4532,21 @@ input[readonly] {
 .vtm-revised .vtm-status-toggle.is-active { color: #fff; border-color: #d34b63; background: rgba(138, 17, 43, 0.78); box-shadow: 0 0 8px rgba(205, 35, 70, 0.4); }
 .vtm-revised .vtm-combat-maneuvers { display: flex; flex-wrap: wrap; gap: 0.35rem; margin: 0.35rem 0 0.6rem; }
 .vtm-revised .vtm-combat-maneuvers button { width: auto; }
+.vtm-revised .vampire-advancement-open {
+  margin: 8px 0 14px;
+}
+.vtm-advancement-dialog-window .window-content {
+  background: linear-gradient(180deg, #18070b, #080205) !important;
+  color: #eadde0 !important;
+}
+.vtm-advancement-dialog-window .vtm-advancement-dialog { display: grid; gap: 12px; }
+.vtm-advancement-dialog-window .vtm-advancement-dialog label { display: grid; gap: 6px; }
+.vtm-advancement-dialog-window .vtm-advancement-dialog select {
+  min-height: 38px;
+  border-color: rgba(155, 62, 78, 0.72) !important;
+  background: #120408 !important;
+  color: #f6e9ec !important;
+}
 /* ==========================================================================
    VTM Revised v9.5.12 Glowing Trait Pips
    Заполненные точки атрибутов и способностей светятся и мерцают по значению поля.
@@ -7233,6 +7324,127 @@ footer .vtm-import-morality {
   border-radius: 8px !important;
   background: rgba(5, 3, 6, 0.48) !important;
   padding: 6px !important;
+}
+
+/* Compact rules-reference controls shared by both sheets and creation wizards. */
+.vtm-revised .trait-reference-open,
+.vtm-themed-wizard-window .trait-reference-open {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  min-width: 28px;
+  height: 28px;
+  min-height: 28px;
+  margin: 0;
+  padding: 0;
+  border: 1px solid rgba(201, 170, 97, 0.42);
+  border-radius: 7px;
+  background: rgba(8, 6, 9, 0.72);
+  color: var(--vtm-gold-bright, #e6cf91);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.vtm-revised .trait-reference-open:hover,
+.vtm-themed-wizard-window .trait-reference-open:hover {
+  border-color: rgba(238, 211, 144, 0.86);
+  background: rgba(201, 170, 97, 0.13);
+  box-shadow: 0 0 10px rgba(201, 170, 97, 0.18);
+}
+
+.vtm-revised.sheet .trait-row {
+  grid-template-columns: minmax(0, 1fr) 48px 30px 28px;
+}
+
+.vtm-revised.creation-wizard .wizard-dot-row,
+.vtm-themed-wizard-window .wizard-dot-row {
+  grid-template-columns: minmax(0, 1fr) 72px 28px;
+}
+
+.vtm-revised.demon-sheet .trait-reference-open,
+.vtm-revised.creation-wizard:has(.demon-character-wizard-form) .trait-reference-open {
+  border-color: rgba(112, 145, 230, 0.56);
+  background: rgba(3, 9, 25, 0.80);
+  color: #d5e2ff;
+}
+
+.vtm-revised.demon-sheet .trait-reference-open:hover,
+.vtm-revised.creation-wizard:has(.demon-character-wizard-form) .trait-reference-open:hover {
+  border-color: rgba(151, 182, 255, 0.92);
+  background: rgba(53, 89, 177, 0.20);
+  box-shadow: 0 0 11px rgba(82, 126, 235, 0.28);
+}
+
+.trait-reference-dialog-window .window-content {
+  background: linear-gradient(160deg, #100b10, #080609 72%);
+  color: #eee8e5;
+}
+
+.trait-reference-card {
+  display: grid;
+  gap: 12px;
+}
+
+.trait-reference-card header {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  padding-bottom: 9px;
+  border-bottom: 1px solid rgba(201, 170, 97, 0.35);
+}
+
+.trait-reference-card header > i {
+  color: #e6cf91;
+  font-size: 22px;
+  text-align: center;
+}
+
+.trait-reference-card h2,
+.trait-reference-card h3,
+.trait-reference-card p {
+  margin: 0;
+}
+
+.trait-reference-card header span,
+.trait-reference-card aside {
+  color: #bbb1af;
+  font-size: 12px;
+}
+
+.vampire-roll-dialog-window .vtm-roll-effects-fieldset {
+  margin: 10px 0 0;
+  padding: 8px;
+  border: 1px solid rgba(112, 35, 56, 0.48);
+  border-radius: 9px;
+}
+.vampire-roll-dialog-window .vtm-roll-effects-fieldset legend { padding: 0 6px; color: #e1c27d; font-weight: 700; }
+.vampire-roll-dialog-window .vtm-roll-effects-list { display: grid; gap: 6px; max-height: 250px; overflow-y: auto; }
+.vampire-roll-dialog-window .vtm-roll-effect-option { display: grid; grid-template-columns: 18px minmax(0,1fr); gap: 8px; align-items: start; padding: 7px; border: 1px solid rgba(112,35,56,.28); border-radius: 7px; background: rgba(20,5,10,.48); }
+.vampire-roll-dialog-window .vtm-roll-effect-option input { margin-top: 3px; }
+.vampire-roll-dialog-window .vtm-roll-effect-option span { display: block; }
+.vampire-roll-dialog-window .vtm-roll-effect-option strong { color: #e4c471; }
+.vampire-roll-dialog-window .vtm-roll-effect-option small { display: block; margin-top: 3px; color: #c7b7b8; line-height: 1.3; }
+.vampire-roll-dialog-window .vtm-roll-effects-empty { margin: 0; color: #b8aaad; font-style: italic; }
+
+.trait-reference-card section {
+  display: grid;
+  gap: 5px;
+  padding: 10px 12px;
+  border: 1px solid rgba(201, 170, 97, 0.22);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.trait-reference-card section h3 {
+  color: #e6cf91;
+  font-size: 13px;
+}
+
+.trait-reference-card aside {
+  padding: 8px 10px;
+  border-left: 3px solid rgba(201, 170, 97, 0.58);
+  background: rgba(201, 170, 97, 0.06);
 }
 
 .vtm-revised.creation-wizard .wizard-warning,
@@ -13063,6 +13275,48 @@ body .demon-character-wizard-search-panel .vtm-dialog-search-option.is-selected 
   border-radius: 6px;
   background: rgba(13, 8, 9, 0.46);
 }
+.demon-invocation-dialog-window .window-content {
+  background: linear-gradient(180deg, #080b16, #03050c) !important;
+  color: #d8def2 !important;
+}
+.demon-invocation-dialog-window .demon-invocation-dialog { display: grid; gap: 10px; }
+.demon-invocation-dialog-window .demon-invocation-target,
+.demon-invocation-dialog-window .demon-invocation-controls,
+.demon-invocation-dialog-window .demon-invocation-preview {
+  border-color: rgba(112, 127, 196, 0.58) !important;
+  background: rgba(8, 12, 28, 0.76) !important;
+}
+.demon-invocation-dialog-window input,
+.demon-invocation-dialog-window select {
+  border-color: rgba(112, 127, 196, 0.58) !important;
+  background: #080c1c !important;
+  color: #f1f4ff !important;
+}
+.demon-invocation-dialog-window .demon-invocation-target { padding: 8px 10px; border: 1px solid; border-radius: 6px; }
+.demon-vampire-layout .demon-active-invocations {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 14px;
+  padding: 10px;
+  border: 1px solid var(--demon-border);
+  border-radius: 8px;
+  background: linear-gradient(180deg, var(--demon-panel), var(--demon-panel-dark));
+}
+.demon-vampire-layout .demon-active-invocations h3 { margin: 0; color: var(--demon-text-bright); }
+.demon-vampire-layout .demon-active-invocation-list { display: grid; gap: 6px; }
+.demon-vampire-layout .demon-active-invocation-list article {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 7px;
+  border: 1px solid var(--demon-border-soft);
+  border-radius: 6px;
+  background: rgba(8, 12, 28, 0.72);
+}
+.demon-vampire-layout .demon-active-invocation-list img { width: 32px; height: 32px; border: 0; object-fit: contain; }
+.demon-vampire-layout .demon-active-invocation-list span,
+.demon-vampire-layout .demon-active-invocation-list small { display: block; color: var(--demon-muted); }
 
 .demon-pacts-panel {
   margin: 0.85rem 0;
@@ -13504,4 +13758,70 @@ body .demon-character-wizard-search-panel .vtm-dialog-search-option.is-selected 
   background: #080c1c !important;
   color: var(--demon-dialog-bright) !important;
   box-shadow: none !important;
+}
+
+/* Reference books add one compact action after the roll button. */
+.vtm-revised.sheet .vtm-vampire-layout .trait-row {
+  grid-template-columns: minmax(90px, 1fr) minmax(86px, auto) 42px 28px 28px !important;
+}
+
+.vtm-revised.sheet .demon-vampire-layout .demon-trait-row {
+  grid-template-columns: minmax(132px, 1fr) 112px 48px 34px 28px !important;
+}
+
+/* One portrait frame, three independently stored Demon appearances. */
+.demon-vampire-layout .demon-portrait-frame {
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.demon-vampire-layout .demon-portrait-cycle {
+  position: absolute !important;
+  z-index: 3 !important;
+  top: 50% !important;
+  display: grid !important;
+  place-items: center !important;
+  width: 30px !important;
+  min-width: 30px !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  padding: 0 !important;
+  border: 1px solid rgba(146, 170, 245, 0.58) !important;
+  border-radius: 7px !important;
+  background: rgba(3, 7, 22, 0.82) !important;
+  color: #e6edff !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.46) !important;
+  opacity: 0.72;
+  transform: translateY(-50%);
+  transition: opacity 120ms ease, background 120ms ease, border-color 120ms ease;
+}
+
+.demon-vampire-layout .demon-portrait-cycle:hover {
+  border-color: rgba(190, 207, 255, 0.94) !important;
+  background: rgba(20, 35, 83, 0.94) !important;
+  opacity: 1;
+}
+
+.demon-vampire-layout .demon-portrait-previous { left: 7px !important; }
+.demon-vampire-layout .demon-portrait-next { right: 7px !important; }
+
+.demon-vampire-layout .demon-portrait-mode-label {
+  position: absolute;
+  z-index: 2;
+  right: 7px;
+  bottom: 7px;
+  left: 7px;
+  overflow: hidden;
+  padding: 5px 7px;
+  border: 1px solid rgba(137, 160, 230, 0.42);
+  border-radius: 6px;
+  background: rgba(2, 5, 17, 0.84);
+  color: #e3eaff;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  pointer-events: none;
 }

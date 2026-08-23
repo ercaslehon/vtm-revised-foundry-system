@@ -1,4 +1,5 @@
 import { rollDicePool } from "../dice/dice-pool.mjs";
+import { activeAutomationRollModifier } from "../utils/active-automation-effects.mjs";
 import { VTM_REVISED } from "../config.mjs";
 import { applyAutomationCost, normalizeAutomationCost } from "../utils/automation-costs.mjs";
 
@@ -253,8 +254,10 @@ export class VTMRitualCard extends HandlebarsApplicationMixin(ApplicationV2) {
   async _rollFromForm(htmlOrElement) {
     const form = this._getFormElement(htmlOrElement);
     if (!form) return;
-    const first = this._resolveTraitOption(form.querySelector("[name='firstTrait']")?.value ?? "");
-    const second = this._resolveTraitOption(form.querySelector("[name='secondTrait']")?.value ?? "");
+    const firstTraitKey = form.querySelector("[name='firstTrait']")?.value ?? "";
+    const secondTraitKey = form.querySelector("[name='secondTrait']")?.value ?? "";
+    const first = this._resolveTraitOption(firstTraitKey);
+    const second = this._resolveTraitOption(secondTraitKey);
     const difficulty = Number(form.querySelector("[name='difficulty']")?.value || 6);
     const customLabel = form.querySelector("[name='label']")?.value?.trim() ?? "";
     if (!first) return ui.notifications?.warn?.(game.i18n.localize("VTM_REVISED.Roll.NoTraitSelected"));
@@ -262,7 +265,8 @@ export class VTMRitualCard extends HandlebarsApplicationMixin(ApplicationV2) {
     const basePool = Math.max(1, components.reduce((total, component) => total + Number(component.value || 0), 0));
     const healthPenalty = this._resolveHealthPenalty();
     if (healthPenalty.incapacitated) return ui.notifications?.warn?.(game.i18n.localize("VTM_REVISED.Roll.HealthBlocked"));
-    await rollDicePool({ actor: this.actor, pool: Math.max(1, basePool + healthPenalty.value), basePool, healthPenalty: healthPenalty.value, healthPenaltyLabel: healthPenalty.label, difficulty, label: customLabel || this.ritual?.name || "Ритуал", components });
+    const activeModifier = activeAutomationRollModifier(this.actor, [firstTraitKey, secondTraitKey]);
+    await rollDicePool({ actor: this.actor, pool: Math.max(1, basePool + healthPenalty.value + activeModifier.dice), basePool, healthPenalty: healthPenalty.value, healthPenaltyLabel: healthPenalty.label, difficulty: Math.max(2, Math.min(10, difficulty + activeModifier.difficulty)), label: customLabel || this.ritual?.name || "Ритуал", components: [...components, ...activeModifier.effects.map(effect => ({ label: effect.name, value: Number(effect.diceModifier || effect.difficultyModifier || 0) }))] });
   }
 
   async _useRitual() {

@@ -159,6 +159,7 @@
                 {{#each group.traits as |trait|}}
                   <label class="wizard-dot-row {{#if trait.overGeneration}}is-over{{/if}}">{{trait.label}}
                     <input type="number" name="{{trait.path}}" value="{{trait.value}}" min="1" max="{{trait.max}}"/>
+                    <button type="button" class="trait-reference-open" data-trait-kind="attribute" data-trait-key="{{trait.key}}" data-trait-label="{{trait.label}}" title="Когда применять"><i class="fas fa-book-open"></i></button>
                   </label>
                 {{/each}}
               </article>
@@ -188,6 +189,7 @@
                 {{#each group.traits as |trait|}}
                   <label class="wizard-dot-row {{#if (or trait.overThree trait.overGeneration)}}is-over{{/if}}">{{trait.label}}
                     <input type="number" name="{{trait.path}}" value="{{trait.value}}" min="0" max="{{trait.max}}"/>
+                    <button type="button" class="trait-reference-open" data-trait-kind="ability" data-trait-key="{{trait.key}}" data-trait-label="{{trait.label}}" title="Когда применять"><i class="fas fa-book-open"></i></button>
                   </label>
                 {{/each}}
               </article>

@@ -15,6 +15,7 @@
               </span>
               <input class="trait-value-input" type="number" name="system.abilities.{{group}}.{{key}}.value" value="{{ability.value}}" min="0" max="{{../../../generationCaps.traitMax}}"/>
               <button type="button" class="vtm-roll" data-trait="ability.{{group}}.{{key}}" data-label="{{localize (concat 'VTM_REVISED.Ability.' key)}}"><i class="fas fa-dice-d10"></i></button>
+              <button type="button" class="trait-reference-open" data-trait-kind="ability" data-trait-key="{{key}}" data-trait-label="{{localize (concat 'VTM_REVISED.Ability.' key)}}" title="Когда применять"><i class="fas fa-book-open"></i></button>
             </label>
           {{/with}}
         {{/each}}

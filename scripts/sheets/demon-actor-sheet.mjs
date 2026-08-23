@@ -11,8 +11,11 @@ import { getActiveDemonFormSummary } from "../data/demon/demon-apocalyptic-mecha
 import { DEMON_ARCHETYPES } from "../data/demon/demon-archetypes.mjs";
 import { VTMDemonCharacterCreationWizard } from "../apps/demon-character-creation-wizard.mjs";
 import { shouldPreselectAutomationEffect } from "../utils/automation-mode.mjs";
+import { activeAutomationRollModifier } from "../utils/active-automation-effects.mjs";
 import { VTM_STATUS_EFFECTS, actorHasStatus, statusRollModifier } from "../combat/status-effects.mjs";
 import { demonHighTormentSlots, netAttackSuccesses as calculateNetAttackSuccesses } from "../combat/combat-math.mjs";
+import { advancementCost } from "../utils/advancement-costs.mjs";
+import { activateTraitReferenceButtons } from "../data/trait-reference.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const ActorSheetV2 = foundry.applications.sheets.ActorSheetV2;
@@ -371,6 +374,11 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       abilities: activeFormSummary.abilities.map(entry => ({ ...entry, label: entry.mechanic?.label || String(entry.description).split(":")[0].trim(), high: entry.tier === "high", actionable: Boolean(entry.mechanic?.naturalAttack) }))
     };
     activeFormView.healthBoxes = Array.from({ length: activeFormSummary.healthLevels }, (_, index) => ({ index, damage: Number(system.health?.formBonusDamage?.[index] || 0) }));
+    const activeInvocationEffects = Array.from(actor.effects ?? []).map(effect => {
+      const flag = effect.flags?.["vtm-revised"];
+      const data = flag?.type === "automationEffect" && flag?.sourceType === "demonInvocation" ? flag : null;
+      return data ? { id: effect.id, name: effect.name, img: effect.img, description: effect.description, ...data } : null;
+    }).filter(Boolean);
     const pactToday = new Date().toLocaleDateString("sv-SE");
     const pactEntries = (Array.isArray(system.pacts?.entries) ? system.pacts.entries : []).map(entry => {
       const faithRating = Math.max(1, Math.min(5, Number(entry.faithRating || 1)));
@@ -392,6 +400,13 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     const backgroundRows = buildBackgroundRows(system);
     const suggestedWillpower = calculateSuggestedWillpower(system);
     const healthRows = this._buildHealthRows();
+    const portraitMode = ["human", "partial", "apocalyptic"].includes(system.profile?.avatarMode) ? system.profile.avatarMode : "human";
+    const portraitImages = {
+      human: system.profile?.avatar || actor.img || "icons/svg/mystery-man.svg",
+      partial: system.profile?.partialAvatar || "icons/svg/mystery-man.svg",
+      apocalyptic: system.profile?.apocalypticAvatar || "icons/svg/mystery-man.svg"
+    };
+    const portraitLabels = { human: "Человеческий облик", partial: "Частичная апокалиптическая форма", apocalyptic: "Полная апокалиптическая форма" };
 
     return {
       ...context,
@@ -407,11 +422,13 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       archetypeOptions: DEMON_ARCHETYPES,
       selectedNature,
       selectedDemeanor,
+      demonPortrait: { mode: portraitMode, image: portraitImages[portraitMode], label: portraitLabels[portraitMode] },
       resourceCards,
       tormentScales,
       highTormentSlots,
       highTormentFormOptions,
       activeFormView,
+      activeInvocationEffects,
       pactEntries,
       pactDailyFaith: pactEntries.filter(entry => entry.active).reduce((total, entry) => total + entry.offeredFaith, 0),
       weapons: items.filter(item => item.type === "weapon"),
@@ -438,6 +455,7 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     super._onRender(context, options);
     const element = this.element;
     if (!element) return;
+    activateTraitReferenceButtons(element);
     this._applyHouseHeaderIcon(element);
 
     const scrollBody = element.querySelector(".demon-sheet-body");
@@ -588,6 +606,17 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
     if (!this.isEditable) return;
 
+    element.querySelectorAll(".demon-portrait-cycle").forEach(button => {
+      button.addEventListener("click", async event => {
+        event.preventDefault();
+        const modes = ["human", "partial", "apocalyptic"];
+        const current = modes.indexOf(this._portraitMode());
+        const delta = Number(button.dataset.delta || 1);
+        const next = modes[(current + delta + modes.length) % modes.length];
+        await this.actor.update({ "system.profile.avatarMode": next });
+      });
+    });
+
     element.querySelectorAll(".actor-portrait-edit").forEach(button => {
       button.addEventListener("click", async event => {
         event.preventDefault();
@@ -722,6 +751,11 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       damage[index] = damage[index] >= 3 ? 0 : damage[index] + 1;
       await this.actor.update({ "system.health.formBonusDamage": damage });
     }));
+    element.querySelectorAll(".demon-invocation-effect-remove").forEach(button => button.addEventListener("click", async event => {
+      event.preventDefault();
+      const effectId = String(button.dataset.effectId || "");
+      if (effectId) await this.actor.deleteEmbeddedDocuments("ActiveEffect", [effectId]);
+    }));
 
     element.querySelector(".demon-harvest-faith")?.addEventListener("click", async event => {
       event.preventDefault();
@@ -791,6 +825,10 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
         await this._recalculateExperienceFromJournal();
       });
     });
+    element.querySelectorAll(".experience-entry-undo").forEach(button => button.addEventListener("click", async event => {
+      event.preventDefault();
+      await this._undoExperiencePurchase(button.dataset.entryId || "");
+    }));
     element.querySelector(".demon-advancement-open")?.addEventListener("click", async event => { event.preventDefault(); await this._openAdvancementDialog(); });
 
     element.querySelectorAll(".demon-creation-wizard-open").forEach(button => {
@@ -964,13 +1002,14 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
         ...entry,
         id: entry.id || String(index),
         type,
-        typeLabel: this._experienceTypeLabel(type),
+        typeLabel: entry.reversedAt ? "Отменено" : this._experienceTypeLabel(type),
         dateLabel: this._formatExperienceDate(entry.createdAt),
-        signedDelta: delta > 0 ? `+${delta}` : String(delta),
-        positive: delta >= 0,
+        signedDelta: entry.reversedAt ? "0" : (delta > 0 ? `+${delta}` : String(delta)),
+        positive: entry.reversedAt || delta >= 0,
         reason: String(entry.reason || "").trim() || game.i18n.localize("VTM_REVISED.Experience.NoReason"),
         target: String(entry.target || "").trim(),
-        userName: String(entry.userName || "").trim()
+        userName: String(entry.userName || "").trim(),
+        canUndo: Boolean(entry.purchase && !entry.reversedAt)
       };
     }).sort((a, b) => String(b.createdAt || "").localeCompare(String(a.createdAt || "")));
 
@@ -1024,6 +1063,10 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     const journal = this._experienceJournalEntries();
     const entry = journal.find(item => String(item.id) === String(entryId));
     if (!entry) return null;
+    if (entry.reversedAt) {
+      await this.actor.update({ "system.resources.experience.journal": journal.filter(item => String(item.id) !== String(entryId)) });
+      return entry;
+    }
     const type = entry.type || (Number(entry.delta || 0) < 0 ? "spend" : "award");
     const amount = Math.abs(Number(entry.amount ?? entry.delta ?? 0));
     const delta = Number(entry.delta || 0);
@@ -1037,8 +1080,32 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     return entry;
   }
 
+  async _undoExperiencePurchase(entryId = "") {
+    const journal = this._experienceJournalEntries();
+    const entry = journal.find(item => String(item.id) === String(entryId));
+    if (!entry?.purchase || entry.reversedAt || !entry.target) return false;
+    const [uuid, nestedPath] = String(entry.target).split("#");
+    const document = nestedPath ? await fromUuid(uuid) : this.actor;
+    const path = nestedPath || entry.target;
+    if (!document) return false;
+    const before = JSON.parse(entry.beforeJson || "null");
+    const after = JSON.parse(entry.afterJson || "null");
+    if (JSON.stringify(foundry.utils.getProperty(document, path)) !== JSON.stringify(after)) {
+      ui.notifications?.warn?.("Покупку нельзя откатить: значение уже изменилось после неё.");
+      return false;
+    }
+    const confirmed = await new Promise(resolve => new DialogV1({ title: "Откатить развитие", content: `<p>Вернуть <b>${Math.abs(Number(entry.amount || entry.delta || 0))} опыта</b> и восстановить прежнее значение?</p>`, buttons: { undo: { label: "Откатить", callback: () => resolve(true) }, cancel: { label: game.i18n.localize("Cancel"), callback: () => resolve(false) } }, default: "cancel", close: () => resolve(false) }, { width: 440, classes: ["demon-roll-dialog-window"] }).render(true));
+    if (!confirmed) return false;
+    const reversedAt = new Date().toISOString();
+    const nextJournal = journal.map(item => String(item.id) === String(entryId) ? { ...item, reversedAt } : item);
+    const xp = this.actor.system?.resources?.experience ?? {};
+    if (document === this.actor) await this.actor.update({ [path]: before, "system.resources.experience.journal": nextJournal, "system.resources.experience.available": Number(xp.available || 0) + Math.abs(Number(entry.amount || 0)), "system.resources.experience.spent": Math.max(0, Number(xp.spent || 0) - Math.abs(Number(entry.amount || 0))) });
+    else { await document.update({ [path]: before }); await this.actor.update({ "system.resources.experience.journal": nextJournal, "system.resources.experience.available": Number(xp.available || 0) + Math.abs(Number(entry.amount || 0)), "system.resources.experience.spent": Math.max(0, Number(xp.spent || 0) - Math.abs(Number(entry.amount || 0))) }); }
+    return true;
+  }
+
   async _recalculateExperienceFromJournal() {
-    const entries = this._experienceJournalEntries();
+    const entries = this._experienceJournalEntries().filter(entry => !entry.reversedAt);
     const total = entries.filter(entry => entry.type === "award").reduce((sum, entry) => sum + Math.abs(Number(entry.amount ?? entry.delta ?? 0)), 0);
     const spent = entries.filter(entry => entry.type === "spend").reduce((sum, entry) => sum + Math.abs(Number(entry.amount ?? entry.delta ?? 0)), 0);
     const adjustments = entries.filter(entry => entry.type === "adjust").reduce((sum, entry) => sum + Number(entry.delta || 0), 0);
@@ -1059,41 +1126,57 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     };
     for (const [group, keys] of Object.entries(VTM_REVISED.attributeCategories)) for (const key of keys) {
       const current = numberValue(system.attributes?.[group]?.[key], 1);
-      if (current < 5) add("Атрибуты", ATTRIBUTE_LABELS[key] || key, `system.attributes.${group}.${key}`, current, current * 4);
+      if (current < 5) add("Атрибуты", ATTRIBUTE_LABELS[key] || key, `system.attributes.${group}.${key}`, current, advancementCost("attribute", current));
     }
     for (const [group, keys] of Object.entries(DEMON_ABILITY_CATEGORIES)) for (const key of keys) {
       const current = numberValue(system.abilities?.[group]?.[key]?.value, 0);
-      if (current < 5) add("Способности", ABILITY_LABELS[key] || key, `system.abilities.${group}.${key}.value`, current, current === 0 ? 3 : current * 2);
+      if (current < 5) add("Способности", ABILITY_LABELS[key] || key, `system.abilities.${group}.${key}.value`, current, advancementCost("ability", current));
     }
     const house = VTM_REVISED.demonRules.houses.find(entry => entry.key === system.profile?.house);
     for (const lore of DEMON_CATALOGS.lores) {
       const current = numberValue(system.lores?.[lore.key]?.value, 0);
       if (current >= 5) continue;
       const own = house?.houseLores?.includes(lore.key) || ["fundament", "humanity"].includes(lore.key);
-      add("Знания", lore.label, `system.lores.${lore.key}.value`, current, current === 0 ? (own ? 7 : 10) : current * 5);
+      add("Знания", lore.label, `system.lores.${lore.key}.value`, current, advancementCost("demonLore", current, { ownLore: own }));
     }
-    for (const row of buildBackgroundRows(system)) if (row.value < 5) add("Дополнения", row.label, row.valuePath, row.value, Math.max(1, row.value) * 3);
-    for (const row of buildVirtueRows(system)) if (row.value < 5) add("Добродетели", row.label, row.valuePath, row.value, row.value * 2);
+    for (const row of buildBackgroundRows(system)) if (row.value < 5) add("Дополнения", row.label, row.valuePath, row.value, advancementCost("background", row.value));
+    for (const row of buildVirtueRows(system)) if (row.value < 5) add("Добродетели", row.label, row.valuePath, row.value, advancementCost("virtue", row.value));
     const willpower = numberValue(system.resources?.willpower?.max, 0);
-    if (willpower < 10) add("Ресурсы", "Сила Воли", "system.resources.willpower.max", willpower, Math.max(1, willpower));
+    if (willpower < 10) add("Ресурсы", "Сила Воли", "system.resources.willpower.max", willpower, advancementCost("willpower", willpower));
     const faith = numberValue(system.resources?.faith?.max, 0);
-    if (faith < 10) add("Ресурсы", "Вера", "system.resources.faith.max", faith, Math.max(1, faith) * 7);
+    if (faith < 10) add("Ресурсы", "Вера", "system.resources.faith.max", faith, advancementCost("faith", faith));
     const torment = numberValue(system.resources?.torment?.max, 1);
-    if (torment > 1) add("Ресурсы", "Снизить постоянную Муку", "system.resources.torment.max", torment, 10, torment - 1);
+    if (torment > 1) add("Ресурсы", "Снизить постоянную Муку", "system.resources.torment.max", torment, advancementCost("tormentReduction", torment), torment - 1);
     const grouped = new Map();
     purchases.forEach((entry, index) => { entry.index = index; if (!grouped.has(entry.group)) grouped.set(entry.group, []); grouped.get(entry.group).push(entry); });
     const options = [...grouped.entries()].map(([group, entries]) => `<optgroup label="${foundry.utils.escapeHTML(group)}">${entries.map(entry => `<option value="${entry.index}">${foundry.utils.escapeHTML(entry.label)} · ${entry.current} → ${entry.next} · ${entry.cost} опыта</option>`).join("")}</optgroup>`).join("");
-    const content = `<form class="demon-advancement-dialog"><p>Доступно опыта: <b>${numberValue(system.resources?.experience?.available, 0)}</b></p><label>Развитие<select name="purchase" data-vtm-searchable="true">${options}</select></label><div class="demon-advancement-preview"></div><p class="hint">Покупка повышает характеристику на одну точку и автоматически записывается в журнал опыта. Требуется одобрение Рассказчика.</p></form>`;
+    const content = `<form class="demon-advancement-dialog"><p>Доступно опыта: <b>${numberValue(system.resources?.experience?.available, 0)}</b></p><label>Развитие<select name="purchase" data-vtm-searchable="true">${options}</select></label><div class="demon-advancement-preview"></div><fieldset><legend>Новая пользовательская Способность · 3 опыта</legend><div class="grid grid-2"><label>Название<input name="customAbilityName"></label><label>Категория<select name="customAbilityCategory"><option value="talents">Талант</option><option value="skills">Навык</option><option value="knowledges">Знание</option></select></label></div><label>Специализация<input name="customAbilitySpecialization"></label></fieldset><label class="demon-roll-effect-option"><input type="checkbox" name="storytellerApproved"><span><b>Покупка согласована с Рассказчиком</b></span></label><p class="hint">Стоимость и текущее значение проверяются перед покупкой. Покупку можно откатить из журнала, пока параметр не изменился снова.</p></form>`;
     return new Promise(resolve => new DialogV1({ title: "Развитие персонажа", content, buttons: { buy: { label: "Купить", callback: async html => {
       const selected = purchases[Number(this._getFormElement(html)?.querySelector("[name='purchase']")?.value)];
       if (!selected) return resolve(false);
+      if (!this._getFormElement(html)?.querySelector("[name='storytellerApproved']")?.checked) { ui.notifications?.warn?.("Подтверди согласование покупки с Рассказчиком."); return resolve(false); }
+      const liveCurrent = foundry.utils.getProperty(this.actor, selected.path);
+      if (JSON.stringify(liveCurrent) !== JSON.stringify(selected.current)) { ui.notifications?.warn?.("Значение изменилось после открытия окна. Открой развитие заново."); return resolve(false); }
       const available = numberValue(this.actor.system?.resources?.experience?.available, 0);
       if (available < selected.cost) { ui.notifications?.warn?.(`Недостаточно опыта: ${available}/${selected.cost}.`); return resolve(false); }
-      const entry = { id: foundry.utils.randomID(), type: "spend", amount: selected.cost, delta: -selected.cost, reason: `Развитие: ${selected.label} ${selected.current} → ${selected.next}`, target: selected.path, createdAt: new Date().toISOString(), userId: game.user?.id || "", userName: game.user?.name || "" };
+      const entry = { id: foundry.utils.randomID(), type: "spend", amount: selected.cost, delta: -selected.cost, reason: `Развитие: ${selected.label} ${selected.current} → ${selected.next}`, target: selected.path, beforeJson: JSON.stringify(selected.current), afterJson: JSON.stringify(selected.next), purchase: true, reversedAt: "", createdAt: new Date().toISOString(), userId: game.user?.id || "", userName: game.user?.name || "" };
       await this.actor.update({ [selected.path]: selected.next, "system.resources.experience.available": available - selected.cost, "system.resources.experience.spent": numberValue(this.actor.system?.resources?.experience?.spent, 0) + selected.cost, "system.resources.experience.journal": [...this._experienceJournalEntries(), entry] });
       await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this.actor }), content: `<article class="vtm-chat-card demon-chat-card"><h2>Развитие персонажа</h2><p><b>${foundry.utils.escapeHTML(selected.label)}</b>: ${selected.current} → ${selected.next}</p><p>Потрачено опыта: ${selected.cost}</p></article>` });
       resolve(true);
-    } }, cancel: { label: game.i18n.localize("Cancel"), callback: () => resolve(false) } }, default: "buy", close: () => resolve(false), render: html => enhanceActorRollSearchSelects(html?.[0] ?? html) }, { width: 620, classes: ["demon-roll-dialog-window", "demon-advancement-dialog-window"] }).render(true));
+    } }, custom: { label: "Купить новую Способность", callback: async html => {
+      const form = this._getFormElement(html);
+      if (!form?.querySelector("[name='storytellerApproved']")?.checked) { ui.notifications?.warn?.("Подтверди согласование покупки с Рассказчиком."); return resolve(false); }
+      const name = String(form?.querySelector("[name='customAbilityName']")?.value || "").trim();
+      if (!name) { ui.notifications?.warn?.("Укажи название новой Способности."); return resolve(false); }
+      const available = numberValue(this.actor.system?.resources?.experience?.available, 0);
+      if (available < 3) { ui.notifications?.warn?.(`Недостаточно опыта: ${available}/3.`); return resolve(false); }
+      const before = Array.from(this.actor.system?.abilities?.custom ?? []).map(entry => foundry.utils.deepClone(entry));
+      if (before.some(entry => String(entry.name || "").trim().toLowerCase() === name.toLowerCase())) { ui.notifications?.warn?.("Такая пользовательская Способность уже существует."); return resolve(false); }
+      const after = [...before, { name, category: String(form.querySelector("[name='customAbilityCategory']")?.value || "custom"), value: 1, specialization: String(form.querySelector("[name='customAbilitySpecialization']")?.value || "").trim() }];
+      const entry = { id: foundry.utils.randomID(), type: "spend", amount: 3, delta: -3, reason: `Новая Способность: ${name} 0 → 1`, target: "system.abilities.custom", beforeJson: JSON.stringify(before), afterJson: JSON.stringify(after), purchase: true, reversedAt: "", createdAt: new Date().toISOString(), userId: game.user?.id || "", userName: game.user?.name || "" };
+      await this.actor.update({ "system.abilities.custom": after, "system.resources.experience.available": available - 3, "system.resources.experience.spent": numberValue(this.actor.system?.resources?.experience?.spent, 0) + 3, "system.resources.experience.journal": [...this._experienceJournalEntries(), entry] });
+      resolve(true);
+    } }, cancel: { label: game.i18n.localize("Cancel"), callback: () => resolve(false) } }, default: "buy", close: () => resolve(false), render: html => enhanceActorRollSearchSelects(html?.[0] ?? html) }, { width: 680, classes: ["demon-roll-dialog-window", "demon-advancement-dialog-window"] }).render(true));
   }
 
   _damageTypeLabel(type = "") {
@@ -1187,22 +1270,24 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     const components = [first, second].filter(Boolean);
     const basePool = Math.max(1, components.reduce((sum, component) => sum + Number(component.value || 0), 0));
     const attackStatus = statusRollModifier(this.actor, { physical: true });
+    const activeModifier = activeAutomationRollModifier(this.actor, components.map(component => component.key));
     const formEffects = getDemonRollEffects(this.actor, components.map(component => component.key))
       .filter(effect => effect.type === "apocalypticForm");
     const formDice = formEffects.reduce((sum, effect) => sum + Number(effect.dice || 0), 0);
     const formDifficulty = formEffects.reduce((sum, effect) => sum + Number(effect.difficulty || 0), 0);
     const attackResult = await rollDicePool({
       actor: this.actor,
-      pool: Math.max(1, basePool + healthPenalty.value + attackStatus.dice + formDice),
+      pool: Math.max(1, basePool + healthPenalty.value + attackStatus.dice + formDice + activeModifier.dice),
       basePool,
       healthPenalty: healthPenalty.value,
       healthPenaltyLabel: healthPenalty.label,
-      difficulty: Math.max(2, Math.min(10, Number(options.difficulty || weapon.difficulty || 6) + formDifficulty)),
+      difficulty: Math.max(2, Math.min(10, Number(options.difficulty || weapon.difficulty || 6) + formDifficulty + activeModifier.difficulty)),
       label: game.i18n.format("VTM_REVISED.Weapon.AttackLabel", { name: item.name }),
       components: [
         ...components,
         ...(attackStatus.dice ? [{ label: attackStatus.label, value: attackStatus.dice }] : []),
-        ...formEffects.filter(effect => effect.dice).map(effect => ({ label: effect.label, value: Number(effect.dice) }))
+        ...formEffects.filter(effect => effect.dice).map(effect => ({ label: effect.label, value: Number(effect.dice) })),
+        ...activeModifier.effects.map(effect => ({ label: effect.name, value: Number(effect.diceModifier || effect.difficultyModifier || 0) }))
       ],
       flavor: formEffects.length ? formEffects.map(effect => effect.label).join("; ") : ""
     });
@@ -2032,7 +2117,10 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   }
 
   _buildRollEffectsHtml(firstTrait = "", secondTrait = "") {
-    const effects = getDemonRollEffects(this.actor, [firstTrait, secondTrait]);
+    const active = activeAutomationRollModifier(this.actor, [firstTrait, secondTrait]).effects.map(effect => ({
+      type: "activeEffect", key: effect.id, label: effect.name, dice: Number(effect.diceModifier || 0), difficulty: Number(effect.difficultyModifier || 0), note: effect.notes || effect.duration, automatic: true
+    }));
+    const effects = [...getDemonRollEffects(this.actor, [firstTrait, secondTrait]), ...active];
     if (!effects.length) return '<p class="demon-roll-effects-empty">Для выбранного броска подходящих модификаторов нет.</p>';
     const escape = value => foundry.utils.escapeHTML(String(value ?? ""));
     return effects.map(effect => {
@@ -2427,9 +2515,14 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     const options = invocations.map(invocation =>
       `<option value="${Number(invocation.level)}">${"●".repeat(Number(invocation.level))} ${escape(invocation.name)}</option>`
     ).join("");
+    const target = this._selectedCombatTargetActor({ notify: false });
     const content = `<form class="demon-invocation-dialog">
       <div class="form-group"><label>Обращение</label><select name="level" data-vtm-searchable-select="true">${options}</select></div>
+      <div class="demon-invocation-target"><b>Цель:</b> ${escape(target?.name || "не выбрана")}</div>
       <label class="demon-roll-effect-option"><input type="checkbox" name="forceHighTorment"><span><b>Намеренно применить высокую Муку</b><small>Добавит 1 временную Муку после применения.</small></span></label>
+      <label class="demon-roll-effect-option"><input type="checkbox" name="useResistance" ${target ? "" : "disabled"}><span><b>Встречное сопротивление цели</b><small class="demon-invocation-resistance-note">Если оно предусмотрено текстом Обращения.</small></span></label>
+      <label class="demon-roll-effect-option"><input type="checkbox" name="applyEffect" ${target ? "checked" : "disabled"}><span><b>Наложить активный эффект на цель</b><small>Эффект появится на цели и сохранит описание и длительность.</small></span></label>
+      <div class="grid grid-2 demon-invocation-controls"><label>Сложность сопротивления<input type="number" name="resistanceDifficulty" min="2" max="10" value="6"></label><label>Длительность<input type="text" name="duration" placeholder="Сцена, ход, день…"></label></div>
       <div class="demon-invocation-preview"></div>
     </form>`;
 
@@ -2445,7 +2538,11 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
               const form = this._getFormElement(html);
               const level = Number(form?.querySelector("[name='level']")?.value || 1);
               const forceHighTorment = Boolean(form?.querySelector("[name='forceHighTorment']")?.checked);
-              resolve(await this._useInvocation({ loreKey, loreLabel, level, forceHighTorment }));
+              const useResistance = Boolean(form?.querySelector("[name='useResistance']")?.checked);
+              const applyEffect = Boolean(form?.querySelector("[name='applyEffect']")?.checked);
+              const resistanceDifficulty = Number(form?.querySelector("[name='resistanceDifficulty']")?.value || 6);
+              const duration = String(form?.querySelector("[name='duration']")?.value || "").trim();
+              resolve(await this._useInvocation({ loreKey, loreLabel, level, forceHighTorment, targetActor: target, useResistance, applyEffect, resistanceDifficulty, duration }));
             }
           },
           cancel: { label: game.i18n.localize("Cancel"), callback: () => resolve(false) }
@@ -2460,6 +2557,14 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
             const preview = root?.querySelector?.(".demon-invocation-preview");
             if (!invocation || !preview) return;
             preview.innerHTML = `<h3>${escape(invocation.name)}</h3><p>${escape(invocation.description || "")}</p><p><b>Система:</b> ${escape(invocation.system || "")}</p>${invocation.torment ? `<p><b>Высокая Мука:</b> ${escape(invocation.torment)}</p>` : ""}`;
+            const resistance = root?.querySelector?.("[name='useResistance']");
+            const resistanceNote = root?.querySelector?.(".demon-invocation-resistance-note");
+            const resistanceDifficulty = root?.querySelector?.("[name='resistanceDifficulty']");
+            const duration = root?.querySelector?.("[name='duration']");
+            if (resistance) resistance.checked = Boolean(target && invocation.resistanceTrait);
+            if (resistanceNote) resistanceNote.textContent = invocation.resistanceTrait ? `Автоопределено: ${invocation.resistanceTrait}, сложность ${invocation.resistanceDifficulty}.` : "В тексте не найден встречный бросок; можно включить вручную (Сила Воли).";
+            if (resistanceDifficulty) resistanceDifficulty.value = String(invocation.resistanceDifficulty || 6);
+            if (duration) duration.value = invocation.duration || "";
           };
           select?.addEventListener("change", update);
           update();
@@ -2470,7 +2575,34 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     });
   }
 
-  async _useInvocation({ loreKey = "", loreLabel = "Знание", level = 1, forceHighTorment = false } = {}) {
+  _invocationResistanceValue(actor, trait = "resource.willpower") {
+    const path = trait === "resource.willpower" ? "resources.willpower" : trait.replace(/^attribute\./, "attributes.").replace(/^ability\./, "abilities.");
+    const raw = foundry.utils.getProperty(actor.system, path);
+    if (typeof raw === "number") return raw;
+    if (raw && typeof raw === "object") return Number(raw.value ?? raw.max ?? 0);
+    return 0;
+  }
+
+  async _applyInvocationActiveEffect(target, { invocation, loreKey, loreLabel, highTorment, duration, successes }) {
+    if (!target?.createEmbeddedDocuments) return null;
+    if (!target.isOwner && !game.user?.isGM) {
+      ui.notifications?.warn?.(`Нет прав для наложения эффекта на ${target.name}. Результат останется в чате.`);
+      return null;
+    }
+    const description = highTorment ? invocation.torment : invocation.description;
+    const [effect] = await target.createEmbeddedDocuments("ActiveEffect", [{
+      name: `${invocation.name} — ${this.actor.name}`,
+      img: "icons/magic/symbols/circle-ouroboros.webp",
+      disabled: false,
+      changes: [],
+      duration: {},
+      description: String(description || invocation.system || ""),
+      flags: { "vtm-revised": { type: "automationEffect", sourceType: "demonInvocation", sourceActorUuid: this.actor.uuid, loreKey, loreLabel, level: invocation.level, highTorment, duration: duration || invocation.duration || "По тексту Обращения", scope: "manual", target: "", diceModifier: 0, difficultyModifier: 0, notes: String(description || invocation.system || ""), successes } }
+    }]);
+    return effect;
+  }
+
+  async _useInvocation({ loreKey = "", loreLabel = "Знание", level = 1, forceHighTorment = false, targetActor = null, useResistance = false, applyEffect = false, resistanceDifficulty = 6, duration = "" } = {}) {
     const invocation = getAvailableDemonInvocations(loreKey, level).find(entry => Number(entry.level) === Number(level));
     if (!invocation) return false;
     if (invocation.faithCost > Number(this.actor.system?.resources?.faith?.value || 0)) {
@@ -2494,14 +2626,24 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     }
 
     const torment = Number(this.actor.system?.resources?.torment?.max || 0);
-    const succeeded = Number(rolled.successes || 0) > 0 && !rolled.botch;
-    const highTorment = succeeded && (forceHighTorment || Number(rolled.successes || 0) <= torment);
+    let resistance = null;
+    if (useResistance && targetActor) {
+      const trait = invocation.resistanceTrait || "resource.willpower";
+      const pool = Math.max(1, this._invocationResistanceValue(targetActor, trait));
+      resistance = await rollDicePool({ actor: targetActor, pool, basePool: pool, difficulty: Math.max(2, Math.min(10, Number(resistanceDifficulty || invocation.resistanceDifficulty || 6))), label: `Сопротивление: ${invocation.name}`, components: [{ label: trait, value: pool }] });
+    }
+    const netSuccesses = Math.max(0, Number(rolled.successes || 0) - Number(resistance?.successes || 0));
+    const succeeded = netSuccesses > 0 && !rolled.botch;
+    const tormentTriggered = torment > 0 && Array.from(rolled.dice ?? []).some(value => Number(value) <= torment);
+    const highTorment = succeeded && (forceHighTorment || tormentTriggered);
     const outcome = rolled.botch ? "Провал" : (!succeeded ? "Неудача" : (highTorment ? "Высокая Мука" : "Обычный эффект"));
     const effect = succeeded ? (highTorment ? invocation.torment : invocation.description) : "Обращение не сработало.";
     const content = `<article class="vtm-chat-card demon-chat-card demon-invocation-card">
       <h2><i class="fas fa-wand-sparkles"></i> ${foundry.utils.escapeHTML(invocation.name)}</h2>
       <p><b>${foundry.utils.escapeHTML(loreLabel)}</b> · ${"●".repeat(Number(invocation.level))}</p>
-      <p><b>Результат:</b> ${outcome} (${Number(rolled.successes || 0)} усп., постоянная Мука ${torment})</p>
+      <p><b>Результат:</b> ${outcome} (${Number(rolled.successes || 0)} усп.${resistance ? ` − сопротивление ${Number(resistance.successes || 0)} = ${netSuccesses}` : ""}; постоянная Мука ${torment}${tormentTriggered ? ", сработала" : ""})</p>
+      ${targetActor ? `<p><b>Цель:</b> ${foundry.utils.escapeHTML(targetActor.name)}</p>` : ""}
+      ${duration ? `<p><b>Длительность:</b> ${foundry.utils.escapeHTML(duration)}</p>` : ""}
       <p>${foundry.utils.escapeHTML(effect || invocation.description || "")}</p>
       <p><b>Система:</b> ${foundry.utils.escapeHTML(invocation.system || "")}</p>
     </article>`;
@@ -2510,7 +2652,8 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       content,
       flags: { "vtm-revised": { type: "demonInvocation", actorId: this.actor.id, loreKey, level, highTorment } }
     });
-    return rolled;
+    if (succeeded && applyEffect && targetActor) await this._applyInvocationActiveEffect(targetActor, { invocation, loreKey, loreLabel, highTorment, duration, successes: netSuccesses });
+    return { ...rolled, resistance, netSuccesses, highTorment, tormentTriggered };
   }
   _resolveArchetype(value = "") {
     const raw = String(value ?? "").trim();
@@ -2543,8 +2686,9 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   }
 
   async _openActorPortraitViewer() {
-    const image = this.actor.img || this.actor.system?.profile?.avatar || "icons/svg/mystery-man.svg";
-    const title = this.actor.name || "Демон";
+    const mode = this._portraitMode();
+    const image = this._portraitPath(mode);
+    const title = `${this.actor.name || "Демон"} · ${this._portraitLabel(mode)}`;
 
     const ImagePopoutClass = foundry.applications?.apps?.ImagePopout?.implementation
       ?? foundry.applications?.apps?.ImagePopout
@@ -2596,12 +2740,13 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       return;
     }
 
-    const current = this.actor.img || this.actor.system?.profile?.avatar || "icons/svg/mystery-man.svg";
+    const mode = this._portraitMode();
+    const current = this._portraitPath(mode);
     const picker = new FilePickerClass({
       type: "image",
       current,
       document: this.actor,
-      callback: async path => this._setActorPortrait(path, { notify: true }),
+      callback: async path => this._setActorPortrait(path, { notify: true, mode }),
       position: {
         top: (this.position?.top ?? 100) + 40,
         left: (this.position?.left ?? 100) + 10
@@ -2612,20 +2757,38 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     else if (typeof picker.render === "function") picker.render(true);
   }
 
-  async _setActorPortrait(path, { notify = false } = {}) {
+  _portraitMode() {
+    const mode = String(this.actor.system?.profile?.avatarMode || "human");
+    return ["human", "partial", "apocalyptic"].includes(mode) ? mode : "human";
+  }
+
+  _portraitLabel(mode = this._portraitMode()) {
+    return { human: "Человеческий облик", partial: "Частичная апокалиптическая форма", apocalyptic: "Полная апокалиптическая форма" }[mode] || "Человеческий облик";
+  }
+
+  _portraitPath(mode = this._portraitMode()) {
+    const profile = this.actor.system?.profile ?? {};
+    if (mode === "partial") return profile.partialAvatar || "icons/svg/mystery-man.svg";
+    if (mode === "apocalyptic") return profile.apocalypticAvatar || "icons/svg/mystery-man.svg";
+    return profile.avatar || this.actor.img || "icons/svg/mystery-man.svg";
+  }
+
+  async _setActorPortrait(path, { notify = false, mode = this._portraitMode() } = {}) {
     const image = String(path || "icons/svg/mystery-man.svg").trim() || "icons/svg/mystery-man.svg";
-    await this.actor.update({
-      img: image,
-      "system.profile.avatar": image
-    });
-    if (notify) ui.notifications?.info?.(`Портрет обновлён: ${image}`);
+    const update = mode === "partial"
+      ? { "system.profile.partialAvatar": image }
+      : mode === "apocalyptic"
+        ? { "system.profile.apocalypticAvatar": image }
+        : { img: image, "system.profile.avatar": image };
+    await this.actor.update(update);
+    if (notify) ui.notifications?.info?.(`${this._portraitLabel(mode)}: портрет обновлён.`);
     return image;
   }
 
   async _syncPrototypeTokenImage() {
-    const image = this.actor.img || this.actor.system?.profile?.avatar || "icons/svg/mystery-man.svg";
+    const image = this._portraitPath();
     await this.actor.update({ "prototypeToken.texture.src": image });
-    ui.notifications?.info?.("Изображение токена синхронизировано.");
+    ui.notifications?.info?.(`Изображение токена синхронизировано: ${this._portraitLabel()}.`);
     return image;
   }
 

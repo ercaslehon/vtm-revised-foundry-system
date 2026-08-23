@@ -3,6 +3,7 @@ import { DEMON_CATALOGS } from "../data/demon/demon-catalogs.mjs";
 import { DEMON_ARCHETYPES } from "../data/demon/demon-archetypes.mjs";
 import { DEMON_APOCALYPTIC_FORMS } from "../data/demon/demon-apocalyptic-forms.mjs";
 import { DEMON_ABILITY_CATEGORIES, DEMON_ABILITY_LABELS } from "../data/demon/demon-abilities.mjs";
+import { activateTraitReferenceButtons } from "../data/trait-reference.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -219,6 +220,8 @@ export class VTMDemonCharacterCreationWizard extends HandlebarsApplicationMixin(
   _onRender(context, options) {
     super._onRender(context, options);
     const root = this.element;
+    if (!root) return;
+    activateTraitReferenceButtons(root, { inject: true });
     const move = async index => { await this._save(); this.stepIndex = Math.max(0, Math.min(STEPS.length - 1, index)); await this.render({ force: true }); };
     root.querySelectorAll(".wizard-step-button").forEach(button => button.addEventListener("click", event => { event.preventDefault(); move(Number(button.dataset.step)); }));
     root.querySelector(".wizard-prev")?.addEventListener("click", event => { event.preventDefault(); move(this.stepIndex - 1); });

@@ -233,6 +233,11 @@ export class VTMRatedItemData extends foundry.abstract.TypeDataModel {
         amount: new fields.NumberField({ required: false, integer: true, min: -99, max: 99, initial: 0 }),
         difficultyModifier: new fields.NumberField({ required: false, integer: true, min: -10, max: 10, initial: 0 }),
         diceModifier: new fields.NumberField({ required: false, integer: true, min: -20, max: 20, initial: 0 }),
+        appliesToRoll: new fields.BooleanField({ required: false, initial: false }),
+        automatic: new fields.BooleanField({ required: false, initial: false }),
+        conditional: new fields.BooleanField({ required: false, initial: true }),
+        matchAll: new fields.BooleanField({ required: false, initial: false }),
+        selectors: new fields.ArrayField(new fields.StringField({ required: true, blank: false }), { required: false, initial: [] }),
         notes: htmlField()
       }),
       rawText: textField(),

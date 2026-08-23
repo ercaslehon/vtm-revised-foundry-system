@@ -1,4 +1,5 @@
 import { VTM_REVISED } from "../config.mjs";
+import { activateTraitReferenceButtons } from "../data/trait-reference.mjs";
 import { VTMClanCard, findClanItemForName } from "./clan-card.mjs";
 import { VTMDisciplineCard } from "./discipline-card.mjs";
 import { VTMMeritFlawCard } from "./merit-flaw-card.mjs";
@@ -249,6 +250,7 @@ export class VTMCharacterCreationWizard extends HandlebarsApplicationMixin(Appli
     super._onRender(context, options);
     const element = this.element;
     if (!element) return;
+    activateTraitReferenceButtons(element);
 
     element.querySelectorAll(".wizard-step-button").forEach(button => {
       button.addEventListener("click", async event => {

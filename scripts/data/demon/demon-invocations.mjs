@@ -37,7 +37,9 @@ const TRAIT_ALIASES = new Map([
   ["оккультизм", "ability.knowledges.occult"],
   ["наука", "ability.knowledges.science"],
   ["расследование", "ability.knowledges.investigation"],
-  ["исследование", "ability.knowledges.research"]
+  ["исследование", "ability.knowledges.research"],
+  ["сила воли", "resource.willpower"],
+  ["силы воли", "resource.willpower"]
 ]);
 
 function parseTraits(system = "") {
@@ -66,6 +68,35 @@ function parseFaithCost(system = "") {
   return Math.max(0, Number(match?.[1] || 0));
 }
 
+function parseResistance(system = "") {
+  const text = normalize(system);
+  const aliases = Array.from(TRAIT_ALIASES.entries()).sort((a, b) => b[0].length - a[0].length);
+  const resistanceText = text.match(/(?:сопротив\S*|встречн\S* брос\S*|против)\s+([^.;]{2,90})/u)?.[1] ?? "";
+  const found = aliases.find(([label]) => resistanceText.includes(label));
+  const difficulty = resistanceText.match(/сложност(?:ь|ью|и)\s+(?:равн\S*\s+)?(\d+)/u)?.[1]
+    ?? text.match(/(?:сопротив\S*|встречн\S* брос\S*|против)[^.;]{0,90}?сложност(?:ь|ью|и)\s+(?:равн\S*\s+)?(\d+)/u)?.[1];
+  return {
+    resistanceTrait: found?.[1] ?? "",
+    resistanceDifficulty: difficulty ? Math.max(2, Math.min(10, Number(difficulty))) : 6
+  };
+}
+
+function parseDuration(system = "") {
+  const text = String(system ?? "").replace(/\s+/g, " ").trim();
+  const match = text.match(/(?:действ(?:ует|ие длится)|длится|сохраня(?:ется|ются)|в течение)\s+([^.;]+)/iu);
+  return String(match?.[1] ?? "").trim();
+}
+
+export function parseDemonInvocationMechanics(system = "") {
+  return {
+    ...parseTraits(system),
+    difficulty: parseDifficulty(system),
+    faithCost: parseFaithCost(system),
+    ...parseResistance(system),
+    duration: parseDuration(system)
+  };
+}
+
 export function getDemonLore(key = "") {
   return DEMON_LORE_DETAILS[String(key ?? "").trim()] ?? null;
 }
@@ -77,9 +108,7 @@ export function getDemonInvocation(loreKey = "", level = 1) {
   return {
     ...power,
     loreKey,
-    ...parseTraits(power.system),
-    difficulty: parseDifficulty(power.system),
-    faithCost: parseFaithCost(power.system)
+    ...parseDemonInvocationMechanics(power.system)
   };
 }
 
