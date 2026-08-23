@@ -44,7 +44,7 @@ export const DEMON_ABILITY_LABELS = Object.freeze({
   stealth: "Маскировка",
   survival: "Выживание",
   technology: "Технология",
-  academics: "Академические знания",
+  academics: "Гуманитарные науки",
   computer: "Знание компьютера",
   finance: "Финансы",
   investigation: "Расследование",
@@ -54,6 +54,6 @@ export const DEMON_ABILITY_LABELS = Object.freeze({
   politics: "Политика",
   religion: "Религия",
   research: "Исследование",
-  science: "Наука",
-  linguistics: "Лингвистика (доп.)"
+  science: "Естественные науки",
+  linguistics: "Лингвистика"
 });

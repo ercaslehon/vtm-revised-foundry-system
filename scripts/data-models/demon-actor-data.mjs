@@ -130,6 +130,7 @@ function healthSchema() {
     mauled: ratingField(0, 3),
     crippled: ratingField(0, 3),
     incapacitated: ratingField(0, 1),
+    formBonusDamage: new fields.ArrayField(ratingField(0, 3)),
     summary: textField()
   });
 }
@@ -241,6 +242,10 @@ export class DemonActorData extends foundry.abstract.TypeDataModel {
       }),
 
       health: healthSchema(),
+
+      automation: new fields.SchemaField({
+        formExtraActionsTurn: ratingField(0, 10)
+      }),
 
       creation: new fields.SchemaField({
         attributePrimary: textField(),

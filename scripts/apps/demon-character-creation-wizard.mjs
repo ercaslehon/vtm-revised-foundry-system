@@ -20,8 +20,8 @@ const STEPS = [
 const ATTRIBUTE_LABELS = {
   physical: "Физические", social: "Социальные", mental: "Ментальные",
   strength: "Сила", dexterity: "Ловкость", stamina: "Выносливость",
-  charisma: "Харизма", manipulation: "Манипулирование", appearance: "Внешность",
-  perception: "Восприятие", intelligence: "Интеллект", wits: "Смекалка"
+  charisma: "Обаяние", manipulation: "Манипулирование", appearance: "Внешность",
+  perception: "Восприятие", intelligence: "Интеллект", wits: "Сообразительность"
 };
 const ABILITY_LABELS = DEMON_ABILITY_LABELS;
 const BACKGROUND_LABELS = {

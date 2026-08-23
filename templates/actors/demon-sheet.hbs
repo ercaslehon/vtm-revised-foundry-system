@@ -16,6 +16,9 @@
       <div class="demon-title-row">
         <input class="demon-character-name-input" type="text" name="name" value="{{actor.name}}" placeholder="Имя персонажа">
       </div>
+      <span class="demon-house-emblem" {{#unless houseIcon}}hidden{{/unless}}>
+        <img class="demon-house-icon" src="{{houseIcon}}" alt="{{system.profile.house}}" title="{{system.profile.house}}">
+      </span>
 
       <div class="demon-profile-grid">
         <div class="demon-field demon-field-with-button">
@@ -156,6 +159,12 @@
           {{#if showDamageLabel}}<span class="demon-health-damage">{{damageLabel}}</span>{{/if}}
         </button>
       {{/each}}
+    </div>
+    <div class="demon-health-statuses">
+      <strong>Состояния</strong>
+      <div class="vtm-status-buttons">
+        {{#each combatStatuses as |status|}}<button type="button" class="vtm-status-toggle {{#if status.active}}is-active{{/if}}" data-status-id="{{status.id}}" title="{{status.description}} Срок: {{status.scopeLabel}}."><img src="{{status.icon}}" alt=""/> {{status.name}}</button>{{/each}}
+      </div>
     </div>
   </section>
 
@@ -390,7 +399,22 @@
           <h2>{{localize "VTM_REVISED.Demon.Section.Form"}}</h2>
         </div>
 
-        <label class="demon-apocalyptic-active"><input type="checkbox" name="system.apocalypticForm.active" {{checked system.apocalypticForm.active}}> Полная апокалиптическая форма активна</label>
+        <label class="demon-apocalyptic-active {{#if system.apocalypticForm.active}}is-active{{/if}}"><input type="checkbox" name="system.apocalypticForm.active" {{checked system.apocalypticForm.active}}> Полная апокалиптическая форма активна</label>
+
+        {{#if activeFormView.active}}
+        <section class="demon-active-form-summary">
+          <header><div><small>Активная форма</small><h3>{{activeFormView.formName}}</h3></div><div class="demon-active-form-actions"><button type="button" class="demon-form-initiative" title="Бросить инициативу"><i class="fas fa-forward-fast"></i> Инициатива{{#if activeFormView.initiative}} +{{activeFormView.initiative}}{{/if}}</button>{{#if activeFormView.extraActions}}<button type="button" class="demon-form-extra-action" title="Купить дополнительное действие за 1 Веру"><i class="fas fa-bolt"></i> Действие за Веру</button>{{/if}}<button type="button" class="demon-form-show-chat" title="Показать активную форму в чате"><i class="fas fa-comment"></i></button></div></header>
+          <div class="demon-active-form-stats">
+            {{#if activeFormView.armor}}<span>Броня +{{activeFormView.armor}}{{#if activeFormView.aggravatedArmor}} · от тяжёлого +{{activeFormView.aggravatedArmor}}{{/if}}</span>{{/if}}
+            {{#if activeFormView.healthLevels}}<span>Здоровье +{{activeFormView.healthLevels}}</span>{{/if}}
+            {{#if activeFormView.immunitiesLabel}}<span>Иммунитеты: {{activeFormView.immunitiesLabel}}</span>{{/if}}
+          </div>
+          {{#if activeFormView.healthBoxes.length}}<div class="demon-form-health-boxes"><b>Дополнительное здоровье</b>{{#each activeFormView.healthBoxes}}<button type="button" class="demon-form-health-box damage-{{damage}}" data-form-health-index="{{index}}" title="Дополнительный уровень: нажми для смены типа урона"><i class="fas fa-square"></i></button>{{/each}}</div>{{/if}}
+          <div class="demon-active-form-abilities">
+            {{#each activeFormView.abilities}}<article class="{{#if high}}is-high-torment{{/if}}"><div><b>{{label}}</b><small>{{description}}</small></div>{{#if actionable}}<button type="button" class="demon-form-special-attack" data-tier="{{tier}}" data-index="{{index}}" title="Применить особую атаку"><i class="fas fa-burst"></i></button>{{/if}}</article>{{/each}}
+          </div>
+        </section>
+        {{/if}}
 
         {{#if highTormentFormOptions.length}}
         <fieldset class="demon-high-torment-picker">
@@ -440,20 +464,8 @@
           <h2>{{localize "VTM_REVISED.Demon.Section.Profile"}}</h2>
         </div>
 
-        <div class="demon-profile-xp-panel">
-          <div class="demon-section-title demon-subsection-title">
-            <span><i class="fas fa-ankh"></i></span>
-            <h2>{{localize "VTM_REVISED.Demon.Section.Experience"}}</h2>
-          </div>
-
-          <div class="demon-profile-xp-grid">
-            <label>Доступно<input type="number" name="system.resources.experience.available" value="{{system.resources.experience.available}}" min="0"></label>
-            <label>Всего<input type="number" name="system.resources.experience.total" value="{{system.resources.experience.total}}" min="0"></label>
-            <label>Потрачено<input type="number" name="system.resources.experience.spent" value="{{system.resources.experience.spent}}" min="0"></label>
-          </div>
-        </div>
-
         {{> "systems/vtm-revised/templates/actors/parts/experience-journal.hbs"}}
+        <button type="button" class="demon-advancement-open"><i class="fas fa-arrow-up-right-dots"></i> Развитие за опыт</button>
 
         <div class="demon-archetype-grid">
           <article class="demon-info-card">
@@ -500,6 +512,7 @@
                 <small>{{#if collectedToday}}Сегодня получено{{else}}{{#if active}}Ожидает рассвета{{else}}Договор неактивен{{/if}}{{/if}}</small>
                 {{#if gift}}<p><b>Дар:</b> {{gift}}</p>{{/if}}
                 {{#if terms}}<p><b>Условия:</b> {{terms}}</p>{{/if}}
+                <div class="demon-pact-actions"><button type="button" class="demon-pact-edit demon-mini-card-button" data-pact-id="{{id}}" title="Редактировать договор"><i class="fas fa-pen"></i></button><button type="button" class="demon-pact-delete demon-mini-card-button" data-pact-id="{{id}}" title="Удалить договор"><i class="fas fa-trash"></i></button></div>
               </article>
             {{else}}
               <p class="demon-selected-catalog-empty">Структурированных договоров пока нет.</p>
@@ -514,8 +527,8 @@
           </div>
 
           <div class="demon-field">
-            <label>{{localize "VTM_REVISED.Demon.Profile.HostHistory"}}</label>
-            <textarea name="system.profile.hostHistory">{{system.profile.hostHistory}}</textarea>
+            <label>{{localize "VTM_REVISED.Profile.Goals"}}</label>
+            <textarea name="system.profile.goals">{{system.profile.goals}}</textarea>
           </div>
 
           <div class="demon-field">
@@ -524,8 +537,8 @@
           </div>
 
           <div class="demon-field">
-            <label>{{localize "VTM_REVISED.Profile.Goals"}}</label>
-            <textarea name="system.profile.goals">{{system.profile.goals}}</textarea>
+            <label>{{localize "VTM_REVISED.Demon.Profile.HostHistory"}}</label>
+            <textarea name="system.profile.hostHistory">{{system.profile.hostHistory}}</textarea>
           </div>
 
           <div class="demon-field">

@@ -7,7 +7,7 @@
 ## Статус проекта
 
 - Package ID: `vtm-revised`
-- Текущая версия: `11.0.28`
+- Текущая версия: `11.0.29`
 - Foundry VTT: minimum `13.347`, verified `14`
 - Автор: `Ercaslehon`
 - Тип проекта: fan-made / unofficial system
@@ -211,4 +211,4 @@ https://raw.githubusercontent.com/ercaslehon/vtm-revised-foundry-system/main/sys
 
 Vampire: The Masquerade и связанные материалы принадлежат их правообладателям.
 
-Текущая версия: 11.0.28
+Текущая версия: 11.0.29

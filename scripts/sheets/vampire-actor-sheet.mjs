@@ -2,6 +2,8 @@ import { rollDicePool } from "../dice/dice-pool.mjs";
 import { VTM_REVISED } from "../config.mjs";
 import { applyAutomationCost, normalizeAutomationCost } from "../utils/automation-costs.mjs";
 import { clearAutomationEffects, registerAutomationEffect } from "../utils/active-automation-effects.mjs";
+import { VTM_STATUS_EFFECTS, actorHasStatus, clearVtmStatuses, statusRollModifier } from "../combat/status-effects.mjs";
+import { multipleActionPenalty, netAttackSuccesses as calculateNetAttackSuccesses } from "../combat/combat-math.mjs";
 import { VTMDisciplineCard } from "../apps/discipline-card.mjs";
 import { VTMRitualCard } from "../apps/ritual-card.mjs";
 import { VTMClanCard, findClanItemForName } from "../apps/clan-card.mjs";
@@ -287,12 +289,17 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
         spent: Number(actor.system?.automation?.bloodSpentTurn || 0),
         max: Number(generationCaps.bloodPerTurn || 1),
         remaining: Math.max(0, Number(generationCaps.bloodPerTurn || 1) - Number(actor.system?.automation?.bloodSpentTurn || 0)),
-        boosts: actor.system?.automation?.physicalBoost ?? {}
+        boosts: actor.system?.automation?.physicalBoost ?? {},
+        celerityActions: Number(actor.system?.automation?.celerityActionsTurn || 0),
+        celerityRating: this._disciplineRating(actor, ["Стремительность", "Celerity"])
+        , multipleActions: actor.system?.automation?.multipleActions ?? { declared: 1, used: 0 }
       },
       beastState: {
         frenzy: Boolean(actor.system?.automation?.frenzy),
         rotschreck: Boolean(actor.system?.automation?.rotschreck)
       },
+      armor: actor.system?.automation?.armor ?? {},
+      combatStatuses: VTM_STATUS_EFFECTS.map(status => ({ ...status, active: actorHasStatus(actor, status.id) })),
       activeAutomationEffects: Array.from(actor.system?.automation?.activeEffects ?? [])
     };
   }
@@ -466,7 +473,27 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
 
     element.querySelector(".vampire-blood-turn-reset")?.addEventListener("click", async event => {
       event.preventDefault();
-      await this.actor.update({ "system.automation.bloodSpentTurn": 0 });
+      await this.actor.update({ "system.automation.bloodSpentTurn": 0, "system.automation.celerityActionsTurn": 0, "system.automation.multipleActions.declared": 1, "system.automation.multipleActions.used": 0 });
+    });
+
+    element.querySelector(".vampire-celerity-activate")?.addEventListener("click", async event => {
+      event.preventDefault();
+      const rating = this._disciplineRating(this.actor, ["Стремительность", "Celerity"]);
+      if (rating <= 0) return ui.notifications?.warn?.("У персонажа нет Стремительности.");
+      if (Number(this.actor.system?.automation?.celerityActionsTurn || 0) > 0) return ui.notifications?.warn?.("Стремительность уже активирована в этом ходу.");
+      const spent = await this._spendBloodForTurn(1, "Стремительность", { countForTurn: true });
+      if (!spent) return;
+      await this.actor.update({ "system.automation.celerityActionsTurn": rating });
+      await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this.actor }), content: `<div class="vtm-chat-card"><h3>Стремительность</h3><p>${foundry.utils.escapeHTML(this.actor.name)} получает дополнительных действий: ${rating}.</p></div>` });
+    });
+
+    element.querySelector(".vampire-roll-initiative")?.addEventListener("click", async event => {
+      event.preventDefault();
+      await this._rollCombatInitiative();
+    });
+    element.querySelector(".vampire-multiple-actions")?.addEventListener("click", async event => {
+      event.preventDefault();
+      await this._declareMultipleActions();
     });
 
     element.querySelector(".vampire-blood-boost-reset")?.addEventListener("click", async event => {
@@ -476,6 +503,8 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
         "system.automation.physicalBoost.dexterity": 0,
         "system.automation.physicalBoost.stamina": 0
       });
+      await clearVtmStatuses(this.actor, "scene");
+      await clearAutomationEffects(this.actor, "scene");
     });
 
     element.querySelectorAll(".automation-effect-clear").forEach(button => {
@@ -490,6 +519,13 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
       button.addEventListener("click", async event => {
         event.preventDefault();
         await clearAutomationEffects(this.actor, button.dataset.scope || "all");
+      });
+    });
+    element.querySelectorAll(".vtm-status-toggle").forEach(button => {
+      button.addEventListener("click", async event => {
+        event.preventDefault();
+        const id = button.dataset.statusId;
+        await this.actor.toggleStatusEffect(id, { active: !actorHasStatus(this.actor, id) });
       });
     });
 
@@ -701,6 +737,12 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
         const row = button.closest("[data-item-id]");
         const item = row ? this.actor.items.get(row.dataset.itemId) : null;
         if (item?.type === "weapon") await this._useWeapon(item);
+      });
+    });
+    element.querySelectorAll(".combat-maneuver").forEach(button => {
+      button.addEventListener("click", async event => {
+        event.preventDefault();
+        await this._useCombatManeuver(button.dataset.maneuver);
       });
     });
 
@@ -1694,10 +1736,12 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
     const attackSecond = weapon.attackSecondTrait || (weapon.category === "firearm" ? "ability.skills.firearms" : "ability.skills.melee");
     const defaultDifficulty = Number(weapon.difficulty || 6);
     const damageDifficulty = Number(weapon.damageDifficulty || 6);
+    const target = this._selectedCombatTargetActor({ notify: false });
 
     const content = `
       <form class="vtm-weapon-attack-dialog">
         <p><strong>${foundry.utils.escapeHTML(item.name)}</strong></p>
+        <p class="muted">Цель: <strong>${foundry.utils.escapeHTML(target?.name || "не выбрана")}</strong></p>
         <div class="form-group">
           <label>${game.i18n.localize("VTM_REVISED.Roll.FirstTrait")}</label>
           ${this._buildRollSelectHtml("firstTrait", attackFirst, false)}
@@ -1713,6 +1757,14 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
           <label>${game.i18n.localize("VTM_REVISED.Weapon.DamageDifficulty")}
             <input type="number" name="damageDifficulty" min="2" max="10" value="${damageDifficulty}"/>
           </label>
+        </div>
+        <div class="form-group">
+          <label><input type="checkbox" name="useDefense" ${target ? "checked" : "disabled"}/> Активная защита цели</label>
+          <select name="defenseType" ${target ? "" : "disabled"}>
+            <option value="dodge">Уклонение: Ловкость + Уклонение</option>
+            <option value="parry">Парирование: Ловкость + Холодное оружие</option>
+            <option value="block">Блок: Ловкость + Драка</option>
+          </select>
         </div>
         <p class="muted">${game.i18n.format("VTM_REVISED.Weapon.DamagePreview", { damage: this._weaponDamageLabel(item) })}</p>
       </form>`;
@@ -1731,7 +1783,9 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
                 firstTrait: form?.querySelector("[name='firstTrait']")?.value || attackFirst,
                 secondTrait: form?.querySelector("[name='secondTrait']")?.value || attackSecond,
                 difficulty: Number(form?.querySelector("[name='difficulty']")?.value || defaultDifficulty),
-                damageDifficulty: Number(form?.querySelector("[name='damageDifficulty']")?.value || damageDifficulty)
+                damageDifficulty: Number(form?.querySelector("[name='damageDifficulty']")?.value || damageDifficulty),
+                targetActor: target,
+                defenseType: form?.querySelector("[name='useDefense']")?.checked ? form?.querySelector("[name='defenseType']")?.value : ""
               });
               resolve(true);
             }
@@ -1744,6 +1798,21 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
         default: "attack",
         close: () => resolve(false)
       }, { width: 520 }).render(true);
+    });
+  }
+
+  async _useCombatManeuver(key = "punch") {
+    const maneuvers = {
+      punch: { name: "Удар кулаком", difficulty: 6, damageBonus: 0, damageType: "bashing" },
+      kick: { name: "Удар ногой", difficulty: 7, damageBonus: 1, damageType: "bashing" },
+      bite: { name: "Укус", difficulty: 6, damageBonus: 1, damageType: "aggravated", note: "Боевой укус требует предварительно обездвижить цель захватом или сбить её с ног." }
+    };
+    const maneuver = maneuvers[key];
+    if (!maneuver) return;
+    if (maneuver.note) ui.notifications?.info?.(maneuver.note);
+    return this._useWeapon({
+      id: `maneuver-${key}`, name: maneuver.name,
+      system: { weapon: { category: "melee", attackFirstTrait: "attribute.physical.dexterity", attackSecondTrait: "ability.talents.brawl", difficulty: maneuver.difficulty, damageDifficulty: 6, usesStrength: true, damageBonus: maneuver.damageBonus, damageType: maneuver.damageType, addsAttackSuccesses: true } }
     });
   }
 
@@ -1763,7 +1832,10 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
 
     const components = [first, second].filter(Boolean);
     const basePool = Math.max(1, components.reduce((total, component) => total + Number(component.value || 0), 0));
-    const attackPool = Math.max(1, basePool + healthPenalty.value);
+    const armorPenalty = this._armorDexterityPenalty(this.actor);
+    const statusModifier = statusRollModifier(this.actor, { physical: true });
+    const multiplePenalty = await this._consumeMultipleAction();
+    const attackPool = Math.max(1, basePool + healthPenalty.value - armorPenalty + statusModifier.dice - multiplePenalty);
     const attackResult = await rollDicePool({
       actor: this.actor,
       pool: attackPool,
@@ -1772,16 +1844,25 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
       healthPenaltyLabel: healthPenalty.label,
       difficulty: Number(options.difficulty || 6),
       label: game.i18n.format("VTM_REVISED.Weapon.AttackLabel", { name: item.name }),
-      components
+      components: [...components, ...(armorPenalty ? [{ label: "Штраф брони", value: -armorPenalty }] : []), ...(statusModifier.dice ? [{ label: statusModifier.label, value: statusModifier.dice }] : []), ...(multiplePenalty ? [{ label: "Множественные действия", value: -multiplePenalty }] : [])]
     });
 
-    if (attackResult.botch || attackResult.successes <= 0) {
+    const defenseResult = options.targetActor && options.defenseType
+      ? await this._rollTargetDefense(options.targetActor, options.defenseType)
+      : null;
+    const netAttackSuccesses = calculateNetAttackSuccesses(attackResult.successes, defenseResult?.successes);
+
+    if (attackResult.botch || netAttackSuccesses <= 0) {
       ui.notifications?.warn?.(game.i18n.format("VTM_REVISED.Weapon.AttackMissed", { name: item.name }));
+      if (defenseResult) await ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor: options.targetActor }),
+        content: `<div class="vtm-chat-card"><h3>Атака отражена</h3><p>${foundry.utils.escapeHTML(options.targetActor.name)}: защита ${defenseResult.successes}, атака ${attackResult.successes}.</p></div>`
+      });
       return attackResult;
     }
 
     const weapon = item.system?.weapon ?? {};
-    const extraSuccesses = weapon.addsAttackSuccesses === false ? 0 : Math.max(0, Number(attackResult.successes || 0) - 1);
+    const extraSuccesses = weapon.addsAttackSuccesses === false ? 0 : Math.max(0, netAttackSuccesses - 1);
     const strength = Number(this._resolveTraitOption("attribute.physical.strength")?.value || 0);
     const baseDamage = weapon.usesStrength ? (strength + Number(weapon.damageBonus || 0)) : Number(weapon.damageDice || 0);
     const damagePool = Math.max(1, baseDamage + extraSuccesses);
@@ -1796,23 +1877,27 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
       pool: damagePool,
       basePool: damagePool,
       healthPenalty: 0,
+      automaticSuccesses: weapon.usesStrength ? this._disciplineRating(this.actor, ["Могущество", "Potence"]) : 0,
       difficulty: Number(options.damageDifficulty || weapon.damageDifficulty || 6),
       label: game.i18n.format("VTM_REVISED.Weapon.DamageLabel", { name: item.name }),
       flavor: game.i18n.format("VTM_REVISED.Weapon.DamageFlavor", { type: damageTypeLabel }),
       components: damageComponents
     });
 
-    await this._createWeaponDamageSummary({ item, weapon, attackResult, damageResult, extraSuccesses, damagePool, damageTypeLabel });
+    await this._createWeaponDamageSummary({ item, weapon, attackResult, defenseResult, netAttackSuccesses, damageResult, extraSuccesses, damagePool, damageTypeLabel });
     return { attackResult, damageResult };
   }
 
-  async _createWeaponDamageSummary({ item, weapon, attackResult, damageResult, extraSuccesses, damagePool, damageTypeLabel }) {
+  async _createWeaponDamageSummary({ item, weapon, attackResult, defenseResult, netAttackSuccesses, damageResult, extraSuccesses, damagePool, damageTypeLabel }) {
     const renderTemplate = foundry.applications?.handlebars?.renderTemplate ?? globalThis.renderTemplate;
     const content = await renderTemplate("systems/vtm-revised/templates/chat/weapon-damage-card.hbs", {
       actor: this.actor,
       item,
       weapon,
       attackSuccesses: attackResult.successes,
+      hasDefense: Boolean(defenseResult),
+      defenseSuccesses: defenseResult?.successes ?? null,
+      netAttackSuccesses,
       extraSuccesses,
       damagePool,
       damageSuccesses: damageResult.successes,
@@ -1822,8 +1907,99 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
       content,
-      flags: { "vtm-revised": { type: "weaponDamage", actorId: this.actor.id, itemId: item.id } }
+      flags: { "vtm-revised": {
+        type: "weaponDamage", actorId: this.actor.id, itemId: item.id,
+        damageSuccesses: Number(damageResult.successes || 0), damageType: weapon.damageType || "bashing", damageTypeLabel
+      } }
     });
+  }
+
+  _selectedCombatTargetActor({ notify = true } = {}) {
+    const targets = Array.from(game.user?.targets ?? []);
+    if (targets.length === 1) return targets[0].actor ?? null;
+    if (notify) ui.notifications?.warn?.("Выбери ровно один токен-цель.");
+    return null;
+  }
+
+  _actorTraitValue(actor, path) {
+    return Number(foundry.utils.getProperty(actor, `system.${path}`) || 0);
+  }
+
+  _armorDexterityPenalty(actor) {
+    const armor = actor?.system?.automation?.armor ?? {};
+    return armor.active ? Math.max(0, Number(armor.dexterityPenalty || 0)) : 0;
+  }
+
+  _disciplineRating(actor, names) {
+    const wanted = names.map(name => this._normalizeName(name));
+    const discipline = Array.from(actor?.items ?? []).find(item => item.type === "discipline" && wanted.includes(this._normalizeName(item.name)));
+    return Number(discipline?.system?.rating || 0);
+  }
+
+  _actorHealthPenalty(actor) {
+    const health = actor.system?.health ?? {};
+    const key = [...VTM_REVISED.healthLevels].reverse().find(entry => Number(health[entry] || 0) > 0);
+    if (!key || actor.system?.automation?.frenzy) return { value: 0, incapacitated: false, label: "" };
+    const penalty = VTM_REVISED.healthPenalties[key] ?? 0;
+    return { value: penalty === "out" ? 0 : Number(penalty || 0), incapacitated: penalty === "out", label: game.i18n.localize(`VTM_REVISED.Health.${key}`) };
+  }
+
+  async _rollTargetDefense(actor, type = "dodge") {
+    const ability = type === "parry" ? "skills.melee" : type === "block" ? "talents.brawl" : "talents.dodge";
+    const labels = { dodge: "Уклонение", parry: "Парирование", block: "Блок" };
+    const dexterity = this._actorTraitValue(actor, "attributes.physical.dexterity");
+    const abilityValue = this._actorTraitValue(actor, `abilities.${ability}.value`);
+    const health = this._actorHealthPenalty(actor);
+    if (health.incapacitated) return { successes: 0, botch: false };
+    const basePool = Math.max(1, dexterity + abilityValue);
+    const armorPenalty = this._armorDexterityPenalty(actor);
+    const statusModifier = statusRollModifier(actor, { physical: true });
+    return rollDicePool({
+      actor, pool: Math.max(1, basePool + health.value - armorPenalty + statusModifier.dice), basePool,
+      healthPenalty: health.value, healthPenaltyLabel: health.label, difficulty: 6,
+      label: `${labels[type] || labels.dodge}: ${actor.name}`,
+      components: [{ label: "Ловкость", value: dexterity }, { label: labels[type] || labels.dodge, value: abilityValue }, ...(armorPenalty ? [{ label: "Штраф брони", value: -armorPenalty }] : []), ...(statusModifier.dice ? [{ label: statusModifier.label, value: statusModifier.dice }] : [])]
+    });
+  }
+
+  async _rollCombatInitiative() {
+    const dexterity = Number(this._resolveTraitOption("attribute.physical.dexterity")?.value || 0);
+    const wits = Number(this._resolveTraitOption("attribute.mental.wits")?.value || 0);
+    const roll = await new Roll("1d10").evaluate({ async: true });
+    const total = Number(roll.total || 0) + dexterity + wits;
+    const tokens = this.actor.getActiveTokens?.(true, true) ?? [];
+    const token = tokens.find(entry => entry.controlled) ?? tokens[0];
+    if (!token) {
+      await roll.toMessage({ speaker: ChatMessage.getSpeaker({ actor: this.actor }), flavor: `Инициатива ${this.actor.name}: ${total} (1d10 + Ловкость ${dexterity} + Сообразительность ${wits})` });
+      return;
+    }
+    let combat = game.combat;
+    if (!combat) combat = await Combat.create({ scene: canvas.scene.id, active: true });
+    let combatant = combat.combatants.find(entry => entry.tokenId === token.id);
+    if (!combatant) [combatant] = await combat.createEmbeddedDocuments("Combatant", [{ tokenId: token.id, actorId: this.actor.id, sceneId: canvas.scene.id }]);
+    await combat.setInitiative(combatant.id, total);
+    await roll.toMessage({ speaker: ChatMessage.getSpeaker({ actor: this.actor, token: token.document }), flavor: `Инициатива: ${total} (Ловкость ${dexterity} + Сообразительность ${wits})` });
+  }
+
+  async _declareMultipleActions() {
+    const current = Number(this.actor.system?.automation?.multipleActions?.declared || 1);
+    return new Promise(resolve => new DialogV1({
+      title: "Множественные действия", content: `<form><label>Действий в этом ходу <input type="number" name="count" min="1" max="10" value="${current}"/></label><p class="muted">Первое действие: −N кубиков; каждое следующее получает ещё −1.</p></form>`,
+      buttons: { apply: { label: "Объявить", callback: async html => { const count = Math.max(1, Math.min(10, Number(this._getFormElement(html)?.querySelector("[name='count']")?.value || 1))); await this.actor.update({ "system.automation.multipleActions.declared": count, "system.automation.multipleActions.used": 0 }); resolve(count); } }, cancel: { label: game.i18n.localize("Cancel"), callback: () => resolve(null) } }, default: "apply", close: () => resolve(null)
+    }, { width: 440 }).render(true));
+  }
+
+  async _consumeMultipleAction() {
+    const state = this.actor.system?.automation?.multipleActions ?? {};
+    const declared = Math.max(1, Number(state.declared || 1));
+    if (declared <= 1) return 0;
+    const used = Math.max(0, Number(state.used || 0));
+    if (used >= declared) {
+      ui.notifications?.warn?.("Все объявленные действия этого хода уже использованы.");
+      return declared + used;
+    }
+    await this.actor.update({ "system.automation.multipleActions.used": used + 1 });
+    return multipleActionPenalty(declared, used);
   }
 
   _soakHint(damageType = "") {
@@ -2732,16 +2908,24 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
 
     const label = customLabel || components.map(component => component.label).join(" + ");
     const pool = Math.max(1, basePool + healthPenalty.value);
+    const usesStrength = [firstTraitKey, secondTraitKey].includes("attribute.physical.strength");
+    const usesDexterity = [firstTraitKey, secondTraitKey].includes("attribute.physical.dexterity");
+    const armorPenalty = usesDexterity ? this._armorDexterityPenalty(this.actor) : 0;
+    const isPhysical = [firstTraitKey, secondTraitKey].some(key => key.startsWith("attribute.physical.") || /\.(brawl|athletics|dodge|melee|firearms)$/.test(key));
+    const statusModifier = statusRollModifier(this.actor, { physical: isPhysical });
+    const multiplePenalty = await this._consumeMultipleAction();
+    const automaticSuccesses = usesStrength ? this._disciplineRating(this.actor, ["Могущество", "Potence"]) : 0;
 
-    await rollDicePool({
+    return rollDicePool({
       actor: this.actor,
-      pool,
+      pool: Math.max(1, pool - armorPenalty + statusModifier.dice - multiplePenalty),
       basePool,
       healthPenalty: healthPenalty.value,
       healthPenaltyLabel: healthPenalty.label,
+      automaticSuccesses,
       difficulty,
       label,
-      components
+      components: [...components, ...(armorPenalty ? [{ label: "Штраф брони", value: -armorPenalty }] : []), ...(statusModifier.dice ? [{ label: statusModifier.label, value: statusModifier.dice }] : []), ...(multiplePenalty ? [{ label: "Множественные действия", value: -multiplePenalty }] : [])]
     });
   }
 

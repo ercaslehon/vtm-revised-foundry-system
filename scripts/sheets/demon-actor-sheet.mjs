@@ -7,9 +7,12 @@ import { getDemonRollEffects } from "../data/demon/demon-roll-effects.mjs";
 import { getAvailableDemonInvocations } from "../data/demon/demon-invocations.mjs";
 import { DEMON_ABILITY_CATEGORIES, DEMON_ABILITY_LABELS } from "../data/demon/demon-abilities.mjs";
 import { DEMON_APOCALYPTIC_FORMS } from "../data/demon/demon-apocalyptic-forms.mjs";
+import { getActiveDemonFormSummary } from "../data/demon/demon-apocalyptic-mechanics.mjs";
 import { DEMON_ARCHETYPES } from "../data/demon/demon-archetypes.mjs";
 import { VTMDemonCharacterCreationWizard } from "../apps/demon-character-creation-wizard.mjs";
 import { shouldPreselectAutomationEffect } from "../utils/automation-mode.mjs";
+import { VTM_STATUS_EFFECTS, actorHasStatus, statusRollModifier } from "../combat/status-effects.mjs";
+import { demonHighTormentSlots, netAttackSuccesses as calculateNetAttackSuccesses } from "../combat/combat-math.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const ActorSheetV2 = foundry.applications.sheets.ActorSheetV2;
@@ -31,6 +34,22 @@ const DEMON_HOUSES = [
   { key: "fiends", label: "Неберу", hint: "Дом Светил, пророчеств, узоров и времени." }
 ];
 
+const DEMON_HOUSE_ICON_FILES = new Map([
+  ["devils", "devils.webp"], ["намару", "devils.webp"], ["дьяволы", "devils.webp"],
+  ["scourges", "scourges.webp"], ["ашару", "scourges.webp"], ["кнуты", "scourges.webp"],
+  ["malefactors", "malefactors.webp"], ["ануннаки", "malefactors.webp"], ["преступники", "malefactors.webp"],
+  ["defilers", "defilers.webp"], ["ламмасу", "defilers.webp"], ["осквернители", "defilers.webp"],
+  ["devourers", "devourers.webp"], ["рабису", "devourers.webp"], ["пожиратели", "devourers.webp"],
+  ["slayers", "slayers.webp"], ["халаку", "slayers.webp"], ["убийцы", "slayers.webp"],
+  ["fiends", "fiends.webp"], ["неберу", "fiends.webp"], ["изверги", "fiends.webp"]
+]);
+
+function demonHouseIcon(value = "") {
+  const key = String(value || "").trim().toLowerCase().replaceAll("ё", "е");
+  const file = DEMON_HOUSE_ICON_FILES.get(key);
+  return file ? `systems/vtm-revised/assets/demon-house-icons/${file}` : "";
+}
+
 const DEMON_FACTIONS = [
   { key: "faustians", label: "Фаустианцы", hint: "Люди должны верить, служить и строить новый порядок." },
   { key: "luciferans", label: "Люцифериане", hint: "Поиск Люцифера и продолжение войны." },
@@ -46,12 +65,12 @@ const ATTRIBUTE_LABELS = {
   strength: "Сила",
   dexterity: "Ловкость",
   stamina: "Выносливость",
-  charisma: "Харизма",
+  charisma: "Обаяние",
   manipulation: "Манипулирование",
   appearance: "Внешность",
   perception: "Восприятие",
   intelligence: "Интеллект",
-  wits: "Смекалка"
+  wits: "Сообразительность"
 };
 
 const ABILITY_LABELS = DEMON_ABILITY_LABELS;
@@ -334,14 +353,24 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     const primaryLore = String(system.creation?.primaryLore ?? "").trim();
     const canonicalForm = DEMON_APOCALYPTIC_FORMS[primaryLore];
     const selectedHighTorment = new Set(Array.isArray(system.apocalypticForm?.highTormentSelected) ? system.apocalypticForm.highTormentSelected.map(String) : []);
-    const highTormentSlots = Math.max(0, Math.min(4, Number(system.resources?.torment?.max || 0) - 6));
+    const highTormentSlots = demonHighTormentSlots(system.resources?.torment?.max);
     const highTormentFormOptions = (canonicalForm?.highTormentAbilities ?? []).map((description, index) => ({
       key: String(index),
       label: String(description).split(":")[0].trim(),
       description,
       checked: selectedHighTorment.has(String(index)),
-      disabled: highTormentSlots <= 0
+      disabled: highTormentSlots <= 0 || (!selectedHighTorment.has(String(index)) && selectedHighTorment.size >= highTormentSlots)
     }));
+    const activeFormSummary = getActiveDemonFormSummary(actor);
+    const immunityLabels = { fire: "Огонь", electricity: "Электричество", poison: "Яды", falling: "Падение", bashing: "Поверхностный урон" };
+    const activeFormView = {
+      ...activeFormSummary,
+      active: Boolean(system.apocalypticForm?.active && canonicalForm),
+      formName: canonicalForm?.name || system.apocalypticForm?.name || "Апокалиптическая форма",
+      immunitiesLabel: activeFormSummary.immunities.map(key => immunityLabels[key] || key).join(", "),
+      abilities: activeFormSummary.abilities.map(entry => ({ ...entry, label: entry.mechanic?.label || String(entry.description).split(":")[0].trim(), high: entry.tier === "high", actionable: Boolean(entry.mechanic?.naturalAttack) }))
+    };
+    activeFormView.healthBoxes = Array.from({ length: activeFormSummary.healthLevels }, (_, index) => ({ index, damage: Number(system.health?.formBonusDamage?.[index] || 0) }));
     const pactToday = new Date().toLocaleDateString("sv-SE");
     const pactEntries = (Array.isArray(system.pacts?.entries) ? system.pacts.entries : []).map(entry => {
       const faithRating = Math.max(1, Math.min(5, Number(entry.faithRating || 1)));
@@ -373,6 +402,7 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       cssClass: "vtm-revised sheet actor demon",
       config: VTM_REVISED,
       houses: DEMON_HOUSES,
+      houseIcon: demonHouseIcon(system.profile?.house),
       factions: DEMON_FACTIONS,
       archetypeOptions: DEMON_ARCHETYPES,
       selectedNature,
@@ -381,6 +411,7 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       tormentScales,
       highTormentSlots,
       highTormentFormOptions,
+      activeFormView,
       pactEntries,
       pactDailyFaith: pactEntries.filter(entry => entry.active).reduce((total, entry) => total + entry.offeredFaith, 0),
       weapons: items.filter(item => item.type === "weapon"),
@@ -394,6 +425,7 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       suggestedWillpower,
       demonRules: VTM_REVISED.demonRules,
       healthRows,
+      combatStatuses: VTM_STATUS_EFFECTS.map(status => ({ ...status, active: actorHasStatus(actor, status.id) })),
       activeHealthPenalty: this._resolveHealthPenalty(),
       traitPips: Array.from({ length: traitMax }, (_, index) => index + 1),
       lorePips: Array.from({ length: 5 }, (_, index) => index + 1),
@@ -406,6 +438,7 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     super._onRender(context, options);
     const element = this.element;
     if (!element) return;
+    this._applyHouseHeaderIcon(element);
 
     const scrollBody = element.querySelector(".demon-sheet-body");
     if (scrollBody) {
@@ -584,6 +617,13 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
         await this.actor.changeResource(resource, delta, button.dataset.reason || "");
       });
     });
+    element.querySelectorAll(".vtm-status-toggle").forEach(button => {
+      button.addEventListener("click", async event => {
+        event.preventDefault();
+        const id = button.dataset.statusId;
+        await this.actor.toggleStatusEffect(id, { active: !actorHasStatus(this.actor, id) });
+      });
+    });
 
     element.querySelectorAll(".resource-path-change").forEach(button => {
       button.addEventListener("click", async event => {
@@ -641,7 +681,8 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
     element.querySelectorAll(".demon-high-torment-ability").forEach(input => {
       input.addEventListener("change", async event => {
-        const allowed = Math.max(0, Math.min(4, Number(this.actor.system?.resources?.torment?.max || 0) - 6));
+        event.stopPropagation();
+        const allowed = demonHighTormentSlots(this.actor.system?.resources?.torment?.max);
         const selected = [...element.querySelectorAll(".demon-high-torment-ability:checked")].map(entry => String(entry.value));
         if (selected.length > allowed) {
           event.currentTarget.checked = false;
@@ -649,8 +690,38 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
           return;
         }
         await this.actor.update({ "system.apocalypticForm.highTormentSelected": selected });
+        await this._postApocalypticFormChat({ abilityIndex: event.currentTarget.value, active: event.currentTarget.checked });
       });
     });
+
+    element.querySelector(".demon-apocalyptic-active")?.addEventListener("change", async event => {
+      if (!event.target.matches("input[type='checkbox']")) return;
+      event.preventDefault();
+      event.stopPropagation();
+      const active = event.target.checked;
+      const update = { "system.apocalypticForm.active": active };
+      if (!active) {
+        update["system.health.formBonusDamage"] = [];
+        update["system.automation.formExtraActionsTurn"] = 0;
+      }
+      await this.actor.update(update);
+      await this._postApocalypticFormChat({ fullForm: true, active });
+    });
+    element.querySelector(".demon-form-show-chat")?.addEventListener("click", async event => { event.preventDefault(); await this._postApocalypticFormChat({ fullForm: true, active: true }); });
+    element.querySelector(".demon-form-initiative")?.addEventListener("click", async event => { event.preventDefault(); await this._rollApocalypticInitiative(); });
+    element.querySelector(".demon-form-extra-action")?.addEventListener("click", async event => { event.preventDefault(); await this._buyApocalypticExtraAction(); });
+    element.querySelectorAll(".demon-form-special-attack").forEach(button => button.addEventListener("click", async event => {
+      event.preventDefault();
+      await this._useApocalypticSpecialAbility(button.dataset.tier, Number(button.dataset.index));
+    }));
+    element.querySelectorAll(".demon-form-health-box").forEach(button => button.addEventListener("click", async event => {
+      event.preventDefault();
+      const index = Number(button.dataset.formHealthIndex);
+      const summary = getActiveDemonFormSummary(this.actor);
+      const damage = Array.from({ length: summary.healthLevels }, (_, i) => Number(this.actor.system?.health?.formBonusDamage?.[i] || 0));
+      damage[index] = damage[index] >= 3 ? 0 : damage[index] + 1;
+      await this.actor.update({ "system.health.formBonusDamage": damage });
+    }));
 
     element.querySelector(".demon-harvest-faith")?.addEventListener("click", async event => {
       event.preventDefault();
@@ -676,6 +747,8 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
         await this.actor.update({ "system.pacts.entries": entries });
       });
     });
+    element.querySelectorAll(".demon-pact-edit").forEach(button => button.addEventListener("click", async event => { event.preventDefault(); await this._openPactDialog(button.dataset.pactId); }));
+    element.querySelectorAll(".demon-pact-delete").forEach(button => button.addEventListener("click", async event => { event.preventDefault(); await this._deletePact(button.dataset.pactId); }));
 
     const rollBuilder = element.querySelector(".vtm-roll-builder");
     rollBuilder?.querySelector(".vtm-roll-builder-submit")?.addEventListener("click", async event => {
@@ -718,6 +791,7 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
         await this._recalculateExperienceFromJournal();
       });
     });
+    element.querySelector(".demon-advancement-open")?.addEventListener("click", async event => { event.preventDefault(); await this._openAdvancementDialog(); });
 
     element.querySelectorAll(".demon-creation-wizard-open").forEach(button => {
       button.addEventListener("click", async event => {
@@ -804,6 +878,33 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
         if (item?.type === "weapon") await this._useWeapon(item);
       });
     });
+    element.querySelectorAll(".combat-maneuver").forEach(button => {
+      button.addEventListener("click", async event => {
+        event.preventDefault();
+        await this._useCombatManeuver(button.dataset.maneuver);
+      });
+    });
+  }
+
+  _applyHouseHeaderIcon(element) {
+    const emblem = element?.querySelector?.(".demon-house-emblem");
+    const icon = emblem?.querySelector?.(".demon-house-icon");
+    const houseSelect = element?.querySelector?.('select[name="system.profile.house"]');
+    if (!emblem || !icon) return;
+    const apply = () => {
+      const house = houseSelect?.value ?? this.actor.system?.profile?.house ?? "";
+      const path = demonHouseIcon(house);
+      emblem.hidden = !path;
+      if (!path) return icon.removeAttribute("src");
+      icon.src = path;
+      icon.alt = house;
+      icon.title = house;
+    };
+    apply();
+    if (houseSelect && !houseSelect.dataset.demonHouseIconBound) {
+      houseSelect.dataset.demonHouseIconBound = "1";
+      houseSelect.addEventListener("change", apply);
+    }
   }
 
   _experienceJournalEntries() {
@@ -950,6 +1051,51 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     return { total, spent, available };
   }
 
+  async _openAdvancementDialog() {
+    const system = this.actor.system ?? {};
+    const purchases = [];
+    const add = (group, label, path, current, cost, next = Number(current) + 1) => {
+      if (Number.isFinite(cost) && cost > 0) purchases.push({ group, label, path, current: Number(current), next, cost });
+    };
+    for (const [group, keys] of Object.entries(VTM_REVISED.attributeCategories)) for (const key of keys) {
+      const current = numberValue(system.attributes?.[group]?.[key], 1);
+      if (current < 5) add("Атрибуты", ATTRIBUTE_LABELS[key] || key, `system.attributes.${group}.${key}`, current, current * 4);
+    }
+    for (const [group, keys] of Object.entries(DEMON_ABILITY_CATEGORIES)) for (const key of keys) {
+      const current = numberValue(system.abilities?.[group]?.[key]?.value, 0);
+      if (current < 5) add("Способности", ABILITY_LABELS[key] || key, `system.abilities.${group}.${key}.value`, current, current === 0 ? 3 : current * 2);
+    }
+    const house = VTM_REVISED.demonRules.houses.find(entry => entry.key === system.profile?.house);
+    for (const lore of DEMON_CATALOGS.lores) {
+      const current = numberValue(system.lores?.[lore.key]?.value, 0);
+      if (current >= 5) continue;
+      const own = house?.houseLores?.includes(lore.key) || ["fundament", "humanity"].includes(lore.key);
+      add("Знания", lore.label, `system.lores.${lore.key}.value`, current, current === 0 ? (own ? 7 : 10) : current * 5);
+    }
+    for (const row of buildBackgroundRows(system)) if (row.value < 5) add("Дополнения", row.label, row.valuePath, row.value, Math.max(1, row.value) * 3);
+    for (const row of buildVirtueRows(system)) if (row.value < 5) add("Добродетели", row.label, row.valuePath, row.value, row.value * 2);
+    const willpower = numberValue(system.resources?.willpower?.max, 0);
+    if (willpower < 10) add("Ресурсы", "Сила Воли", "system.resources.willpower.max", willpower, Math.max(1, willpower));
+    const faith = numberValue(system.resources?.faith?.max, 0);
+    if (faith < 10) add("Ресурсы", "Вера", "system.resources.faith.max", faith, Math.max(1, faith) * 7);
+    const torment = numberValue(system.resources?.torment?.max, 1);
+    if (torment > 1) add("Ресурсы", "Снизить постоянную Муку", "system.resources.torment.max", torment, 10, torment - 1);
+    const grouped = new Map();
+    purchases.forEach((entry, index) => { entry.index = index; if (!grouped.has(entry.group)) grouped.set(entry.group, []); grouped.get(entry.group).push(entry); });
+    const options = [...grouped.entries()].map(([group, entries]) => `<optgroup label="${foundry.utils.escapeHTML(group)}">${entries.map(entry => `<option value="${entry.index}">${foundry.utils.escapeHTML(entry.label)} · ${entry.current} → ${entry.next} · ${entry.cost} опыта</option>`).join("")}</optgroup>`).join("");
+    const content = `<form class="demon-advancement-dialog"><p>Доступно опыта: <b>${numberValue(system.resources?.experience?.available, 0)}</b></p><label>Развитие<select name="purchase" data-vtm-searchable="true">${options}</select></label><div class="demon-advancement-preview"></div><p class="hint">Покупка повышает характеристику на одну точку и автоматически записывается в журнал опыта. Требуется одобрение Рассказчика.</p></form>`;
+    return new Promise(resolve => new DialogV1({ title: "Развитие персонажа", content, buttons: { buy: { label: "Купить", callback: async html => {
+      const selected = purchases[Number(this._getFormElement(html)?.querySelector("[name='purchase']")?.value)];
+      if (!selected) return resolve(false);
+      const available = numberValue(this.actor.system?.resources?.experience?.available, 0);
+      if (available < selected.cost) { ui.notifications?.warn?.(`Недостаточно опыта: ${available}/${selected.cost}.`); return resolve(false); }
+      const entry = { id: foundry.utils.randomID(), type: "spend", amount: selected.cost, delta: -selected.cost, reason: `Развитие: ${selected.label} ${selected.current} → ${selected.next}`, target: selected.path, createdAt: new Date().toISOString(), userId: game.user?.id || "", userName: game.user?.name || "" };
+      await this.actor.update({ [selected.path]: selected.next, "system.resources.experience.available": available - selected.cost, "system.resources.experience.spent": numberValue(this.actor.system?.resources?.experience?.spent, 0) + selected.cost, "system.resources.experience.journal": [...this._experienceJournalEntries(), entry] });
+      await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this.actor }), content: `<article class="vtm-chat-card demon-chat-card"><h2>Развитие персонажа</h2><p><b>${foundry.utils.escapeHTML(selected.label)}</b>: ${selected.current} → ${selected.next}</p><p>Потрачено опыта: ${selected.cost}</p></article>` });
+      resolve(true);
+    } }, cancel: { label: game.i18n.localize("Cancel"), callback: () => resolve(false) } }, default: "buy", close: () => resolve(false), render: html => enhanceActorRollSearchSelects(html?.[0] ?? html) }, { width: 620, classes: ["demon-roll-dialog-window", "demon-advancement-dialog-window"] }).render(true));
+  }
+
   _damageTypeLabel(type = "") {
     return (VTM_REVISED.damageTypes ?? []).find(entry => entry.key === type)?.name || type;
   }
@@ -995,10 +1141,41 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
   async _useWeapon(item) {
     const weapon = item.system?.weapon ?? {};
-    const first = this._resolveTraitOption(weapon.attackFirstTrait || "attribute.physical.dexterity");
-    const second = this._resolveTraitOption(
-      weapon.attackSecondTrait || (weapon.category === "firearm" ? "ability.skills.firearms" : "ability.skills.melee")
-    );
+    const attackFirst = weapon.attackFirstTrait || "attribute.physical.dexterity";
+    const attackSecond = weapon.attackSecondTrait || (weapon.category === "firearm" ? "ability.skills.firearms" : "ability.skills.melee");
+    const target = this._selectedCombatTargetActor({ notify: false });
+    const content = `<form class="demon-roll-dialog demon-weapon-attack-dialog">
+      <p><strong>${foundry.utils.escapeHTML(item.name)}</strong></p>
+      <p class="muted">Цель: <strong>${foundry.utils.escapeHTML(target?.name || "не выбрана")}</strong></p>
+      <div class="form-group"><label>Первый параметр</label>${this._buildRollSelectHtml("firstTrait", attackFirst, false)}</div>
+      <div class="form-group"><label>Второй параметр</label>${this._buildRollSelectHtml("secondTrait", attackSecond, true)}</div>
+      <div class="grid grid-2"><label>Сложность атаки<input type="number" name="difficulty" min="2" max="10" value="${Number(weapon.difficulty || 6)}"></label><label>Сложность урона<input type="number" name="damageDifficulty" min="2" max="10" value="${Number(weapon.damageDifficulty || 6)}"></label></div>
+      <div class="form-group"><label><input type="checkbox" name="useDefense" ${target ? "checked" : "disabled"}> Активная защита цели</label><select name="defenseType" ${target ? "" : "disabled"}><option value="dodge">Уклонение</option><option value="parry">Парирование</option><option value="block">Блок</option></select></div>
+    </form>`;
+    return new Promise(resolve => new DialogV1({
+      title: `Атака: ${item.name}`, content,
+      buttons: {
+        attack: { icon: '<i class="fas fa-dice-d10"></i>', label: "Атака и урон", callback: async html => {
+          const form = this._getFormElement(html);
+          const result = await this._rollWeaponAttackAndDamage(item, {
+            firstTrait: form?.querySelector("[name='firstTrait']")?.value || attackFirst,
+            secondTrait: form?.querySelector("[name='secondTrait']")?.value || attackSecond,
+            difficulty: Number(form?.querySelector("[name='difficulty']")?.value || weapon.difficulty || 6),
+            damageDifficulty: Number(form?.querySelector("[name='damageDifficulty']")?.value || weapon.damageDifficulty || 6),
+            targetActor: target,
+            defenseType: form?.querySelector("[name='useDefense']")?.checked ? form?.querySelector("[name='defenseType']")?.value : ""
+          });
+          resolve(result);
+        } },
+        cancel: { label: game.i18n.localize("Cancel"), callback: () => resolve(null) }
+      }, default: "attack", close: () => resolve(null)
+    }, { width: 560, classes: ["demon-roll-dialog-window", "demon-weapon-dialog-window"] }).render(true));
+  }
+
+  async _rollWeaponAttackAndDamage(item, options = {}) {
+    const weapon = item.system?.weapon ?? {};
+    const first = this._resolveTraitOption(options.firstTrait || weapon.attackFirstTrait || "attribute.physical.dexterity");
+    const second = this._resolveTraitOption(options.secondTrait || weapon.attackSecondTrait || (weapon.category === "firearm" ? "ability.skills.firearms" : "ability.skills.melee"));
     if (!first) return null;
 
     const healthPenalty = this._resolveHealthPenalty();
@@ -1009,20 +1186,35 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
     const components = [first, second].filter(Boolean);
     const basePool = Math.max(1, components.reduce((sum, component) => sum + Number(component.value || 0), 0));
+    const attackStatus = statusRollModifier(this.actor, { physical: true });
+    const formEffects = getDemonRollEffects(this.actor, components.map(component => component.key))
+      .filter(effect => effect.type === "apocalypticForm");
+    const formDice = formEffects.reduce((sum, effect) => sum + Number(effect.dice || 0), 0);
+    const formDifficulty = formEffects.reduce((sum, effect) => sum + Number(effect.difficulty || 0), 0);
     const attackResult = await rollDicePool({
       actor: this.actor,
-      pool: Math.max(1, basePool + healthPenalty.value),
+      pool: Math.max(1, basePool + healthPenalty.value + attackStatus.dice + formDice),
       basePool,
       healthPenalty: healthPenalty.value,
       healthPenaltyLabel: healthPenalty.label,
-      difficulty: Number(weapon.difficulty || 6),
+      difficulty: Math.max(2, Math.min(10, Number(options.difficulty || weapon.difficulty || 6) + formDifficulty)),
       label: game.i18n.format("VTM_REVISED.Weapon.AttackLabel", { name: item.name }),
-      components
+      components: [
+        ...components,
+        ...(attackStatus.dice ? [{ label: attackStatus.label, value: attackStatus.dice }] : []),
+        ...formEffects.filter(effect => effect.dice).map(effect => ({ label: effect.label, value: Number(effect.dice) }))
+      ],
+      flavor: formEffects.length ? formEffects.map(effect => effect.label).join("; ") : ""
     });
 
-    if (attackResult.botch || attackResult.successes <= 0) return attackResult;
+    const defenseResult = options.targetActor && options.defenseType ? await this._rollTargetDefense(options.targetActor, options.defenseType) : null;
+    const netAttackSuccesses = calculateNetAttackSuccesses(attackResult.successes, defenseResult?.successes);
+    if (attackResult.botch || netAttackSuccesses <= 0) {
+      ui.notifications?.warn?.(`${item.name}: атака не достигла цели.`);
+      return { attackResult, defenseResult, netAttackSuccesses };
+    }
 
-    const extraSuccesses = weapon.addsAttackSuccesses === false ? 0 : Math.max(0, Number(attackResult.successes || 0) - 1);
+    const extraSuccesses = weapon.addsAttackSuccesses === false ? 0 : Math.max(0, netAttackSuccesses - 1);
     const strength = numberValue(this.actor.system?.attributes?.physical?.strength, 0);
     const baseDamage = weapon.usesStrength ? strength + Number(weapon.damageBonus || 0) : Number(weapon.damageDice || 0);
     const selectedMerits = this.actor.getFlag?.("vtm-revised", "demonSelections")?.merits ?? [];
@@ -1049,7 +1241,7 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       pool: damagePool,
       basePool: damagePool,
       healthPenalty: 0,
-      difficulty: Number(weapon.damageDifficulty || 6),
+      difficulty: Number(options.damageDifficulty || weapon.damageDifficulty || 6),
       label: game.i18n.format("VTM_REVISED.Weapon.DamageLabel", { name: item.name }),
       flavor: game.i18n.format("VTM_REVISED.Weapon.DamageFlavor", { type: damageTypeLabel }),
       components: [
@@ -1058,7 +1250,70 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
         ...(goodRightHookDice ? [{ label: "Хороший хук справа", value: "+2 куб." }] : [])
       ]
     });
-    return { attackResult, damageResult };
+    const renderTemplate = foundry.applications?.handlebars?.renderTemplate ?? globalThis.renderTemplate;
+    const content = await renderTemplate("systems/vtm-revised/templates/chat/weapon-damage-card.hbs", {
+      actor: this.actor, item, weapon, attackSuccesses: attackResult.successes, hasDefense: Boolean(defenseResult), defenseSuccesses: defenseResult?.successes ?? null, netAttackSuccesses, extraSuccesses,
+      damagePool, damageSuccesses: damageResult.successes, damageTypeLabel,
+      soakHint: weapon.damageType === "aggravated" ? "Усиливающийся урон поглощается только специальной защитой апокалиптической формы." : "Падший поглощает поверхностный урон Выносливостью; для летального можно выбрать Выносливость или Веру."
+    });
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }), content,
+      flags: { "vtm-revised": { type: "weaponDamage", actorId: this.actor.id, itemId: item.id, targetActorUuid: options.targetActor?.uuid || "", damageSuccesses: Number(damageResult.successes || 0), damageType: weapon.damageType || "bashing", damageTypeLabel } }
+    });
+    return { attackResult, defenseResult, netAttackSuccesses, damageResult };
+  }
+
+  _selectedCombatTargetActor({ notify = true } = {}) {
+    const targets = Array.from(game.user?.targets ?? []);
+    if (targets.length === 1) return targets[0].actor ?? null;
+    if (notify) ui.notifications?.warn?.("Выбери ровно один токен-цель.");
+    return null;
+  }
+
+  _actorTraitValue(actor, path) {
+    return Number(foundry.utils.getProperty(actor, `system.${path}`) || 0);
+  }
+
+  _actorHealthPenalty(actor) {
+    const health = actor.system?.health ?? {};
+    const key = [...VTM_REVISED.healthLevels].reverse().find(entry => Number(health[entry] || 0) > 0);
+    if (!key) return { value: 0, incapacitated: false, label: "" };
+    const penalty = VTM_REVISED.healthPenalties[key] ?? 0;
+    return { value: penalty === "out" ? 0 : Number(penalty || 0), incapacitated: penalty === "out", label: game.i18n.localize(`VTM_REVISED.Health.${key}`) };
+  }
+
+  async _rollTargetDefense(actor, type = "dodge") {
+    const ability = type === "parry" ? "skills.melee" : type === "block" ? "talents.brawl" : "talents.dodge";
+    const labels = { dodge: "Уклонение", parry: "Парирование", block: "Блок" };
+    const dexterity = this._actorTraitValue(actor, "attributes.physical.dexterity");
+    const abilityValue = this._actorTraitValue(actor, `abilities.${ability}.value`);
+    const health = this._actorHealthPenalty(actor);
+    if (health.incapacitated) return { successes: 0, botch: false };
+    const basePool = Math.max(1, dexterity + abilityValue);
+    const armor = actor.system?.automation?.armor ?? {};
+    const armorPenalty = armor.active ? Math.max(0, Number(armor.dexterityPenalty || 0)) : 0;
+    const status = statusRollModifier(actor, { physical: true });
+    return rollDicePool({
+      actor, pool: Math.max(1, basePool + health.value - armorPenalty + status.dice), basePool,
+      healthPenalty: health.value, healthPenaltyLabel: health.label, difficulty: 6,
+      label: `${labels[type] || labels.dodge}: ${actor.name}`,
+      components: [{ label: "Ловкость", value: dexterity }, { label: labels[type] || labels.dodge, value: abilityValue }, ...(armorPenalty ? [{ label: "Штраф брони", value: -armorPenalty }] : []), ...(status.dice ? [{ label: status.label, value: status.dice }] : [])]
+    });
+  }
+
+  async _useCombatManeuver(key = "punch") {
+    const maneuvers = {
+      punch: { name: "Удар кулаком", difficulty: 6, damageBonus: 0, damageType: "bashing" },
+      kick: { name: "Удар ногой", difficulty: 7, damageBonus: 1, damageType: "bashing" },
+      bite: { name: "Укус", difficulty: 6, damageBonus: 1, damageType: "lethal", note: "Боевой укус требует предварительно обездвижить цель." }
+    };
+    const maneuver = maneuvers[key];
+    if (!maneuver) return;
+    if (maneuver.note) ui.notifications?.info?.(maneuver.note);
+    return this._useWeapon({
+      id: `maneuver-${key}`, name: maneuver.name,
+      system: { weapon: { category: "melee", attackFirstTrait: "attribute.physical.dexterity", attackSecondTrait: "ability.talents.brawl", difficulty: maneuver.difficulty, damageDifficulty: 6, usesStrength: true, damageBonus: maneuver.damageBonus, damageType: maneuver.damageType, addsAttackSuccesses: true } }
+    });
   }
 
   _buildHealthRows() {
@@ -1827,11 +2082,14 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     }));
     const diceModifier = selectedEffects.reduce((total, effect) => total + effect.dice, 0);
     const difficultyModifier = selectedEffects.reduce((total, effect) => total + effect.difficulty, 0);
-    const pool = Math.max(1, basePool + healthPenalty.value + diceModifier);
+    const isPhysical = [firstTraitKey, secondTraitKey].some(key => key.includes("physical") || /\.(brawl|athletics|dodge|melee|firearms)$/.test(key));
+    const statusModifier = statusRollModifier(this.actor, { physical: isPhysical });
+    const pool = Math.max(1, basePool + healthPenalty.value + diceModifier + statusModifier.dice);
     const difficulty = Math.max(2, Math.min(10, (Number.isFinite(baseDifficulty) ? baseDifficulty : 6) + difficultyModifier));
     const label = customLabel || components.map(component => component.label).join(" + ");
     const rollComponents = [
       ...components,
+      ...(statusModifier.dice ? [{ label: statusModifier.label, value: statusModifier.dice }] : []),
       ...selectedEffects.map(effect => ({ label: effect.label, value: [effect.dice ? `${effect.dice > 0 ? "+" : ""}${effect.dice} куб.` : "", effect.difficulty ? `${effect.difficulty > 0 ? "+" : ""}${effect.difficulty} сл.` : ""].filter(Boolean).join(", ") }))
     ];
 
@@ -1952,28 +2210,105 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       : [];
   }
 
-  async _openPactDialog() {
+  async _postApocalypticFormChat({ fullForm = false, abilityIndex = "", active = false } = {}) {
+    const loreKey = String(this.actor.system?.creation?.primaryLore ?? "").trim();
+    const form = DEMON_APOCALYPTIC_FORMS[loreKey];
+    if (!form) return null;
+    const escape = value => foundry.utils.escapeHTML(String(value ?? ""));
+    let title = form.name;
+    let body = "";
+    if (fullForm) {
+      if (!active) {
+        body = "<p><b>Полная апокалиптическая форма прекращена.</b></p>";
+      } else {
+        const selected = new Set(Array.isArray(this.actor.system?.apocalypticForm?.highTormentSelected)
+          ? this.actor.system.apocalypticForm.highTormentSelected.map(String)
+          : []);
+        const high = (form.highTormentAbilities ?? []).filter((_, index) => selected.has(String(index)));
+        const abilities = [...(form.abilities ?? []), ...high];
+        body = `<p>${escape(form.description)}</p><h3>Действующие способности</h3><ul>${abilities.map(ability => `<li>${escape(ability)}</li>`).join("")}</ul>`;
+      }
+    } else {
+      const ability = form.highTormentAbilities?.[Number(abilityIndex)];
+      if (!ability) return null;
+      title = `${form.name}: высокая Мука`;
+      body = `<p><b>${active ? "Способность активирована" : "Способность отключена"}:</b> ${escape(ability)}</p>${active && !this.actor.system?.apocalypticForm?.active ? "<p><i>Эффект начнёт действовать после активации полной формы.</i></p>" : ""}`;
+    }
+    return ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: `<article class="vtm-chat-card demon-chat-card demon-apocalyptic-chat"><h2><i class="fas fa-circle-dot"></i> ${escape(title)}</h2>${body}</article>`,
+      flags: { "vtm-revised": { type: "apocalypticForm", active, fullForm, abilityIndex: String(abilityIndex) } }
+    });
+  }
+
+  async _rollApocalypticInitiative() {
+    const summary = getActiveDemonFormSummary(this.actor);
+    const dexterity = numberValue(this.actor.system?.attributes?.physical?.dexterity, 0);
+    const wits = numberValue(this.actor.system?.attributes?.mental?.wits, 0);
+    const bonus = Number(summary.initiative || 0);
+    const roll = await new Roll("1d10").evaluate({ async: true });
+    const total = Number(roll.total || 0) + dexterity + wits + bonus;
+    const tokens = this.actor.getActiveTokens?.(true, true) ?? [];
+    const token = tokens.find(entry => entry.controlled) ?? tokens[0];
+    if (token) {
+      let combat = game.combat;
+      if (!combat) combat = await Combat.create({ scene: canvas.scene.id, active: true });
+      let combatant = combat.combatants.find(entry => entry.tokenId === token.id);
+      if (!combatant) [combatant] = await combat.createEmbeddedDocuments("Combatant", [{ tokenId: token.id, actorId: this.actor.id, sceneId: canvas.scene.id }]);
+      await combat.setInitiative(combatant.id, total);
+    }
+    await roll.toMessage({ speaker: ChatMessage.getSpeaker({ actor: this.actor, token: token?.document }), flavor: `Инициатива: ${total} (Ловкость ${dexterity} + Сообразительность ${wits}${bonus ? ` + форма ${bonus}` : ""})` });
+    return total;
+  }
+
+  async _buyApocalypticExtraAction() {
+    const summary = getActiveDemonFormSummary(this.actor);
+    if (!summary.extraActions) return false;
     if (Number(this.actor.system?.resources?.faith?.value || 0) < 1) {
+      ui.notifications?.warn?.("Недостаточно временной Веры.");
+      return false;
+    }
+    const current = Number(this.actor.system?.automation?.formExtraActionsTurn || 0);
+    await this.actor.changeResource("resources.faith", -1, "Дополнительное действие апокалиптической формы");
+    await this.actor.update({ "system.automation.formExtraActionsTurn": current + 1 });
+    await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this.actor }), content: `<article class="vtm-chat-card demon-chat-card"><h2>Дополнительное действие</h2><p>${foundry.utils.escapeHTML(this.actor.name)} тратит 1 Веру и получает дополнительное действие в этом ходу. Всего приобретено: ${current + 1}.</p></article>` });
+    return true;
+  }
+
+  async _useApocalypticSpecialAbility(tier = "low", index = 0) {
+    const ability = getActiveDemonFormSummary(this.actor).abilities.find(entry => entry.tier === tier && Number(entry.index) === Number(index));
+    if (!ability) return false;
+    const escape = value => foundry.utils.escapeHTML(String(value ?? ""));
+    await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this.actor }), content: `<article class="vtm-chat-card demon-chat-card"><h2><i class="fas fa-burst"></i> ${escape(ability.mechanic?.label || "Особая способность")}</h2><p>${escape(ability.description)}</p><p><b>Источник:</b> ${escape(ability.formName)}</p></article>`, flags: { "vtm-revised": { type: "demonFormAbility", loreKey: ability.loreKey, tier, index } } });
+    const attack = ability.mechanic?.naturalAttack;
+    if (!attack) return true;
+    return this._useWeapon({ id: `form-${ability.loreKey}-${tier}-${index}`, name: ability.mechanic?.label || "Естественная атака", system: { weapon: { category: "melee", attackFirstTrait: "attribute.physical.dexterity", attackSecondTrait: "ability.talents.brawl", difficulty: Number(attack.difficulty || 6), damageDifficulty: 6, usesStrength: attack.usesStrength !== false, damageBonus: Number(attack.damageBonus || 0), damageDice: Number(attack.damageDice || 0), damageType: attack.damageType || "aggravated", addsAttackSuccesses: true } } });
+  }
+
+  async _openPactDialog(pactId = "") {
+    const existing = this._pactEntries().find(entry => String(entry.id) === String(pactId));
+    if (!existing && Number(this.actor.system?.resources?.faith?.value || 0) < 1) {
       ui.notifications?.warn?.("Для закрепления нового договора требуется 1 временная Вера.");
       return false;
     }
+    const escape = value => foundry.utils.escapeHTML(String(value ?? ""));
     const content = `<form class="demon-pact-dialog">
-      <div class="form-group"><label>Имя смертного</label><input type="text" name="name" required></div>
+      <div class="form-group"><label>Имя смертного</label><input type="text" name="name" value="${escape(existing?.name)}" required></div>
       <div class="grid grid-2">
-        <div class="form-group"><label>Вера смертного</label><input type="number" name="faithRating" value="1" min="1" max="5"></div>
-        <div class="form-group"><label>Вера демону в день</label><input type="number" name="offeredFaith" value="1" min="0" max="3"></div>
+        <div class="form-group"><label>Вера смертного</label><input type="number" name="faithRating" value="${Number(existing?.faithRating || 1)}" min="1" max="5"></div>
+        <div class="form-group"><label>Вера демону в день</label><input type="number" name="offeredFaith" value="${Number(existing?.offeredFaith ?? 1)}" min="0" max="3"></div>
       </div>
-      <div class="form-group"><label>Желание / дар</label><textarea name="gift"></textarea></div>
-      <div class="form-group"><label>Условия договора</label><textarea name="terms"></textarea></div>
-      <p class="hint">Закрепление договора расходует 1 временную Веру. Ежедневно можно получать не больше половины Веры слуги с округлением вверх.</p>
+      <div class="form-group"><label>Желание / дар</label><textarea name="gift">${escape(existing?.gift)}</textarea></div>
+      <div class="form-group"><label>Условия договора</label><textarea name="terms">${escape(existing?.terms)}</textarea></div>
+      <p class="hint">${existing ? "Редактирование не расходует Веру." : "Закрепление договора расходует 1 временную Веру."} Ежедневно можно получать не больше половины Веры слуги с округлением вверх.</p>
     </form>`;
     return new Promise(resolve => new DialogV1({
-      title: "Заключить договор",
+      title: existing ? "Изменить договор" : "Заключить договор",
       content,
       buttons: {
         create: {
           icon: '<i class="fas fa-file-signature"></i>',
-          label: "Закрепить договор",
+          label: existing ? "Сохранить" : "Закрепить договор",
           callback: async html => {
             const form = this._getFormElement(html);
             const name = String(form?.querySelector("[name='name']")?.value || "").trim();
@@ -1986,18 +2321,21 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
             const maximum = Math.ceil(faithRating / 2);
             const offeredFaith = Math.max(0, Math.min(maximum, Number(form.querySelector("[name='offeredFaith']")?.value || 0)));
             const entries = this._pactEntries();
-            entries.push({
-              id: foundry.utils.randomID(),
+            const pact = {
+              id: existing?.id || foundry.utils.randomID(),
               name,
               faithRating,
               offeredFaith,
               gift: String(form.querySelector("[name='gift']")?.value || "").trim(),
               terms: String(form.querySelector("[name='terms']")?.value || "").trim(),
-              active: true,
-              lastCollected: ""
-            });
+              active: existing?.active ?? true,
+              lastCollected: existing?.lastCollected || ""
+            };
+            if (existing) entries.splice(entries.findIndex(entry => String(entry.id) === String(existing.id)), 1, pact);
+            else entries.push(pact);
             await this.actor.update({ "system.pacts.entries": entries });
-            await this.actor.changeResource("resources.faith", -1, `Закрепление договора: ${name}`);
+            if (!existing) await this.actor.changeResource("resources.faith", -1, `Закрепление договора: ${name}`);
+            await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this.actor }), content: `<article class="vtm-chat-card demon-chat-card"><h2>${existing ? "Договор изменён" : "Договор заключён"}</h2><p><b>${escape(name)}</b> · Вера ${faithRating} · предложено ${offeredFaith}/${maximum} в день.</p></article>` });
             resolve(true);
           }
         },
@@ -2005,7 +2343,18 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       },
       default: "create",
       close: () => resolve(false)
-    }, { width: 560 }).render(true));
+    }, { width: 680, classes: ["demon-roll-dialog-window", "demon-pact-dialog-window"] }).render(true));
+  }
+
+  async _deletePact(pactId = "") {
+    const entries = this._pactEntries();
+    const pact = entries.find(entry => String(entry.id) === String(pactId));
+    if (!pact) return false;
+    const confirmed = await new Promise(resolve => new DialogV1({ title: "Разорвать договор", content: `<p>Удалить договор с <b>${foundry.utils.escapeHTML(pact.name)}</b>? Это действие нельзя отменить.</p>`, buttons: { remove: { label: "Разорвать", callback: () => resolve(true) }, cancel: { label: game.i18n.localize("Cancel"), callback: () => resolve(false) } }, default: "cancel", close: () => resolve(false) }, { width: 440, classes: ["demon-roll-dialog-window", "demon-pact-dialog-window"] }).render(true));
+    if (!confirmed) return false;
+    await this.actor.update({ "system.pacts.entries": entries.filter(entry => String(entry.id) !== String(pactId)) });
+    await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this.actor }), content: `<article class="vtm-chat-card demon-chat-card"><h2>Договор разорван</h2><p>${foundry.utils.escapeHTML(pact.name)}</p></article>` });
+    return true;
   }
 
   async _collectPactFaith() {
@@ -2064,7 +2413,7 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       },
       default: "harvest",
       close: () => resolve(false)
-    }, { width: 540 }).render(true));
+    }, { width: 620, classes: ["demon-roll-dialog-window", "demon-harvest-dialog-window"] }).render(true));
   }
 
   async _openInvocationDialog({ loreKey = "", loreLabel = "Знание", rating = 0 } = {}) {

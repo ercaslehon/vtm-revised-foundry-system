@@ -134,7 +134,10 @@
       <button type="button" class="vampire-blood-heal" title="Исцелить ударный или летальный уровень за 1 кровь"><i class="fas fa-heart-pulse"></i></button>
       <button type="button" class="vampire-blood-heal-aggravated" title="Исцелить аггравированный уровень за 5 крови и день отдыха"><i class="fas fa-fire-flame-curved"></i></button>
       <button type="button" class="vampire-blood-boost" title="Усилить Физический Атрибут на сцену"><i class="fas fa-dumbbell"></i></button>
+      {{#if bloodTurn.celerityRating}}<button type="button" class="vampire-celerity-activate" title="Потратить кровь и получить дополнительные действия Стремительности"><i class="fas fa-bolt"></i>{{#if bloodTurn.celerityActions}} {{bloodTurn.celerityActions}}{{/if}}</button>{{/if}}
       <button type="button" class="vampire-blood-turn-reset" title="Начать новый ход"><i class="fas fa-rotate"></i></button>
+      <button type="button" class="vampire-roll-initiative" title="Инициатива: 1d10 + Ловкость + Сообразительность"><i class="fas fa-list-ol"></i></button>
+      <button type="button" class="vampire-multiple-actions" title="Объявить множественные действия"><i class="fas fa-layer-group"></i> {{bloodTurn.multipleActions.used}}/{{bloodTurn.multipleActions.declared}}</button>
       <button type="button" class="vampire-blood-boost-reset" title="Закончить сцену и убрать усиления"><i class="fas fa-hourglass-end"></i></button>
       <button type="button" class="vampire-frenzy-check {{#if beastState.frenzy}}is-active{{/if}}" title="{{#if beastState.frenzy}}Завершить Безумие{{else}}Проверка Безумия{{/if}}"><i class="fas fa-teeth"></i></button>
       <button type="button" class="vampire-rotschreck-check {{#if beastState.rotschreck}}is-active{{/if}}" title="{{#if beastState.rotschreck}}Завершить Ротшрек{{else}}Проверка Ротшрека{{/if}}"><i class="fas fa-fire"></i></button>
@@ -227,6 +230,12 @@
 
     <div class="vtm-tab-panels">
       <section class="vtm-tab-panel {{#if (eq activeSheetTab "main")}}is-active{{/if}}" data-vtm-tab-panel="main">
+        <section class="vtm-panel vtm-status-panel">
+          <h2><i class="fas fa-person-circle-exclamation"></i> Состояния</h2>
+          <div class="vtm-status-buttons">
+            {{#each combatStatuses as |status|}}<button type="button" class="vtm-status-toggle {{#if status.active}}is-active{{/if}}" data-status-id="{{status.id}}" title="{{status.name}} · {{status.scope}}"><img src="{{status.icon}}" alt=""/> {{status.name}}</button>{{/each}}
+          </div>
+        </section>
         <div class="vtm-main-grid vtm-main-grid-single">
           <main class="vtm-main-left">
             {{> "systems/vtm-revised/templates/actors/parts/attributes.hbs"}}
@@ -241,6 +250,14 @@
       </section>
 
       <section class="vtm-tab-panel {{#if (eq activeSheetTab "powers")}}is-active{{/if}}" data-vtm-tab-panel="powers">
+        <section class="vtm-panel vtm-armor-panel">
+          <div class="vtm-inline-heading-actions"><h2><i class="fas fa-shield-halved"></i> Броня</h2><label><input type="checkbox" name="system.automation.armor.active" {{checked armor.active}}/> Надета</label></div>
+          <div class="grid grid-3">
+            <label>Название <input name="system.automation.armor.name" value="{{armor.name}}" placeholder="Бронежилет"/></label>
+            <label>Рейтинг поглощения <input type="number" min="0" max="10" name="system.automation.armor.rating" value="{{armor.rating}}"/></label>
+            <label>Штраф Ловкости <input type="number" min="0" max="10" name="system.automation.armor.dexterityPenalty" value="{{armor.dexterityPenalty}}"/></label>
+          </div>
+        </section>
         {{#if activeAutomationEffects.length}}
           <section class="vtm-panel vtm-active-effects-panel">
             <div class="vtm-inline-heading-actions">

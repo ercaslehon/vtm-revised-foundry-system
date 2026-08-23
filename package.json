@@ -2,15 +2,17 @@
   "name": "vtm-revised-foundry-system",
   "private": true,
   "type": "module",
-  "version": "11.0.28",
+  "version": "11.0.29",
   "scripts": {
     "validate:catalogs": "node scripts/validate-catalogs.mjs",
     "prerelease": "npm run validate:catalogs",
     "check": "npm run validate:catalogs",
+    "test:combat": "node tests/combat-math.test.mjs && node tests/demon-apocalyptic-mechanics.test.mjs",
     "styles:split": "node scripts/split-styles.mjs",
     "styles:build": "node scripts/build-styles.mjs",
     "styles:check": "node scripts/build-styles.mjs --check",
     "styles:regroup": "node scripts/regroup-styles.mjs",
-    "styles:audit": "node scripts/audit-styles.mjs"
+    "styles:audit": "node scripts/audit-styles.mjs",
+    "test": "npm run test:combat && npm run validate:catalogs"
   }
 }

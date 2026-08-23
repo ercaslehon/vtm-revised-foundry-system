@@ -141,6 +141,14 @@ export class VTMVampireActorData extends foundry.abstract.TypeDataModel {
       health: healthSchema(),
       automation: new fields.SchemaField({
         bloodSpentTurn: ratingField(0, 10),
+        celerityActionsTurn: ratingField(0, 10),
+        multipleActions: new fields.SchemaField({ declared: ratingField(1, 10), used: ratingField(0, 10) }),
+        armor: new fields.SchemaField({
+          name: textField(),
+          rating: ratingField(0, 10),
+          dexterityPenalty: ratingField(0, 10),
+          active: new fields.BooleanField({ required: true, initial: false })
+        }),
         frenzy: new fields.BooleanField({ required: true, initial: false }),
         rotschreck: new fields.BooleanField({ required: true, initial: false }),
         physicalBoost: new fields.SchemaField({

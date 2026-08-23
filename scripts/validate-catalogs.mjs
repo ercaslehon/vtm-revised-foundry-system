@@ -40,6 +40,8 @@ const DISCIPLINE_PLACEHOLDER_NAMES = new Set([
   "по выбору игрока"
 ].map(normalizeName));
 
+const PASSIVE_LEVEL_DISCIPLINES = new Set(["могущество", "стойкость", "стремительность"].map(normalizeName));
+
 let failures = 0;
 let warnings = 0;
 
@@ -214,6 +216,7 @@ function validateUniqueEntries(allEntries) {
     if (identity.endsWith("::")) continue;
 
     if (seen.has(identity)) {
+      if (type === "discipline" && sourcePath.includes("blood-magic.generated.json")) continue;
       if (type === "discipline" || type === "disciplinePath") warn(`${label}: duplicate ${type} identity "${identity}" also used by ${seen.get(identity)}; built-in import dedupe should skip duplicates`);
       else fail(`${label}: duplicate identity "${identity}" also used by ${seen.get(identity)}`);
     } else {
@@ -268,6 +271,7 @@ function validateDisciplinesAndPowers(allEntries) {
     const levels = Array.from(levelSet).sort((a, b) => a - b);
     const min = levels[0];
     const max = levels.at(-1);
+    if (PASSIVE_LEVEL_DISCIPLINES.has(parent)) continue;
     if (min > 1) { warn(`discipline powers for "${parent}": starts at level ${min}; lower levels may be represented by passive dots or another catalog`); continue; }
     for (let level = 1; level <= max; level += 1) if (!levelSet.has(level)) warn(`discipline powers for "${parent}": missing level ${level}; present levels: ${levels.join(", ")}`);
   }
@@ -293,7 +297,7 @@ function validateClanDisciplineLinks(allEntries) {
 
     for (const discipline of disciplines) {
       const normalized = normalizeName(discipline);
-      if (DISCIPLINE_PLACEHOLDER_NAMES.has(normalized)) { warn(`${label}: discipline placeholder "${discipline}" is allowed`); continue; }
+      if (DISCIPLINE_PLACEHOLDER_NAMES.has(normalized)) continue;
       if (!disciplineNames.has(normalized)) fail(`${label}: clan discipline "${discipline}" has no matching discipline in catalogs`);
     }
   }

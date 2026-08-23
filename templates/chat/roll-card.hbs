@@ -12,5 +12,6 @@
   <p>{{localize "VTM_REVISED.Roll.Pool"}}: {{pool}}, {{localize "VTM_REVISED.Roll.Difficulty"}}: {{difficulty}}</p>
   <p>{{localize "VTM_REVISED.Roll.Dice"}}: {{#each dice}}<span class="die">{{this}}</span> {{/each}}</p>
   <p>{{localize "VTM_REVISED.Roll.RawSuccesses"}}: {{rawSuccesses}} ({{localize "VTM_REVISED.Roll.Tens"}}: {{tens}} ×2), {{localize "VTM_REVISED.Roll.Ones"}}: {{ones}}</p>
+  {{#if automaticSuccesses}}<p>Автоматические успехи: +{{automaticSuccesses}}</p>{{/if}}
   <p class="result {{#if botch}}botch{{/if}}">{{#if botch}}{{localize "VTM_REVISED.Roll.Botched"}}{{else}}{{localize "VTM_REVISED.Roll.Successes"}}: {{successes}}{{/if}}</p>
 </div>

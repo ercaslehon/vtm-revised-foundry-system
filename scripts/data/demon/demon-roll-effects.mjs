@@ -1,5 +1,7 @@
 import { DEMON_CATALOGS } from "./demon-catalogs.mjs";
 import { DEMON_APOCALYPTIC_FORMS } from "./demon-apocalyptic-forms.mjs";
+import { activeDemonHighTormentIndexes } from "../../combat/combat-math.mjs";
+import { getDemonFormAbilityMechanic } from "./demon-apocalyptic-mechanics.mjs";
 
 const SOCIAL = ["attribute.social.*"];
 const WILLPOWER = ["resource.willpower"];
@@ -92,79 +94,30 @@ export const DEMON_ROLL_EFFECTS = {
 
 const selectorMatches = (selector, trait) => selector === "*" || (selector.endsWith(".*") ? trait.startsWith(selector.slice(0, -1)) : selector === trait);
 
-const FORM_TRAITS = new Map([
-  ["сила", "attribute.physical.strength"],
-  ["ловкость", "attribute.physical.dexterity"],
-  ["выносливость", "attribute.physical.stamina"],
-  ["обаяние", "attribute.social.charisma"],
-  ["манипулирование", "attribute.social.manipulation"],
-  ["внешность", "attribute.social.appearance"],
-  ["восприятие", "attribute.mental.perception"],
-  ["интеллект", "attribute.mental.intelligence"],
-  ["сообразительность", "attribute.mental.wits"],
-  ["осведомленность", "ability.talents.awareness"],
-  ["атлетизм", "ability.talents.athletics"],
-  ["уворот", "ability.talents.dodge"],
-  ["эмпатия", "ability.talents.empathy"],
-  ["запугивание", "ability.talents.intimidation"],
-  ["лидерство", "ability.talents.leadership"],
-  ["хитрость", "ability.talents.subterfuge"],
-  ["интуиция", "ability.talents.intuition"],
-  ["маскировка", "ability.skills.stealth"],
-  ["ремесло", "ability.skills.crafts"]
-]);
-
-const normalizeFormText = value => String(value ?? "").toLowerCase().replaceAll("ё", "е");
-
 export function getDemonApocalypticFormRollEffects(actor, traits = []) {
   if (!actor?.system?.apocalypticForm?.active) return [];
   const loreKey = String(actor.system?.creation?.primaryLore ?? "").trim();
   const form = DEMON_APOCALYPTIC_FORMS[loreKey];
   if (!form) return [];
 
-  const selectedHigh = new Set(Array.isArray(actor.system?.apocalypticForm?.highTormentSelected)
-    ? actor.system.apocalypticForm.highTormentSelected.map(String)
-    : []);
-  const availableHigh = Math.max(0, Math.min(4, Number(actor.system?.resources?.torment?.max || 0) - 6));
+  const selectedHigh = new Set(activeDemonHighTormentIndexes(actor.system?.resources?.torment?.max, actor.system?.apocalypticForm?.highTormentSelected));
   const highAbilities = (form.highTormentAbilities ?? [])
-    .map((ability, index) => ({ ability, index }))
-    .filter(entry => selectedHigh.has(String(entry.index)))
-    .slice(0, availableHigh)
-    .map(entry => entry.ability);
-  const activeAbilities = [...(form.abilities ?? []), ...highAbilities];
+    .map((ability, index) => ({ ability, index, tier: "high" }))
+    .filter(entry => selectedHigh.has(String(entry.index)));
+  const activeAbilities = [
+    ...(form.abilities ?? []).map((ability, index) => ({ ability, index, tier: "low" })),
+    ...highAbilities
+  ];
   const effects = [];
-  for (const [index, ability] of activeAbilities.entries()) {
-    const text = normalizeFormText(ability);
+  for (const entry of activeAbilities) {
+    const { ability, index, tier } = entry;
     const label = String(ability).split(":")[0].trim() || `Апокалиптическая форма ${index + 1}`;
-    const byTrait = new Map();
-    const add = (trait, values) => {
-      const current = byTrait.get(trait) ?? { dice: 0, difficulty: 0 };
-      byTrait.set(trait, { dice: current.dice + Number(values.dice || 0), difficulty: current.difficulty + Number(values.difficulty || 0) });
-    };
-
-    for (const [name, trait] of FORM_TRAITS.entries()) {
-      const root = name.length > 5 ? name.slice(0, -1) : name;
-      const escaped = root.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-      const after = text.match(new RegExp(`${escaped}[а-я]*\\s*\\+\\s*(\\d+)`, "u"));
-      const before = text.match(new RegExp(`\\+\\s*(\\d+)\\s*(?:к\\s+)?${escaped}[а-я]*`, "u"));
-      const bonus = Number(after?.[1] || before?.[1] || 0);
-      if (bonus > 0) add(trait, { dice: bonus });
-    }
-
-    const lowersDifficulty = /(?:снижает|снижая|снижается|уменьшается|уменьшает).*сложност|сложност.*(?:снижает|снижается|уменьшается|уменьшает)/u.test(text);
-    if (lowersDifficulty) {
-      const amount = Number(text.match(/(?:на|уменьшается на|снижается на)\s+(?:два\s*)?\(?([12])\)?/u)?.[1] || (/на два/u.test(text) ? 2 : 1));
-      for (const [name, trait] of FORM_TRAITS.entries()) {
-        const root = name.length > 5 ? name.slice(0, -1) : name;
-        if (text.includes(root)) add(trait, { difficulty: -amount });
-      }
-    }
-
-    for (const [trait, modifier] of byTrait.entries()) {
+    const mechanic = getDemonFormAbilityMechanic(loreKey, tier, index);
+    for (const [trait, modifier] of Object.entries(mechanic?.roll ?? {})) {
       if (!traits.some(rollTrait => selectorMatches(trait, rollTrait))) continue;
       effects.push({
         type: "apocalypticForm",
-        key: `${loreKey}:${index}:${trait}`,
+        key: `${loreKey}:${tier}:${index}:${trait}`,
         label: `${form.name}: ${label}`,
         mechanics: ability,
         note: ability,

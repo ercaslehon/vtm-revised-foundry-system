@@ -3031,3 +3031,10 @@
 .vtm-revised .vtm-active-effects-list li { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; padding: 0.45rem 0.6rem; border: 1px solid rgba(145, 38, 55, 0.55); border-radius: 5px; }
 .vtm-revised .vtm-active-effects-list li div { display: grid; gap: 0.1rem; }
 .vtm-revised .vtm-active-effects-list li span, .vtm-revised .vtm-active-effects-list li small { opacity: 0.8; }
+.vtm-revised .vtm-status-panel { margin-bottom: 0.65rem; }
+.vtm-revised .vtm-status-buttons { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.vtm-revised .vtm-status-toggle { display: inline-flex; align-items: center; gap: 0.3rem; width: auto; }
+.vtm-revised .vtm-status-toggle img { width: 20px; height: 20px; border: 0; }
+.vtm-revised .vtm-status-toggle.is-active { color: #fff; border-color: #d34b63; background: rgba(138, 17, 43, 0.78); box-shadow: 0 0 8px rgba(205, 35, 70, 0.4); }
+.vtm-revised .vtm-combat-maneuvers { display: flex; flex-wrap: wrap; gap: 0.35rem; margin: 0.35rem 0 0.6rem; }
+.vtm-revised .vtm-combat-maneuvers button { width: auto; }

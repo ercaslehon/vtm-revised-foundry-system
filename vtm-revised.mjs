@@ -1,5 +1,7 @@
 import "./scripts/ui/search-selects.mjs";
 import "./scripts/ui/actor-roll-search-select.mjs";
+import "./scripts/combat/combat-chat-actions.mjs";
+import { registerVtmStatusEffects } from "./scripts/combat/status-effects.mjs";
 import { VTM_REVISED } from "./scripts/config.mjs";
 import { VTMActor } from "./scripts/documents/vtm-actor.mjs";
 import { VTMItem } from "./scripts/documents/vtm-item.mjs";
@@ -139,6 +141,7 @@ Hooks.once("init", async () => {
   });
 
   CONFIG.VTM_REVISED = VTM_REVISED;
+  registerVtmStatusEffects();
   registerCatalogAutoSeeder({ RulesJsonImporter });
   registerHandlebarsHelpers();
   // TEMP HOTFIX: disabled sheet-wide searchable selects because they break actor sheet re-render

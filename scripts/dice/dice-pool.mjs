@@ -4,6 +4,7 @@ export async function rollDicePool({
   basePool = null,
   healthPenalty = 0,
   healthPenaltyLabel = "",
+  automaticSuccesses = 0,
   difficulty = 6,
   label = "Roll",
   flavor = "",
@@ -12,6 +13,7 @@ export async function rollDicePool({
   const safePool = Math.max(1, Number(pool || 1));
   const safeBasePool = Math.max(1, Number(basePool ?? safePool));
   const safeHealthPenalty = Number(healthPenalty || 0);
+  const safeAutomaticSuccesses = Math.max(0, Number(automaticSuccesses || 0));
   const safeDifficulty = Math.max(2, Math.min(10, Number(difficulty || 6)));
   const roll = await new Roll(`${safePool}d10`).evaluate({ async: true });
   const dice = roll.dice?.[0]?.results?.map(result => result.result) ?? [];
@@ -25,8 +27,8 @@ export async function rollDicePool({
   // - Every 1 subtracts 1 success.
   // - Final successes cannot go below 0.
   const rawSuccesses = normalSuccesses + (tens * 2);
-  const successes = Math.max(0, rawSuccesses - ones);
-  const botch = rawSuccesses === 0 && ones > 0;
+  const successes = Math.max(0, rawSuccesses - ones + safeAutomaticSuccesses);
+  const botch = rawSuccesses + safeAutomaticSuccesses === 0 && ones > 0;
 
   const content = await renderTemplate("systems/vtm-revised/templates/chat/roll-card.hbs", {
     actor,
@@ -36,6 +38,7 @@ export async function rollDicePool({
     basePool: safeBasePool,
     healthPenalty: safeHealthPenalty,
     healthPenaltyLabel,
+    automaticSuccesses: safeAutomaticSuccesses,
     difficulty: safeDifficulty,
     dice,
     tens,
@@ -58,6 +61,7 @@ export async function rollDicePool({
         basePool: safeBasePool,
         healthPenalty: safeHealthPenalty,
         healthPenaltyLabel,
+        automaticSuccesses: safeAutomaticSuccesses,
         difficulty: safeDifficulty,
         dice,
         tens,
@@ -83,6 +87,7 @@ export async function rollDicePool({
     pool: safePool,
     basePool: safeBasePool,
     healthPenalty: safeHealthPenalty,
+    automaticSuccesses: safeAutomaticSuccesses,
     components
   };
 }

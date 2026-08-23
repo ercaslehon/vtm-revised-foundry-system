@@ -2,8 +2,10 @@
   <h3>{{localize "VTM_REVISED.Weapon.DamageSummary"}}: {{item.name}}</h3>
   {{#if actor}}<p><strong>{{actor.name}}</strong></p>{{/if}}
   <p>{{localize "VTM_REVISED.Weapon.AttackSuccesses"}}: {{attackSuccesses}}</p>
+  {{#if hasDefense}}<p>Защита цели: {{defenseSuccesses}} · Чистые успехи атаки: {{netAttackSuccesses}}</p>{{/if}}
   <p>{{localize "VTM_REVISED.Weapon.ExtraAttackSuccesses"}}: {{extraSuccesses}}</p>
   <p>{{localize "VTM_REVISED.Weapon.DamagePool"}}: {{damagePool}} · {{localize "VTM_REVISED.Weapon.DamageType"}}: {{damageTypeLabel}}</p>
   <p class="result">{{localize "VTM_REVISED.Weapon.DamageLevelsBeforeSoak"}}: {{damageSuccesses}}</p>
   {{#if soakHint}}<p class="muted">{{soakHint}}</p>{{/if}}
+  {{#if damageSuccesses}}<button type="button" class="weapon-damage-apply"><i class="fas fa-crosshairs"></i> Поглотить и применить к выбранной цели</button>{{/if}}
 </div>
