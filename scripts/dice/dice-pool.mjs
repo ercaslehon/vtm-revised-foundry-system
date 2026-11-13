@@ -8,7 +8,8 @@ export async function rollDicePool({
   difficulty = 6,
   label = "Roll",
   flavor = "",
-  components = []
+  components = [],
+  messageVisibility = null
 } = {}) {
   const safePool = Math.max(1, Number(pool || 1));
   const safeBasePool = Math.max(1, Number(basePool ?? safePool));
@@ -50,13 +51,16 @@ export async function rollDicePool({
     components
   });
 
-  await roll.toMessage({
+  const messageData = {
     speaker: actor ? ChatMessage.getSpeaker({ actor }) : ChatMessage.getSpeaker(),
     flavor: label,
     content,
     flags: {
       "vtm-revised": {
         type: "dicePool",
+        actorUuid: actor?.uuid ?? null,
+        label,
+        flavor,
         pool: safePool,
         basePool: safeBasePool,
         healthPenalty: safeHealthPenalty,
@@ -73,7 +77,17 @@ export async function rollDicePool({
         components
       }
     }
-  });
+  };
+
+  if (messageVisibility) {
+    // Prepare without publishing, then restore the original audience.
+    const data = await roll.toMessage(messageData, { create: false });
+    data.whisper = [...messageVisibility.whisper];
+    data.blind = Boolean(messageVisibility.blind);
+    await ChatMessage.create(data);
+  } else {
+    await roll.toMessage(messageData);
+  }
 
   return {
     roll,

@@ -1,3 +1,4 @@
+import "./scripts/dice/repeat-roll.mjs";
 import "./scripts/ui/search-selects.mjs";
 import "./scripts/ui/actor-roll-search-select.mjs";
 import "./scripts/combat/combat-chat-actions.mjs";
