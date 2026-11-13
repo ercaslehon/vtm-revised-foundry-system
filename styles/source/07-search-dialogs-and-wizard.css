@@ -31,6 +31,21 @@
   text-transform: uppercase !important;
 }
 
+/* Fortitude uses the standard roll theme; only its armor checkbox needs a row layout. */
+.vtm-fortitude-soak-dialog .vtm-soak-armor-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.vtm-fortitude-soak-dialog input[type="checkbox"] {
+  min-height: 0 !important;
+  width: 16px !important;
+  height: 16px !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
 .vtm-searchable-dialog-form input,
 .vtm-searchable-dialog-form textarea,
 .vtm-searchable-dialog-form select,
@@ -4708,4 +4723,262 @@
   .demon-creation-priorities {
     grid-template-columns: 1fr !important;
   }
+}
+
+/* Actor targets and weapon dialogs, including native dropdown menus. */
+.vtm-combat-dialog-window {
+  --vtm-combat-bg: #16090f;
+  --vtm-combat-field: #0f070b;
+  --vtm-combat-border: #82364b;
+  --vtm-combat-accent: #e6c785;
+  color: #f1e7dc;
+}
+.vtm-combat-dialog-window.demon-roll-dialog-window {
+  --vtm-combat-bg: #0c1730;
+  --vtm-combat-field: #080f20;
+  --vtm-combat-border: #486ba9;
+  --vtm-combat-accent: #b9d5ff;
+}
+.vtm-combat-dialog-window .window-content {
+  background: linear-gradient(145deg, var(--vtm-combat-bg), var(--vtm-combat-field)) !important;
+  color: #f1e7dc !important;
+  padding: 16px !important;
+}
+.vtm-combat-dialog-window .window-header { background: var(--vtm-combat-bg) !important; color: #f1e7dc !important; border-bottom: 1px solid var(--vtm-combat-border); }
+.vtm-combat-dialog-window .vtm-weapon-attack-dialog { display: grid; gap: 14px; margin-bottom: 14px; }
+.vtm-combat-dialog-window .vtm-weapon-heading { display: flex; align-items: center; gap: 10px; color: var(--vtm-combat-accent); font-size: 18px; }
+.vtm-combat-dialog-window .form-group { display: grid; gap: 6px; margin: 0; min-width: 0; }
+.vtm-combat-dialog-window label { color: #e5d6d1 !important; font-weight: 600; }
+.vtm-combat-dialog-window input:not([type="checkbox"]),
+.vtm-combat-dialog-window select:not(.vtm-trait-search-select__native):not(.vtm-dialog-native-select) {
+  box-sizing: border-box; width: 100%; min-height: 36px; padding: 6px 10px;
+  border: 1px solid var(--vtm-combat-border) !important; border-radius: 6px;
+  color: #f4ece2 !important; background: var(--vtm-combat-field) !important; color-scheme: dark;
+}
+.vtm-combat-dialog-window select option, .vtm-combat-dialog-window select optgroup { background: var(--vtm-combat-field) !important; color: #f4ece2 !important; }
+.vtm-combat-dialog-window input:focus-visible, .vtm-combat-dialog-window select:focus-visible,
+.vtm-combat-dialog-window button:focus-visible { outline: 2px solid var(--vtm-combat-accent); outline-offset: 2px; }
+.vtm-combat-dialog-window input[type="checkbox"] { width: 18px; height: 18px; margin: 0; accent-color: #b44762; }
+.vtm-combat-dialog-window .vtm-defense-check { display: flex; gap: 8px; align-items: center; }
+.vtm-combat-dialog-window .vtm-weapon-difficulties { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.vtm-combat-dialog-window .vtm-weapon-difficulties label { display: grid; gap: 6px; }
+.vtm-combat-dialog-window .vtm-weapon-damage-preview { margin: 0; color: var(--vtm-combat-accent); }
+.vtm-combat-dialog-window small { color: #bfb3b9; font-weight: normal; }
+.vtm-combat-dialog-window button { border: 1px solid var(--vtm-combat-border) !important; background: var(--vtm-combat-bg) !important; color: #f1e7dc !important; border-radius: 6px; }
+.vtm-combat-dialog-window button:hover:not(:disabled) { border-color: var(--vtm-combat-accent) !important; filter: brightness(1.15); }
+.vtm-combat-dialog-window button:disabled, .vtm-combat-dialog-window select:disabled { opacity: .45; cursor: default; }
+.vtm-combat-dialog-window .dialog-buttons { gap: 8px; }
+.vtm-combat-dialog-window .dialog-buttons button { min-height: 38px; }
+.vtm-combat-dialog-window .dialog-buttons [data-button="attack"] { background: #74283e !important; }
+.vtm-combat-dialog-window.demon-roll-dialog-window .dialog-buttons [data-button="attack"] { background: #244574 !important; }
+.vtm-combat-dialog-window .vtm-attack-target { padding: 12px; border: 1px solid var(--vtm-combat-border); border-radius: 8px; display: grid; gap: 10px; }
+.vtm-combat-dialog-window .vtm-target-current, .vtm-combat-dialog-window .vtm-target-option { display: flex; align-items: center; gap: 10px; min-width: 0; text-align: left; }
+.vtm-combat-dialog-window .vtm-target-current { min-height: 42px; }
+.vtm-combat-dialog-window .vtm-target-current img, .vtm-combat-dialog-window .vtm-target-option img { width: 42px; height: 42px; flex: 0 0 42px; object-fit: cover; object-position: top; border: 1px solid var(--vtm-combat-border); border-radius: 6px; }
+.vtm-combat-dialog-window .vtm-target-current span, .vtm-combat-dialog-window .vtm-target-option span { display: grid; gap: 3px; overflow-wrap: anywhere; white-space: normal; line-height: 1.3; }
+.vtm-combat-dialog-window .vtm-target-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.vtm-combat-dialog-window .vtm-target-actions button { width: auto; min-height: 32px; padding: 4px 12px; }
+.vtm-combat-dialog-window [hidden] { display: none !important; }
+.vtm-combat-dialog-window .vtm-trait-search-select__button { min-height: 36px !important; color: #f1e7dc !important; background: var(--vtm-combat-field) !important; border-color: var(--vtm-combat-border) !important; }
+.vtm-combat-dialog-window .vtm-trait-search-select__panel { background: var(--vtm-combat-bg) !important; color: #f1e7dc !important; border-color: var(--vtm-combat-border) !important; z-index: 100010 !important; }
+.vtm-combat-dialog-window .vtm-trait-search-select__option { color: #f1e7dc !important; }
+.vtm-combat-dialog-window .vtm-trait-search-select__option:hover { background: var(--vtm-combat-field) !important; }
+.vtm-combat-dialog-window .vtm-weapon-special-options { border-top: 1px solid var(--vtm-combat-border); padding-top: 8px; }
+.vtm-combat-dialog-window .vtm-weapon-special-options summary { color: var(--vtm-combat-accent); cursor: pointer; }
+.vtm-combat-dialog-window .vtm-weapon-special-options > label { margin-top: 10px; }
+
+/* Compact target picker: a quiet roster with one-click selection. */
+.vtm-target-picker-window.vtm-combat-dialog-window {
+  --vtm-picker-bg: #171317;
+  --vtm-picker-line: rgba(222, 204, 184, .12);
+  --vtm-picker-muted: #a69ba2;
+  --vtm-picker-accent: #d4bb92;
+  --vtm-picker-selection: rgba(179, 111, 115, .13);
+  max-width: calc(100vw - 24px);
+  border: 1px solid var(--vtm-picker-line);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 18px 60px #0009, 0 2px 10px #0005;
+}
+.vtm-target-picker-window.demon-roll-dialog-window {
+  --vtm-picker-bg: #13171f;
+  --vtm-picker-accent: #b4c8e2;
+  --vtm-picker-selection: rgba(122, 159, 205, .13);
+}
+.vtm-target-picker-window.vtm-combat-dialog-window .window-header {
+  min-height: 54px;
+  padding: 0 20px;
+  align-items: center;
+  background: var(--vtm-picker-bg) !important;
+  border-bottom: 1px solid var(--vtm-picker-line);
+}
+.vtm-target-picker-window .window-header .window-title {
+  color: #eee5dc;
+  font-size: 17px;
+  font-weight: 500;
+  text-shadow: none !important;
+  letter-spacing: .02em;
+}
+.vtm-target-picker-window .window-header .header-button {
+  color: var(--vtm-picker-muted);
+  font-size: 12px;
+  text-shadow: none !important;
+}
+.vtm-target-picker-window .window-header .header-button:hover { color: #eee5dc; }
+.vtm-target-picker-window.vtm-combat-dialog-window .window-content {
+  background: var(--vtm-picker-bg) !important;
+  padding: 18px 16px 12px !important;
+}
+.vtm-target-picker-window .vtm-target-picker { display: grid; gap: 0; margin: 0; }
+.vtm-target-picker-window .vtm-target-search {
+  position: relative;
+  display: block;
+  margin: 0 4px 18px;
+}
+.vtm-target-picker-window .vtm-target-search > i {
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--vtm-picker-muted);
+  font-size: 13px;
+  pointer-events: none;
+}
+.vtm-target-picker-window.vtm-combat-dialog-window .vtm-target-search input {
+  height: 40px;
+  padding: 8px 12px 8px 36px;
+  border: 1px solid var(--vtm-picker-line) !important;
+  border-radius: 8px;
+  background: #ffffff04 !important;
+  font-size: 14px;
+  font-weight: 400 !important;
+  text-transform: none !important;
+  letter-spacing: normal;
+  box-shadow: none !important;
+}
+.vtm-target-picker-window .vtm-target-search input::placeholder { color: var(--vtm-picker-muted); opacity: 1; }
+.vtm-target-picker-window.vtm-combat-dialog-window .vtm-target-search input:focus {
+  border-color: var(--vtm-picker-accent) !important;
+  outline: none;
+}
+.vtm-target-picker-window .vtm-target-list-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 12px 8px;
+  color: var(--vtm-picker-muted);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.vtm-target-picker-window .vtm-target-count { font-variant-numeric: tabular-nums; letter-spacing: 0; }
+.vtm-target-picker-window .vtm-target-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: min(340px, 46vh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 3px;
+  scrollbar-width: thin;
+  scrollbar-color: #776a7166 transparent;
+}
+.vtm-target-picker-window.vtm-combat-dialog-window .vtm-target-option {
+  flex: 0 0 auto;
+  min-height: 44px !important;
+  height: auto;
+  width: 100%;
+  margin: 0;
+  padding: 9px 10px;
+  gap: 12px;
+  border: 1px solid transparent !important;
+  border-radius: 7px;
+  background: transparent !important;
+  color: #ded6d8 !important;
+  font-size: 14px;
+  font-weight: 400 !important;
+  text-transform: none !important;
+  letter-spacing: normal;
+  text-shadow: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+.vtm-target-picker-window .vtm-target-option + .vtm-target-option { border-top-color: #ffffff06 !important; }
+.vtm-target-picker-window .vtm-target-option > span { flex: 1; min-width: 0; }
+.vtm-target-picker-window .vtm-target-option strong { font-weight: 400 !important;
+  text-transform: none !important;
+  letter-spacing: normal; }
+.vtm-target-picker-window.vtm-combat-dialog-window .vtm-target-option img {
+  width: 32px;
+  height: 32px;
+  flex-basis: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--vtm-picker-line);
+}
+.vtm-target-picker-window .vtm-target-option small { color: var(--vtm-picker-muted); font-size: 11px; }
+.vtm-target-picker-window.vtm-combat-dialog-window .vtm-target-option:hover {
+  background: #ffffff06 !important;
+  border-color: transparent !important;
+  color: #fff5e9 !important;
+  filter: none !important;
+}
+.vtm-target-picker-window.vtm-combat-dialog-window .vtm-target-option.is-selected {
+  background: var(--vtm-picker-selection) !important;
+  border-color: transparent !important;
+  color: #f5e8d7 !important;
+}
+.vtm-target-picker-window.vtm-combat-dialog-window .vtm-target-option:focus-visible {
+  outline: 1px solid var(--vtm-picker-accent);
+  outline-offset: -1px;
+}
+.vtm-target-picker-window .vtm-target-indicator {
+  flex: 0 0 16px;
+  width: 16px;
+  margin: 0;
+  color: var(--vtm-picker-accent);
+  font-size: 11px;
+  text-align: center;
+  opacity: 0;
+}
+.vtm-target-picker-window .vtm-target-option:is(:hover, :focus-visible, .is-selected) .vtm-target-indicator { opacity: 1; }
+.vtm-target-picker-window .vtm-target-no-results {
+  padding: 28px 12px;
+  margin: 0;
+  color: #ded6d8;
+  font-size: 14px;
+  text-align: center;
+}
+.vtm-target-picker-window .vtm-target-no-results small { display: block; margin-top: 6px; color: var(--vtm-picker-muted); font-size: 12px; }
+.vtm-target-picker-window.vtm-combat-dialog-window .dialog-buttons {
+  justify-content: flex-end;
+  margin: 14px 4px 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--vtm-picker-line);
+}
+.vtm-target-picker-window.vtm-combat-dialog-window .dialog-buttons button {
+  flex: 0 0 auto;
+  width: auto;
+  min-height: 30px !important;
+  margin: 0;
+  padding: 4px 12px;
+  border: 1px solid transparent !important;
+  background: transparent !important;
+  color: var(--vtm-picker-muted) !important;
+  font-size: 12px;
+  font-weight: 400 !important;
+  text-transform: none !important;
+  letter-spacing: normal;
+  text-shadow: none !important;
+  box-shadow: none !important;
+}
+.vtm-target-picker-window.vtm-combat-dialog-window .dialog-buttons button:hover {
+  background: #ffffff06 !important;
+  color: #eee5dc !important;
+  border-color: transparent !important;
+  filter: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .vtm-target-picker-window .vtm-target-option { transition: none; }
 }

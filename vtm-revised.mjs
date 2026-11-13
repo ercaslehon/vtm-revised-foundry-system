@@ -1,3 +1,6 @@
+import { registerInitiative } from "./scripts/combat/initiative.mjs";
+import "./scripts/combat/initiative-dock.mjs";
+import "./scripts/combat/combat-authority.mjs";
 import "./scripts/dice/repeat-roll.mjs";
 import "./scripts/ui/search-selects.mjs";
 import "./scripts/ui/actor-roll-search-select.mjs";
@@ -147,6 +150,7 @@ Hooks.once("init", async () => {
   registerHandlebarsHelpers();
   // TEMP HOTFIX: disabled sheet-wide searchable selects because they break actor sheet re-render
   // registerSearchableSelects();
+  registerInitiative();
   CONFIG.Actor.documentClass = VTMActor;
   CONFIG.Item.documentClass = VTMItem;
 

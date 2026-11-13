@@ -1,3 +1,6 @@
+import { resolveReferenceItem } from "../import/catalog-reference-view.mjs";
+import { buildSystemData } from "../import/rules-json-importer.mjs";
+
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
 function normalizeName(value = "") {
@@ -42,7 +45,7 @@ export class VTMClanCard extends HandlebarsApplicationMixin(ApplicationV2) {
 
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
-    const clan = this.clan;
+    const clan = await resolveReferenceItem(this.clan, Array.from(game.items ?? []), buildSystemData);
     const system = clan?.system ?? {};
     const disciplines = splitList(system.disciplines);
     const sourceUrl = system.sourceUrl || system.audit?.sourceUrl || system.automation?.source?.url || "";

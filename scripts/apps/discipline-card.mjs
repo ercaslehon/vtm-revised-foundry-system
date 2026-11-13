@@ -1,7 +1,12 @@
+import { healthPenalty, CONDITION_LABELS } from "../combat/vampire-health.mjs";
 import { rollDicePool } from "../dice/dice-pool.mjs";
+import { isFortitudeDiscipline, fortitudeRating, fortitudeSoakPool } from "../combat/fortitude-soak.mjs";
 import { VTM_REVISED } from "../config.mjs";
 import { applyAutomationCost, normalizeAutomationCost } from "../utils/automation-costs.mjs";
 import { activeAutomationRollModifier, registerAutomationEffect } from "../utils/active-automation-effects.mjs";
+import { isUneditedInventedRarePower, referenceDisplayItem, resolveReferenceItem } from "../import/catalog-reference-view.mjs";
+import { ensureReferenceCatalogs } from "../import/catalog-reference-cache.mjs";
+import { buildSystemData } from "../import/rules-json-importer.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 const DialogV1 = foundry.appv1?.api?.Dialog ?? globalThis.Dialog;
@@ -21,7 +26,8 @@ const DISCIPLINE_NAME_EQUIVALENTS = [
   ["obeah", "обеах"],
   ["valeren", "валерен"],
   ["превращение", "превращения", "протеан", "protean"],
-  ["изменчивость", "метаморфозы", "метаморфоза", "висцисситуда", "висцисситуд", "vicissitude"]
+  ["изменчивость", "метаморфозы", "метаморфоза", "висцисситуда", "висцисситуд", "vicissitude"],
+  ["полёт", "полёт горгулий", "flight", "gargoyle_flight"]
 ].map(group => group.map(normalizeName));
 
 function expandDisciplineNames(values = []) {
@@ -161,14 +167,17 @@ export class VTMDisciplineCard extends HandlebarsApplicationMixin(ApplicationV2)
 
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
+    await ensureReferenceCatalogs();
     const actorItems = Array.from(this.actor?.items ?? []);
     const worldItems = Array.from(game.items ?? []);
-    const allItems = uniqueItems([...actorItems, ...worldItems]);
+    const allItems = uniqueItems([...actorItems.map(item => referenceDisplayItem(item, worldItems, buildSystemData)), ...worldItems])
+      .filter(item => !isUneditedInventedRarePower(item, buildSystemData));
     const rating = Number(this.discipline?.system?.rating || 0);
     const isEmbeddedDiscipline = Boolean(this.discipline?.parent === this.actor);
     const canEditRating = Boolean(isEmbeddedDiscipline && this.actor?.isOwner && ["discipline", "disciplinePath"].includes(this.discipline?.type));
-    const libraryDiscipline = allItems.find(item => item !== this.discipline && matchDisciplineItem(item, this.discipline));
-    const description = firstNonEmpty(itemDescription(this.discipline), itemDescription(libraryDiscipline));
+    const libraryDiscipline = worldItems.find(item => item !== this.discipline && matchDisciplineItem(item, this.discipline));
+    const displayDiscipline = referenceDisplayItem(this.discipline, worldItems, buildSystemData);
+    const description = firstNonEmpty(itemDescription(displayDiscipline), itemDescription(libraryDiscipline));
 
     const powers = allItems
       .filter(item => item.type === "disciplinePower")
@@ -197,11 +206,7 @@ export class VTMDisciplineCard extends HandlebarsApplicationMixin(ApplicationV2)
           sourceUrl: item.system?.audit?.sourceUrl || item.system?.automation?.source?.url || "",
           sourcePage: item.system?.audit?.sourcePage || item.system?.automation?.source?.page || "",
           sourceBook: item.system?.audit?.sourceBook || "",
-          auditStatus: item.system?.audit?.status || "draft",
-          auditStatusLabel: this._auditStatusLabel(item.system?.audit?.status || "draft"),
-          auditNotes: item.system?.audit?.notes || "",
-          canUse: (item.system?.audit?.status || "draft") === "verified",
-          useDisabledReason: (item.system?.audit?.status || "draft") === "verified" ? "" : "Механика этой силы ещё не подтверждена аудитом, автоматизация отключена.",
+          canUse: Boolean(this.actor?.isOwner),
           activation: interpolateMechanics(item.system?.mechanics?.activation || "", { actor: this.actor, discipline: this.discipline, rating, item }),
           duration: interpolateMechanics(item.system?.mechanics?.duration || "", { actor: this.actor, discipline: this.discipline, rating, item }),
           successScaling: interpolateMechanics(item.system?.mechanics?.successScaling || "", { actor: this.actor, discipline: this.discipline, rating, item }),
@@ -225,6 +230,8 @@ export class VTMDisciplineCard extends HandlebarsApplicationMixin(ApplicationV2)
       discipline: this.discipline,
       rating,
       canEditRating,
+      isFortitude: this.actor?.type === "vampire" && isFortitudeDiscipline(this.discipline),
+      canRollFortitude: Boolean(this.actor?.isOwner && fortitudeRating(this.actor, this.discipline) > 0),
       isEmbeddedDiscipline,
       description,
       powers,
@@ -235,17 +242,15 @@ export class VTMDisciplineCard extends HandlebarsApplicationMixin(ApplicationV2)
     };
   }
 
-  _auditStatusLabel(status = "draft") {
-    const key = String(status || "draft").trim().toLowerCase();
-    if (key === "verified") return "Проверено";
-    if (key === "needs-review") return "Требует проверки";
-    return "Черновик";
-  }
-
   _onRender(context, options) {
     super._onRender(context, options);
     const element = this.element;
     if (!element) return;
+
+    element.querySelector(".discipline-fortitude-soak")?.addEventListener("click", async event => {
+      event.preventDefault();
+      await this._rollFortitudeSoak();
+    });
 
     element.querySelectorAll(".discipline-rating-input").forEach(input => {
       input.addEventListener("change", async event => {
@@ -278,6 +283,10 @@ export class VTMDisciplineCard extends HandlebarsApplicationMixin(ApplicationV2)
   }
 
   _resolveHealthPenalty() {
+    if (this.actor?.type === "vampire") {
+      const result = healthPenalty(this.actor);
+      return { ...result, label: result.condition !== "active" ? CONDITION_LABELS[result.condition] : game.i18n.localize(`VTM_REVISED.Health.${result.key === "extraBruised" ? "bruised" : result.key}`) };
+    }
     const health = this.actor?.system?.health ?? {};
     const activeKey = [...VTM_REVISED.healthLevels]
       .reverse()
@@ -458,7 +467,7 @@ export class VTMDisciplineCard extends HandlebarsApplicationMixin(ApplicationV2)
     }
 
     const components = [first, second].filter(Boolean);
-    const basePool = Math.max(1, components.reduce((total, component) => total + Number(component.value || 0), 0));
+    const basePool = components.reduce((total, component) => total + Number(component.value || 0), 0);
     const healthPenalty = this._resolveHealthPenalty();
 
     if (healthPenalty.incapacitated) {
@@ -468,7 +477,8 @@ export class VTMDisciplineCard extends HandlebarsApplicationMixin(ApplicationV2)
 
     const label = customLabel || components.map(component => component.label).join(" + ");
     const activeModifier = activeAutomationRollModifier(this.actor, [firstTraitKey, secondTraitKey]);
-    const pool = Math.max(1, basePool + healthPenalty.value + activeModifier.dice);
+    const pool = basePool + healthPenalty.value + activeModifier.dice;
+    if (pool <= 0) { ui.notifications?.warn?.("После штрафов нет кубиков для действия."); return; }
 
     await rollDicePool({
       actor: this.actor,
@@ -482,12 +492,86 @@ export class VTMDisciplineCard extends HandlebarsApplicationMixin(ApplicationV2)
     });
   }
 
-  async _useItemAutomation(item) {
-    const auditStatus = item.system?.audit?.status || "draft";
-    if (auditStatus !== "verified") {
-      ui.notifications?.warn?.(`Механика «${item.name}» не подтверждена аудитом wod.su. Автоматизация отключена, чтобы система не врала кубиками.`);
+  async _rollFortitudeSoak() {
+    if (!this.actor?.isOwner || this.actor.type !== "vampire" || !isFortitudeDiscipline(this.discipline)) return;
+    if (fortitudeRating(this.actor, this.discipline) <= 0) {
+      ui.notifications?.warn?.("У персонажа нет изученной Стойкости. Укажи её рейтинг в карточке дисциплины.");
       return;
     }
+    const poolSummary = (damageType = "bashing", ignoreArmor = false, damageSource = "unknown") => {
+      const soak = fortitudeSoakPool(this.actor, damageType, { discipline: this.discipline, ignoreArmor, damageSource });
+      return [["Выносливость", soak.stamina], ["Стойкость", soak.fortitude], ["Броня", soak.armor]]
+        .filter(([, value]) => value > 0).map(([name, value]) => `${name} ${value}`).join(" + ") + ` = ${soak.pool} куб.`;
+    };
+    const content = `<form class="vtm-roll-dialog vtm-fortitude-soak-dialog">
+      <div class="form-group">
+        <label>Тип урона</label>
+        <select name="damageType">
+          <option value="bashing">Ударный</option><option value="lethal">Летальный</option><option value="aggravated">Аггравированный</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Запас кубиков</label>
+        <input type="text" name="poolSummary" value="${poolSummary()}" readonly/>
+      </div>
+      <div class="form-group">
+        <label>${game.i18n.localize("VTM_REVISED.Roll.Difficulty")}</label>
+        <input type="number" name="difficulty" min="2" max="10" value="6"/>
+      </div>
+      <div class="form-group">
+        <label class="vtm-soak-armor-option"><input type="checkbox" name="ignoreArmor"/> Игнорировать броню</label>
+      </div>
+      <div class="form-group"><label>Источник аггравированного урона</label><select name="damageSource"><option value="unknown">Иной / не указан — без обычной брони</option><option value="physical">Клыки, когти</option><option value="fire">Огонь</option><option value="sunlight">Солнце</option></select></div>
+      <p class="muted">Без траты крови и штрафа от ран. Бросок не изменяет здоровье.</p>
+    </form>`;
+    const selection = await new Promise(resolve => new DialogV1({
+      title: "Стойкость · Бросок поглощения", content,
+      buttons: {
+        roll: { icon: '<i class="fas fa-dice-d10"></i>', label: game.i18n.localize("VTM_REVISED.Roll.RollButton"), callback: html => {
+          const root = html?.querySelector ? html : html?.[0];
+          resolve({
+            damageType: root?.querySelector("[name='damageType']")?.value || "bashing",
+            difficulty: Number(root?.querySelector("[name='difficulty']")?.value || 6),
+            ignoreArmor: Boolean(root?.querySelector("[name='ignoreArmor']")?.checked),
+            damageSource: root?.querySelector("[name='damageSource']")?.value || "unknown"
+          });
+        } },
+        cancel: { label: game.i18n.localize("Cancel"), callback: () => resolve(null) }
+      }, default: "roll", close: () => resolve(null),
+      render: html => {
+        const root = html?.querySelector ? html : html?.[0];
+        if (!root) return;
+        const refresh = () => {
+          const summary = root.querySelector("[name='poolSummary']");
+          if (summary) summary.value = poolSummary(root.querySelector("[name='damageType']")?.value || "bashing",
+            Boolean(root.querySelector("[name='ignoreArmor']")?.checked), root.querySelector("[name='damageSource']")?.value || "unknown");
+        };
+        root.querySelectorAll("[name='damageType'], [name='ignoreArmor'], [name='damageSource']").forEach(input => input.addEventListener("change", refresh));
+        refresh();
+      }
+    }, { width: 460, classes: ["vtm-themed-dialog-window", "vtm-roll-dialog-window", "vampire-roll-dialog-window"] }).render(true));
+    if (!selection || !this.actor?.isOwner) return;
+    const soak = fortitudeSoakPool(this.actor, selection.damageType, { discipline: this.discipline, ignoreArmor: selection.ignoreArmor, damageSource: selection.damageSource });
+    if (soak.pool <= 0) return;
+    const labels = { bashing: "Ударный", lethal: "Летальный", aggravated: "Аггравированный" };
+    const components = [
+      ...(soak.stamina ? [{ label: "Выносливость", value: soak.stamina }] : []),
+      ...(soak.fortitude ? [{ label: "Стойкость", value: soak.fortitude }] : []),
+      ...(soak.armor ? [{ label: "Броня", value: soak.armor }] : [])
+    ];
+    return rollDicePool({ rollKind: "soak", actor: this.actor, pool: soak.pool, basePool: soak.pool, healthPenalty: 0,
+      automaticSuccesses: 0, difficulty: selection.difficulty,
+      label: `Поглощение · ${labels[selection.damageType]} урон`, components });
+  }
+
+  async _useItemAutomation(item) {
+    if (!this.actor?.isOwner) return;
+    if (this.actor.type === "vampire" && isFortitudeDiscipline(this.discipline) &&
+        item.type === "disciplinePower" && matchParentDiscipline(item, this.discipline) &&
+        Number(item.system?.level) >= 1 && Number(item.system?.level) <= 5) {
+      return this._rollFortitudeSoak();
+    }
+    item = await resolveReferenceItem(item, Array.from(game.items ?? []), buildSystemData);
 
     const auto = item.system?.automation ?? {};
     const roll = auto.roll ?? {};

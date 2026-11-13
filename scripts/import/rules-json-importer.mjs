@@ -1,5 +1,10 @@
+import { originalDigest, isUntouchedImportedItem } from "./catalog-reconciliation.mjs";
+import { referenceTextUpdate } from "./catalog-reference-text.mjs";
+import { registerReferenceCatalog } from "./catalog-reference-cache.mjs";
+
 const renderTemplateCompat = foundry.applications?.handlebars?.renderTemplate ?? globalThis.renderTemplate;
 const DialogV1 = foundry.appv1?.api?.Dialog ?? globalThis.Dialog;
+let retirementBackupRegistered = false;
 
 const TYPE_MAP = {
   clans: "clan",
@@ -100,7 +105,7 @@ function isVtmImportedItem(item) {
   return Boolean(flags.source || flags.original || flags.importedAt);
 }
 
-function buildSystemData(type, entry = {}) {
+export function buildSystemData(type, entry = {}) {
   const description = {
     value: html(entry.description ?? entry.summary ?? ""),
     system: html(entry.system ?? entry.systemText ?? ""),
@@ -365,9 +370,11 @@ function collectEntries(payload) {
 }
 
 async function loadBuiltInCatalog(url, errorLabel) {
-  const response = await fetch(url);
+  const response = await fetch(url, { cache: "no-store" });
   if (!response.ok) throw new Error(`Failed to load ${errorLabel}: ${response.status} ${response.statusText}`);
-  return response.json();
+  const payload = await response.json();
+  registerReferenceCatalog(payload);
+  return { ...payload, repairReferenceTexts: true };
 }
 
 export class RulesJsonImporter {
@@ -512,7 +519,7 @@ export class RulesJsonImporter {
     const folderName = payload.folderName ?? "VtM Revised Rules Catalog";
     let folder = game.folders?.find(f => f.type === "Item" && f.name === folderName);
 
-    if (payload.replaceFolder && folder) {
+    if (payload.replaceFolder && !payload.reconcileImported && folder) {
       const oldItems = Array.from(game.items ?? []).filter(item => item.folder?.id === folder.id);
       if (oldItems.length) await Item.deleteDocuments(oldItems.map(item => item.id));
       try {
@@ -531,6 +538,41 @@ export class RulesJsonImporter {
     });
 
     const existingKeys = new Set(existingScopeItems.map(catalogIdentityFromItem));
+    const report = { updated: 0, removed: 0, preserved: 0 };
+    let localImported = existingScopeItems.filter(item => item.folder?.id === folder.id && item.flags?.["vtm-revised"]?.original);
+    const updates = [];
+    if (payload.reconcileImported) {
+      const retired = new Set((payload.removedEntries ?? []).map(entry => entry.originalDigest));
+      const deletions = [];
+      for (const item of localImported) {
+        if (!retired.has(await originalDigest(item.flags["vtm-revised"].original))) continue;
+        if (isUntouchedImportedItem(item, buildSystemData)) deletions.push(item.id);
+        else report.preserved += 1;
+      }
+      if (deletions.length) {
+        // Persist complete documents before removal, so ID and flags are recoverable.
+        if (!retirementBackupRegistered) {
+          game.settings.register("vtm-revised", "catalogRetirementBackup", {
+            scope: "world", config: false, type: Object, default: {}
+          });
+          retirementBackupRegistered = true;
+        }
+        const backup = game.settings.get("vtm-revised", "catalogRetirementBackup") ?? {};
+        const snapshots = localImported.filter(item => deletions.includes(item.id)).map(item => item.toObject());
+        await game.settings.set("vtm-revised", "catalogRetirementBackup", {
+          ...backup,
+          [payload.catalogRevision]: [...(backup[payload.catalogRevision] ?? []), ...snapshots]
+        });
+        await Item.deleteDocuments(deletions);
+        report.removed = deletions.length;
+        const retiredIds = new Set(deletions);
+        localImported = localImported.filter(item => !retiredIds.has(item.id));
+        existingKeys.clear();
+        for (const item of existingScopeItems) {
+          if (!retiredIds.has(item.id)) existingKeys.add(catalogIdentityFromItem(item));
+        }
+      }
+    }
     const docs = [];
 
     for (const { type, entry } of collected) {
@@ -543,25 +585,67 @@ export class RulesJsonImporter {
           "vtm-revised": {
             source: payload.source ?? entry.sourceUrl ?? "manual-json",
             importedAt: new Date().toISOString(),
-            original: entry
+            original: entry,
+            catalogRevision: payload.catalogRevision ?? ""
           }
         }
       };
 
       const key = catalogIdentityFromData(doc);
+      if (payload.reconcileImported && existingKeys.has(key)) {
+        for (const item of localImported.filter(item => catalogIdentityFromItem(item) === key)) {
+          const flags = item.flags["vtm-revised"];
+          const referenceRevision = payload.repairReferenceTexts ? "reference-text-20261009-3" : "";
+          if (flags.catalogRevision === payload.catalogRevision &&
+              (!referenceRevision || flags.catalogReferenceRevision === referenceRevision)) continue;
+          const untouched = isUntouchedImportedItem(item, buildSystemData);
+          const plan = payload.repairReferenceTexts ? referenceTextUpdate(item, entry, buildSystemData) : null;
+          if (!untouched && !plan) { report.preserved += 1; continue; }
+          if (plan?.preserved.length) report.preserved += 1;
+          const allFlags = JSON.parse(JSON.stringify(item.flags ?? {}));
+          allFlags["vtm-revised"] = {
+            ...allFlags["vtm-revised"], original: JSON.parse(JSON.stringify(entry)),
+            catalogRevision: payload.catalogRevision,
+            ...(referenceRevision ? { catalogReferenceRevision: referenceRevision } : {}),
+            catalogBackup: {
+              revision: flags.catalogRevision ?? "before-wod-content-repair",
+              original: flags.original,
+              system: JSON.parse(JSON.stringify(item.toObject?.().system ?? item.system)),
+              previous: flags.catalogBackup ?? null
+            }
+          };
+          updates.push({
+            _id: item.id,
+            system: plan ? plan.system : doc.system,
+            flags: allFlags
+          });
+        }
+        continue;
+      }
       if (payload.dedupe && existingKeys.has(key)) continue;
 
       if (payload.dedupe) existingKeys.add(key);
       docs.push(doc);
     }
 
-    if (!docs.length) {
+    if (updates.length) {
+      // Full source descriptions are larger than the former link placeholders.
+      for (let offset = 0; offset < updates.length; offset += 100) {
+        // Foundry otherwise merges flags.original recursively and retains retired fields.
+        await Item.updateDocuments(updates.slice(offset, offset + 100), { recursive: false });
+      }
+      report.updated = updates.length;
+    }
+    if (!docs.length && !report.updated && !report.removed) {
       if (notify) ui.notifications?.info?.(game.i18n.localize("VTM_REVISED.Import.RulesAlreadyImported"));
-      return [];
+      const result = [];
+      result.catalogReport = report;
+      return result;
     }
 
-    const created = await Item.createDocuments(docs);
-    if (notify) ui.notifications?.info?.(game.i18n.format("VTM_REVISED.Import.RulesCreated", { count: created.length }));
+    const created = docs.length ? await Item.createDocuments(docs) : [];
+    created.catalogReport = report;
+    if (notify) ui.notifications?.info?.(`VtM Revised | Справочники: создано ${created.length}, исправлено ${report.updated}, удалено неподтверждённых ${report.removed}, сохранено ручных правок ${report.preserved}.`);
     return created;
   }
 }

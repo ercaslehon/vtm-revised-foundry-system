@@ -1,3 +1,6 @@
+import { resolveReferenceItem } from "../import/catalog-reference-view.mjs";
+import { buildSystemData } from "../import/rules-json-importer.mjs";
+
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
 function normalizeName(value = "") {
@@ -36,7 +39,7 @@ export class VTMMeritFlawCard extends HandlebarsApplicationMixin(ApplicationV2) 
 
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
-    const item = this.item;
+    const item = await resolveReferenceItem(this.item, Array.from(game.items ?? []), buildSystemData);
     const system = item?.system ?? {};
     const sourceUrl = system.audit?.sourceUrl || system.automation?.source?.url || "";
     const sourceBook = system.audit?.sourceBook || "";
@@ -84,15 +87,16 @@ export class VTMMeritFlawCard extends HandlebarsApplicationMixin(ApplicationV2) 
 
   async _useFromCard() {
     if (!this.actor || !this.item) return;
+    const item = await resolveReferenceItem(this.item, Array.from(game.items ?? []), buildSystemData);
     const sheet = this.actor.sheet;
-    if (sheet?._useItemAutomation) return sheet._useItemAutomation(this.item);
+    if (sheet?._useItemAutomation) return sheet._useItemAutomation(item);
 
     const renderTemplate = foundry.applications?.handlebars?.renderTemplate ?? globalThis.renderTemplate;
     const content = await renderTemplate("systems/vtm-revised/templates/chat/item-use-card.hbs", {
       actor: this.actor,
-      item: this.item,
-      cost: this.item.system?.automation?.cost ?? {},
-      description: this.item.system?.description?.chat || this.item.system?.description?.system || this.item.system?.description?.value || this.item.system?.effect?.notes || ""
+      item,
+      cost: item.system?.automation?.cost ?? {},
+      description: item.system?.description?.chat || item.system?.description?.system || item.system?.description?.value || item.system?.effect?.notes || ""
     });
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),

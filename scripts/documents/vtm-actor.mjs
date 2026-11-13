@@ -1,3 +1,4 @@
+import { healthCondition } from "../combat/vampire-health.mjs";
 import { VTM_REVISED } from "../config.mjs";
 
 const renderTemplateCompat = foundry.applications?.handlebars?.renderTemplate ?? globalThis.renderTemplate;
@@ -47,10 +48,20 @@ export class VTMActor extends Actor {
 
   async _preUpdate(changed, options, user) {
     await super._preUpdate?.(changed, options, user);
+    const healthPatch = this.type === "vampire" ? foundry.utils.expandObject(changed) : null;
     const generation = foundry.utils.getProperty(changed, "system.profile.generation") ?? this.system?.profile?.generation ?? "13";
     const caps = this.constructor.generationCaps(generation);
     this._applyGenerationCapsToUpdateData(changed, caps, { includeGeneration: false, clampBlood: true });
     this._clampTraitFieldsInUpdate(changed, caps.traitMax);
+    if (this.type === "vampire") {
+      const patch = healthPatch;
+      if (!Object.hasOwn(patch.system?.health ?? {}, "condition")) {
+        const projected = { items: this.items, system: foundry.utils.mergeObject(this.system.toObject(), patch.system ?? {}, { inplace: false }) };
+        const prior = healthCondition(this), next = healthCondition(projected);
+        // Feeding an incapacitated, bloodless vampire must not silently end torpor.
+        if (prior !== "active" || next !== "active") foundry.utils.setProperty(changed, "system.health.condition", prior !== "active" ? prior : next);
+      }
+    }
   }
 
   _applyGenerationCapsToUpdateData(target, caps, { includeGeneration = false, clampBlood = true } = {}) {

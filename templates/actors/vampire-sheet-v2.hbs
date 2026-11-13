@@ -2,12 +2,24 @@
   <section class="vtm-top-shell">
     <aside class="portrait-card vtm-portrait-card">
       <div class="vtm-portrait-frame">
-        <img class="profile-img actor-portrait-view" src="{{actor.img}}" title="{{actor.name}}" alt="{{actor.name}}" role="button" tabindex="0"/>
+        <img class="profile-img actor-portrait-view" src="{{portraitGallery.src}}" title="{{portraitGallery.label}}" alt="{{actor.name}} — {{portraitGallery.label}}" role="button" tabindex="0"/>
+        {{#if portraitGallery.multiple}}
+        <button type="button" class="actor-portrait-cycle actor-portrait-previous" data-delta="-1" title="{{localize 'VTM_REVISED.Portrait.Previous'}}" aria-label="{{localize 'VTM_REVISED.Portrait.Previous'}}"><i class="fas fa-chevron-left"></i></button>
+        <button type="button" class="actor-portrait-cycle actor-portrait-next" data-delta="1" title="{{localize 'VTM_REVISED.Portrait.Next'}}" aria-label="{{localize 'VTM_REVISED.Portrait.Next'}}"><i class="fas fa-chevron-right"></i></button>
+        <span class="vtm-portrait-gallery-label" aria-live="polite">{{portraitGallery.number}} / {{portraitGallery.total}} · {{portraitGallery.label}}</span>
+        {{/if}}
       </div>
       <div class="portrait-actions vtm-portrait-actions">
-        <button type="button" class="actor-portrait-edit" title="{{localize 'VTM_REVISED.Portrait.Edit'}}"><i class="fas fa-image"></i></button>
-        <button type="button" class="actor-portrait-sync-token" title="{{localize 'VTM_REVISED.Portrait.SyncToken'}}"><i class="fas fa-user-tag"></i></button>
-        <button type="button" class="actor-portrait-reset" title="{{localize 'VTM_REVISED.Portrait.Reset'}}"><i class="fas fa-rotate-left"></i></button>
+        {{#if editable}}
+        <button type="button" class="actor-portrait-edit" title="{{localize 'VTM_REVISED.Portrait.Edit'}}" aria-label="{{localize 'VTM_REVISED.Portrait.Edit'}}"><i class="fas fa-image"></i></button>
+        <button type="button" class="actor-portrait-add" title="{{localize 'VTM_REVISED.Portrait.Add'}}" aria-label="{{localize 'VTM_REVISED.Portrait.Add'}}"><i class="fas fa-plus"></i></button>
+        <button type="button" class="actor-portrait-add-folder" title="{{localize 'VTM_REVISED.Portrait.AddFolder'}}" aria-label="{{localize 'VTM_REVISED.Portrait.AddFolder'}}"><i class="fas fa-folder-plus"></i></button>
+        <button type="button" class="actor-portrait-sync-token" title="{{localize 'VTM_REVISED.Portrait.SyncToken'}}" aria-label="{{localize 'VTM_REVISED.Portrait.SyncToken'}}"><i class="fas fa-user-tag"></i></button>
+        <button type="button" class="actor-portrait-reset" title="{{#if portraitGallery.primary}}{{localize 'VTM_REVISED.Portrait.Reset'}}{{else}}{{localize 'VTM_REVISED.Portrait.Remove'}}{{/if}}" aria-label="{{#if portraitGallery.primary}}{{localize 'VTM_REVISED.Portrait.Reset'}}{{else}}{{localize 'VTM_REVISED.Portrait.Remove'}}{{/if}}"><i class="fas {{#if portraitGallery.primary}}fa-rotate-left{{else}}fa-trash{{/if}}"></i></button>
+        {{/if}}
+        {{#if canSharePortrait}}
+        <button type="button" class="actor-portrait-share" title="{{localize 'VTM_REVISED.Portrait.Share'}}" aria-label="{{localize 'VTM_REVISED.Portrait.Share'}}"><i class="fas fa-eye"></i></button>
+        {{/if}}
       </div>
       <input type="hidden" name="img" value="{{actor.img}}"/>
       <input type="hidden" name="system.profile.avatar" value="{{system.profile.avatar}}"/>
@@ -255,6 +267,7 @@
         <section class="vtm-panel vtm-status-panel">
           <h2><i class="fas fa-person-circle-exclamation"></i> Состояния</h2>
           <div class="vtm-status-buttons">
+            <button type="button" class="vtm-status-toggle vampire-health-condition is-active" title="Нажми для переключения: В сознании → Торпор → Смерть" aria-label="Состояние: {{healthConditionLabel}}. Нажми для переключения" {{#unless canManageHealth}}disabled{{/unless}}><i class="fas fa-heart-pulse" aria-hidden="true"></i> {{healthConditionLabel}}</button>
             {{#each combatStatuses as |status|}}<button type="button" class="vtm-status-toggle {{#if status.active}}is-active{{/if}}" data-status-id="{{status.id}}" title="{{status.name}} · {{status.scope}}"><img src="{{status.icon}}" alt=""/> {{status.name}}</button>{{/each}}
           </div>
         </section>
@@ -263,10 +276,7 @@
             {{> "systems/vtm-revised/templates/actors/parts/attributes.hbs"}}
             {{> "systems/vtm-revised/templates/actors/parts/abilities.hbs"}}
 
-            <details class="vtm-panel vtm-optional-weapons">
-              <summary><i class="fas fa-khanda"></i> {{localize "VTM_REVISED.Weapon.Section"}}</summary>
-              {{> "systems/vtm-revised/templates/actors/parts/weapons.hbs"}}
-            </details>
+            {{> "systems/vtm-revised/templates/actors/parts/weapons.hbs"}}
           </main>
         </div>
       </section>

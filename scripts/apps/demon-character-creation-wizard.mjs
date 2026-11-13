@@ -331,12 +331,14 @@ export class VTMDemonCharacterCreationWizard extends HandlebarsApplicationMixin(
     if (!entry && catalog === "archetypes") entry = DEMON_ARCHETYPES.find(item => item.name === key);
     if (!entry && catalog === "backgrounds") {
       const rule = VTM_REVISED.demonRules.backgrounds.find(item => item.key === key);
-      if (rule) entry = { ...rule, label: BACKGROUND_LABELS[key] || key, summary: rule.hint };
+      if (rule) entry = { ...rule, label: BACKGROUND_LABELS[key] || key, summary: rule.summary || rule.hint };
     }
     if (!entry) return ui.notifications?.warn?.("Сначала выбери запись справочника.");
     const escape = value => foundry.utils.escapeHTML(String(value ?? ""));
     const mechanics = entry.mechanics || entry.regain || "";
-    const content = `<article class="demon-reference-card"><header><h2>${escape(entry.label || entry.name)}</h2>${entry.cost !== undefined ? `<strong class="demon-reference-cost">${escape(entry.cost)} очк.</strong>` : ""}</header><section><h3>Описание</h3><p>${escape(entry.summary || entry.hint || "Описание пока не заполнено.")}</p></section>${mechanics ? `<section><h3>Механика</h3><p>${escape(mechanics)}</p></section>` : ""}</article>`;
+    const powers = (entry.powers ?? []).map(power => `<li><strong>${"●".repeat(Number(power.level) || 1)} ${escape(power.name)}</strong>${[power.description, power.system, power.torment].filter(Boolean).map(text => `<p style="white-space:pre-line">${escape(text)}</p>`).join("")}</li>`).join("");
+    const summary = entry.summary || entry.hint || "";
+    const content = `<article class="demon-reference-card"><header><h2>${escape(entry.label || entry.name)}</h2>${entry.cost !== undefined ? `<strong class="demon-reference-cost">${escape(entry.cost)} очк.</strong>` : ""}</header>${summary ? `<section><h3>Описание</h3><p style="white-space:pre-line">${escape(summary)}</p></section>` : ""}${mechanics ? `<section><h3>Механика</h3><p style="white-space:pre-line">${escape(mechanics)}</p></section>` : ""}${powers ? `<section><h3>Обращения</h3><ol>${powers}</ol></section>` : ""}</article>`;
     const DialogV1 = foundry.appv1?.api?.Dialog ?? globalThis.Dialog;
     new DialogV1({ title: entry.label || entry.name, content, buttons: { close: { label: "Закрыть" } }, default: "close" }, { width: 540, classes: ["demon-reference-dialog-window"] }).render(true);
   }

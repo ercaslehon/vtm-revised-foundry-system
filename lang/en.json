@@ -673,7 +673,20 @@
       "Reset": "Reset portrait",
       "SyncToken": "Copy portrait to prototype token",
       "TokenSynced": "Portrait copied to prototype token.",
-      "Updated": "Portrait updated: {path}"
+      "Updated": "Portrait updated: {path}",
+      "Primary": "Main portrait",
+      "Previous": "Previous image",
+      "Next": "Next image",
+      "Add": "Add image",
+      "AddFolder": "Add images from a folder",
+      "Remove": "Remove image from gallery (keep file)",
+      "Share": "Show to players",
+      "ShareSelected": "Show to selected players",
+      "Recipients": "Who should see this image?",
+      "ViewerTitle": "Image",
+      "NoPlayers": "No players are connected.",
+      "NoRecipients": "No connected player selected.",
+      "Added": "Images added: {count}."
     },
     "Profile": {
       "Age": "Возраст",
@@ -1044,5 +1057,18 @@
     "Sheet": {
       "Demon": "Demon: The Fallen"
     }
-  }
+  },
+  "VTM_REVISED.Portrait.Primary": "Main portrait",
+  "VTM_REVISED.Portrait.Previous": "Previous image",
+  "VTM_REVISED.Portrait.Next": "Next image",
+  "VTM_REVISED.Portrait.Add": "Add image",
+  "VTM_REVISED.Portrait.AddFolder": "Add images from a folder",
+  "VTM_REVISED.Portrait.Remove": "Remove image from gallery (keep file)",
+  "VTM_REVISED.Portrait.Share": "Show to players",
+  "VTM_REVISED.Portrait.ShareSelected": "Show to selected players",
+  "VTM_REVISED.Portrait.Recipients": "Who should see this image?",
+  "VTM_REVISED.Portrait.ViewerTitle": "Image",
+  "VTM_REVISED.Portrait.NoPlayers": "No players are connected.",
+  "VTM_REVISED.Portrait.NoRecipients": "No connected player selected.",
+  "VTM_REVISED.Portrait.Added": "Images added: {count}."
 }

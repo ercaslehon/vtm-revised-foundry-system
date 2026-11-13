@@ -105,6 +105,8 @@ function isRollTraitSelect(select) {
 }
 
 function shouldEnhanceSelect(select) {
+  // Combat dialogs own their native selects and dynamic disabled state.
+  if (select?.closest?.(".vtm-combat-dialog-window")) return false;
   // Actor sheets must not be enhanced by dialog/catalog searchable selects.
   // This module is only for dialogs, catalog pickers and the character creation wizard.
   if (select?.closest?.(".vtm-sheet, .vtm-sheet-v2, .vtm-vampire-shell")) return false;

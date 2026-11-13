@@ -4,6 +4,7 @@ import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
 import { spawnSync } from "node:child_process";
+import { sourceIntegrityErrors } from "./import/catalog-source-integrity.mjs";
 
 const ROOT = process.cwd();
 
@@ -211,6 +212,7 @@ function validateUniqueEntries(allEntries) {
 
     if (!entry || typeof entry !== "object") { fail(`${label}: entry must be an object`); continue; }
     if (!isMeaningful(entry.name)) fail(`${label}: missing name`);
+    for (const error of sourceIntegrityErrors(entry)) fail(`${label}: ${error}`);
 
     const identity = uniqueIdentity(type, entry);
     if (identity.endsWith("::")) continue;
@@ -251,7 +253,9 @@ function validateDisciplinesAndPowers(allEntries) {
     if (type === "disciplinePower") {
       checkRequiredFields(entry, REQUIRED_POWER_FIELDS, label);
 
-      if (!isMeaningful(entry.systemText) && !isMeaningful(entry.system) && !isMeaningful(entry.mechanics?.automationNotes)) warn(`${label}: missing recommended mechanics/system text`);
+      // A source level may have one unsplit rules paragraph in description.
+      // Do not require an invented or duplicated System section for that case.
+      if (entry.contentMode !== "local-source-text" && !isMeaningful(entry.systemText) && !isMeaningful(entry.system) && !isMeaningful(entry.mechanics?.automationNotes)) warn(`${label}: missing recommended mechanics/system text`);
 
       const parent = normalizeName(entry.parentDiscipline ?? entry.discipline ?? "");
       if (!parent) continue;
@@ -287,7 +291,9 @@ function validateClanDisciplineLinks(allEntries) {
     if (type !== "clan") continue;
 
     const label = `${sourcePath}:${key}[${index}]`;
-    checkRequiredFields(entry, REQUIRED_CLAN_FIELDS, label);
+    checkRequiredFields(entry, entry.contentMode === "local-source-text"
+      ? REQUIRED_CLAN_FIELDS.filter(field => field !== "shortDescription")
+      : REQUIRED_CLAN_FIELDS, label);
 
     const hasExpandedSections = REQUIRED_EXPANDED_CLAN_FIELDS.some(field => isMeaningful(entry[field]));
     if (hasExpandedSections) checkRequiredFields(entry, REQUIRED_EXPANDED_CLAN_FIELDS, label);
@@ -308,7 +314,10 @@ function validateMorality(allEntries) {
   for (const item of allEntries) {
     const { key, entry, index, sourcePath } = item;
     if (entryType(key, entry) !== "moralityPath") continue;
-    checkRequiredFields(entry, REQUIRED_MORALITY_FIELDS, `${sourcePath}:${key}[${index}]`);
+    // Humanity has no separate Ethics heading in the supplied source page.
+    checkRequiredFields(entry, entry.contentMode === "local-source-text"
+      ? REQUIRED_MORALITY_FIELDS.filter(field => field !== "ethics")
+      : REQUIRED_MORALITY_FIELDS, `${sourcePath}:${key}[${index}]`);
   }
   logOk("morality path cards checked");
 }

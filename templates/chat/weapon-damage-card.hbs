@@ -1,11 +1,12 @@
 <div class="vtm-chat-card weapon-damage-card {{#if (eq actor.type "demon")}}demon-chat-card{{/if}}">
   <h3>{{localize "VTM_REVISED.Weapon.DamageSummary"}}: {{item.name}}</h3>
   {{#if actor}}<p><strong>{{actor.name}}</strong></p>{{/if}}
+  {{#if targetActorName}}<p class="vtm-damage-target">Цель: <strong>{{targetActorName}}</strong></p>{{/if}}
   <p>{{localize "VTM_REVISED.Weapon.AttackSuccesses"}}: {{attackSuccesses}}</p>
   {{#if hasDefense}}<p>Защита цели: {{defenseSuccesses}} · Чистые успехи атаки: {{netAttackSuccesses}}</p>{{/if}}
   <p>{{localize "VTM_REVISED.Weapon.ExtraAttackSuccesses"}}: {{extraSuccesses}}</p>
   <p>{{localize "VTM_REVISED.Weapon.DamagePool"}}: {{damagePool}} · {{localize "VTM_REVISED.Weapon.DamageType"}}: {{damageTypeLabel}}</p>
   <p class="result">{{localize "VTM_REVISED.Weapon.DamageLevelsBeforeSoak"}}: {{damageSuccesses}}</p>
   {{#if soakHint}}<p class="muted">{{soakHint}}</p>{{/if}}
-  {{#if damageSuccesses}}<button type="button" class="weapon-damage-apply"><i class="fas fa-crosshairs"></i> Поглотить и применить к выбранной цели</button>{{/if}}
+  {{#if damageSuccesses}}<button type="button" class="weapon-damage-apply"><i class="fas fa-crosshairs"></i> {{#if targetActorName}}Поглотить и применить урон{{else}}Выбрать цель и применить урон{{/if}}</button>{{/if}}
 </div>

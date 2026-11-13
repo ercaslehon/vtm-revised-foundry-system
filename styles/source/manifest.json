@@ -130,6 +130,11 @@
       "file": "styles/source/10-demon-final-overrides.css",
       "title": "Final Demon-only isolation for shared weapon, experience and chat components",
       "sourceFiles": []
+    },
+    {
+      "file": "styles/source/11-initiative-dock.css",
+      "title": "Tokenless initiative carousel and participant picker",
+      "sourceFiles": []
     }
   ]
 }

@@ -1,0 +1,62 @@
+
+/* Initiative uses world Actors; no scene or Token is required. */
+#vtm-initiative-dock {
+  position: fixed;
+  z-index: 60;
+  left: max(16px, calc((100vw - 340px - 960px) / 2));
+  right: 340px;
+  bottom: 88px;
+  max-width: 960px;
+  color: #e9e0d8;
+  background: #171317f5;
+  border: 1px solid #c8ae7b33;
+  border-radius: 12px;
+  box-shadow: 0 12px 40px #0008;
+  font-family: var(--font-primary, sans-serif);
+  overflow: hidden;
+  pointer-events: auto;
+}
+#vtm-initiative-dock .vtm-initiative-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding: 10px 14px; }
+#vtm-initiative-dock .vtm-initiative-round { display: flex; align-items: center; gap: 8px; font-size: 13px; white-space: nowrap; color: #dec59a; }
+#vtm-initiative-dock nav { display: flex; gap: 4px; flex-wrap: wrap; }
+#vtm-initiative-dock button {
+  width: auto; height: auto; min-height: 28px; margin: 0; padding: 5px 8px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  border: 1px solid transparent; border-radius: 6px; background: transparent; color: #c7b8be;
+  font-family: inherit; font-size: 12px; font-weight: 400; line-height: 1.2; text-shadow: none; box-shadow: none; cursor: pointer;
+}
+#vtm-initiative-dock button:hover:not(:disabled) { background: #ffffff0b; color: #f5e8d7; border-color: #c8ae7b33; }
+#vtm-initiative-dock button:focus-visible { outline: 2px solid #dec59a; outline-offset: -1px; }
+#vtm-initiative-dock button:disabled { opacity: .4; cursor: default; }
+#vtm-initiative-dock [data-action="start"], #vtm-initiative-dock [data-action="next"] { background: #79334b55; color: #efdbb8; }
+#vtm-initiative-dock :is([data-action="previous"], [data-action="end"], [data-action="collapse"]) span { display: none; }
+#vtm-initiative-dock .vtm-initiative-cards { display: flex; gap: 9px; padding: 0 14px 12px; overflow-x: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: #74636c transparent; }
+#vtm-initiative-dock [hidden] { display: none !important; }
+#vtm-initiative-dock .vtm-initiative-card {
+  position: relative; flex: 0 0 152px; min-width: 0; display: flex; flex-direction: column;
+  border: 1px solid #ffffff12; border-radius: 8px; overflow: hidden; background: #211b20;
+}
+#vtm-initiative-dock .vtm-initiative-card.is-current { border-color: #d4b780; box-shadow: 0 0 0 1px #d4b78022; background: #302329; }
+#vtm-initiative-dock .vtm-initiative-card.is-defeated { opacity: .5; }
+#vtm-initiative-dock .vtm-initiative-portrait { position: relative; height: 86px; background: #0e0c11; overflow: hidden; }
+#vtm-initiative-dock .vtm-initiative-portrait::after { content: ""; position: absolute; inset: 0; background: linear-gradient(transparent 40%, #211b20); pointer-events: none; }
+#vtm-initiative-dock .is-current .vtm-initiative-portrait::after { background: linear-gradient(transparent 40%, #302329); }
+#vtm-initiative-dock .vtm-initiative-portrait img { width: 100%; height: 100%; object-fit: cover; object-position: center 25%; border: none; border-radius: 0; }
+#vtm-initiative-dock .vtm-initiative-score { position: absolute; top: 7px; right: 7px; z-index: 1; min-width: 28px; padding: 3px 6px; border: 1px solid #c8ae7b55; border-radius: 6px; background: #171317e8; color: #efd6a9; font-size: 17px; font-weight: 600; text-align: center; font-variant-numeric: tabular-nums; }
+#vtm-initiative-dock .vtm-initiative-identity { display: grid; gap: 4px; padding: 6px 10px 3px; flex: 1; }
+#vtm-initiative-dock .vtm-initiative-card-status { color: #a897a0; font-size: 9px; letter-spacing: .07em; text-transform: uppercase; }
+#vtm-initiative-dock .is-current .vtm-initiative-card-status { color: #e1c491; }
+#vtm-initiative-dock .vtm-initiative-identity strong { font-size: 13px; line-height: 1.3; font-weight: 500; overflow-wrap: anywhere; }
+#vtm-initiative-dock .vtm-initiative-card-actions { display: flex; justify-content: flex-end; gap: 2px; min-height: 31px; padding: 2px 5px 4px; }
+#vtm-initiative-dock .vtm-initiative-card-actions span { display: none; }
+#vtm-initiative-dock .vtm-initiative-card-actions button { padding: 4px 6px; min-width: 26px; min-height: 24px; font-size: 11px; }
+#vtm-initiative-dock .vtm-initiative-empty { color: #bbaeb5; padding: 12px 0; font-size: 13px; }
+.vtm-initiative-participants-window .vtm-initiative-participant { display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 9px 10px; border-radius: 7px; font-size: 14px; font-weight: 400 !important; cursor: pointer; }
+.vtm-initiative-participants-window .vtm-initiative-participant:hover { background: #ffffff06; }
+.vtm-initiative-participants-window .vtm-initiative-participant:has(:checked) { background: #b36f7321; }
+.vtm-initiative-participants-window .vtm-initiative-participant input { flex: 0 0 16px; width: 16px; height: 16px; accent-color: #ba946d; }
+.vtm-initiative-participants-window .vtm-initiative-participant span { flex: 1; overflow-wrap: anywhere; }
+.vtm-initiative-participants-window .vtm-initiative-participant small { color: #b3a3ac; font-size: 11px; }
+.vtm-initiative-participants-window.vtm-combat-dialog-window .dialog-buttons [data-button="add"] { background: #79334b55 !important; color: #efdbb8 !important; }
+.vtm-add-combat-participants { font-size: 12px; margin-bottom: 6px; }
+@media (max-width: 900px) { #vtm-initiative-dock { left: 12px; right: 12px; bottom: 76px; } #vtm-initiative-dock nav span { display: none; } }

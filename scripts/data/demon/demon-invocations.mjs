@@ -108,7 +108,9 @@ export function getDemonInvocation(loreKey = "", level = 1) {
   return {
     ...power,
     loreKey,
-    ...parseDemonInvocationMechanics(power.system)
+    // Reference prose is verbatim source text, not a machine-readable DSL.
+    // Existing catalog invocations retain their explicit numerical behavior.
+    ...(power.automation ?? parseDemonInvocationMechanics(power.system))
   };
 }
 

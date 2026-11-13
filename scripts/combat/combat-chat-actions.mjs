@@ -1,3 +1,6 @@
+import { chooseCombatTarget, resolveCombatTarget } from "./combat-targets.mjs";
+import { planDamage, healthPenalty, CONDITION_LABELS } from "./vampire-health.mjs";
+import { fortitudeSoakPool } from "./fortitude-soak.mjs";
 import { rollDicePool } from "../dice/dice-pool.mjs";
 import { DEMON_APOCALYPTIC_FORMS } from "../data/demon/demon-apocalyptic-forms.mjs";
 import { getActiveDemonFormSummary, getDemonFormAbilityMechanic } from "../data/demon/demon-apocalyptic-mechanics.mjs";
@@ -12,14 +15,6 @@ function rootElement(html) {
   return null;
 }
 
-function selectedTargetActor() {
-  const targets = Array.from(game.user?.targets ?? []);
-  if (targets.length !== 1) {
-    ui.notifications?.warn?.("Выбери ровно один токен-цель.");
-    return null;
-  }
-  return targets[0].actor ?? null;
-}
 
 function disciplineRating(actor, names) {
   const normalized = names.map(name => name.toLowerCase());
@@ -29,7 +24,8 @@ function disciplineRating(actor, names) {
 
 function demonFormArmor(actor, damageType) {
   if (actor.type !== "demon" || !actor.system?.apocalypticForm?.active) return 0;
-  const form = DEMON_APOCALYPTIC_FORMS[String(actor.system?.creation?.primaryLore || "")];
+  const loreKey = String(actor.system?.creation?.primaryLore || "");
+  const form = DEMON_APOCALYPTIC_FORMS[loreKey];
   if (!form) return 0;
   const selected = new Set(activeDemonHighTormentIndexes(actor.system?.resources?.torment?.max, actor.system?.apocalypticForm?.highTormentSelected));
   const mechanics = [
@@ -42,7 +38,8 @@ function demonFormArmor(actor, damageType) {
   }, 0);
 }
 
-function soakPool(actor, damageType, { ignoreArmor = false, demonBase = "stamina" } = {}) {
+export function soakPool(actor, damageType, { ignoreArmor = false, demonBase = "stamina", damageSource = "unknown" } = {}) {
+  if (actor.type === "vampire") return fortitudeSoakPool(actor, damageType, { ignoreArmor, damageSource });
   const stamina = Number(actor.system?.attributes?.physical?.stamina || 0);
   if (actor.type === "demon") {
     const faith = Number(actor.system?.resources?.faith?.max || actor.system?.resources?.faith?.value || 0);
@@ -64,7 +61,15 @@ function currentHealth(actor) {
   return [...bonus, ...HEALTH_LEVELS.map(key => ({ key, value: Number(actor.system?.health?.[key] || 0) }))];
 }
 
-async function applyDamage(actor, levels, damageType) {
+export async function applyDamage(actor, levels, damageType, { requestId = null } = {}) {
+  const prior = Array.from(actor.getFlag?.("vtm-revised", "appliedAttackRequests") ?? actor.flags?.["vtm-revised"]?.appliedAttackRequests ?? []);
+  if (requestId && prior.includes(requestId)) throw new Error("Урон этой атаки уже применён.");
+  const receipt = requestId ? { "flags.vtm-revised.appliedAttackRequests": [...prior.slice(-499), requestId] } : {};
+  if (actor.type === "vampire") {
+    const result = planDamage(actor, levels, damageType);
+    if (Object.keys(result.update).length || requestId) await actor.update({ ...result.update, ...receipt });
+    return result;
+  }
   const state = currentHealth(actor);
   const value = damageType === "aggravated" ? 3 : damageType === "lethal" ? 2 : 1;
   let remaining = Math.max(0, Math.trunc(Number(levels || 0)));
@@ -75,7 +80,7 @@ async function applyDamage(actor, levels, damageType) {
     update[`system.health.${box.key}`] = box.key === "incapacitated" ? 1 : value;
     remaining -= 1;
   }
-  if (Object.keys(update).length) await actor.update(update);
+  if (Object.keys(update).length || requestId) await actor.update({ ...update, ...receipt });
   return { applied: Math.max(0, Math.trunc(Number(levels || 0))) - remaining, overflow: remaining };
 }
 
@@ -98,20 +103,25 @@ async function confirmDamage({ target, incoming, soakSuccesses, damageType }) {
       } },
       cancel: { label: game.i18n.localize("Cancel"), callback: () => resolve(null) }
     }, default: "apply", close: () => resolve(null)
-  }, { width: 440 }).render(true));
+  }, { width: 440, classes: ["vtm-themed-dialog-window", "vtm-combat-dialog-window"] }).render(true));
 }
 
 async function resolveWeaponDamage(message) {
   const data = message.flags?.["vtm-revised"] ?? {};
-  const storedTarget = data.targetActorUuid ? await fromUuid(data.targetActorUuid) : null;
-  const target = storedTarget?.documentName === "Actor" ? storedTarget : selectedTargetActor();
+  let target;
+  if (data.targetActorUuid) {
+    target = await resolveCombatTarget(data.targetActorUuid);
+    if (!target) { ui.notifications?.warn?.("Цель этого броска удалена или больше недоступна."); return; }
+  } else {
+    target = await chooseCombatTarget({ requireOwner: true });
+  }
   if (!target) return;
   if (!target.isOwner && !game.user.isGM) {
     ui.notifications?.warn?.("У тебя нет прав изменять здоровье выбранной цели.");
     return;
   }
   const incoming = Math.max(0, Number(data.damageSuccesses || 0));
-  const damageType = String(data.damageType || "bashing");
+  let damageType = String(data.damageType || "bashing");
   const formSummary = target.type === "demon" ? getActiveDemonFormSummary(target) : null;
   if (formSummary?.immunities?.includes(damageType)) {
     await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: target }), content: `<div class="vtm-chat-card demon-chat-card"><h3>Иммунитет апокалиптической формы</h3><p><strong>${foundry.utils.escapeHTML(target.name)}</strong> не получает ${foundry.utils.escapeHTML(data.damageTypeLabel || damageType)} урон.</p></div>` });
@@ -127,13 +137,19 @@ async function resolveWeaponDamage(message) {
     if (!demonBase) return;
   }
   const armorChoice = await new Promise(resolve => new DialogV1({
-    title: "Защита цели", content: `<form><label><input type="checkbox" name="ignoreArmor"/> Игнорировать броню (прицельная или особая атака)</label></form>`,
-    buttons: { next: { label: "Продолжить", callback: html => resolve(Boolean(rootElement(html)?.querySelector("[name='ignoreArmor']")?.checked)) }, cancel: { label: game.i18n.localize("Cancel"), callback: () => resolve(null) } },
+    title: "Защита цели", content: `<form><label><input type="checkbox" name="ignoreArmor"/> Игнорировать броню (прицельная или особая атака)</label>
+      ${target.type === "vampire" && data.weaponCategory === "firearm" && damageType === "lethal" ? '<p>Обычная пуля наносит вампиру ударный урон. Выстрел в голову остаётся летальным.</p><label><input type="checkbox" name="headshot"/> Попадание в голову / особый боеприпас с летальным уроном</label>' : ''}
+      ${target.type === "vampire" && damageType === "aggravated" ? '<label>Источник аггравированного урона<select name="damageSource"><option value="unknown">Иной / не указан — без обычной брони</option><option value="physical">Клыки, когти — броня действует</option><option value="fire">Огонь — броня не действует</option><option value="sunlight">Солнце — броня не действует</option></select></label>' : ''}</form>`,
+    buttons: { next: { label: "Продолжить", callback: html => {
+      const root = rootElement(html);
+      resolve({ ignoreArmor: Boolean(root?.querySelector("[name='ignoreArmor']")?.checked),
+        headshot: Boolean(root?.querySelector("[name='headshot']")?.checked), damageSource: root?.querySelector("[name='damageSource']")?.value || "unknown" });
+    } }, cancel: { label: game.i18n.localize("Cancel"), callback: () => resolve(null) } },
     default: "next", close: () => resolve(null)
-  }, { width: 430 }).render(true));
+  }, { width: 430, classes: ["vtm-themed-dialog-window", "vtm-combat-dialog-window"] }).render(true));
   if (armorChoice === null) return;
-  const ignoreArmor = Boolean(armorChoice);
-  const soak = soakPool(target, damageType, { ignoreArmor, demonBase });
+  if (target.type === "vampire" && data.weaponCategory === "firearm" && damageType === "lethal" && !armorChoice.headshot) damageType = "bashing";
+  const soak = soakPool(target, damageType, { ...armorChoice, demonBase });
   let soakSuccesses = 0;
   if (soak.pool > 0) {
     const components = [];
@@ -141,22 +157,33 @@ async function resolveWeaponDamage(message) {
     if (soak.faith) components.push({ label: "Вера", value: soak.faith });
     if (soak.fortitude) components.push({ label: "Стойкость", value: soak.fortitude });
     if (soak.armor) components.push({ label: target.system?.automation?.armor?.name || "Броня", value: soak.armor });
-    const result = await rollDicePool({ actor: target, pool: soak.pool, basePool: soak.pool, difficulty: 6, label: `Поглощение: ${target.name}`, components });
+    const result = await rollDicePool({ rollKind: "soak", actor: target, pool: soak.pool, basePool: soak.pool, difficulty: 6, label: `Поглощение: ${target.name}`, components });
     soakSuccesses = Number(result.successes || 0);
   } else if (damageType === "aggravated") {
     ui.notifications?.info?.(target.type === "demon" ? "У апокалиптической формы нет защиты от усиливающегося урона." : "У цели нет Стойкости: тяжёлый урон поглотить нельзя.");
   }
   const levels = await confirmDamage({ target, incoming, soakSuccesses, damageType });
   if (levels === null) return;
+  if (!target.isOwner && !game.user.isGM) return;
   const applied = await applyDamage(target, levels, damageType);
-  const overflow = applied.overflow ? ` Не поместилось в шкалу: ${applied.overflow}.` : "";
-  await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: target }), content: `<div class="vtm-chat-card"><h3>Получен урон</h3><p><strong>${foundry.utils.escapeHTML(target.name)}</strong>: ${applied.applied} ур. (${foundry.utils.escapeHTML(data.damageTypeLabel || damageType)}).${overflow}</p></div>` });
+  const overflow = applied.condition ? ` Состояние: ${applied.condition === "active" && healthPenalty(target).incapacitated ? "Обездвижен" : CONDITION_LABELS[applied.condition]}.${applied.overflow ? ` Урон сверх шкалы: ${applied.overflow}.` : ""}`
+    : applied.overflow ? ` Не поместилось в шкалу: ${applied.overflow}.` : "";
+  await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: target }), content: `<div class="vtm-chat-card"><h3>Получен урон</h3><p><strong>${foundry.utils.escapeHTML(target.name)}</strong>: ${applied.applied} ур. (${foundry.utils.escapeHTML({ bashing: "Ударный", lethal: "Летальный", aggravated: "Аггравированный" }[damageType] || damageType)}).${overflow}</p></div>` });
 }
 
-Hooks.on("renderChatMessage", (message, html) => {
+const pendingDamage = new Set();
+for (const hook of ["renderChatMessage", "renderChatMessageHTML"]) Hooks.on(hook, (message, html) => {
   if (message.flags?.["vtm-revised"]?.type !== "weaponDamage") return;
-  rootElement(html)?.querySelector(".weapon-damage-apply")?.addEventListener("click", event => {
+  const button = rootElement(html)?.querySelector(".weapon-damage-apply");
+  if (!button || button.dataset.vtmDamageBound) return;
+  button.dataset.vtmDamageBound = "true";
+  button.addEventListener("click", async event => {
     event.preventDefault();
-    void resolveWeaponDamage(message);
+    if (pendingDamage.has(message.id)) return;
+    pendingDamage.add(message.id);
+    button.disabled = true;
+    try { await resolveWeaponDamage(message); }
+    catch (error) { console.error("VtM Revised | Apply damage failed", error); ui.notifications?.error?.("Не удалось применить урон."); }
+    finally { pendingDamage.delete(message.id); button.disabled = false; }
   });
 });

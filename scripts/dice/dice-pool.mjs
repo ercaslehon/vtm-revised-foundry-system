@@ -9,7 +9,8 @@ export async function rollDicePool({
   label = "Roll",
   flavor = "",
   components = [],
-  messageVisibility = null
+  messageVisibility = null,
+  rollKind = "action"
 } = {}) {
   const safePool = Math.max(1, Number(pool || 1));
   const safeBasePool = Math.max(1, Number(basePool ?? safePool));
@@ -29,7 +30,7 @@ export async function rollDicePool({
   // - Final successes cannot go below 0.
   const rawSuccesses = normalSuccesses + (tens * 2);
   const successes = Math.max(0, rawSuccesses - ones + safeAutomaticSuccesses);
-  const botch = rawSuccesses + safeAutomaticSuccesses === 0 && ones > 0;
+  const botch = !["damage", "soak"].includes(rollKind) && rawSuccesses + safeAutomaticSuccesses === 0 && ones > 0;
 
   const content = await renderTemplate("systems/vtm-revised/templates/chat/roll-card.hbs", {
     actor,
@@ -58,6 +59,7 @@ export async function rollDicePool({
     flags: {
       "vtm-revised": {
         type: "dicePool",
+        rollKind,
         actorUuid: actor?.uuid ?? null,
         label,
         flavor,

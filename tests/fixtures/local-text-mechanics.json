@@ -1,0 +1,1357 @@
+{
+  "invocations": {
+    "awakening": [
+      {
+        "level": 1,
+        "firstTrait": "attribute.mental.perception",
+        "secondTrait": "ability.talents.awareness",
+        "difficulty": 8,
+        "faithCost": 0,
+        "resistanceTrait": "resource.willpower",
+        "resistanceDifficulty": 8,
+        "duration": ""
+      },
+      {
+        "level": 2,
+        "firstTrait": "attribute.physical.stamina",
+        "secondTrait": "ability.knowledges.medicine",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 3,
+        "firstTrait": "attribute.physical.stamina",
+        "secondTrait": "ability.knowledges.medicine",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 4,
+        "firstTrait": "attribute.mental.intelligence",
+        "secondTrait": "ability.skills.crafts",
+        "difficulty": 6,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": "сцену"
+      },
+      {
+        "level": 5,
+        "firstTrait": "attribute.physical.stamina",
+        "secondTrait": "ability.knowledges.medicine",
+        "difficulty": 6,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": "эпизод, а 1 временная Сила Воли делает эффект постоянным"
+      }
+    ],
+    "beast": [
+      {
+        "level": 1,
+        "firstTrait": "attribute.mental.perception",
+        "secondTrait": "ability.skills.animalken",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 2,
+        "firstTrait": "attribute.social.manipulation",
+        "secondTrait": "ability.skills.animalken",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": "один день"
+      },
+      {
+        "level": 3,
+        "firstTrait": "attribute.mental.intelligence",
+        "secondTrait": "ability.skills.animalken",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 4,
+        "firstTrait": "attribute.physical.stamina",
+        "secondTrait": "ability.skills.animalken",
+        "difficulty": 6,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": "до конца эпизода либо добровольного прекращения"
+      },
+      {
+        "level": 5,
+        "firstTrait": "attribute.mental.intelligence",
+        "secondTrait": "ability.skills.animalken",
+        "difficulty": 6,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      }
+    ],
+    "celestials": [
+      {
+        "level": 1,
+        "firstTrait": "attribute.mental.perception",
+        "secondTrait": "ability.talents.alertness",
+        "difficulty": 8,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 8,
+        "duration": ""
+      },
+      {
+        "level": 2,
+        "firstTrait": "attribute.social.manipulation",
+        "secondTrait": "ability.talents.expression",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 3,
+        "firstTrait": "attribute.social.manipulation",
+        "secondTrait": "ability.talents.leadership",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 4,
+        "firstTrait": "attribute.physical.dexterity",
+        "secondTrait": "ability.talents.athletics",
+        "difficulty": 6,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 5,
+        "firstTrait": "attribute.social.manipulation",
+        "secondTrait": "ability.talents.leadership",
+        "difficulty": 6,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      }
+    ],
+    "chaos": [
+      {
+        "level": 1,
+        "firstTrait": "attribute.social.manipulation",
+        "secondTrait": "ability.knowledges.occult",
+        "difficulty": 7,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 2,
+        "firstTrait": "attribute.mental.wits",
+        "secondTrait": "ability.talents.expression",
+        "difficulty": 8,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 3,
+        "firstTrait": "attribute.physical.strength",
+        "secondTrait": "ability.knowledges.medicine",
+        "difficulty": 7,
+        "faithCost": 0,
+        "resistanceTrait": "attribute.physical.stamina",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 4,
+        "firstTrait": "attribute.mental.wits",
+        "secondTrait": "ability.knowledges.occult",
+        "difficulty": 7,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 5,
+        "firstTrait": "attribute.physical.stamina",
+        "secondTrait": "ability.knowledges.occult",
+        "difficulty": 7,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 7,
+        "duration": ""
+      }
+    ],
+    "contamination": [
+      {
+        "level": 1,
+        "firstTrait": "attribute.physical.strength",
+        "secondTrait": "ability.skills.crafts",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": "по одному дню за успех, постоянно за 1 Силу Воли"
+      },
+      {
+        "level": 2,
+        "firstTrait": "attribute.physical.dexterity",
+        "secondTrait": "ability.talents.expression",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 3,
+        "firstTrait": "attribute.physical.stamina",
+        "secondTrait": "ability.talents.awareness",
+        "difficulty": 7,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 4,
+        "firstTrait": "attribute.social.manipulation",
+        "secondTrait": "ability.skills.crafts",
+        "difficulty": 7,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": "сцены"
+      },
+      {
+        "level": 5,
+        "firstTrait": "attribute.physical.stamina",
+        "secondTrait": "ability.skills.crafts",
+        "difficulty": 7,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      }
+    ],
+    "death": [
+      {
+        "level": 1,
+        "firstTrait": "attribute.mental.perception",
+        "secondTrait": "ability.talents.awareness",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 2,
+        "firstTrait": "attribute.physical.stamina",
+        "secondTrait": "ability.knowledges.medicine",
+        "difficulty": 7,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 3,
+        "firstTrait": "attribute.social.manipulation",
+        "secondTrait": "ability.talents.intuition",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "resource.willpower",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 4,
+        "firstTrait": "attribute.physical.strength",
+        "secondTrait": "ability.talents.awareness",
+        "difficulty": 6,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 5,
+        "firstTrait": "attribute.physical.stamina",
+        "secondTrait": "ability.knowledges.medicine",
+        "difficulty": 7,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      }
+    ],
+    "earth": [
+      {
+        "level": 1,
+        "firstTrait": "attribute.physical.strength",
+        "secondTrait": "ability.skills.survival",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 2,
+        "firstTrait": "attribute.physical.strength",
+        "secondTrait": "ability.skills.survival",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 3,
+        "firstTrait": "attribute.physical.strength",
+        "secondTrait": "ability.skills.crafts",
+        "difficulty": 5,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 4,
+        "firstTrait": "attribute.physical.strength",
+        "secondTrait": "ability.skills.survival",
+        "difficulty": 6,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": "эпизод"
+      },
+      {
+        "level": 5,
+        "firstTrait": "attribute.physical.strength",
+        "secondTrait": "ability.skills.survival",
+        "difficulty": 6,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      }
+    ],
+    "firmament": [
+      {
+        "level": 1,
+        "firstTrait": "attribute.mental.perception",
+        "secondTrait": "ability.talents.empathy",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": "по одному ходу за успех"
+      },
+      {
+        "level": 2,
+        "firstTrait": "attribute.mental.perception",
+        "secondTrait": "ability.talents.empathy",
+        "difficulty": 8,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 3,
+        "firstTrait": "attribute.social.manipulation",
+        "secondTrait": "ability.talents.leadership",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 4,
+        "firstTrait": "attribute.social.manipulation",
+        "secondTrait": "ability.talents.awareness",
+        "difficulty": 6,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 5,
+        "firstTrait": "attribute.social.manipulation",
+        "secondTrait": "ability.talents.leadership",
+        "difficulty": 6,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      }
+    ],
+    "flame": [
+      {
+        "level": 1,
+        "firstTrait": "attribute.physical.stamina",
+        "secondTrait": "ability.skills.survival",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 2,
+        "firstTrait": "attribute.physical.stamina",
+        "secondTrait": "ability.skills.survival",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 3,
+        "firstTrait": "attribute.mental.wits",
+        "secondTrait": "ability.skills.survival",
+        "difficulty": 8,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 4,
+        "firstTrait": "attribute.physical.stamina",
+        "secondTrait": "ability.skills.survival",
+        "difficulty": 6,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 5,
+        "firstTrait": "attribute.physical.stamina",
+        "secondTrait": "ability.skills.survival",
+        "difficulty": 6,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      }
+    ],
+    "flesh": [
+      {
+        "level": 1,
+        "firstTrait": "attribute.mental.intelligence",
+        "secondTrait": "ability.knowledges.medicine",
+        "difficulty": 8,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 8,
+        "duration": "эпизод"
+      },
+      {
+        "level": 2,
+        "firstTrait": "attribute.mental.intelligence",
+        "secondTrait": "ability.knowledges.medicine",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 8,
+        "duration": ""
+      },
+      {
+        "level": 3,
+        "firstTrait": "attribute.mental.intelligence",
+        "secondTrait": "ability.knowledges.medicine",
+        "difficulty": 8,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 8,
+        "duration": ""
+      },
+      {
+        "level": 4,
+        "firstTrait": "attribute.mental.perception",
+        "secondTrait": "ability.knowledges.medicine",
+        "difficulty": 6,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 5,
+        "firstTrait": "attribute.physical.dexterity",
+        "secondTrait": "ability.knowledges.medicine",
+        "difficulty": 7,
+        "faithCost": 1,
+        "resistanceTrait": "resource.willpower",
+        "resistanceDifficulty": 7,
+        "duration": ""
+      }
+    ],
+    "forge": [
+      {
+        "level": 1,
+        "firstTrait": "attribute.mental.perception",
+        "secondTrait": "ability.skills.crafts",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": "эпизод, либо постоянно за 1 временную Силу Воли"
+      },
+      {
+        "level": 2,
+        "firstTrait": "attribute.mental.intelligence",
+        "secondTrait": "ability.skills.crafts",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": "на один механизм в радиусе Веры в ярдах, но не управляет электронной информацией и не двигает предмет целиком"
+      },
+      {
+        "level": 3,
+        "firstTrait": "attribute.physical.dexterity",
+        "secondTrait": "ability.skills.crafts",
+        "difficulty": 9,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 4,
+        "firstTrait": "attribute.physical.dexterity",
+        "secondTrait": "ability.skills.crafts",
+        "difficulty": 6,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 5,
+        "firstTrait": "attribute.physical.stamina",
+        "secondTrait": "ability.skills.crafts",
+        "difficulty": 6,
+        "faithCost": 1,
+        "resistanceTrait": "resource.willpower",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      }
+    ],
+    "fundament": [
+      {
+        "level": 1,
+        "firstTrait": "attribute.physical.strength",
+        "secondTrait": "ability.talents.athletics",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 2,
+        "firstTrait": "attribute.physical.dexterity",
+        "secondTrait": "ability.talents.athletics",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": "ход"
+      },
+      {
+        "level": 3,
+        "firstTrait": "attribute.physical.dexterity",
+        "secondTrait": "ability.talents.athletics",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 4,
+        "firstTrait": "attribute.physical.dexterity",
+        "secondTrait": "ability.talents.athletics",
+        "difficulty": 6,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 5,
+        "firstTrait": "attribute.physical.stamina",
+        "secondTrait": "ability.knowledges.science",
+        "difficulty": 6,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      }
+    ],
+    "humanity": [
+      {
+        "level": 1,
+        "firstTrait": "attribute.social.manipulation",
+        "secondTrait": "ability.talents.empathy",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 2,
+        "firstTrait": "attribute.social.manipulation",
+        "secondTrait": "ability.talents.empathy",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": "и на незащищённых слуг"
+      },
+      {
+        "level": 3,
+        "firstTrait": "ability.talents.subterfuge",
+        "secondTrait": "attribute.social.manipulation",
+        "difficulty": 8,
+        "faithCost": 0,
+        "resistanceTrait": "resource.willpower",
+        "resistanceDifficulty": 8,
+        "duration": "эпизод либо до речи, прикосновения или добровольного прекращения"
+      },
+      {
+        "level": 4,
+        "firstTrait": "attribute.social.manipulation",
+        "secondTrait": "ability.talents.subterfuge",
+        "difficulty": 7,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 7,
+        "duration": "и на незащищённых слуг"
+      },
+      {
+        "level": 5,
+        "firstTrait": "attribute.social.manipulation",
+        "secondTrait": "ability.talents.subterfuge",
+        "difficulty": 7,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 7,
+        "duration": "и на незащищённых слуг"
+      }
+    ],
+    "light": [
+      {
+        "level": 1,
+        "firstTrait": "attribute.physical.stamina",
+        "secondTrait": "ability.knowledges.science",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": "ход и наносит посмотревшим поверхностный урон за успех"
+      },
+      {
+        "level": 2,
+        "firstTrait": "attribute.physical.stamina",
+        "secondTrait": "ability.knowledges.science",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 3,
+        "firstTrait": "attribute.mental.intelligence",
+        "secondTrait": "ability.skills.performance",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": "Веры в днях"
+      },
+      {
+        "level": 4,
+        "firstTrait": "attribute.mental.intelligence",
+        "secondTrait": "ability.talents.expression",
+        "difficulty": 6,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 5,
+        "firstTrait": "attribute.mental.intelligence",
+        "secondTrait": "ability.talents.expression",
+        "difficulty": 6,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      }
+    ],
+    "longing": [
+      {
+        "level": 1,
+        "firstTrait": "attribute.mental.perception",
+        "secondTrait": "ability.talents.empathy",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 2,
+        "firstTrait": "attribute.social.manipulation",
+        "secondTrait": "ability.talents.empathy",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": "на одного человека до конца эпизода либо смены цели"
+      },
+      {
+        "level": 3,
+        "firstTrait": "attribute.mental.intelligence",
+        "secondTrait": "ability.talents.intuition",
+        "difficulty": 7,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 7,
+        "duration": ""
+      },
+      {
+        "level": 4,
+        "firstTrait": "attribute.social.manipulation",
+        "secondTrait": "ability.talents.empathy",
+        "difficulty": 8,
+        "faithCost": 1,
+        "resistanceTrait": "resource.willpower",
+        "resistanceDifficulty": 8,
+        "duration": "Веру в днях либо до исполнения желания"
+      },
+      {
+        "level": 5,
+        "firstTrait": "attribute.mental.intelligence",
+        "secondTrait": "ability.knowledges.medicine",
+        "difficulty": 7,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      }
+    ],
+    "paths": [
+      {
+        "level": 1,
+        "firstTrait": "attribute.mental.perception",
+        "secondTrait": "ability.skills.survival",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 2,
+        "firstTrait": "attribute.physical.dexterity",
+        "secondTrait": "ability.skills.survival",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 3,
+        "firstTrait": "attribute.mental.perception",
+        "secondTrait": "ability.skills.survival",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": "постоянную Веру в днях и становится постоянным за 1 временную Силу Воли"
+      },
+      {
+        "level": 4,
+        "firstTrait": "attribute.physical.dexterity",
+        "secondTrait": "ability.skills.survival",
+        "difficulty": 6,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 5,
+        "firstTrait": "attribute.physical.dexterity",
+        "secondTrait": "ability.skills.survival",
+        "difficulty": 6,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      }
+    ],
+    "patterns": [
+      {
+        "level": 1,
+        "firstTrait": "attribute.mental.perception",
+        "secondTrait": "ability.talents.intuition",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 2,
+        "firstTrait": "attribute.mental.perception",
+        "secondTrait": "ability.talents.intuition",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 3,
+        "firstTrait": "attribute.mental.wits",
+        "secondTrait": "ability.talents.intuition",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": "по одному ходу за успех"
+      },
+      {
+        "level": 4,
+        "firstTrait": "attribute.mental.perception",
+        "secondTrait": "ability.talents.intuition",
+        "difficulty": 6,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 5,
+        "firstTrait": "attribute.physical.stamina",
+        "secondTrait": "ability.talents.intuition",
+        "difficulty": 7,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      }
+    ],
+    "portals": [
+      {
+        "level": 1,
+        "firstTrait": "attribute.social.manipulation",
+        "secondTrait": "ability.talents.intuition",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 2,
+        "firstTrait": "attribute.social.charisma",
+        "secondTrait": "ability.talents.intuition",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 3,
+        "firstTrait": "attribute.mental.intelligence",
+        "secondTrait": "ability.talents.intuition",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 4,
+        "firstTrait": "attribute.physical.stamina",
+        "secondTrait": "ability.talents.intuition",
+        "difficulty": 6,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 5,
+        "firstTrait": "attribute.physical.stamina",
+        "secondTrait": "ability.talents.awareness",
+        "difficulty": 6,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      }
+    ],
+    "radiance": [
+      {
+        "level": 1,
+        "firstTrait": "attribute.social.manipulation",
+        "secondTrait": "ability.talents.leadership",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": "на демонов и защищённых слуг"
+      },
+      {
+        "level": 2,
+        "firstTrait": "attribute.social.manipulation",
+        "secondTrait": "ability.talents.leadership",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 3,
+        "firstTrait": "attribute.social.manipulation",
+        "secondTrait": "ability.talents.leadership",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": "лишь раз за эпизод"
+      },
+      {
+        "level": 4,
+        "firstTrait": "attribute.social.manipulation",
+        "secondTrait": "ability.talents.expression",
+        "difficulty": 7,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 7,
+        "duration": ""
+      },
+      {
+        "level": 5,
+        "firstTrait": "attribute.mental.perception",
+        "secondTrait": "ability.talents.intuition",
+        "difficulty": 7,
+        "faithCost": 1,
+        "resistanceTrait": "resource.willpower",
+        "resistanceDifficulty": 6,
+        "duration": "на демонов, но действует на слуг"
+      }
+    ],
+    "realms": [
+      {
+        "level": 1,
+        "firstTrait": "attribute.mental.perception",
+        "secondTrait": "ability.talents.awareness",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 2,
+        "firstTrait": "attribute.physical.dexterity",
+        "secondTrait": "ability.talents.awareness",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 3,
+        "firstTrait": "attribute.physical.stamina",
+        "secondTrait": "ability.talents.awareness",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 4,
+        "firstTrait": "attribute.physical.dexterity",
+        "secondTrait": "ability.talents.awareness",
+        "difficulty": 6,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 5,
+        "firstTrait": "attribute.physical.stamina",
+        "secondTrait": "ability.talents.awareness",
+        "difficulty": 6,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      }
+    ],
+    "spirit": [
+      {
+        "level": 1,
+        "firstTrait": "attribute.social.manipulation",
+        "secondTrait": "ability.talents.awareness",
+        "difficulty": 9,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 2,
+        "firstTrait": "attribute.social.manipulation",
+        "secondTrait": "ability.talents.leadership",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 3,
+        "firstTrait": "attribute.social.manipulation",
+        "secondTrait": "ability.talents.leadership",
+        "difficulty": 8,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 8,
+        "duration": "Веры в ходах"
+      },
+      {
+        "level": 4,
+        "firstTrait": "attribute.physical.stamina",
+        "secondTrait": "ability.talents.awareness",
+        "difficulty": 6,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 5,
+        "firstTrait": "attribute.physical.stamina",
+        "secondTrait": "ability.talents.awareness",
+        "difficulty": 6,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      }
+    ],
+    "storms": [
+      {
+        "level": 1,
+        "firstTrait": "attribute.physical.stamina",
+        "secondTrait": "ability.skills.survival",
+        "difficulty": 8,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 2,
+        "firstTrait": "attribute.physical.stamina",
+        "secondTrait": "ability.knowledges.medicine",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 3,
+        "firstTrait": "attribute.mental.intelligence",
+        "secondTrait": "ability.knowledges.science",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 4,
+        "firstTrait": "attribute.mental.intelligence",
+        "secondTrait": "ability.knowledges.science",
+        "difficulty": 6,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 5,
+        "firstTrait": "attribute.physical.stamina",
+        "secondTrait": "ability.skills.survival",
+        "difficulty": 9,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      }
+    ],
+    "transfiguration": [
+      {
+        "level": 1,
+        "firstTrait": "attribute.social.manipulation",
+        "secondTrait": "ability.skills.performance",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 2,
+        "firstTrait": "attribute.social.charisma",
+        "secondTrait": "ability.talents.subterfuge",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 3,
+        "firstTrait": "attribute.social.charisma",
+        "secondTrait": "ability.talents.subterfuge",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 4,
+        "firstTrait": "attribute.social.manipulation",
+        "secondTrait": "ability.talents.empathy",
+        "difficulty": 8,
+        "faithCost": 1,
+        "resistanceTrait": "resource.willpower",
+        "resistanceDifficulty": 8,
+        "duration": "Веру в ходах"
+      },
+      {
+        "level": 5,
+        "firstTrait": "attribute.mental.intelligence",
+        "secondTrait": "ability.knowledges.medicine",
+        "difficulty": 8,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 8,
+        "duration": ""
+      }
+    ],
+    "violation": [
+      {
+        "level": 1,
+        "firstTrait": "attribute.social.manipulation",
+        "secondTrait": "ability.talents.expression",
+        "difficulty": 7,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 2,
+        "firstTrait": "attribute.mental.perception",
+        "secondTrait": "ability.talents.awareness",
+        "difficulty": 7,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 3,
+        "firstTrait": "attribute.social.manipulation",
+        "secondTrait": "ability.talents.intimidation",
+        "difficulty": 8,
+        "faithCost": 0,
+        "resistanceTrait": "resource.willpower",
+        "resistanceDifficulty": 8,
+        "duration": ""
+      },
+      {
+        "level": 4,
+        "firstTrait": "attribute.social.manipulation",
+        "secondTrait": "ability.talents.subterfuge",
+        "difficulty": 7,
+        "faithCost": 1,
+        "resistanceTrait": "resource.willpower",
+        "resistanceDifficulty": 7,
+        "duration": "сцену"
+      },
+      {
+        "level": 5,
+        "firstTrait": "attribute.mental.wits",
+        "secondTrait": "ability.knowledges.occult",
+        "difficulty": 8,
+        "faithCost": 0,
+        "resistanceTrait": "resource.willpower",
+        "resistanceDifficulty": 8,
+        "duration": ""
+      }
+    ],
+    "wild": [
+      {
+        "level": 1,
+        "firstTrait": "attribute.mental.perception",
+        "secondTrait": "ability.skills.survival",
+        "difficulty": 7,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 2,
+        "firstTrait": "attribute.physical.stamina",
+        "secondTrait": "ability.skills.survival",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": "на конструкции с эквивалентной Силой"
+      },
+      {
+        "level": 3,
+        "firstTrait": "attribute.mental.intelligence",
+        "secondTrait": "ability.skills.survival",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 4,
+        "firstTrait": "attribute.physical.stamina",
+        "secondTrait": "ability.skills.survival",
+        "difficulty": 6,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 5,
+        "firstTrait": "attribute.mental.intelligence",
+        "secondTrait": "ability.skills.survival",
+        "difficulty": 6,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      }
+    ],
+    "winds": [
+      {
+        "level": 1,
+        "firstTrait": "attribute.physical.stamina",
+        "secondTrait": "ability.skills.survival",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 2,
+        "firstTrait": "attribute.physical.stamina",
+        "secondTrait": "ability.skills.survival",
+        "difficulty": 6,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 3,
+        "firstTrait": "attribute.physical.dexterity",
+        "secondTrait": "ability.skills.survival",
+        "difficulty": 9,
+        "faithCost": 0,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      },
+      {
+        "level": 4,
+        "firstTrait": "attribute.physical.stamina",
+        "secondTrait": "ability.skills.survival",
+        "difficulty": 7,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": "эпизод или до недееспособности демона"
+      },
+      {
+        "level": 5,
+        "firstTrait": "attribute.physical.stamina",
+        "secondTrait": "ability.skills.survival",
+        "difficulty": 7,
+        "faithCost": 1,
+        "resistanceTrait": "",
+        "resistanceDifficulty": 6,
+        "duration": ""
+      }
+    ]
+  },
+  "demonFormsSha256": "59fdc529634ef6f0679b1f5e71d09c254163c695a759fc2281c6f7766e010c2d"
+}

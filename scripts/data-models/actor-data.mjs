@@ -92,7 +92,12 @@ function healthSchema() {
     wounded: ratingField(0, 3),
     mauled: ratingField(0, 3),
     crippled: ratingField(0, 3),
-    incapacitated: ratingField(0, 1),
+    incapacitated: ratingField(0, 3),
+    extraBruised: ratingField(0, 3),
+    condition: new fields.StringField({ initial: "active", choices: ["active", "torpor", "finalDeath"] }),
+    restStartedAt: new fields.NumberField({ initial: -1 }),
+    restCompletedAt: new fields.NumberField({ initial: -1 }),
+    extraHealingUsed: new fields.BooleanField({ initial: false }),
     summary: textField()
   });
 }

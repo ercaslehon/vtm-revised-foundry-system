@@ -11,7 +11,7 @@ export function multipleActionPenalty(declared = 1, used = 0) {
 export function damageAfterSoak(incoming = 0, soak = 0, { halveBashing = false } = {}) {
   const remainder = Math.max(0, Math.trunc(Number(incoming || 0)) - Math.trunc(Number(soak || 0)));
   if (!halveBashing || remainder <= 0) return remainder;
-  return Math.max(1, Math.floor(remainder / 2));
+  return Math.floor(remainder / 2);
 }
 
 export function demonHighTormentSlots(permanentTorment = 0) {

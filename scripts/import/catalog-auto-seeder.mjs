@@ -18,7 +18,8 @@ function activePrimaryGm() {
 }
 
 function currentSeedVersion() {
-  return game.system?.version || CONFIG?.VTM_REVISED?.version || "unknown";
+  const systemVersion = game.system?.version || CONFIG?.VTM_REVISED?.version || "unknown";
+  return `${systemVersion}:wod-reference-text-20261009-3`;
 }
 
 async function runImportStep(step, { notify = false } = {}) {
@@ -26,7 +27,8 @@ async function runImportStep(step, { notify = false } = {}) {
   return {
     key: step.key,
     label: step.label,
-    count: Array.isArray(created) ? created.length : 0
+    count: Array.isArray(created) ? created.length : 0,
+    ...(created?.catalogReport ?? {})
   };
 }
 
@@ -150,11 +152,17 @@ export async function runCatalogAutoSeedIfNeeded({ force = false, notify = true 
 
   const createdTotal = results.reduce((sum, result) => sum + Number(result.count || 0), 0);
   const failed = results.filter(result => result.error);
+  const updatedTotal = results.reduce((sum, result) => sum + Number(result.updated || 0), 0);
+  const removedTotal = results.reduce((sum, result) => sum + Number(result.removed || 0), 0);
+  const preservedTotal = results.reduce((sum, result) => sum + Number(result.preserved || 0), 0);
   const report = {
     version: seedVersion,
     startedAt,
     finishedAt: new Date().toISOString(),
     createdTotal,
+    updatedTotal,
+    removedTotal,
+    preservedTotal,
     results
   };
 
@@ -169,8 +177,8 @@ export async function runCatalogAutoSeedIfNeeded({ force = false, notify = true 
   await game.settings.set(SYSTEM_ID, SEED_VERSION_SETTING, seedVersion);
 
   console.log("VtM Revised | Automatic catalog seed finished", report);
-  if (notify && createdTotal > 0) {
-    ui.notifications?.info?.(`VtM Revised | Встроенные справочники импортированы: создано ${createdTotal} записей.`);
+  if (notify && (createdTotal > 0 || updatedTotal > 0 || removedTotal > 0)) {
+    ui.notifications?.info?.(`VtM Revised | Справочники: создано ${createdTotal}, исправлено ${updatedTotal}, убрано неподтверждённых ${removedTotal}. Ручных правок сохранено: ${preservedTotal}.`);
   } else if (notify && force) {
     ui.notifications?.info?.("VtM Revised | Справочники уже были импортированы, новых записей не создано.");
   }

@@ -1,3 +1,6 @@
+import { resolveReferenceItem } from "../import/catalog-reference-view.mjs";
+import { buildSystemData } from "../import/rules-json-importer.mjs";
+
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
 function normalizeName(value = "") {
@@ -43,7 +46,7 @@ export class VTMMoralityPathCard extends HandlebarsApplicationMixin(ApplicationV
 
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
-    const item = this.moralityPath;
+    const item = await resolveReferenceItem(this.moralityPath, Array.from(game.items ?? []), buildSystemData);
     const system = item?.system ?? {};
     const category = system.category === "road" ? "Дорога" : system.category === "humanity" ? "Человечность" : "Путь Просветления";
     const sourceUrl = system.audit?.sourceUrl || system.automation?.source?.url || "";

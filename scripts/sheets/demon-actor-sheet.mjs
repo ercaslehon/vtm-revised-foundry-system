@@ -1,3 +1,8 @@
+import { rollActorInitiative } from "../combat/tokenless-combat.mjs";
+import { bindInitiativeControls } from "../combat/initiative-dock.mjs";
+import { finishAutomaticAttack } from "../combat/automatic-resolution.mjs";
+import { openWeaponAttackDialog } from "../combat/weapon-attack-dialog.mjs";
+import { canManageTarget } from "../combat/combat-targets.mjs";
 import { rollDicePool } from "../dice/dice-pool.mjs";
 import { VTM_REVISED } from "../config.mjs";
 import { VTMArchetypeCard, findArchetypeForName } from "../apps/archetype-card.mjs";
@@ -454,6 +459,7 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   _onRender(context, options) {
     super._onRender(context, options);
     const element = this.element;
+    bindInitiativeControls(element, this.actor);
     if (!element) return;
     activateTraitReferenceButtons(element);
     this._applyHouseHeaderIcon(element);
@@ -1223,36 +1229,7 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   }
 
   async _useWeapon(item) {
-    const weapon = item.system?.weapon ?? {};
-    const attackFirst = weapon.attackFirstTrait || "attribute.physical.dexterity";
-    const attackSecond = weapon.attackSecondTrait || (weapon.category === "firearm" ? "ability.skills.firearms" : "ability.skills.melee");
-    const target = this._selectedCombatTargetActor({ notify: false });
-    const content = `<form class="demon-roll-dialog demon-weapon-attack-dialog">
-      <p><strong>${foundry.utils.escapeHTML(item.name)}</strong></p>
-      <p class="muted">Цель: <strong>${foundry.utils.escapeHTML(target?.name || "не выбрана")}</strong></p>
-      <div class="form-group"><label>Первый параметр</label>${this._buildRollSelectHtml("firstTrait", attackFirst, false)}</div>
-      <div class="form-group"><label>Второй параметр</label>${this._buildRollSelectHtml("secondTrait", attackSecond, true)}</div>
-      <div class="grid grid-2"><label>Сложность атаки<input type="number" name="difficulty" min="2" max="10" value="${Number(weapon.difficulty || 6)}"></label><label>Сложность урона<input type="number" name="damageDifficulty" min="2" max="10" value="${Number(weapon.damageDifficulty || 6)}"></label></div>
-      <div class="form-group"><label><input type="checkbox" name="useDefense" ${target ? "checked" : "disabled"}> Активная защита цели</label><select name="defenseType" ${target ? "" : "disabled"}><option value="dodge">Уклонение</option><option value="parry">Парирование</option><option value="block">Блок</option></select></div>
-    </form>`;
-    return new Promise(resolve => new DialogV1({
-      title: `Атака: ${item.name}`, content,
-      buttons: {
-        attack: { icon: '<i class="fas fa-dice-d10"></i>', label: "Атака и урон", callback: async html => {
-          const form = this._getFormElement(html);
-          const result = await this._rollWeaponAttackAndDamage(item, {
-            firstTrait: form?.querySelector("[name='firstTrait']")?.value || attackFirst,
-            secondTrait: form?.querySelector("[name='secondTrait']")?.value || attackSecond,
-            difficulty: Number(form?.querySelector("[name='difficulty']")?.value || weapon.difficulty || 6),
-            damageDifficulty: Number(form?.querySelector("[name='damageDifficulty']")?.value || weapon.damageDifficulty || 6),
-            targetActor: target,
-            defenseType: form?.querySelector("[name='useDefense']")?.checked ? form?.querySelector("[name='defenseType']")?.value : ""
-          });
-          resolve(result);
-        } },
-        cancel: { label: game.i18n.localize("Cancel"), callback: () => resolve(null) }
-      }, default: "attack", close: () => resolve(null)
-    }, { width: 560, classes: ["demon-roll-dialog-window", "demon-weapon-dialog-window"] }).render(true));
+    return openWeaponAttackDialog(this, item);
   }
 
   async _rollWeaponAttackAndDamage(item, options = {}) {
@@ -1292,9 +1269,10 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       flavor: formEffects.length ? formEffects.map(effect => effect.label).join("; ") : ""
     });
 
-    const defenseResult = options.targetActor && options.defenseType ? await this._rollTargetDefense(options.targetActor, options.defenseType) : null;
+    const defenseResult = attackResult.successes > 0 && options.targetActor && options.defenseType ? await (options.automateTarget ? options.targetActor.sheet : this)._rollTargetDefense(options.targetActor, options.defenseType) : null;
     const netAttackSuccesses = calculateNetAttackSuccesses(attackResult.successes, defenseResult?.successes);
     if (attackResult.botch || netAttackSuccesses <= 0) {
+      if (options.automateTarget) return finishAutomaticAttack({ actor: this.actor, item, options, attackResult, defenseResult });
       ui.notifications?.warn?.(`${item.name}: атака не достигла цели.`);
       return { attackResult, defenseResult, netAttackSuccesses };
     }
@@ -1307,7 +1285,8 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       && selectedMerits.includes("good-right-hook")
       && !this.actor.system?.apocalypticForm?.active;
     let goodRightHookDice = 0;
-    if (goodRightHookAvailable) {
+    if (goodRightHookAvailable && options.automateTarget) goodRightHookDice = options.goodRightHook ? 2 : 0;
+    if (goodRightHookAvailable && !options.automateTarget) {
       goodRightHookDice = await new Promise(resolve => new DialogV1({
         title: "Модификаторы урона",
         content: `<form class="demon-roll-dialog"><label class="demon-roll-effect-option"><input type="checkbox" name="goodRightHook" checked><span><b>Хороший хук справа</b> <strong>+2 куб.</strong><small>Только к урону атаки, основанной на Драке.</small></span></label></form>`,
@@ -1322,6 +1301,7 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     const damagePool = Math.max(1, baseDamage + extraSuccesses + goodRightHookDice);
     const damageTypeLabel = this._damageTypeLabel(weapon.damageType);
     const damageResult = await rollDicePool({
+      rollKind: "damage",
       actor: this.actor,
       pool: damagePool,
       basePool: damagePool,
@@ -1336,14 +1316,16 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       ]
     });
     const renderTemplate = foundry.applications?.handlebars?.renderTemplate ?? globalThis.renderTemplate;
+    if (options.automateTarget) return finishAutomaticAttack({ actor: this.actor, item, options, attackResult, defenseResult, damageResult });
+
     const content = await renderTemplate("systems/vtm-revised/templates/chat/weapon-damage-card.hbs", {
       actor: this.actor, item, weapon, attackSuccesses: attackResult.successes, hasDefense: Boolean(defenseResult), defenseSuccesses: defenseResult?.successes ?? null, netAttackSuccesses, extraSuccesses,
-      damagePool, damageSuccesses: damageResult.successes, damageTypeLabel,
+      damagePool, damageSuccesses: damageResult.successes, damageTypeLabel, targetActorName: options.targetActor?.name,
       soakHint: weapon.damageType === "aggravated" ? "Усиливающийся урон поглощается только специальной защитой апокалиптической формы." : "Падший поглощает поверхностный урон Выносливостью; для летального можно выбрать Выносливость или Веру."
     });
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this.actor }), content,
-      flags: { "vtm-revised": { type: "weaponDamage", actorId: this.actor.id, itemId: item.id, targetActorUuid: options.targetActor?.uuid || "", damageSuccesses: Number(damageResult.successes || 0), damageType: weapon.damageType || "bashing", damageTypeLabel } }
+      flags: { "vtm-revised": { type: "weaponDamage", actorId: this.actor.id, itemId: item.id, targetActorUuid: options.targetActor?.uuid || "", targetActorName: options.targetActor?.name || "", weaponCategory: weapon.category || "", damageSuccesses: Number(damageResult.successes || 0), damageType: weapon.damageType || "bashing", damageTypeLabel } }
     });
     return { attackResult, defenseResult, netAttackSuccesses, damageResult };
   }
@@ -1368,18 +1350,21 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   }
 
   async _rollTargetDefense(actor, type = "dodge") {
+    if (!canManageTarget(actor)) return null;
     const ability = type === "parry" ? "skills.melee" : type === "block" ? "talents.brawl" : "talents.dodge";
     const labels = { dodge: "Уклонение", parry: "Парирование", block: "Блок" };
     const dexterity = this._actorTraitValue(actor, "attributes.physical.dexterity");
     const abilityValue = this._actorTraitValue(actor, `abilities.${ability}.value`);
-    const health = this._actorHealthPenalty(actor);
+    const health = actor === this.actor ? this._resolveHealthPenalty() : this._actorHealthPenalty(actor);
     if (health.incapacitated) return { successes: 0, botch: false };
-    const basePool = Math.max(1, dexterity + abilityValue);
+    const basePool = dexterity + abilityValue;
     const armor = actor.system?.automation?.armor ?? {};
     const armorPenalty = armor.active ? Math.max(0, Number(armor.dexterityPenalty || 0)) : 0;
     const status = statusRollModifier(actor, { physical: true });
+    const pool = basePool + health.value - armorPenalty + status.dice;
+    if (pool <= 0) return { successes: 0, botch: false };
     return rollDicePool({
-      actor, pool: Math.max(1, basePool + health.value - armorPenalty + status.dice), basePool,
+      actor, pool, basePool,
       healthPenalty: health.value, healthPenaltyLabel: health.label, difficulty: 6,
       label: `${labels[type] || labels.dodge}: ${actor.name}`,
       components: [{ label: "Ловкость", value: dexterity }, { label: labels[type] || labels.dodge, value: abilityValue }, ...(armorPenalty ? [{ label: "Штраф брони", value: -armorPenalty }] : []), ...(status.dice ? [{ label: status.label, value: status.dice }] : [])]
@@ -1734,7 +1719,7 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     let entry = (DEMON_CATALOGS[catalog] ?? []).find(item => item.key === key);
     if (!entry && catalog === "backgrounds") {
       const row = buildBackgroundRows(this.actor.system ?? {}).find(item => item.key === key);
-      if (row) entry = { key, label: row.label, summary: row.hint };
+      if (row) entry = { key, label: row.label, summary: row.summary || row.hint };
     }
     if (!entry && catalog === "lores") {
       const row = buildLoreRows(this.actor.system ?? {}).find(item => item.key === key);
@@ -1756,11 +1741,11 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       : "";
 
     const mechanics = entry.mechanics
-      ? `<section><h3>Механика</h3><p>${escape(entry.mechanics)}</p></section>`
+      ? `<section><h3>Механика</h3><p style="white-space:pre-line">${escape(entry.mechanics)}</p></section>`
       : "";
 
     const powers = Array.isArray(entry.powers) && entry.powers.length
-      ? `<section class="demon-reference-powers"><h3>Обращения</h3><ol>${entry.powers.map(power => `<li><div class="demon-reference-power-title"><strong>${"●".repeat(Number(power.level) || 1)}</strong> ${escape(power.name)}</div>${power.description ? `<p>${escape(power.description)}</p>` : ""}${power.system ? `<p><b>Система:</b> ${escape(power.system)}</p>` : ""}${power.torment ? `<p class="demon-reference-torment"><b>Высокая Мука:</b> ${escape(power.torment)}</p>` : ""}</li>`).join("")}</ol></section>`
+      ? `<section class="demon-reference-powers"><h3>Обращения</h3><ol>${entry.powers.map(power => `<li><div class="demon-reference-power-title"><strong>${"●".repeat(Number(power.level) || 1)}</strong> ${escape(power.name)}</div>${power.description ? `<p style="white-space:pre-line">${escape(power.description)}</p>` : ""}${power.system ? `<p style="white-space:pre-line">${/^Система\s*:/i.test(power.system) ? "" : "<b>Система:</b> "}${escape(power.system)}</p>` : ""}${power.torment ? `<p class="demon-reference-torment" style="white-space:pre-line">${/^Мука\s*:/i.test(power.torment) ? "" : "<b>Высокая Мука:</b> "}${escape(power.torment)}</p>` : ""}</li>`).join("")}</ol></section>`
       : "";
 
     const source = /^https:\/\/wod\.su\//.test(String(entry.sourceUrl || ""))
@@ -1777,10 +1762,10 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
         ${tags}
 
-        <section>
+        ${entry.summary ? `<section>
           <h3>Описание</h3>
-          <p>${escape(entry.summary || "Описание пока не заполнено.")}</p>
-        </section>
+          <p style="white-space:pre-line">${escape(entry.summary)}</p>
+        </section>` : ""}
 
         ${mechanics}
         ${powers}
@@ -2330,23 +2315,7 @@ export class DemonActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   }
 
   async _rollApocalypticInitiative() {
-    const summary = getActiveDemonFormSummary(this.actor);
-    const dexterity = numberValue(this.actor.system?.attributes?.physical?.dexterity, 0);
-    const wits = numberValue(this.actor.system?.attributes?.mental?.wits, 0);
-    const bonus = Number(summary.initiative || 0);
-    const roll = await new Roll("1d10").evaluate({ async: true });
-    const total = Number(roll.total || 0) + dexterity + wits + bonus;
-    const tokens = this.actor.getActiveTokens?.(true, true) ?? [];
-    const token = tokens.find(entry => entry.controlled) ?? tokens[0];
-    if (token) {
-      let combat = game.combat;
-      if (!combat) combat = await Combat.create({ scene: canvas.scene.id, active: true });
-      let combatant = combat.combatants.find(entry => entry.tokenId === token.id);
-      if (!combatant) [combatant] = await combat.createEmbeddedDocuments("Combatant", [{ tokenId: token.id, actorId: this.actor.id, sceneId: canvas.scene.id }]);
-      await combat.setInitiative(combatant.id, total);
-    }
-    await roll.toMessage({ speaker: ChatMessage.getSpeaker({ actor: this.actor, token: token?.document }), flavor: `Инициатива: ${total} (Ловкость ${dexterity} + Сообразительность ${wits}${bonus ? ` + форма ${bonus}` : ""})` });
-    return total;
+    return rollActorInitiative(this.actor);
   }
 
   async _buyApocalypticExtraAction() {

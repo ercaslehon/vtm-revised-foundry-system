@@ -2,6 +2,8 @@ import { rollDicePool } from "../dice/dice-pool.mjs";
 import { activeAutomationRollModifier } from "../utils/active-automation-effects.mjs";
 import { VTM_REVISED } from "../config.mjs";
 import { applyAutomationCost, normalizeAutomationCost } from "../utils/automation-costs.mjs";
+import { resolveReferenceItem } from "../import/catalog-reference-view.mjs";
+import { buildSystemData } from "../import/rules-json-importer.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 const DialogV1 = foundry.appv1?.api?.Dialog ?? globalThis.Dialog;
@@ -89,7 +91,7 @@ export class VTMRitualCard extends HandlebarsApplicationMixin(ApplicationV2) {
     const libraryRitual = [...actorItems, ...worldItems]
       .find(item => item !== this.ritual && matchRitualItem(item, this.ritual));
 
-    const source = libraryRitual ?? this.ritual;
+    const source = await resolveReferenceItem(libraryRitual ?? this.ritual, worldItems, buildSystemData);
     const embeddedRitual = this.ritual?.parent === this.actor ? this.ritual : null;
     const system = source?.system ?? {};
     const embeddedSystem = embeddedRitual?.system ?? {};
@@ -125,22 +127,12 @@ export class VTMRitualCard extends HandlebarsApplicationMixin(ApplicationV2) {
       failure: interpolateText(mechanics.failure || "", { actor: this.actor, ritual: source }),
       botch: interpolateText(mechanics.botch || "", { actor: this.actor, ritual: source }),
       automationNotes: interpolateText(mechanics.automationNotes || "", { actor: this.actor, ritual: source }),
-      auditStatus: audit.status || "draft",
-      auditStatusLabel: this._auditStatusLabel(audit.status || "draft"),
-      auditNotes: audit.notes || "",
       sourceUrl: audit.sourceUrl || automation?.source?.url || "",
       sourceBook: audit.sourceBook || "",
       sourcePage: audit.sourcePage || automation?.source?.page || "",
       canUse: Boolean(this.actor?.isOwner),
       editable: Boolean(this.ritual?.isOwner)
     };
-  }
-
-  _auditStatusLabel(status = "draft") {
-    const key = String(status || "draft").trim().toLowerCase();
-    if (key === "verified") return "Проверено";
-    if (key === "needs-review") return "Требует проверки";
-    return "Черновик";
   }
 
   _onRender(context, options) {

@@ -673,7 +673,20 @@
       "Reset": "Сбросить портрет",
       "SyncToken": "Скопировать портрет в прототип токена",
       "TokenSynced": "Портрет скопирован в прототип токена.",
-      "Updated": "Портрет обновлён: {path}"
+      "Updated": "Портрет обновлён: {path}",
+      "Primary": "Основной портрет",
+      "Previous": "Предыдущее изображение",
+      "Next": "Следующее изображение",
+      "Add": "Добавить изображение",
+      "AddFolder": "Добавить изображения из папки",
+      "Remove": "Убрать изображение из галереи (файл сохранится)",
+      "Share": "Показать игрокам",
+      "ShareSelected": "Показать выбранным",
+      "Recipients": "Кому показать текущее изображение?",
+      "ViewerTitle": "Изображение",
+      "NoPlayers": "Нет подключённых игроков.",
+      "NoRecipients": "Не выбран ни один подключённый игрок.",
+      "Added": "Добавлено изображений: {count}."
     },
     "Profile": {
       "Age": "Возраст",
@@ -1044,5 +1057,18 @@
     "Sheet": {
       "Demon": "Демон: Падшие"
     }
-  }
+  },
+  "VTM_REVISED.Portrait.Primary": "Основной портрет",
+  "VTM_REVISED.Portrait.Previous": "Предыдущее изображение",
+  "VTM_REVISED.Portrait.Next": "Следующее изображение",
+  "VTM_REVISED.Portrait.Add": "Добавить изображение",
+  "VTM_REVISED.Portrait.AddFolder": "Добавить изображения из папки",
+  "VTM_REVISED.Portrait.Remove": "Убрать изображение из галереи (файл сохранится)",
+  "VTM_REVISED.Portrait.Share": "Показать игрокам",
+  "VTM_REVISED.Portrait.ShareSelected": "Показать выбранным",
+  "VTM_REVISED.Portrait.Recipients": "Кому показать текущее изображение?",
+  "VTM_REVISED.Portrait.ViewerTitle": "Изображение",
+  "VTM_REVISED.Portrait.NoPlayers": "Нет подключённых игроков.",
+  "VTM_REVISED.Portrait.NoRecipients": "Не выбран ни один подключённый игрок.",
+  "VTM_REVISED.Portrait.Added": "Добавлено изображений: {count}."
 }

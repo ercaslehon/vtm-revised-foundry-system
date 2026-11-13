@@ -1,3 +1,9 @@
+import { rollActorInitiative } from "../combat/tokenless-combat.mjs";
+import { bindInitiativeControls } from "../combat/initiative-dock.mjs";
+import { finishAutomaticAttack } from "../combat/automatic-resolution.mjs";
+import { openWeaponAttackDialog } from "../combat/weapon-attack-dialog.mjs";
+import { canManageTarget } from "../combat/combat-targets.mjs";
+import { healthKeys, healthPenalty, healthCondition, editHealth, planHealing, CONDITION_LABELS } from "../combat/vampire-health.mjs";
 import { rollDicePool } from "../dice/dice-pool.mjs";
 import { VTM_REVISED } from "../config.mjs";
 import { applyAutomationCost, normalizeAutomationCost } from "../utils/automation-costs.mjs";
@@ -15,6 +21,7 @@ import { VTMCharacterCreationWizard } from "../apps/character-creation-wizard.mj
 import { enhanceActorRollSearchSelects } from "../ui/actor-roll-search-select.mjs";
 import { advancementCost } from "../utils/advancement-costs.mjs";
 import { activateTraitReferenceButtons } from "../data/trait-reference.mjs";
+import { actorPortraits, portraitState, cyclePortrait, addActorPortraits, replaceActorPortrait, removeActorPortrait, isPortraitImage, createPortraitPopout, sharePortraitWithUsers } from "../utils/portrait-gallery.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const ActorSheetV2 = foundry.applications.sheets.ActorSheetV2;
@@ -213,35 +220,28 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
       out: "background: radial-gradient(circle at 14% 10%, rgba(150, 0, 30, 0.48), transparent 52%), linear-gradient(180deg, rgba(48, 0, 8, 1), rgba(8, 0, 2, 1)) !important; border-color: rgba(180, 20, 45, 1) !important; box-shadow: inset 0 0 0 1px rgba(220, 60, 80, 0.16), 0 0 18px rgba(120, 0, 24, 0.44) !important;"
     };
 
-    const healthRows = VTM_REVISED.healthLevels.map(key => {
-      const penalty = VTM_REVISED.healthPenalties[key] ?? "";
+    const healthRows = healthKeys(actor).map(key => {
+      const penalty = VTM_REVISED.healthPenalties[key] ?? "0";
       const penaltyLabel = penalty === "out"
         ? game.i18n.localize("VTM_REVISED.HealthPenalty.out")
         : game.i18n.format("VTM_REVISED.HealthPenalty.dice", { penalty });
 
       const rawDamageState = Number(actor.system?.health?.[key] || 0);
-      const isIncapacitated = key === "incapacitated";
-      const damageState = isIncapacitated
-        ? (rawDamageState > 0 ? 1 : 0)
-        : Math.max(0, Math.min(3, Number.isFinite(rawDamageState) ? Math.trunc(rawDamageState) : 0));
-      const damageLabel = isIncapacitated
-        ? (damageState > 0 ? game.i18n.localize("VTM_REVISED.HealthPenalty.out") : healthDamageLabels[0])
-        : (healthDamageLabels[damageState] || healthDamageLabels[0]);
-      const damageType = isIncapacitated
-        ? (damageState > 0 ? "out" : "none")
-        : (healthDamageTypes[damageState] || healthDamageTypes[0]);
+      const damageState = Math.max(0, Math.min(3, Number.isFinite(rawDamageState) ? Math.trunc(rawDamageState) : 0));
+      const damageLabel = healthDamageLabels[damageState] || healthDamageLabels[0];
+      const damageType = healthDamageTypes[damageState] || healthDamageTypes[0];
 
       return {
         key,
-        label: game.i18n.localize(`VTM_REVISED.Health.${key}`),
+        label: key === "extraBruised" ? "Дополнительный уровень · Огромные размеры" : game.i18n.localize(`VTM_REVISED.Health.${key}`),
         penalty,
         penaltyLabel,
         damageState,
         damageType,
         damageLabel,
         damageTitle: `${damageLabel}. Нажми, чтобы изменить тип урона.`,
-        damageStyle: isIncapacitated && damageState > 0 ? healthDamageStyles.out : (healthDamageStyles[damageState] || healthDamageStyles[0]),
-        showDamageLabel: !isIncapacitated && damageState > 0,
+        damageStyle: healthDamageStyles[damageState] || healthDamageStyles[0],
+        showDamageLabel: damageState > 0,
         checked: damageState > 0
       };
     });
@@ -252,6 +252,8 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
       document: actor,
       system: actor.system,
       editable: this.isEditable,
+      portraitGallery: this._portraitGalleryState(),
+      canSharePortrait: Boolean(game.user?.isGM),
       cssClass: "vtm-revised sheet actor vampire",
       config: VTM_REVISED,
       clanOptionGroups,
@@ -270,6 +272,8 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
       abilityGroups: VTM_REVISED.abilityCategories,
       healthLevels: VTM_REVISED.healthLevels,
       healthRows,
+      healthConditionLabel: healthCondition(actor) === "finalDeath" ? "Смерть" : CONDITION_LABELS[healthCondition(actor)],
+      canManageHealth: Boolean(actor.isOwner || game.user?.isGM),
       activeHealthPenalty: this._resolveHealthPenalty(),
       generationCaps,
       traitPips,
@@ -348,6 +352,7 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
   _onRender(context, options) {
     super._onRender(context, options);
     const element = this.element;
+    bindInitiativeControls(element, this.actor);
     if (!element) return;
     activateTraitReferenceButtons(element);
     enhanceActorRollSearchSelects(element);
@@ -412,6 +417,17 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
       });
     });
 
+    element.querySelectorAll(".actor-portrait-cycle").forEach(button => {
+      button.addEventListener("click", async event => {
+        event.preventDefault();
+        await this._cycleActorPortrait(Number(button.dataset.delta));
+      });
+    });
+    element.querySelector(".actor-portrait-share")?.addEventListener("click", async event => {
+      event.preventDefault();
+      await this._shareActorPortrait();
+    });
+
     if (!this.isEditable) return;
 
     element.querySelectorAll(".trait-value-input").forEach(input => {
@@ -437,10 +453,19 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
       });
     });
 
+    element.querySelector(".actor-portrait-add")?.addEventListener("click", async event => {
+      event.preventDefault();
+      await this._openActorPortraitPicker({ add: true });
+    });
+    element.querySelector(".actor-portrait-add-folder")?.addEventListener("click", async event => {
+      event.preventDefault();
+      await this._openActorPortraitPicker({ add: true, folder: true });
+    });
+
     element.querySelectorAll(".actor-portrait-reset").forEach(button => {
       button.addEventListener("click", async event => {
         event.preventDefault();
-        await this._setActorPortrait("icons/svg/mystery-man.svg", { notify: true });
+        await this._resetActorPortrait();
       });
     });
 
@@ -529,7 +554,7 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
         await clearAutomationEffects(this.actor, button.dataset.scope || "all");
       });
     });
-    element.querySelectorAll(".vtm-status-toggle").forEach(button => {
+    element.querySelectorAll(".vtm-status-toggle[data-status-id]").forEach(button => {
       button.addEventListener("click", async event => {
         event.preventDefault();
         const id = button.dataset.statusId;
@@ -633,6 +658,19 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
       });
     });
 
+    element.querySelector(".vampire-health-condition")?.addEventListener("click", async event => {
+      event.preventDefault();
+      if (!this.actor.isOwner && !game.user.isGM) return;
+      const button = event.currentTarget;
+      if (button.disabled) return;
+      button.disabled = true;
+      try {
+        const conditions = ["active", "torpor", "finalDeath"];
+        const current = conditions.indexOf(healthCondition(this.actor));
+        await this.actor.update({ "system.health.condition": conditions[(current + 1) % conditions.length] });
+      } finally { button.disabled = false; }
+    });
+
     element.querySelectorAll(".health-row[data-health]").forEach(row => {
       row.addEventListener("click", async event => {
         event.preventDefault();
@@ -640,17 +678,9 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
         if (!key) return;
 
         const current = Number(this.actor.system?.health?.[key] || 0);
-        const isIncapacitated = key === "incapacitated";
-
-        const safeCurrent = isIncapacitated
-          ? (current > 0 ? 1 : 0)
-          : (Number.isFinite(current) ? Math.max(0, Math.min(3, Math.trunc(current))) : 0);
-
-        const next = isIncapacitated
-          ? (safeCurrent > 0 ? 0 : 1)
-          : (safeCurrent >= 3 ? 0 : safeCurrent + 1);
-
-        await this.actor.update({ [`system.health.${key}`]: next });
+        if (!this.actor.isOwner) return;
+        const next = current >= 3 ? 0 : current + 1;
+        await this.actor.update(editHealth(this.actor, key, next));
       });
     });
 
@@ -1112,89 +1142,117 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
   }
 
 
+  _portraitGalleryEntries() {
+    return actorPortraits(this.actor, {
+      includeAdditional: Boolean(game.user?.isGM || this.actor.isOwner),
+      primaryLabel: game.i18n.localize("VTM_REVISED.Portrait.Primary")
+    });
+  }
+
+  _portraitGalleryState() {
+    return portraitState(this._portraitGalleryEntries(), this._selectedPortraitId);
+  }
+
+  async _cycleActorPortrait(delta) {
+    this._selectedPortraitId = cyclePortrait(this._portraitGalleryEntries(), this._selectedPortraitId, delta);
+    await this.render({ force: true });
+  }
+
   async _openActorPortraitViewer() {
-    const image = this.actor.img || this.actor.system?.profile?.avatar || "icons/svg/mystery-man.svg";
-    const title = this.actor.name || game.i18n.localize("TYPES.Actor.vampire");
-
-    const ImagePopoutClass = foundry.applications?.apps?.ImagePopout?.implementation
-      ?? foundry.applications?.apps?.ImagePopout
-      ?? globalThis.ImagePopout;
-
-    if (ImagePopoutClass) {
-      try {
-        return new ImagePopoutClass(image, {
-          title,
-          uuid: this.actor.uuid,
-          shareable: false
-        }).render(true);
-      } catch (error) {
-        console.warn("VTM Revised | ImagePopout failed, falling back to dialog.", error);
-      }
-    }
-
-    const escapedSrc = foundry.utils.escapeHTML(image);
-    const escapedTitle = foundry.utils.escapeHTML(title);
-    const content = `
-      <div class="vtm-portrait-viewer">
-        <img src="${escapedSrc}" alt="${escapedTitle}" />
-      </div>`;
-
-    return new DialogV1({
-      title,
-      content,
-      buttons: {
-        close: {
-          icon: '<i class="fas fa-xmark"></i>',
-          label: game.i18n.localize("Close")
-        }
-      },
-      default: "close"
-    }, {
-      width: 720,
-      height: "auto",
-      classes: ["vtm-revised", "vtm-portrait-viewer-dialog"]
+    const portrait = this._portraitGalleryState();
+    return createPortraitPopout(portrait.src, {
+      title: game.i18n.localize("VTM_REVISED.Portrait.ViewerTitle"), uuid: this.actor.uuid
     }).render(true);
   }
 
+  async _shareActorPortrait() {
+    if (!game.user?.isGM) return;
+    const players = game.users.filter(user => user.active && !user.isGM);
+    if (!players.length) {
+      ui.notifications?.warn?.(game.i18n.localize("VTM_REVISED.Portrait.NoPlayers"));
+      return;
+    }
+    // Capture this exact frame: later browsing must not change a pending share dialog.
+    const portrait = this._portraitGalleryState();
+    const escape = foundry.utils.escapeHTML;
+    const choices = players.map(user => `<label class="vtm-portrait-recipient"><input type="checkbox" name="recipient" value="${escape(user.id)}" checked> ${escape(user.name)}</label>`).join("");
+    return new DialogV1({
+      title: game.i18n.localize("VTM_REVISED.Portrait.Share"),
+      content: `<form><p>${escape(game.i18n.localize("VTM_REVISED.Portrait.Recipients"))}</p>${choices}</form>`,
+      buttons: {
+        show: {
+          icon: '<i class="fas fa-eye"></i>', label: game.i18n.localize("VTM_REVISED.Portrait.ShareSelected"),
+          callback: html => {
+            const root = html?.[0] ?? html;
+            const ids = [...root.querySelectorAll('input[name="recipient"]:checked')].map(input => input.value);
+            if (!sharePortraitWithUsers(portrait.src, ids, {
+              uuid: this.actor.uuid, title: game.i18n.localize("VTM_REVISED.Portrait.ViewerTitle")
+            })) ui.notifications?.warn?.(game.i18n.localize("VTM_REVISED.Portrait.NoRecipients"));
+          }
+        },
+        cancel: { label: game.i18n.localize("Cancel") }
+      },
+      default: "show"
+    }, { width: 360 }).render(true);
+  }
 
-  async _openActorPortraitPicker() {
+  async _openActorPortraitPicker({ add = false, folder = false } = {}) {
+    if (!this.isEditable) return;
     const FilePickerClass = foundry.applications?.apps?.FilePicker?.implementation
-      ?? foundry.applications?.apps?.FilePicker
-      ?? globalThis.FilePicker;
-
+      ?? foundry.applications?.apps?.FilePicker ?? globalThis.FilePicker;
     if (!FilePickerClass) {
       ui.notifications?.warn?.(game.i18n.localize("VTM_REVISED.Portrait.NoFilePicker"));
       return;
     }
-
-    const current = this.actor.img || this.actor.system?.profile?.avatar || "icons/svg/mystery-man.svg";
+    const selected = this._portraitGalleryState();
     const picker = new FilePickerClass({
-      type: "image",
-      current,
+      type: folder ? "folder" : "image",
+      current: selected.src,
       document: this.actor,
-      callback: async path => this._setActorPortrait(path, { notify: true }),
-      position: {
-        top: (this.position?.top ?? 100) + 40,
-        left: (this.position?.left ?? 100) + 10
-      }
+      callback: async (path, browser) => {
+        try {
+          if (!add) return await this._setActorPortrait(path, { notify: true, id: selected.id });
+          let paths = [path];
+          if (folder) {
+            const source = browser?.activeSource ?? "data";
+            const bucket = browser?.sources?.[source]?.bucket;
+            const listing = await FilePickerClass.browse(source, path, bucket ? { bucket } : {});
+            paths = (listing.files ?? []).filter(isPortraitImage).sort((a, b) => a.localeCompare(b, "ru", { numeric: true }));
+          }
+          const added = await addActorPortraits(this.actor, paths);
+          if (added.length) this._selectedPortraitId = added[0].id;
+          await this.render({ force: true });
+          ui.notifications?.info?.(game.i18n.format("VTM_REVISED.Portrait.Added", { count: added.length }));
+        } catch (error) {
+          ui.notifications?.error?.(error.message);
+        }
+      },
+      position: { top: (this.position?.top ?? 100) + 40, left: (this.position?.left ?? 100) + 10 }
     });
-
-    if (typeof picker.browse === "function") await picker.browse(current);
-    else if (typeof picker.render === "function") picker.render(true);
+    if (typeof picker.browse === "function") await picker.browse();
+    else picker.render(true);
   }
 
-  async _setActorPortrait(path, { notify = false } = {}) {
-    const image = String(path || "icons/svg/mystery-man.svg").trim() || "icons/svg/mystery-man.svg";
-    await this.actor.update({
-      img: image,
-      "system.profile.avatar": image
-    });
+  async _setActorPortrait(path, { notify = false, id = this._portraitGalleryState().id } = {}) {
+    if (!this.isEditable) return;
+    const image = String(path || "icons/svg/mystery-man.svg").trim();
+    await replaceActorPortrait(this.actor, id, image);
     if (notify) ui.notifications?.info?.(game.i18n.format("VTM_REVISED.Portrait.Updated", { path: image }));
     return image;
   }
 
+  async _resetActorPortrait() {
+    if (!this.isEditable) return;
+    const portrait = this._portraitGalleryState();
+    if (portrait.primary) return this._setActorPortrait("icons/svg/mystery-man.svg", { notify: true });
+    await removeActorPortrait(this.actor, portrait.id);
+    this._selectedPortraitId = "primary";
+    await this.render({ force: true });
+  }
+
   async _syncPrototypeTokenImage() {
-    const image = this.actor.img || this.actor.system?.profile?.avatar || "icons/svg/mystery-man.svg";
+    if (!this.isEditable) return;
+    const image = this._portraitGalleryState().src;
     await this.actor.update({ "prototypeToken.texture.src": image });
     ui.notifications?.info?.(game.i18n.localize("VTM_REVISED.Portrait.TokenSynced"));
     return image;
@@ -1848,74 +1906,7 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
   }
 
   async _useWeapon(item) {
-    const weapon = item.system?.weapon ?? {};
-    const attackFirst = weapon.attackFirstTrait || "attribute.physical.dexterity";
-    const attackSecond = weapon.attackSecondTrait || (weapon.category === "firearm" ? "ability.skills.firearms" : "ability.skills.melee");
-    const defaultDifficulty = Number(weapon.difficulty || 6);
-    const damageDifficulty = Number(weapon.damageDifficulty || 6);
-    const target = this._selectedCombatTargetActor({ notify: false });
-
-    const content = `
-      <form class="vtm-weapon-attack-dialog">
-        <p><strong>${foundry.utils.escapeHTML(item.name)}</strong></p>
-        <p class="muted">Цель: <strong>${foundry.utils.escapeHTML(target?.name || "не выбрана")}</strong></p>
-        <div class="form-group">
-          <label>${game.i18n.localize("VTM_REVISED.Roll.FirstTrait")}</label>
-          ${this._buildRollSelectHtml("firstTrait", attackFirst, false)}
-        </div>
-        <div class="form-group">
-          <label>${game.i18n.localize("VTM_REVISED.Roll.SecondTrait")}</label>
-          ${this._buildRollSelectHtml("secondTrait", attackSecond, true)}
-        </div>
-        <div class="grid grid-2">
-          <label>${game.i18n.localize("VTM_REVISED.Roll.Difficulty")}
-            <input type="number" name="difficulty" min="2" max="10" value="${defaultDifficulty}"/>
-          </label>
-          <label>${game.i18n.localize("VTM_REVISED.Weapon.DamageDifficulty")}
-            <input type="number" name="damageDifficulty" min="2" max="10" value="${damageDifficulty}"/>
-          </label>
-        </div>
-        <div class="form-group">
-          <label><input type="checkbox" name="useDefense" ${target ? "checked" : "disabled"}/> Активная защита цели</label>
-          <select name="defenseType" ${target ? "" : "disabled"}>
-            <option value="dodge">Уклонение: Ловкость + Уклонение</option>
-            <option value="parry">Парирование: Ловкость + Холодное оружие</option>
-            <option value="block">Блок: Ловкость + Драка</option>
-          </select>
-        </div>
-        <p class="muted">${game.i18n.format("VTM_REVISED.Weapon.DamagePreview", { damage: this._weaponDamageLabel(item) })}</p>
-      </form>`;
-
-    return new Promise(resolve => {
-      new DialogV1({
-        title: game.i18n.format("VTM_REVISED.Weapon.AttackWith", { name: item.name }),
-        content,
-        buttons: {
-          attack: {
-            icon: '<i class="fas fa-dice-d10"></i>',
-            label: game.i18n.localize("VTM_REVISED.Weapon.AttackAndDamage"),
-            callback: async html => {
-              const form = this._getFormElement(html);
-              await this._rollWeaponAttackAndDamage(item, {
-                firstTrait: form?.querySelector("[name='firstTrait']")?.value || attackFirst,
-                secondTrait: form?.querySelector("[name='secondTrait']")?.value || attackSecond,
-                difficulty: Number(form?.querySelector("[name='difficulty']")?.value || defaultDifficulty),
-                damageDifficulty: Number(form?.querySelector("[name='damageDifficulty']")?.value || damageDifficulty),
-                targetActor: target,
-                defenseType: form?.querySelector("[name='useDefense']")?.checked ? form?.querySelector("[name='defenseType']")?.value : ""
-              });
-              resolve(true);
-            }
-          },
-          cancel: {
-            label: game.i18n.localize("Cancel"),
-            callback: () => resolve(false)
-          }
-        },
-        default: "attack",
-        close: () => resolve(false)
-      }, { width: 520 }).render(true);
-    });
+    return openWeaponAttackDialog(this, item);
   }
 
   async _useCombatManeuver(key = "punch") {
@@ -1948,12 +1939,13 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
     }
 
     const components = [first, second].filter(Boolean);
-    const basePool = Math.max(1, components.reduce((total, component) => total + Number(component.value || 0), 0));
+    const basePool = components.reduce((total, component) => total + Number(component.value || 0), 0);
     const armorPenalty = this._armorDexterityPenalty(this.actor);
     const statusModifier = statusRollModifier(this.actor, { physical: true });
     const activeModifier = activeAutomationRollModifier(this.actor, [options.firstTrait, options.secondTrait]);
     const multiplePenalty = await this._consumeMultipleAction();
-    const attackPool = Math.max(1, basePool + healthPenalty.value - armorPenalty + statusModifier.dice + activeModifier.dice - multiplePenalty);
+    const attackPool = basePool + healthPenalty.value - armorPenalty + statusModifier.dice + activeModifier.dice - multiplePenalty;
+    if (attackPool <= 0) { ui.notifications?.warn?.("После штрафов нет кубиков для атаки."); return; }
     const attackResult = await rollDicePool({
       actor: this.actor,
       pool: attackPool,
@@ -1965,12 +1957,13 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
       components: [...components, ...(armorPenalty ? [{ label: "Штраф брони", value: -armorPenalty }] : []), ...(statusModifier.dice ? [{ label: statusModifier.label, value: statusModifier.dice }] : []), ...activeModifier.effects.map(effect => ({ label: effect.name, value: Number(effect.diceModifier || effect.difficultyModifier || 0) })), ...(multiplePenalty ? [{ label: "Множественные действия", value: -multiplePenalty }] : [])]
     });
 
-    const defenseResult = options.targetActor && options.defenseType
-      ? await this._rollTargetDefense(options.targetActor, options.defenseType)
+    const defenseResult = attackResult.successes > 0 && options.targetActor && options.defenseType
+      ? await (options.automateTarget ? options.targetActor.sheet : this)._rollTargetDefense(options.targetActor, options.defenseType)
       : null;
     const netAttackSuccesses = calculateNetAttackSuccesses(attackResult.successes, defenseResult?.successes);
 
     if (attackResult.botch || netAttackSuccesses <= 0) {
+      if (options.automateTarget) return finishAutomaticAttack({ actor: this.actor, item, options, attackResult, defenseResult });
       ui.notifications?.warn?.(game.i18n.format("VTM_REVISED.Weapon.AttackMissed", { name: item.name }));
       if (defenseResult) await ChatMessage.create({
         speaker: ChatMessage.getSpeaker({ actor: options.targetActor }),
@@ -1991,6 +1984,7 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
     ];
 
     const damageResult = await rollDicePool({
+      rollKind: "damage",
       actor: this.actor,
       pool: damagePool,
       basePool: damagePool,
@@ -2002,11 +1996,13 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
       components: damageComponents
     });
 
-    await this._createWeaponDamageSummary({ item, weapon, attackResult, defenseResult, netAttackSuccesses, damageResult, extraSuccesses, damagePool, damageTypeLabel });
+    if (options.automateTarget) return finishAutomaticAttack({ actor: this.actor, item, options, attackResult, defenseResult, damageResult });
+
+    await this._createWeaponDamageSummary({ item, weapon, attackResult, defenseResult, netAttackSuccesses, damageResult, extraSuccesses, damagePool, damageTypeLabel, targetActorUuid: options.targetActor?.uuid, targetActorName: options.targetActor?.name });
     return { attackResult, damageResult };
   }
 
-  async _createWeaponDamageSummary({ item, weapon, attackResult, defenseResult, netAttackSuccesses, damageResult, extraSuccesses, damagePool, damageTypeLabel }) {
+  async _createWeaponDamageSummary({ item, weapon, attackResult, defenseResult, netAttackSuccesses, damageResult, extraSuccesses, damagePool, damageTypeLabel, targetActorUuid, targetActorName }) {
     const renderTemplate = foundry.applications?.handlebars?.renderTemplate ?? globalThis.renderTemplate;
     const content = await renderTemplate("systems/vtm-revised/templates/chat/weapon-damage-card.hbs", {
       actor: this.actor,
@@ -2020,13 +2016,15 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
       damagePool,
       damageSuccesses: damageResult.successes,
       damageTypeLabel,
+      targetActorName,
       soakHint: this._soakHint(weapon.damageType)
     });
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
       content,
       flags: { "vtm-revised": {
-        type: "weaponDamage", actorId: this.actor.id, itemId: item.id,
+        type: "weaponDamage", targetActorUuid: targetActorUuid ?? null, targetActorName: targetActorName ?? "", actorId: this.actor.id, itemId: item.id,
+        weaponCategory: weapon.category || "",
         damageSuccesses: Number(damageResult.successes || 0), damageType: weapon.damageType || "bashing", damageTypeLabel
       } }
     });
@@ -2055,26 +2053,28 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
   }
 
   _actorHealthPenalty(actor) {
-    const health = actor.system?.health ?? {};
-    const key = [...VTM_REVISED.healthLevels].reverse().find(entry => Number(health[entry] || 0) > 0);
-    if (!key || actor.system?.automation?.frenzy) return { value: 0, incapacitated: false, label: "" };
-    const penalty = VTM_REVISED.healthPenalties[key] ?? 0;
-    return { value: penalty === "out" ? 0 : Number(penalty || 0), incapacitated: penalty === "out", label: game.i18n.localize(`VTM_REVISED.Health.${key}`) };
+    const result = healthPenalty(actor);
+    return { ...result, label: result.condition !== "active" ? CONDITION_LABELS[result.condition]
+      : result.key === "healthy" ? game.i18n.localize("VTM_REVISED.HealthPenalty.none")
+      : game.i18n.localize(`VTM_REVISED.Health.${result.key === "extraBruised" ? "bruised" : result.key}`) };
   }
 
   async _rollTargetDefense(actor, type = "dodge") {
+    if (!canManageTarget(actor)) return null;
     const ability = type === "parry" ? "skills.melee" : type === "block" ? "talents.brawl" : "talents.dodge";
     const labels = { dodge: "Уклонение", parry: "Парирование", block: "Блок" };
-    const dexterity = this._actorTraitValue(actor, "attributes.physical.dexterity");
+    const dexterity = this._actorTraitValue(actor, "attributes.physical.dexterity") + Number(actor.system?.automation?.physicalBoost?.dexterity || 0);
     const abilityValue = this._actorTraitValue(actor, `abilities.${ability}.value`);
-    const health = this._actorHealthPenalty(actor);
+    const health = actor === this.actor ? this._resolveHealthPenalty() : this._actorHealthPenalty(actor);
     if (health.incapacitated) return { successes: 0, botch: false };
-    const basePool = Math.max(1, dexterity + abilityValue);
+    const basePool = dexterity + abilityValue;
     const armorPenalty = this._armorDexterityPenalty(actor);
     const statusModifier = statusRollModifier(actor, { physical: true });
     const activeModifier = activeAutomationRollModifier(actor, ["attribute.physical.dexterity", `ability.${ability}`]);
+    const pool = basePool + health.value - armorPenalty + statusModifier.dice + activeModifier.dice;
+    if (pool <= 0) return { successes: 0, botch: false };
     return rollDicePool({
-      actor, pool: Math.max(1, basePool + health.value - armorPenalty + statusModifier.dice + activeModifier.dice), basePool,
+      actor, pool, basePool,
       healthPenalty: health.value, healthPenaltyLabel: health.label,
       label: `${labels[type] || labels.dodge}: ${actor.name}`,
       difficulty: Math.max(2, Math.min(10, 6 + activeModifier.difficulty)),
@@ -2083,22 +2083,7 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
   }
 
   async _rollCombatInitiative() {
-    const dexterity = Number(this._resolveTraitOption("attribute.physical.dexterity")?.value || 0);
-    const wits = Number(this._resolveTraitOption("attribute.mental.wits")?.value || 0);
-    const roll = await new Roll("1d10").evaluate({ async: true });
-    const total = Number(roll.total || 0) + dexterity + wits;
-    const tokens = this.actor.getActiveTokens?.(true, true) ?? [];
-    const token = tokens.find(entry => entry.controlled) ?? tokens[0];
-    if (!token) {
-      await roll.toMessage({ speaker: ChatMessage.getSpeaker({ actor: this.actor }), flavor: `Инициатива ${this.actor.name}: ${total} (1d10 + Ловкость ${dexterity} + Сообразительность ${wits})` });
-      return;
-    }
-    let combat = game.combat;
-    if (!combat) combat = await Combat.create({ scene: canvas.scene.id, active: true });
-    let combatant = combat.combatants.find(entry => entry.tokenId === token.id);
-    if (!combatant) [combatant] = await combat.createEmbeddedDocuments("Combatant", [{ tokenId: token.id, actorId: this.actor.id, sceneId: canvas.scene.id }]);
-    await combat.setInitiative(combatant.id, total);
-    await roll.toMessage({ speaker: ChatMessage.getSpeaker({ actor: this.actor, token: token.document }), flavor: `Инициатива: ${total} (Ловкость ${dexterity} + Сообразительность ${wits})` });
+    return rollActorInitiative(this.actor);
   }
 
   async _declareMultipleActions() {
@@ -2633,47 +2618,7 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
   }
 
   _resolveHealthPenalty() {
-    const health = this.actor?.system?.health ?? {};
-    const activeKey = [...VTM_REVISED.healthLevels]
-      .reverse()
-      .find(key => Number(health[key] || 0) > 0);
-
-    if (!activeKey) {
-      return {
-        key: "healthy",
-        value: 0,
-        label: game.i18n.localize("VTM_REVISED.HealthPenalty.none"),
-        incapacitated: false
-      };
-    }
-
-    const rawPenalty = VTM_REVISED.healthPenalties[activeKey] ?? 0;
-    const label = game.i18n.localize(`VTM_REVISED.Health.${activeKey}`);
-
-    if (rawPenalty === "out") {
-      return {
-        key: activeKey,
-        value: 0,
-        label,
-        incapacitated: true
-      };
-    }
-
-    if (this.actor.system?.automation?.frenzy) {
-      return {
-        key: activeKey,
-        value: 0,
-        label: `${label} · штраф игнорируется в Безумии`,
-        incapacitated: false
-      };
-    }
-
-    return {
-      key: activeKey,
-      value: Number(rawPenalty || 0),
-      label,
-      incapacitated: false
-    };
+    return this._actorHealthPenalty(this.actor);
   }
 
   _buildRollTraitOptions() {
@@ -2812,27 +2757,62 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
   }
 
   async _healWithBlood({ aggravated = false } = {}) {
-    const levels = [...VTM_REVISED.healthLevels].reverse();
-    const wanted = aggravated ? 3 : [1, 2];
-    const healthKey = levels.find(key => {
-      const damage = Number(this.actor.system?.health?.[key] || 0);
-      return aggravated ? damage === wanted : wanted.includes(damage);
-    });
-    if (!healthKey) {
-      ui.notifications?.info?.(aggravated ? "Аггравированных повреждений нет." : "Ударных или летальных повреждений нет.");
-      return false;
-    }
-    const cost = aggravated ? 5 : 1;
-    const spent = await this._spendBloodForTurn(cost, aggravated ? "Лечение аггравированного повреждения" : "Лечение повреждения", { countForTurn: !aggravated });
-    if (!spent) return false;
-    await this.actor.update({ [`system.health.${healthKey}`]: 0 });
-    const label = game.i18n.localize(`VTM_REVISED.Health.${healthKey}`);
-    await ChatMessage.create({
-      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-      content: `<article class="vtm-chat-card"><h2><i class="fas fa-heart-pulse"></i> Лечение кровью</h2><p>${foundry.utils.escapeHTML(label)}: исцелён 1 уровень ${aggravated ? "аггравированного" : "обычного"} урона.</p><p>Потрачено крови: ${cost}.${aggravated ? " Требуется полный день отдыха." : " Требуется покой и концентрация в течение хода."}</p></article>`,
-      flags: { "vtm-revised": { type: "bloodHealing", healthKey, aggravated, cost } }
-    });
-    return true;
+    if (!this.actor.isOwner || this._healingBusy) return false;
+    this._healingBusy = true;
+    try {
+      if (healthCondition(this.actor) === "finalDeath") throw new Error("Окончательная Смерть: лечение невозможно.");
+      const now = () => Number(game.time?.worldTime ?? 0);
+      const health = this.actor.system.health;
+      const ask = (title, content, choices) => new Promise(resolve => new DialogV1({ title, content,
+        buttons: { ...Object.fromEntries(choices.map(([key, label]) => [key, { label, callback: () => resolve(key) }])),
+          cancel: { label: "Отмена", callback: () => resolve(null) } }, close: () => resolve(null)
+      }, { width: 500 }).render(true));
+      let extra = false, restConfirmed = false, outcome = "success";
+      if (aggravated) {
+        const values = healthKeys(this.actor).map(key => Number(health[key] || 0));
+        if (values.some(value => value === 1 || value === 2)) throw new Error("Сначала исцели ударные и летальные раны.");
+        if (!values.includes(3)) throw new Error("Аггравированных повреждений нет.");
+        const resting = health.restStartedAt >= 0;
+        const ready = resting && now() - health.restStartedAt >= 86400;
+        const canExtra = health.restCompletedAt >= 0 && now() >= health.restCompletedAt && now() - health.restCompletedAt < 86400 && !health.extraHealingUsed;
+        const choices = resting ? [...(ready ? [["finish", "Подтверждаю день в покое · 5 крови"]] : []),
+          ...(game.user.isGM && !ready ? [["confirm", "Подтвердить полный день отдыха · 5 крови"]] : []), ["restart", "Начать отдых заново"]]
+          : [["start", "Начать полный день отдыха"], ...(canExtra ? [["extra", "Ещё 1 уровень · 5 крови и 1 Воля"]] : [])];
+        const choice = await ask("Лечение аггравированных ран", `<p>Один уровень: 5 крови и полный день отдыха. Второй после того же отдыха: ещё 5 крови и 1 Сила воли.</p><p>${resting ? `Осталось игрового времени: ${Math.max(0, Math.ceil((86400 - now() + health.restStartedAt) / 3600))} ч. Рассказчик может подтвердить отдых, если календарь игры не ведётся.` : "Начало отдыха не тратит кровь; оплата при завершении."}</p>`, choices);
+        if (!choice || !this.actor.isOwner) return false;
+        if (choice === "start" || choice === "restart") {
+          await this.actor.update({ "system.health.restStartedAt": now(), "system.health.restCompletedAt": -1, "system.health.extraHealingUsed": false });
+          ui.notifications?.info?.("Начат полный день отдыха. После него снова нажми лечение аггравированных ран.");
+          return true;
+        }
+        extra = choice === "extra";
+        restConfirmed = choice === "confirm" && game.user.isGM;
+      } else {
+        // Validate resources and a healable wound before asking for a concentration roll.
+        planHealing(this.actor);
+        const choice = await ask("Лечение кровью", "<p>1 кровь за уровень. В покое лечение занимает ход. При другом действии нужна Выносливость + Выживание, сложность 8; неудача тратит кровь, критический провал добавляет рану.</p>",
+          [["rest", "Ход в покое"], ...(!healthPenalty(this.actor).incapacitated ? [["active", "Одновременно с действием"]] : [])]);
+        if (!choice || !this.actor.isOwner) return false;
+        if (choice === "active") {
+          const penalty = this._resolveHealthPenalty();
+          if (penalty.incapacitated) throw new Error("Персонаж не может действовать.");
+          const stamina = Number(this._resolveTraitOption("attribute.physical.stamina")?.value || 0);
+          const survival = Number(this._resolveTraitOption("ability.skills.survival")?.value || 0);
+          const pool = stamina + survival + penalty.value;
+          if (pool <= 0) throw new Error("После штрафов нет кубиков для концентрации.");
+          const result = await rollDicePool({ actor: this.actor, pool, basePool: stamina + survival, healthPenalty: penalty.value,
+            difficulty: 8, label: "Лечение во время действия · концентрация" });
+          outcome = result.botch ? "botch" : result.successes > 0 ? "success" : "failure";
+        }
+      }
+      const result = planHealing(this.actor, { aggravated, extra, now: now(), restConfirmed, outcome });
+      await this.actor.update(result.update);
+      await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+        content: `<article class="vtm-chat-card"><h2>Лечение кровью</h2><p>Исцелено: ${result.healed}. Потрачено крови: ${result.cost}.${extra ? " Потрачена 1 Сила воли." : ""}${outcome === "botch" ? " Критический провал концентрации: добавлена 1 летальная рана." : ""}</p></article>`,
+        flags: { "vtm-revised": { type: "bloodHealing", aggravated, cost: result.cost, outcome } } });
+      return true;
+    } catch (error) { ui.notifications?.warn?.(error.message); return false; }
+    finally { this._healingBusy = false; }
   }
 
   async _openBloodBoostDialog() {
@@ -3041,7 +3021,7 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
     }
 
     const components = [first, second].filter(Boolean);
-    const basePool = Math.max(1, components.reduce((total, component) => total + Number(component.value || 0), 0));
+    const basePool = components.reduce((total, component) => total + Number(component.value || 0), 0);
     const healthPenalty = this._resolveHealthPenalty();
 
     if (healthPenalty.incapacitated) {
@@ -3050,7 +3030,7 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
     }
 
     const label = customLabel || components.map(component => component.label).join(" + ");
-    const pool = Math.max(1, basePool + healthPenalty.value);
+    const pool = basePool + healthPenalty.value;
     const usesStrength = [firstTraitKey, secondTraitKey].includes("attribute.physical.strength");
     const usesDexterity = [firstTraitKey, secondTraitKey].includes("attribute.physical.dexterity");
     const armorPenalty = usesDexterity ? this._armorDexterityPenalty(this.actor) : 0;
@@ -3063,9 +3043,11 @@ export class VTMVampireActorSheet extends HandlebarsApplicationMixin(ActorSheetV
     const multiplePenalty = await this._consumeMultipleAction();
     const automaticSuccesses = usesStrength ? this._disciplineRating(this.actor, ["Могущество", "Potence"]) : 0;
 
+    const finalPool = pool - armorPenalty + statusModifier.dice + activeModifier.dice + meritDice - multiplePenalty;
+    if (finalPool <= 0) { ui.notifications?.warn?.("После штрафов нет кубиков для действия."); return; }
     return rollDicePool({
       actor: this.actor,
-      pool: Math.max(1, pool - armorPenalty + statusModifier.dice + activeModifier.dice + meritDice - multiplePenalty),
+      pool: finalPool,
       basePool,
       healthPenalty: healthPenalty.value,
       healthPenaltyLabel: healthPenalty.label,

@@ -77,12 +77,10 @@
     <article class="vtm-panel source-panel">
       <h2>{{localize "VTM_REVISED.Ritual.Source"}}</h2>
       <p class="muted">
-        <span class="vtm-audit-badge audit-{{auditStatus}}">{{auditStatusLabel}}</span>
-        {{#if sourceUrl}} · {{localize "VTM_REVISED.Item.SourceUrl"}}: {{sourceUrl}}{{/if}}
+        {{#if sourceUrl}}{{localize "VTM_REVISED.Item.SourceUrl"}}: {{sourceUrl}}{{/if}}
         {{#if sourceBook}} · {{sourceBook}}{{/if}}
         {{#if sourcePage}} · стр. {{sourcePage}}{{/if}}
       </p>
-      {{#if auditNotes}}<div class="vtm-rich-text">{{{auditNotes}}}</div>{{/if}}
     </article>
   </section>
 </div>

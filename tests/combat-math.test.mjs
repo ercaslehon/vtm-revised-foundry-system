@@ -9,7 +9,7 @@ assert.equal(multipleActionPenalty(3, 1), 4);
 assert.equal(multipleActionPenalty(3, 2), 5);
 assert.equal(damageAfterSoak(5, 2), 3);
 assert.equal(damageAfterSoak(5, 2, { halveBashing: true }), 1);
-assert.equal(damageAfterSoak(2, 1, { halveBashing: true }), 1);
+assert.equal(damageAfterSoak(2, 1, { halveBashing: true }), 0);
 assert.equal(damageAfterSoak(2, 4, { halveBashing: true }), 0);
 assert.equal(demonHighTormentSlots(6), 0);
 assert.equal(demonHighTormentSlots(7), 1);

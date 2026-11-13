@@ -17,6 +17,15 @@
   </header>
 
   <section class="vtm-discipline-card-body">
+    {{#if isFortitude}}
+      <article class="vtm-panel">
+        <h2>Поглощение урона</h2>
+        <p class="muted">Ударный и летальный: Выносливость + Стойкость. Аггравированный: только Стойкость.</p>
+        <button type="button" class="discipline-fortitude-soak" {{#unless canRollFortitude}}disabled title="Нужны доступ к персонажу и изученная Стойкость"{{/unless}}>
+          <i class="fas fa-dice-d10"></i> Бросить поглощение
+        </button>
+      </article>
+    {{/if}}
     {{#if description}}
       <article class="vtm-discipline-card-description vtm-panel">
         <h2>{{localize "VTM_REVISED.Discipline.Description"}}</h2>
@@ -43,31 +52,24 @@
       {{#if hasPowers}}
         <ol class="vtm-discipline-powers">
           {{#each powers as |power|}}
-            <li class="vtm-discipline-power {{#if power.available}}is-available{{else}}is-locked{{/if}} audit-{{power.auditStatus}}">
+            <li class="vtm-discipline-power {{#if power.available}}is-available{{else}}is-locked{{/if}}">
               <header class="vtm-discipline-power-header">
                 <div>
                   <h3>{{localize "VTM_REVISED.Item.Level"}} {{#if power.levelLabel}}{{power.levelLabel}}{{else}}{{power.level}}{{/if}} · {{power.name}}</h3>
                   <p class="muted">
-                    <span class="vtm-audit-badge audit-{{power.auditStatus}}">{{power.auditStatusLabel}}</span>
                     {{#if power.available}}
-                      · {{localize "VTM_REVISED.Discipline.Available"}}
+                      {{localize "VTM_REVISED.Discipline.Available"}}
                     {{else}}
-                      · {{localize "VTM_REVISED.Discipline.Locked"}}
+                      {{localize "VTM_REVISED.Discipline.Locked"}}
                     {{/if}}
                     {{#if power.difficulty}} · {{localize "VTM_REVISED.Roll.Difficulty"}} {{power.difficulty}}{{/if}}
                     {{#if power.costText}} · {{power.costText}}{{/if}}
                   </p>
                 </div>
                 <div class="vtm-card-actions">
-                  {{#if power.canUse}}
-                    <button type="button" class="discipline-power-use" data-item-uuid="{{power.uuid}}">
-                      <i class="fas fa-bolt"></i> {{localize "VTM_REVISED.Item.Use"}}
-                    </button>
-                  {{else}}
-                    <button type="button" class="discipline-power-use" data-item-uuid="{{power.uuid}}" disabled title="{{power.useDisabledReason}}">
-                      <i class="fas fa-lock"></i> Непроверено
-                    </button>
-                  {{/if}}
+                  <button type="button" class="discipline-power-use" data-item-uuid="{{power.uuid}}" {{#unless power.canUse}}disabled title="Нет доступа к персонажу"{{/unless}}>
+                    <i class="fas fa-bolt"></i> {{localize "VTM_REVISED.Item.Use"}}
+                  </button>
                   <button type="button" class="discipline-power-edit" data-item-uuid="{{power.uuid}}">
                     <i class="fas fa-edit"></i>
                   </button>
@@ -132,9 +134,6 @@
                   <summary>Заметка по автоматизации</summary>
                   <div class="vtm-rich-text">{{{power.automationNotes}}}</div>
                 </details>
-              {{/if}}
-              {{#if power.auditNotes}}
-                <p class="muted source-line">Аудит: {{{power.auditNotes}}}</p>
               {{/if}}
               {{#if power.sourceUrl}}
                 <p class="muted source-line">{{localize "VTM_REVISED.Item.SourceUrl"}}: {{power.sourceUrl}}{{#if power.sourceBook}} · {{power.sourceBook}}{{/if}}{{#if power.sourcePage}} · стр. {{power.sourcePage}}{{/if}}</p>

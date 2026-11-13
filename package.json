@@ -2,18 +2,23 @@
   "name": "vtm-revised-foundry-system",
   "private": true,
   "type": "module",
-  "version": "11.0.31",
+  "version": "11.0.32",
   "scripts": {
     "validate:catalogs": "node scripts/validate-catalogs.mjs",
     "prerelease": "npm run validate:catalogs",
     "check": "npm run validate:catalogs",
-    "test:combat": "node tests/combat-math.test.mjs && node tests/active-automation-effects.test.mjs && node tests/advancement-costs.test.mjs && node tests/demon-apocalyptic-mechanics.test.mjs && node tests/demon-invocations.test.mjs && node tests/trait-reference.test.mjs && node tests/vampire-roll-effects.test.mjs",
+    "test:combat": "node tests/combat-math.test.mjs && node tests/active-automation-effects.test.mjs && node tests/advancement-costs.test.mjs && node tests/demon-apocalyptic-mechanics.test.mjs && node tests/demon-invocations.test.mjs && node tests/trait-reference.test.mjs && node tests/vampire-roll-effects.test.mjs && node tests/fortitude-card.test.mjs",
     "styles:split": "node scripts/split-styles.mjs",
     "styles:build": "node scripts/build-styles.mjs",
     "styles:check": "node scripts/build-styles.mjs --check",
     "styles:regroup": "node scripts/regroup-styles.mjs",
     "styles:audit": "node scripts/audit-styles.mjs",
-    "test": "npm run test:repeat-roll && npm run test:combat && npm run validate:catalogs",
-    "test:repeat-roll": "node tests/repeat-roll.test.mjs"
+    "test:catalogs": "node tests/catalog-source-integrity.test.mjs && node tests/catalog-reconciliation.test.mjs && node tests/catalog-local-text.test.mjs && node tests/catalog-automation-unlocked.test.mjs && node tests/catalog-reference-text.test.mjs",
+    "test": "npm run test:initiative && npm run test:automatic-combat && npm run test:targets && npm run test:health && npm run test:repeat-roll && npm run test:combat && npm run test:catalogs && npm run validate:catalogs",
+    "test:repeat-roll": "node tests/repeat-roll.test.mjs",
+    "test:health": "node tests/vampire-health.test.mjs && node tests/damage-roll.test.mjs && node tests/vampire-health-integration.test.mjs",
+    "test:targets": "node tests/combat-targets.test.mjs",
+    "test:automatic-combat": "node tests/automatic-combat.test.mjs",
+    "test:initiative": "node tests/initiative.test.mjs"
   }
 }

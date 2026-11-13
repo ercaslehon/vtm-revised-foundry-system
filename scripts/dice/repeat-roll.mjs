@@ -25,6 +25,7 @@ export function getRepeatParameters(message) {
   if (data?.type !== "dicePool" || !Number.isInteger(data.pool) || data.pool < 1
     || !Number.isInteger(data.difficulty) || data.difficulty < 2 || data.difficulty > 10) return null;
   return {
+    rollKind: ["damage", "soak"].includes(data.rollKind) ? data.rollKind : "action",
     pool: data.pool,
     basePool: data.basePool ?? data.pool,
     healthPenalty: data.healthPenalty ?? 0,

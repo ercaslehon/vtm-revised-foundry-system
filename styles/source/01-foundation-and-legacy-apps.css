@@ -323,6 +323,50 @@
 .vtm-rich-text p:first-child { margin-top: 0; }
 .vtm-rich-text p:last-child { margin-bottom: 0; }
 
+/* Full book excerpts: readable paragraphs and tables in every reference card. */
+.vtm-revised .vtm-rich-text {
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+.vtm-revised .vtm-rich-text :is(h2, h3, h4, h5, h6) {
+  color: var(--vtm-gold, #b8963e);
+  line-height: 1.3;
+  margin: 1rem 0 0.5rem;
+}
+.vtm-revised .vtm-rich-text :is(ul, ol) {
+  padding-left: 1.5rem;
+}
+.vtm-revised .vtm-rich-text li + li {
+  margin-top: 0.3rem;
+}
+.vtm-revised .vtm-rich-text table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.6rem 0;
+  font-size: 0.94rem;
+}
+.vtm-revised .vtm-rich-text :is(th, td) {
+  border: 1px solid rgba(184, 150, 62, 0.28);
+  padding: 0.45rem 0.6rem;
+  vertical-align: top;
+  text-align: left;
+  white-space: normal;
+}
+.vtm-revised .vtm-rich-text th {
+  color: var(--vtm-gold, #b8963e);
+  background: rgba(184, 150, 62, 0.09);
+}
+.vtm-revised .vtm-rich-text tr:nth-child(even) td {
+  background: rgba(184, 150, 62, 0.035);
+}
+.vtm-morality-card-body .vtm-rich-text td:first-child {
+  min-width: 3.5rem;
+  font-weight: 600;
+}
+.vtm-revised .source-line {
+  overflow-wrap: anywhere;
+}
+
 .vtm-badge {
   display: inline-block;
   margin-left: 6px;

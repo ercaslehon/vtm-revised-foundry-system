@@ -1,3 +1,5 @@
+import { DEMON_RULE_SOURCE_TEXT } from "./demon-rule-source-text.generated.mjs";
+
 export const DEMON_RULES = {
   characterCreation: {
     attributePriorityDots: {
@@ -158,6 +160,12 @@ export const DEMON_RULES = {
     { key: "violation", label: "Знание Насилия (доп.)", supplemental: true }
   ]
 };
+
+for (const kind of ["backgrounds", "virtues"]) {
+  DEMON_RULES[kind] = DEMON_RULES[kind].map(entry => ({
+    ...entry, ...(DEMON_RULE_SOURCE_TEXT[kind][entry.key] ?? {})
+  }));
+}
 
 export function getDemonRuleEntry(collection, key) {
   const entries = DEMON_RULES?.[collection] ?? [];
